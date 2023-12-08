@@ -5,7 +5,7 @@ export default function Page() {
         <>
     <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
 	<div className="flex flex-col items-center">
-		<h1 className="text-3xl font-semibold">Sign In</h1>
+		<h1 className="text-3xl font-semibold">Sign Up</h1>
 		<p className="text-sm">Sign in to access your account</p>
 	</div>
 	<div className="form-group">
@@ -36,12 +36,12 @@ export default function Page() {
 		</div>
 		<div className="form-field pt-5">
 			<div className="form-control justify-between">
-				<button type="button" className="btn btn-primary w-full">Sign in</button>
+				<button type="button" className="btn btn-primary w-full bg-red-500">Sign in</button>
 			</div>
 		</div>
 
 		<div className="form-field">
-			<div className="form-control justify-center">
+			<div className="form-control justify-center" >
 				<a className="link link-underline-hover link-primary text-sm">Don't have an account yet? Sign up.</a>
 			</div>
 		</div>
