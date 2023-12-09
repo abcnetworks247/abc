@@ -50,7 +50,7 @@ export default function Page() {
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   remeber your password?{" "}
                   <Link href="/signin">
-                    <span className="text-blue-900 font-semibold">login</span>
+                    <span className="text-blue-900 font-semibold">login!</span>
                   </Link>
                 </p>
            
