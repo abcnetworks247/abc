@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function Page() {
   return (
 
@@ -61,9 +62,9 @@ export default function Page() {
                 </button>
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   Already have an account?{" "}
-                  <a href="">
+                  <Link href="/login">
                     <span className="text-blue-900 font-semibold">Login</span>
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>

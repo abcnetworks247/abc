@@ -49,7 +49,7 @@ export default function Page() {
                 </button>
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   remeber your password?{" "}
-                  <Link href="/signin">
+                  <Link href="/login">
                     <span className="text-blue-900 font-semibold">login!</span>
                   </Link>
                 </p>
