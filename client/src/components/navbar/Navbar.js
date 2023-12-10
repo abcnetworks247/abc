@@ -12,12 +12,12 @@ export default function Navbar() {
           <a className="navbar-item">Ripple UI</a>
         </div>
         {/*  Pages  */}
-        <div class="navbar-center hidden md:block ">
-          <a class="navbar-item">Home</a>
-          <a class="navbar-item">Store</a>
-          <a class="navbar-item">Packages</a>
-          <a class="navbar-item">About</a>
-          <a class="navbar-item">Contact</a>
+        <div className="navbar-center hidden md:block ">
+          <a className="navbar-item">Home</a>
+          <a className="navbar-item">Store</a>
+          <a className="navbar-item">Packages</a>
+          <a className="navbar-item">About</a>
+          <a className="navbar-item">Contact</a>
         </div>
         <div className="navbar-end flex flex-row items-center ">
           <div className="flex flex-row items-center gap-3 mr-4">
