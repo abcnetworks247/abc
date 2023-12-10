@@ -6,7 +6,7 @@ import { TiShoppingCart } from "react-icons/ti";
 export default function Navbar() {
   return (
     <div>
-      <div className="navbar rounded-lg sticky top-0 z-[10]">
+      <div className="navbar rounded-lg  ">
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <a className="navbar-item">Ripple UI</a>
