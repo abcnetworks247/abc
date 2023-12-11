@@ -82,7 +82,7 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://creative-tim.com/terms?ref=njs-profile"
                       >
-                        Terms &amp; Conditions
+                        Terms  Conditions
                       </a>
                     </li>
                     <li>
