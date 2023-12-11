@@ -8,6 +8,22 @@ const ProductProvider = ({children}) => {
 
 const [products, setProducts] = useState([])
 const [hasFetchedData, setHasFetchedData] = useState(false);
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [selectedProduct, setSelectedProduct] = useState(null);
+
+const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    openModal();
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
 
 useEffect(() => {
     if (!hasFetchedData) {
@@ -26,7 +42,14 @@ useEffect(() => {
     <ProductContext.Provider
     value={{
         products, 
-        setProducts
+        setProducts,
+        selectedProduct,
+        isModalOpen,
+        handleProductClick,
+        openModal,
+        closeModal
+        
+
       }}
     >
          {children}

@@ -1,7 +1,8 @@
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
 import './globals.css'
-import ProductProvider from '../../contexts/productProvider'
+import ProductProvider from '../../contexts/ProductProvider'
+
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <Head>
         <link rel="stylesheet" href="/assets/css/main.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet"/> 
        
       </Head>
       <body className={inter.className}>

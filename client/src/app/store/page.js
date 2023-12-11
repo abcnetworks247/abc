@@ -8,6 +8,7 @@ import Recommended from '@/components/Recommended/Recommended'
 import Footer from '@/components/Footer/Footer'
 import Copyright from '@/components/Footer/Copyright'
 import Navbar from '@/components/navbar/Navbar'
+import ProductModal from '@/components/Products/ProductModal'
 
 const page = () => {
   return (
@@ -21,6 +22,8 @@ const page = () => {
         <Recommended/>
         <Footer/>
         <Copyright/>
+        <ProductModal/>
+    
 
     </div>
   )
