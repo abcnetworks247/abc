@@ -1,26 +1,18 @@
-import BlogComp from "@/components/Blog/BlogComp"
-import Navbar from "@/components/navbar/Navbar"
-import Sidebar from "@/components/sidebar/Sidebar"
+import BlogComp from "@/components/Blog/BlogComp";
+import Navbar from "@/components/navbar/Navbar";
+import Sidebar from "@/components/sidebar/Sidebar";
+
 export default function Home() {
-    return (
-      <main >
-        {/* navbar component  */}
+  return (
+    <main>
+      {/* navbar component  */}
+      <div className="bg-white sticky top-0 z-[10]">
+        <Navbar />
+      </div>
+      <BlogComp />
 
-   <div className="bg-white sticky top-0 z-[999]">
-
-    <Navbar />
-   </div>
-     
-     <BlogComp />
-
-     <Sidebar />
-     <div className="flex flex-row sm:gap-10">
-
-	<div className="flex w-full flex-col p-4">
-	
-
-	</div>
-</div>
-      </main>
-    )
+      <Sidebar />
+      <div className="flex flex-row sm:gap-10"></div>
+    </main>
+  );
 }

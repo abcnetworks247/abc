@@ -1,8 +1,10 @@
+
 export default function Page() {
   return (
 
 
     <div >
+  
       <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
         
         <div className="w-full  lg:w-1/2 xl:w-5/12 p-6  lg:flex-none flex items-center flex-col justify-center h-screen sm:p-12">

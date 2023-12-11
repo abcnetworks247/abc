@@ -3,6 +3,7 @@ import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
+import Link from "next/link";
 export default function Navbar() {
   return (
     <div>
@@ -12,13 +13,18 @@ export default function Navbar() {
           <a className="navbar-item">Ripple UI</a>
         </div>
         {/*  Pages  */}
-        <div className="navbar-center hidden md:block ">
-          <a className="navbar-item">Home</a>
-          <a className="navbar-item">Store</a>
-          <a className="navbar-item">Packages</a>
-          <a className="navbar-item">About</a>
-          <a className="navbar-item">Contact</a>
+        <div class="navbar-center hidden md:block ">
+          <Link href="/" class="navbar-item">
+            Home
+          </Link>
+          <a class="navbar-item">Store</a>
+          <Link href="/pricing" class="navbar-item">
+            Packages
+          </Link>
+          <a class="navbar-item">About</a>
+          <a class="navbar-item">Contact</a>
         </div>
+        <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
           <div className="flex flex-row items-center gap-3 mr-4">
             <a

@@ -1,7 +1,14 @@
+import Navbar from "@/components/navbar/Navbar";
+import FooterComp from "@/components/Footer/FooterComp";
+import Sidebar from "@/components/sidebar/Sidebar";
 export default function page() {
   return (
     <div>
-      <section className="bg-[#1a1d27] relative overflow-hidden">
+      <div className="bg-white sticky top-0 z-[10]">
+        <Navbar />
+      </div>
+      <Sidebar />
+      <section className="bg-white relative overflow-hidden">
         <svg
           className="absolute opacity-20"
           width="100%"
@@ -64,7 +71,6 @@ export default function page() {
           </g>
           <mask
             id="mask0_1_167"
-    
             maskUnits="userSpaceOnUse"
             x="0"
             y="32"
@@ -568,16 +574,12 @@ export default function page() {
             </radialGradient>
           </defs>
         </svg>
-        <div className="relative flex flex-col items-center justify-center max-w-6xl px-8 py-12 mx-auto lg:py-24">
-          <div>
-            <span className="text-xs font-bold tracking-wide text-white uppercase">
-              Pricing
-            </span>
-            <p className="mt-8 text-4xl font-semibold tracking-tight text-white lg:text-5xl">
-              Equip your business
-              <span className="md:block"> with world className software</span>
+        <div className="relative flex flex-col items-center justify-center max-w-6xl px-8 py-4 mx-auto lg:pt-8 lg:pb-28">
+          <div className="text-center">
+            <p className="mt-8 text-2xl font-semibold tracking-tight text-black lg:text-3xl">
+              <span className="md:block"> Our Packages</span>
             </p>
-            <p className="max-w-xl mt-4 text-lg text-gray-400">
+            <p className="max-w-xl mt-4 text-base text-gray-400">
               Every plan includes every feature, and can scale as your team
               does.
             </p>
@@ -603,9 +605,9 @@ export default function page() {
                         <g clipPath="url(#clip0_501_1474)">
                           <path
                             fillRule="evenodd"
-                           clipRule="evenodd"
+                            clipRule="evenodd"
                             d="M160 54.2857C160 46.3959 153.604 40 145.714 40H134.286C126.396 40 120 46.3959 120 54.2857V57.2269C120 69.9541 104.612 76.3279 95.6128 67.3284L93.533 65.2487C87.9541 59.6698 78.9089 59.6698 73.3299 65.2487L65.2487 73.3299C59.6698 78.9088 59.6698 87.954 65.2487 93.533L67.3285 95.6128C76.328 104.612 69.9542 120 57.227 120H54.2857C46.3959 120 40 126.396 40 134.286V145.714C40 153.604 46.3959 160 54.2857 160H57.2269C69.9542 160 76.328 175.388 67.3285 184.387L65.2487 186.467C59.6698 192.046 59.6698 201.091 65.2487 206.67L73.3299 214.751C78.9089 220.33 87.9541 220.33 93.533 214.751L95.6128 212.671C104.612 203.672 120 210.046 120 222.773V225.714C120 233.604 126.396 240 134.286 240H145.714C153.604 240 160 233.604 160 225.714V222.773C160 210.046 175.388 203.672 184.387 212.671L186.467 214.751C192.046 220.33 201.091 220.33 206.67 214.751L214.751 206.67C220.33 201.091 220.33 192.046 214.751 186.467L212.672 184.387C203.672 175.388 210.046 160 222.773 160H225.714C233.604 160 240 153.604 240 145.714V134.286C240 126.396 233.604 120 225.714 120H222.773C210.046 120 203.672 104.612 212.671 95.6128L214.751 93.5329C220.33 87.954 220.33 78.9088 214.751 73.3299L206.67 65.2487C201.091 59.6697 192.046 59.6697 186.467 65.2487L184.387 67.3284C175.388 76.3279 160 69.9541 160 57.2269V54.2857Z"
-                            fill="currentColor"
+                            fill="#000"
                           ></path>
                         </g>
                         <defs>
@@ -627,7 +629,10 @@ export default function page() {
                       <span className="text-lg font-medium text-white uppercase lg:text-xl">
                         $35
                       </span>
-                      <span className="text-base font-medium text-white"> /mo</span>
+                      <span className="text-base font-medium text-white">
+                        {" "}
+                        /mo
+                      </span>
                     </p>
                   </div>
                   <p className="mt-8 text-sm font-medium text-white">
@@ -646,20 +651,20 @@ export default function page() {
                 </div>
                 <div className="px-8">
                   <div>
-                    <p className="mt-4 text-lg font-medium text-white uppercase lg:mt-8">
+                    <p className="mt-4 text-lg font-medium text-black uppercase lg:mt-8">
                       Features
                     </p>
                     <ul
-                      className="gap-4 mt-4 space-y-3 text-gray-300 list-none"
+                      className="order-last gap-4 mt-4 space-y-3 text-gray-300 list-none"
                       role="list"
                     >
                       <li className="flex items-center gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5 text-gray-500 icon icon-tabler icon-tabler-circle-check"
+                          className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -672,15 +677,15 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Unlimited deploys</span>
+                        <span className="text-black"> 10 deploys</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5 text-gray-500 icon icon-tabler icon-tabler-circle-check"
+                          className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -693,15 +698,15 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Unlimited members</span>
+                        <span className="text-black">1 members</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5 text-gray-500 icon icon-tabler icon-tabler-circle-check"
+                          className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -714,15 +719,15 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> 20 TB cloud storage</span>
+                        <span className="text-black"> 5 TB cloud storage</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5 text-gray-500 icon icon-tabler icon-tabler-circle-check"
+                          className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -735,15 +740,15 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Growth oriented</span>
+                        <span className="text-black"> Growth oriented</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5 text-gray-500 icon icon-tabler icon-tabler-circle-check"
+                          className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -756,7 +761,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Marketing campaigns</span>
+                        <span className="text-black"> Marketing campaigns</span>
                       </li>
                     </ul>
                   </div>
@@ -783,7 +788,7 @@ export default function page() {
                         <g clipPath="url(#clip0_501_1489)">
                           <path
                             d="M196.064 183.936L152.127 140L196.064 96.0636L240 140L196.064 183.936ZM83.9364 183.936L40 140L83.9364 96.0636L127.873 140L83.9364 183.936ZM140 240L96.0636 196.064L140 152.127L183.936 196.064L140 240ZM140 127.873L96.0636 83.9364L140 40L183.936 83.9364L140 127.873Z"
-                            fill="currentColor"
+                            fill="#000"
                           ></path>
                         </g>
                         <defs>
@@ -826,7 +831,7 @@ export default function page() {
                 </div>
                 <div className="px-8">
                   <div>
-                    <p className="mt-4 text-lg font-medium text-white uppercase lg:mt-8">
+                    <p className="mt-4 text-lg font-medium text-black uppercase lg:mt-8">
                       Features
                     </p>
                     <ul
@@ -839,7 +844,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -852,7 +857,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> 10 deploys</span>
+                        <span className="text-black"> 10 deploys</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -860,7 +865,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -873,7 +878,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span>1 members</span>
+                        <span className="text-black">1 members</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -881,7 +886,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -894,7 +899,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> 5 TB cloud storage</span>
+                        <span className="text-black"> 5 TB cloud storage</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -902,7 +907,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -915,7 +920,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Growth oriented</span>
+                        <span className="text-black"> Growth oriented</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -923,7 +928,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -936,7 +941,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Marketing campaigns</span>
+                        <span className="text-black"> Marketing campaigns</span>
                       </li>
                     </ul>
                   </div>
@@ -963,7 +968,7 @@ export default function page() {
                         <g clipPath="url(#clip0_501_1489)">
                           <path
                             d="M196.064 183.936L152.127 140L196.064 96.0636L240 140L196.064 183.936ZM83.9364 183.936L40 140L83.9364 96.0636L127.873 140L83.9364 183.936ZM140 240L96.0636 196.064L140 152.127L183.936 196.064L140 240ZM140 127.873L96.0636 83.9364L140 40L183.936 83.9364L140 127.873Z"
-                            fill="currentColor"
+                            fill="#000"
                           ></path>
                         </g>
                         <defs>
@@ -1006,7 +1011,7 @@ export default function page() {
                 </div>
                 <div className="px-8">
                   <div>
-                    <p className="mt-4 text-lg font-medium text-white uppercase lg:mt-8">
+                    <p className="mt-4 text-lg font-medium text-black uppercase lg:mt-8">
                       Features
                     </p>
                     <ul
@@ -1019,7 +1024,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -1032,7 +1037,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> 10 deploys</span>
+                        <span className="text-black"> 10 deploys</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -1040,7 +1045,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -1053,7 +1058,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span>1 members</span>
+                        <span className="text-black">1 members</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -1061,7 +1066,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -1074,7 +1079,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> 5 TB cloud storage</span>
+                        <span className="text-black"> 5 TB cloud storage</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -1082,7 +1087,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -1095,7 +1100,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Growth oriented</span>
+                        <span className="text-black"> Growth oriented</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <svg
@@ -1103,7 +1108,7 @@ export default function page() {
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
                           viewBox="0 0 24 24"
                           strokeWidth="2"
-                          stroke="currentColor"
+                          stroke="#000"
                           fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -1116,7 +1121,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span> Marketing campaigns</span>
+                        <span className="text-black"> Marketing campaigns</span>
                       </li>
                     </ul>
                   </div>
@@ -1126,6 +1131,7 @@ export default function page() {
           </div>
         </div>
       </section>
+      <FooterComp />
     </div>
   );
 }

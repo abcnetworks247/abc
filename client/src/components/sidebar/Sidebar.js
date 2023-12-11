@@ -5,8 +5,8 @@ export default function Sidebar() {
     <div>
 
 <div className="sm:w-full sm:max-w-[18rem]">
-		<input type="checkbox" id="sidebar-mobile-fixed" className="sidebar-state" />
-		<label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay"></label>
+		<input type="checkbox" id="sidebar-mobile-fixed" className="sidebar-state  hidden" />
+		<label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay lg:hidden md:hidden"></label>
 		<aside className="sidebar sm:hidden md:hidden lg:hidden sidebar-fixed-left sidebar-mobile h-full justify-start max-sm:fixed max-sm:-translate-x-full bg-white">
 			<section className="sidebar-title items-center p-4">
 				<svg fill="none" height="42" viewBox="0 0 32 32" width="42" xmlns="http://www.w3.org/2000/svg">
@@ -163,7 +163,7 @@ export default function Sidebar() {
 							</div>
 						</div>
 					</label>
-					<div className="dropdown-menu-right-top dropdown-menu ml-2">
+					<div className="dropdown-menu-right-top dropdown-menu ml-2 bg-white shadow-sm">
 						<a className="dropdown-item text-sm">Profile</a>
 						<a tabIndex="-1" className="dropdown-item text-sm">Account settings</a>
 						<a tabIndex="-1" className="dropdown-item text-sm">Change email</a>
