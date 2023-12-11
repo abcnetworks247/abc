@@ -2,7 +2,7 @@ import { Inter } from 'next/font/google'
 import Head from 'next/head'
 import './globals.css'
 import ProductProvider from '../../contexts/ProductProvider'
-import ProductProvider from '../../contexts/ProductProvider'
+
 
 
 
