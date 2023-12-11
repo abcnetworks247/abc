@@ -20,6 +20,8 @@ export default function Navbar() {
           <a class="navbar-item">About</a>
           <a class="navbar-item">Contact</a>
         </div>
+        <div className="navbar-center hidden md:block ">
+    
         <div className="navbar-end flex flex-row items-center ">
           <div className="flex flex-row items-center gap-3 mr-4">
             <a
@@ -88,6 +90,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
