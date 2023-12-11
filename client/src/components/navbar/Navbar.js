@@ -3,6 +3,7 @@ import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
+import Link from "next/link";
 export default function Navbar() {
   return (
     <div>
@@ -13,9 +14,9 @@ export default function Navbar() {
         </div>
         {/*  Pages  */}
         <div class="navbar-center hidden md:block ">
-          <a class="navbar-item">Home</a>
+          <Link href="/"  class="navbar-item">Home</Link>
           <a class="navbar-item">Store</a>
-          <a class="navbar-item">Packages</a>
+          <Link href="/pricing" class="navbar-item">Packages</Link>
           <a class="navbar-item">About</a>
           <a class="navbar-item">Contact</a>
         </div>

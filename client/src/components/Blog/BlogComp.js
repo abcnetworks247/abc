@@ -20,10 +20,10 @@ export default function BlogComp() {
                 {" "}
                 Technology{" "}
               </span>
-              <h1 className="text-gray-800 text-4xl font-bold mt-2 mb-2 leading-tight">
+              <h1 className="text-gray-800 text-xl font-bold mt-2 mb-2 leading-tight">
                 Ignorant branched humanity led now marianne too.
               </h1>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-4 text-sm">
                 Necessary ye contented newspaper zealously breakfast he
                 prevailed. Melancholy middletons yet understood decisively boy
                 law she. Answer him easily are its barton little. Oh no though
@@ -52,11 +52,11 @@ export default function BlogComp() {
                     {" "}
                     Gadgets{" "}
                   </span>
-                  <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
+                  <div className="md:mt-0 text-gray-800 font-semibold text-base mb-2">
                     At every tiled on ye defer do. No attention suspected oh
                     difficult.
                   </div>
-                  <p className="block md:hidden p-2 pl-0 pt-1 text-sm text-gray-600">
+                  <p className="block md:hidden p-2 pl-0 pt-1 text-sm text-gray-600 ">
                     Wonder matter now can estate esteem assure fat roused. Am
                     performed on existence as discourse is. Pleasure friendly at
                     marriage blessing or
@@ -75,7 +75,7 @@ export default function BlogComp() {
                     {" "}
                     Bitcoin{" "}
                   </span>
-                  <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
+                  <div className="md:mt-0 text-gray-800 font-semibold text-base mb-2">
                     Fond his say old meet cold find come whom. The sir park sake
                     bred.
                   </div>
@@ -97,7 +97,7 @@ export default function BlogComp() {
                     {" "}
                     Insights{" "}
                   </span>
-                  <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
+                  <div className="md:mt-0 text-gray-800 font-semibold text-base mb-2">
                     Advice me cousin an spring of needed. Tell use paid law ever
                     yet new.
                   </div>
@@ -118,7 +118,7 @@ export default function BlogComp() {
                     {" "}
                     Cryptocurrency{" "}
                   </span>
-                  <div className="md:mt-0 text-gray-800 font-semibold text-xl mb-2">
+                  <div className="md:mt-0 text-gray-800 font-semibold text-base mb-2">
                     Advice me cousin an spring of needed. Tell use paid law ever
                     yet new.
                   </div>
@@ -147,7 +147,7 @@ export default function BlogComp() {
                 alt="technology"
               />
               <div className="p-4 pl-0">
-                <h2 className="font-bold text-2xl text-gray-800">
+                <h2 className="font-bold text-base text-gray-800">
                   Put all speaking her delicate recurred possible.
                 </h2>
                 <p className="text-gray-700 mt-2">
@@ -174,10 +174,10 @@ export default function BlogComp() {
                 alt="technology"
               />
               <div className="p-4 pl-0">
-                <h2 className="font-bold text-2xl text-gray-800">
+                <h2 className="font-bold text-base text-gray-800">
                   Is at purse tried jokes china ready decay an.{" "}
                 </h2>
-                <p className="text-gray-700 mt-2">
+                <p className="text-gray-700 mt-2 text-sm">
                   Small its shy way had woody downs power. To denoting admitted
                   speaking learning my exercise so in. Procured shutters mr it
                   feelings. To or three offer house begin taken am at.
@@ -200,11 +200,11 @@ export default function BlogComp() {
                 alt="technology"
               />
               <div className="p-4 pl-0">
-                <h2 className="font-bold text-2xl text-gray-800">
+                <h2 className="font-bold text-base text-gray-800">
                   As dissuade cheerful overcame so of friendly he indulged
                   unpacked.
                 </h2>
-                <p className="text-gray-700 mt-2">
+                <p className="text-gray-700 mt-2 text-sm">
                   Alteration connection to so as collecting me. Difficult in
                   delivered extensive at direction allowance. Alteration put use
                   diminution can considered sentiments interested discretion.
@@ -241,10 +241,10 @@ export default function BlogComp() {
                 alt="technology"
               />
               <div className="p-4 pl-0">
-                <h2 className="font-bold text-2xl text-gray-800">
+                <h2 className="font-bold text-base text-gray-800">
                   Put all speaking her delicate recurred possible.
                 </h2>
-                <p className="text-gray-700 mt-2">
+                <p className="text-gray-700 mt-2 text-sm">
                   Set indulgence inquietude discretion insensible bed why
                   announcing. Middleton fat two satisfied additions. So
                   continued he or commanded household smallness delivered. Door
@@ -268,10 +268,10 @@ export default function BlogComp() {
                 alt="technology"
               />
               <div className="p-4 pl-0">
-                <h2 className="font-bold text-2xl text-gray-800">
+                <h2 className="font-bold text-base text-gray-800">
                   Is at purse tried jokes china ready decay an.{" "}
                 </h2>
-                <p className="text-gray-700 mt-2">
+                <p className="text-gray-700 mt-2 text-sm">
                   Small its shy way had woody downs power. To denoting admitted
                   speaking learning my exercise so in. Procured shutters mr it
                   feelings. To or three offer house begin taken am at.
@@ -294,11 +294,11 @@ export default function BlogComp() {
                 alt="technology"
               />
               <div className="p-4 pl-0">
-                <h2 className="font-bold text-2xl text-gray-800">
+                <h2 className="font-bold text-base text-gray-800">
                   As dissuade cheerful overcame so of friendly he indulged
                   unpacked.
                 </h2>
-                <p className="text-gray-700 mt-2">
+                <p className="text-gray-700 mt-2 text-sm">
                   Alteration connection to so as collecting me. Difficult in
                   delivered extensive at direction allowance. Alteration put use
                   diminution can considered sentiments interested discretion.
@@ -319,8 +319,8 @@ export default function BlogComp() {
         {/* <!-- main ends here --> */}
 
          
-       <FooterComp />
       </div>
+       <FooterComp />
     </div>
   );
 }
