@@ -9,7 +9,7 @@ export default function FooterComp() {
       <footer className="relative bg-blueGray-200 pt-8 pb-6 bg-[#111827] shadow ">
         <div className="container mx-auto ">
           <div className="flex flex-wrap text-left lg:text-left">
-            <div className="w-full lg:w-6/12 lg:px-20 ">
+            <div className="w-full lg:w-6/12 lg:px-20 pl-4 md:pl-0 ">
               <h4 className="text-2xl  fonat-semibold text-white">
                 Let's keep in touch!
               </h4>
