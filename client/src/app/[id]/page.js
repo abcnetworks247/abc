@@ -1,5 +1,6 @@
 import FooterComp from "@/components/Footer/FooterComp";
 import Navbar from "@/components/navbar/Navbar";
+import RelatedArticles from "@/components/relatedArticles/RelatedArticles";
 import Sidebar from "@/components/sidebar/Sidebar";
 
 export default function page() {
@@ -242,101 +243,12 @@ export default function page() {
         className="py-8 px-10 bg-gray-50 overflow-hidden"
       >
         <div className="px-4 mx-auto max-w-screen-xl">
-          <h2 className="mb-8 text-2xl font-bold text-gray-900">
-            Related articles
-          </h2>
-          <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-            <article className="max-w-xs">
-              <a href="#">
-                <img
-                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"
-                  className="mb-5 rounded-lg"
-                  alt="Image 1"
-                />
-              </a>
-              <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
-                <a href="#">Our first office</a>
-              </h2>
-              <p className="mb-4 text-gray-700 ">
-                Over the past year, Volosoft has undergone many changes! After
-                months of preparation.
-              </p>
-              <a
-                href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
-              >
-                Read in 2 minutes
-              </a>
-            </article>
-            <article className="max-w-xs">
-              <a href="#">
-                <img
-                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"
-                  className="mb-5 rounded-lg"
-                  alt="Image 1"
-                />
-              </a>
-              <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
-                <a href="#">Our first office</a>
-              </h2>
-              <p className="mb-4 text-gray-700 ">
-                Over the past year, Volosoft has undergone many changes! After
-                months of preparation.
-              </p>
-              <a
-                href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
-              >
-                Read in 2 minutes
-              </a>
-            </article>
-            <article className="max-w-xs">
-              <a href="#">
-                <img
-                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"
-                  className="mb-5 rounded-lg"
-                  alt="Image 1"
-                />
-              </a>
-              <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
-                <a href="#">Our first office</a>
-              </h2>
-              <p className="mb-4 text-gray-700 ">
-                Over the past year, Volosoft has undergone many changes! After
-                months of preparation.
-              </p>
-              <a
-                href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
-              >
-                Read in 2 minutes
-              </a>
-            </article>
-            <article className="max-w-xs">
-              <a href="#">
-                <img
-                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/article/blog-1.png"
-                  className="mb-5 rounded-lg"
-                  alt="Image 1"
-                />
-              </a>
-              <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
-                <a href="#">Our first office</a>
-              </h2>
-              <p className="mb-4 text-gray-700 ">
-                Over the past year, Volosoft has undergone many changes! After
-                months of preparation.
-              </p>
-              <a
-                href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
-              >
-                Read in 2 minutes
-              </a>
-            </article>
-          </div>
+  
+    
         </div>
+      <RelatedArticles />
       </aside>
+
 
       <FooterComp />
     </div>
