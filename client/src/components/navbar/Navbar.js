@@ -14,14 +14,17 @@ export default function Navbar() {
         </div>
         {/*  Pages  */}
         <div class="navbar-center hidden md:block ">
-          <Link href="/"  class="navbar-item">Home</Link>
+          <Link href="/" class="navbar-item">
+            Home
+          </Link>
           <a class="navbar-item">Store</a>
-          <Link href="/pricing" class="navbar-item">Packages</Link>
+          <Link href="/pricing" class="navbar-item">
+            Packages
+          </Link>
           <a class="navbar-item">About</a>
           <a class="navbar-item">Contact</a>
         </div>
-        <div className="navbar-center hidden md:block ">
-    
+        <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
           <div className="flex flex-row items-center gap-3 mr-4">
             <a
@@ -90,7 +93,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

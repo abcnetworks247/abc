@@ -5,7 +5,7 @@ export default function Sidebar() {
     <div>
 
 <div className="sm:w-full sm:max-w-[18rem]">
-		<input type="checkbox" id="sidebar-mobile-fixed" className="sidebar-state  lg:hidden md:hidden" />
+		<input type="checkbox" id="sidebar-mobile-fixed" className="sidebar-state  hidden" />
 		<label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay lg:hidden md:hidden"></label>
 		<aside className="sidebar sm:hidden md:hidden lg:hidden sidebar-fixed-left sidebar-mobile h-full justify-start max-sm:fixed max-sm:-translate-x-full bg-white">
 			<section className="sidebar-title items-center p-4">
