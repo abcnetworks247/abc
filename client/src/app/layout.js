@@ -14,10 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="stylesheet" href="/assets/css/main.css"/>
-       
-      </Head>
+
       <body className={inter.className}>
         <ProductProvider>
             {children}
