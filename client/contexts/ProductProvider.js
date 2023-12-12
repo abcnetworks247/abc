@@ -16,8 +16,13 @@ const ProductProvider = ({ children }) => {
     openModal();
   };
 
-  const handleAddToWishlist = (product) => {
+  const addToWishlist = (e, product) => {
+    e.stopPropagation();
     setWishlist((prev) => [...prev, product]);
+  };
+  const handleAddToWishlist = (e,product) => {
+    e.stopPropagation();
+    addToWishlist(e,product)
   };
   const openModal = () => {
     setIsModalOpen(true);
