@@ -2,9 +2,9 @@ import React from 'react'
 
 const Features = () => {
   return (
-    <div className="px-4 mx-10 py-10">
-      <div className="w-fit grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mx-auto justify-center">
-        <div className="border border-gray-700 rounded-lg px-5 py-6 flex justify-center items-center gap-5">
+    <div className="px-4 py-4 mx-2 lg:px-10 lg:mx-10 lg:py-10">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:mx-auto">
+        <div className="border border-gray-700 rounded-lg px-5 py-6 flex justify-center items-center gap-5  ">
           <img
             src="assets/images/icons/delivery-van.svg"
             alt="Delivery"
@@ -16,7 +16,7 @@ const Features = () => {
           </div>
         </div>
 
-        <div className="border border-gray-700 rounded-lg px-5 py-6 flex justify-center items-center gap-5">
+        <div className="border border-gray-700 rounded-lg px-5 py-6 flex justify-center items-center gap-5  ">
           <img
             src="assets/images/icons/money-back.svg"
             alt="Delivery"
@@ -28,7 +28,7 @@ const Features = () => {
           </div>
         </div>
 
-        <div className="border border-gray-700 rounded-lg px-5 py-6 flex justify-center items-center gap-5">
+        <div className="border border-gray-700 rounded-lg px-5 py-6 flex justify-center items-center gap-5 ">
           <img
             src="assets/images/icons/service-hours.svg"
             alt="Delivery"

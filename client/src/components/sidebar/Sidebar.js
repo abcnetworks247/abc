@@ -34,7 +34,7 @@ export default function Sidebar() {
 							<li className="menu-item">
 							<IoStorefrontOutline className="h-5 w-5 opacity-75"  />
 						
-								<span>Store</span>
+								<a href="/store">Store</a>
 							</li>
 							<li>
 								<input type="checkbox" id="menu-1" className="menu-toggle hidden" />

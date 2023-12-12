@@ -23,8 +23,8 @@ export default function Navbar() {
   
 
   return (
-    <div>
-      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white">
+    <div >
+      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <a className="navbar-item">Ripple UI</a>
@@ -108,7 +108,8 @@ export default function Navbar() {
               )}
             </a>
           </div>
-          <div className="avatar avatar-ring avatar-md hidden md:block">
+
+          <div className="hidden avatar avatar-ring avatar-md sm:block">
             <label className="btn btn-ghost  cursor-pointer px-0" tabIndex="0">
               <img
                 src="https://i.pravatar.cc/150?u=a042581f4e29026024d"

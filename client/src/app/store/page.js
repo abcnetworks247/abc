@@ -1,5 +1,4 @@
 import React from 'react'
-import Banner from '@/components/Banner/Banner'
 import Features from '@/components/Features/Features'
 import Categories from '@/components/Categories/Categories'
 import NewArrival from '@/components/NewArrival/NewArrival'
@@ -10,12 +9,17 @@ import Copyright from '@/components/Footer/Copyright'
 import Navbar from '@/components/navbar/Navbar'
 import ProductModal from '@/components/Products/ProductModal'
 import FooterComp from '@/components/Footer/FooterComp'
+import Sidebar from '@/components/sidebar/Sidebar'
+import Banner from '@/components/Banner/Banner'
+
 
 const page = () => {
   return (
-    <div>
+    <div className='relative'>
       <Navbar />
-      <Banner />
+      <Banner/>
+      <Sidebar/>
+    
       <Features />
 
       <NewArrival />
