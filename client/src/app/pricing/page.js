@@ -4,7 +4,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 export default function page() {
   return (
     <div>
-      <div className="bg-white sticky top-0 z-[10]">
+      <div className="bg-white sticky top-0 z-[10] pt-9">
         <Navbar />
       </div>
       <Sidebar />
