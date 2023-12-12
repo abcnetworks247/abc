@@ -14,19 +14,17 @@ import FooterComp from '@/components/Footer/FooterComp'
 const page = () => {
   return (
     <div>
-        <Navbar/>
-        <Banner/>
-        <Features/>
-        <NewArrival/>
-        <Ads/>
-        <Recommended/>
-        <FooterComp/>
-        <Copyright/>
-        <ProductModal/>
-    
+      <Navbar />
+      <Banner />
+      <Features />
 
+      <NewArrival />
+      <Ads />
+      <Recommended />
+      <FooterComp />
+      <Copyright />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

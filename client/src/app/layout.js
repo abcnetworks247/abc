@@ -16,11 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="stylesheet" href="/assets/css/main.css"/>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet"/> 
-       
-      </Head>
+
       <body className={inter.className}>
         <ProductProvider>
             {children}

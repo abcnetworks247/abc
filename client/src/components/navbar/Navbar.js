@@ -13,16 +13,16 @@ export default function Navbar() {
           <a className="navbar-item">Ripple UI</a>
         </div>
         {/*  Pages  */}
-        <div class="navbar-center hidden md:block ">
-          <Link href="/" class="navbar-item">
+        <div className="navbar-center hidden md:block ">
+          <Link href="/" className="navbar-item">
             Home
           </Link>
-          <a class="navbar-item" href="/store">Store</a>
-          <Link href="/pricing" class="navbar-item">
+          <Link href="/store"  className="navbar-item">Store</Link>
+          <Link href="/pricing" className="navbar-item">
             Packages
           </Link>
-          <a class="navbar-item">About</a>
-          <a class="navbar-item">Contact</a>
+          <a className="navbar-item">About</a>
+          <a className="navbar-item">Contact</a>
         </div>
         <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
