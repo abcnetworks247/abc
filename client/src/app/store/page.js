@@ -10,11 +10,13 @@ import Copyright from '@/components/Footer/Copyright'
 import Navbar from '@/components/navbar/Navbar'
 import ProductModal from '@/components/Products/ProductModal'
 import FooterComp from '@/components/Footer/FooterComp'
+import Sidebar from '@/components/sidebar/Sidebar'
 
 const page = () => {
   return (
     <div>
       <Navbar />
+      <Sidebar/>
       <Banner />
       <Features />
 

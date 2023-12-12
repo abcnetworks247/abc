@@ -4,7 +4,8 @@ import React from 'react'
 import Navbar from '@/components/navbar/Navbar'
 import { ProductContext } from '../../../contexts/productContext'
 import CartItem from '@/components/Products/CartItem'
-import { useContext , useEffect} from 'react'
+import { useContext, useEffect } from 'react'
+import Sidebar from '@/components/sidebar/Sidebar'
 
 
 const page = () => {
@@ -14,7 +15,8 @@ const page = () => {
 
   return (
    <>
-    <Navbar/>
+    <Navbar />
+    <Sidebar/>    
     <section className="py-12 bg-white font-poppins dark:bg-gray-700">
    
     <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6">

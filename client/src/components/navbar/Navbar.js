@@ -52,7 +52,8 @@ export default function Navbar() {
               </div>
             </a>
           </div>
-          <div className="avatar avatar-ring avatar-md">
+
+          <div className="hidden avatar avatar-ring avatar-md sm:block">
             <label className="btn btn-ghost  cursor-pointer px-0" tabIndex="0">
               <img
                 src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
