@@ -1,28 +1,35 @@
+"use client"
 import React from "react";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 export default function Navbar() {
+  const pathname = usePathname()
   return (
     <div >
-      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[1000] shadow-md h-16 bg-white">
+      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white">
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <a className="navbar-item">Ripple UI</a>
         </div>
         {/*  Pages  */}
         <div className="navbar-center hidden md:block ">
+<<<<<<< HEAD
           <Link href="/" className="navbar-item  hover:border-b-[2px] border-[#077bff] transition-all">
+=======
+          <Link href="/" className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/" ? "border-b-[2px] border-[#077bff]" : ""}`}>
+>>>>>>> 77dc80b3aba461d4acc1d1e72a759c81eb9b0ab0
             Home
           </Link>
-          <Link href="/store"  className="navbar-item">Store</Link>
-          <Link href="/pricing" className="navbar-item">
+          <Link href="/store" className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#077bff] transition-all ${pathname === "/store" ? "border-b-[2px] border-[#077bff]" : ""}`}>Store</Link>
+          <Link href="/pricing" className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/pricing" ? "border-b-[2px] border-[#077bff]" : ""}`}>
             Packages
           </Link>
-          <a className="navbar-item">About</a>
-          <Link href="/contact" className="navbar-item">Contact</Link>
+          <a className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/about" ? "border-b-[2px] border-[#077bff]" : ""}`}>About</a>
+          <Link href="/contact" className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#077bff]" : ""}`}>Contact</Link>
         </div>
         <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
@@ -52,7 +59,7 @@ export default function Navbar() {
               </div>
             </a>
           </div>
-          <div className="avatar avatar-ring avatar-md">
+          <div className="avatar avatar-ring avatar-md hidden md:block">
             <label className="btn btn-ghost  cursor-pointer px-0" tabIndex="0">
               <img
                 src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
@@ -60,7 +67,7 @@ export default function Navbar() {
               />
             </label>
           </div>
-          <div className="avatar avatar-ring avatar-md">
+          <div className="avatar avatar-ring avatar-md ">
             <div className="dropdown-container   text-center ">
               <label
                 htmlFor="sidebar-mobile-fixed"
@@ -70,8 +77,8 @@ export default function Navbar() {
                 <HiOutlineMenuAlt3 className="text-3xl" />
               </label>
 
-              <div className="flex flex-row gap-4">
-                <div className="dropdown">
+              <div className="flex flex-row gap-4 ">
+                <div className="dropdown  hidden md:block">
                   <label
                     className="btn btn-ghost cursor-pointer px-0 hidden sm:block md:block lg:block justify-items-end"
                     tabIndex="0"
