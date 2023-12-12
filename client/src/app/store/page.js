@@ -23,6 +23,7 @@ const page = () => {
       <Recommended />
       <FooterComp />
       <Copyright />
+      <ProductModal/>
     </div>
   );
 };

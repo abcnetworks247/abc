@@ -14,7 +14,7 @@ export default function Navbar() {
         </div>
         {/*  Pages  */}
         <div className="navbar-center hidden md:block ">
-          <Link href="/" className="navbar-item">
+          <Link href="/" className="navbar-item  hover:border-b-[2px] border-[#077bff] transition-all">
             Home
           </Link>
           <Link href="/store"  className="navbar-item">Store</Link>

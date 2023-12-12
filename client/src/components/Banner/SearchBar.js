@@ -10,15 +10,16 @@ const SearchBar = () => {
         >
           Your Email
         </label>
-        <button
+        {/* <button
           id="dropdown-button"
           data-dropdown-toggle="dropdown"
           className="flex-shrink-0  inline-flex items-center 
-        py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-white bg-opacity-25 border border-gray-300 rounded-s-lg 
+        h-full py-2   bg-opacity-25 border border-gray-300  
         hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:hover:bg-gray-600
 "
           type="button"
-        >
+        ></button> */}
+        <div className="h-full px-4 flex flex-row rounded-s-lg items-center justify-center gap-2 mr-1 text-sm font-medium  text-center text-gray-900 bg-white">
           All categories{" "}
           <svg
             className="w-2.5 h-2.5 ms-2.5"
@@ -35,7 +36,7 @@ const SearchBar = () => {
               d="m1 1 4 4 4-4"
             />
           </svg>
-        </button>
+        </div>
         <div
           id="dropdown"
           className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
@@ -78,16 +79,15 @@ const SearchBar = () => {
             </li>
           </ul>
         </div>
-        <div className="relative w-fit h-full flex flex-row border-2 border-gray-200 rounded-r-lg">
+        <div className="relative w-fit h-full flex flex-row  rounded-r-lg">
           <input
             type="search"
             id="search-dropdown"
-            className="block p-2.5 w-[30vw] py-4 bg-transparent outline-none border-none  text-lg text-gray-900 bg-gray-50 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+            className="block p-2.5 w-[30vw] py-2 bg-white outline-none border-none  text-lg text-gray-900 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
             placeholder="Search here..."
             required
           />{" "}
-          
-          <button className="bg-blue-500 w-[4vw] flex items-center justify-center h-full rounded-e-lg">
+          <button className="bg-blue-500  w-[4vw] flex items-center justify-center h-full rounded-e-lg">
             <svg
               className="w-6 h-6 "
               aria-hidden="true"
