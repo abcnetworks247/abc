@@ -17,11 +17,7 @@ export default function Navbar() {
         </div>
         {/*  Pages  */}
         <div className="navbar-center hidden md:block ">
-<<<<<<< HEAD
-          <Link href="/" className="navbar-item  hover:border-b-[2px] border-[#077bff] transition-all">
-=======
           <Link href="/" className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/" ? "border-b-[2px] border-[#077bff]" : ""}`}>
->>>>>>> 77dc80b3aba461d4acc1d1e72a759c81eb9b0ab0
             Home
           </Link>
           <Link href="/store" className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#077bff] transition-all ${pathname === "/store" ? "border-b-[2px] border-[#077bff]" : ""}`}>Store</Link>
