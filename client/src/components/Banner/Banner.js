@@ -1,20 +1,25 @@
 import React from 'react'
-
+import SearchBar from './SearchBar'
 const Banner = () => {
   return (
-    <div className="bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')]">
-    <div className="container">
-        <h1 className="text-6xl text-gray-800 font-medium mb-4 capitalize">
-            best collection for <br/> home decoration
-        </h1>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam <br/>
-            accusantium perspiciatis, sapiente
-            magni eos dolorum ex quos dolores odio</p>
-        <div className="mt-12">
+    // <div className="bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[38vh]">
+    // <div className="bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[38vh]">
+    <div className="flex flex-col justify-center items-center  gap-2
+    bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[50vh] margin-0">
+         
+             <p className='text-2xl'>
+                Search All Products
+            </p>
+            <SearchBar/>
+        
+       
+
+        {/* <div className="">
             <a href="#" className="bg-primary border border-primary text-white px-8 py-3 font-medium 
                 rounded-md hover:bg-transparent hover:text-primary">Shop Now</a>
         </div>
-    </div>
+         */}
+    {/* </div> */}
 </div>
   )
 }

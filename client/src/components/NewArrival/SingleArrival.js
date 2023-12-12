@@ -1,17 +1,21 @@
 "use client"
 import React from 'react'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { ProductContext } from '../../../contexts/productContext'
 
 
 const SingleArrival = ({product}) => {
 
-    const { handleProductClick }= useContext(ProductContext)
+    const { handleProductClick, handleCartClick }= useContext(ProductContext)
 
     if (!handleProductClick) {
         console.error('handleProductClick is not available in the context.');
         return null;
       }
+
+      useEffect(()=>{
+        console.log(handleCartClick)
+      }, [])
   return (
     <div className="mt-56 bg-white rounded shadow dark:bg-gray-700" onClick={()=>handleProductClick(product)}>
     <div className="relative z-20 p-6 group">
@@ -30,7 +34,7 @@ const SingleArrival = ({product}) => {
                         </svg>
                     </div>
                 </a>
-                <a href="#" className="flex items-center">
+                <a  className="flex items-center" onClick={(e)=>handleCartClick(e, product)}>
                     <div
                         className="relative flex items-center justify-center p-3 mb-3 transition-all translate-x-20 bg-white rounded dark:bg-gray-700 dark:text-white group-hover:translate-x-0 wishlist hover:bg-blue-200 dark:hover:bg-blue-600 group">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -44,8 +48,8 @@ const SingleArrival = ({product}) => {
             </div>
         </div>
         <a href="#">
-            <h2 className="mb-2 text-xl font-bold text-black dark:text-white">
-                lorem ipsum
+            <h2 className="mb-2 text-xl font-bold text-black dark:text-white line-clamp-1">
+                {product.title}
             </h2>
         </a>
         <p className="mb-3 text-lg font-bold text-blue-500 dark:text-blue-300 ">

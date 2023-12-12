@@ -13,9 +13,9 @@ const Categories = () => {
     }, [products])
     
   return (
-    <div className="container py-16">
+    <div className="container py-14">
     <h2 className="text-2xl font-medium text-gray-800 uppercase mb-6">shop by category</h2>
-    <div className="grid grid-cols-3 gap-3">
+    <div className="grid grid-cols-4 gap-4">
       
          {products.length > 0 ? (
           products.map(product => <SingleCategory key={product.id} product={product} />)

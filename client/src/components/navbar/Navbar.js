@@ -6,8 +6,8 @@ import { TiShoppingCart } from "react-icons/ti";
 import Link from "next/link";
 export default function Navbar() {
   return (
-    <div>
-      <div className="navbar rounded-lg  ">
+    <div >
+      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[1000] shadow-md h-16 bg-white">
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <a className="navbar-item">Ripple UI</a>
@@ -17,7 +17,7 @@ export default function Navbar() {
           <Link href="/" class="navbar-item">
             Home
           </Link>
-          <a class="navbar-item">Store</a>
+          <a class="navbar-item" href="/store">Store</a>
           <Link href="/pricing" class="navbar-item">
             Packages
           </Link>
@@ -40,7 +40,7 @@ export default function Navbar() {
               </div>
             </a>
             <a
-              href="#"
+              href="/CartContent"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
             >
               <div className="text-3xl">
