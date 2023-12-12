@@ -17,10 +17,10 @@ const SingleArrival = ({product}) => {
         console.log(handleCartClick)
       }, [])
   return (
-    <div className="mt-56 bg-white rounded shadow dark:bg-gray-700" onClick={()=>handleProductClick(product)}>
+    <div className="mt-56 bg-white rounded shadow" onClick={()=>handleProductClick(product)}>
     <div className="relative z-20 p-6 group">
-        <div className="relative block h-64 mb-4 -mt-56 overflow-hidden rounded -top-full ">
-            <img className="object-cover w-full h-full transition-all group-hover:scale-110"
+        <div className="relative block h-64 mb-4  -mt-56 overflow-hidden rounded -top-full ">
+            <img className="object-contain w-full h-full transition-all group-hover:scale-110"
                 src={product.image} alt=""/>
             <div className="absolute flex flex-col top-4 right-4">
                 <a href="#" className="flex items-center">
