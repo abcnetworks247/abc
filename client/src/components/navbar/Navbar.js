@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
@@ -6,10 +6,24 @@ import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { stringify } from "postcss";
 export default function Navbar() {
-  const pathname = usePathname()
+  const { cartProducts, Wishlist } = UseProductProvider();
+  const pathname = usePathname();
+
+  // cart value variable
+  const cartvalue = cartProducts.length;
+
+  // Wishlist value variable
+
+  const WishlistValue = Wishlist.length;
+
+  // wishlist local storage function
+  
+
   return (
-    <div >
+    <div>
       <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white">
         {/* abcdstudio logo */}
         <div className="navbar-start">
@@ -17,15 +31,45 @@ export default function Navbar() {
         </div>
         {/*  Pages  */}
         <div className="navbar-center hidden md:block ">
-          <Link href="/" className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/" ? "border-b-[2px] border-[#077bff]" : ""}`}>
+          <Link
+            href="/"
+            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${
+              pathname === "/" ? "border-b-[2px] border-[#077bff]" : ""
+            }`}
+          >
             Home
           </Link>
-          <Link href="/store" className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#077bff] transition-all ${pathname === "/store" ? "border-b-[2px] border-[#077bff]" : ""}`}>Store</Link>
-          <Link href="/pricing" className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/pricing" ? "border-b-[2px] border-[#077bff]" : ""}`}>
+          <Link
+            href="/store"
+            className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#077bff] transition-all ${
+              pathname === "/store" ? "border-b-[2px] border-[#077bff]" : ""
+            }`}
+          >
+            Store
+          </Link>
+          <Link
+            href="/pricing"
+            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${
+              pathname === "/pricing" ? "border-b-[2px] border-[#077bff]" : ""
+            }`}
+          >
             Packages
           </Link>
-          <a className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/about" ? "border-b-[2px] border-[#077bff]" : ""}`}>About</a>
-          <Link href="/contact" className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#077bff]" : ""}`}>Contact</Link>
+          <a
+            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${
+              pathname === "/about" ? "border-b-[2px] border-[#077bff]" : ""
+            }`}
+          >
+            About
+          </a>
+          <Link
+            href="/contact"
+            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
+              pathname === "/contact" ? "border-b-[2px] border-[#077bff]" : ""
+            }`}
+          >
+            Contact
+          </Link>
         </div>
         <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
@@ -38,9 +82,14 @@ export default function Navbar() {
                 <FaRegHeart />
               </div>
               <div className="text-xs leading-3">Wishlist</div>
-              <div className="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center bg-red-500 justify-center text-white text-xs">
-                8
-              </div>
+
+              {WishlistValue === 0 ? (
+                <></>
+              ) : (
+                <div className="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center bg-red-500 justify-center text-white text-xs">
+                  {WishlistValue}
+                </div>
+              )}
             </a>
             <a
               href="/CartContent"
@@ -50,9 +99,13 @@ export default function Navbar() {
                 <TiShoppingCart />
               </div>
               <div className="text-xs leading-3">cart</div>
-              <div className="absolute right-0 left-4 -top-1 w-5 h-5 rounded-full flex items-center bg-red-500 justify-center text-white text-xs">
-                8
-              </div>
+              {cartProducts.length === 0 ? (
+                <></>
+              ) : (
+                <div className="absolute right-0 left-4 -top-1 w-5 h-5 rounded-full flex items-center bg-red-500 justify-center text-white text-xs">
+                  {cartvalue}
+                </div>
+              )}
             </a>
           </div>
           <div className="avatar avatar-ring avatar-md hidden md:block">

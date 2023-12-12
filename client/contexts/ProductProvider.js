@@ -1,22 +1,24 @@
-"use client"
-import React from 'react'
-import { ProductContext } from './productContext'
-import { useEffect } from 'react'
-import { useState } from 'react'
+"use client";
+import React from "react";
+import { ProductContext } from "./productContext";
+import { useEffect, useState, useContext } from "react";
 
-const ProductProvider = ({children}) => {
+const ProductProvider = ({ children }) => {
+  const [products, setProducts] = useState([]);
+  const [hasFetchedData, setHasFetchedData] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [cartProducts, setCartProducts] = useState([]);
+  const [Wishlist, setWishlist] = useState([]);
 
-const [products, setProducts] = useState([])
-const [hasFetchedData, setHasFetchedData] = useState(false);
-const [isModalOpen, setIsModalOpen] = useState(false);
-const [selectedProduct, setSelectedProduct] = useState(null);
-const [cartProducts, setCartProducts] = useState([]);
-
-const handleProductClick = (product) => {
+  const handleProductClick = (product) => {
     setSelectedProduct(product);
     openModal();
   };
 
+  const handleAddToWishlist = (product) => {
+    setWishlist((prev) => [...prev, product]);
+  };
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -25,39 +27,33 @@ const handleProductClick = (product) => {
     setIsModalOpen(false);
   };
 
-  const addToCart = (product) => {
-    setCartProducts(prev => [...prev, product]); 
-  }
+  const addToCart = (e, product) => {
+    e.stopPropagation();
+    setCartProducts((prev) => [...prev, product]);
+  };
 
-  
-  const handleCartClick = (event, product) => {
-    event.stopPropagation()
-    addToCart(product);
-    console.log(product)
-  }
+  const handleCartClick = (e, product) => {
+    e.stopPropagation();
+    addToCart(e,product);
+  };
 
-
-useEffect(() => {
+  useEffect(() => {
     if (!hasFetchedData) {
-      fetch('https://fakestoreapi.com/products')
-        .then(res => res.json())
-        .then(json => {
+      fetch("https://fakestoreapi.com/products")
+        .then((res) => res.json())
+        .then((json) => {
           setProducts(json);
           setHasFetchedData(true); // Update state to indicate that data has been fetched
         });
     }
   }, [hasFetchedData]);
 
-  useEffect(()=>{
-    console.log(cartProducts)
-  },[cartProducts])
-
+  useEffect(() => {}, [cartProducts]);
 
   return (
-    
     <ProductContext.Provider
-    value={{
-        products, 
+      value={{
+        products,
         cartProducts,
         selectedProduct,
         isModalOpen,
@@ -66,11 +62,17 @@ useEffect(() => {
         openModal,
         closeModal,
         handleCartClick,
+        handleAddToWishlist,
+        Wishlist,
       }}
     >
-         {children}
+      {children}
     </ProductContext.Provider>
-  )
-}
+  );
+};
 
-export default ProductProvider
+export default ProductProvider;
+
+export function UseProductProvider() {
+  return useContext(ProductContext);
+}

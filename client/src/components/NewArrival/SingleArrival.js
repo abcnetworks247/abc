@@ -2,18 +2,18 @@
 import React from "react";
 import { useContext, useEffect } from "react";
 import { ProductContext } from "../../../contexts/productContext";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
 
 const SingleArrival = ({ product }) => {
   const { handleProductClick, handleCartClick } = useContext(ProductContext);
+  const { handleAddToWishlist } = UseProductProvider()
 
   if (!handleProductClick) {
     console.error("handleProductClick is not available in the context.");
     return null;
   }
 
-  useEffect(() => {
-    console.log(handleCartClick);
-  }, []);
+  
   return (
     <div
       className="mt-56 bg-white rounded shadow"
@@ -26,10 +26,13 @@ const SingleArrival = ({ product }) => {
             src={product.image}
             alt=""
           />
-          <div className="absolute flex flex-col top-4 right-4">
-            <a href="#" className="flex items-center">
+          <div className="absolute flex flex-col top-4 right-4 z-[2]">
+          <a
+              className="flex items-center"
+              onClick={(e) => handleAddToWishlist(e, product)}
+            >
               <div className="relative flex items-center justify-center p-3 mb-3 transition-all translate-x-20 bg-white rounded dark:bg-gray-700 dark:text-white group-hover:translate-x-0 wishlist hover:bg-blue-200 dark:hover:bg-blue-600 group">
-                <svg
+              <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
                   height="20"
@@ -58,6 +61,7 @@ const SingleArrival = ({ product }) => {
                 </svg>
               </div>
             </a>
+           
           </div>
         </div>
         <div className="px-3">

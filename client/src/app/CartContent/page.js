@@ -5,13 +5,14 @@ import Navbar from '@/components/navbar/Navbar'
 import { ProductContext } from '../../../contexts/productContext'
 import CartItem from '@/components/Products/CartItem'
 import { useContext , useEffect} from 'react'
+import { UseProductProvider } from '../../../contexts/ProductProvider'
 
 
 const page = () => {
 
-    const { cartProducts } = useContext(ProductContext)
-    console.log(cartProducts)
+    const { cartProducts } = UseProductProvider()
 
+   console.log('cart value', cartProducts)
   return (
    <>
     <Navbar/>
