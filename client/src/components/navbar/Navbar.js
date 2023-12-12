@@ -1,10 +1,13 @@
+"use client"
 import React from "react";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 export default function Navbar() {
+  const pathname = usePathname()
   return (
     <div >
       <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[1000] shadow-md h-16 bg-white">
@@ -14,15 +17,15 @@ export default function Navbar() {
         </div>
         {/*  Pages  */}
         <div className="navbar-center hidden md:block ">
-          <Link href="/" className="navbar-item">
+          <Link href="/" className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/" ? "border-b-[2px] border-[#077bff]" : ""}`}>
             Home
           </Link>
-          <Link href="/store"  className="navbar-item">Store</Link>
-          <Link href="/pricing" className="navbar-item">
+          <Link href="/store" className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#077bff] transition-all ${pathname === "/store" ? "border-b-[2px] border-[#077bff]" : ""}`}>Store</Link>
+          <Link href="/pricing" className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/pricing" ? "border-b-[2px] border-[#077bff]" : ""}`}>
             Packages
           </Link>
-          <a className="navbar-item">About</a>
-          <Link href="/contact" className="navbar-item">Contact</Link>
+          <a className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${pathname === "/about" ? "border-b-[2px] border-[#077bff]" : ""}`}>About</a>
+          <Link href="/contact" className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#077bff]" : ""}`}>Contact</Link>
         </div>
         <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
