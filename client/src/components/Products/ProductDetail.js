@@ -57,7 +57,7 @@ const ProductDetail = () => {
                     <div className="pb-6 mb-8 border-b border-gray-200 dark:border-gray-700">
                         <span className="text-lg font-medium text-rose-500 dark:text-rose-200">New</span>
                         <h2 className="max-w-xl mt-2 mb-6 text-xl font-bold dark:text-gray-300 md:text-4xl">
-                            lorem ipsum
+                            {selectedProduct.title}
                         </h2>
                         <div className="flex flex-wrap items-center mb-6">
                             <ul className="flex mb-4 mr-2 lg:mb-0">

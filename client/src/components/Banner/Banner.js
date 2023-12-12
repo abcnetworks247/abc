@@ -7,7 +7,7 @@ const Banner = () => {
     <div className="flex flex-col justify-center items-center  gap-2
     bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[50vh] margin-0">
          
-             <p className='text-2xl'>
+             <p className='text-xl text-gray-700 mt-10'>
                 Search All Products
             </p>
             <SearchBar/>
