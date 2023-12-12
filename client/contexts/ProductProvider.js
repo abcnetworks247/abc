@@ -78,6 +78,10 @@ const ProductProvider = ({ children }) => {
 
 export default ProductProvider;
 
+/**
+ * Returns the product provider from the React context.
+ * @returns {Object} The product provider.
+ */
 export function UseProductProvider() {
   return useContext(ProductContext);
 }
