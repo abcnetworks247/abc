@@ -10,7 +10,7 @@ export default function Navbar() {
   const pathname = usePathname()
   return (
     <div >
-      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white">
+      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <a className="navbar-item">Ripple UI</a>
