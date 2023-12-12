@@ -1,4 +1,4 @@
-
+import { IoStorefrontOutline } from "react-icons/io5";
 
 export default function Sidebar() {
   return (
@@ -31,20 +31,13 @@ export default function Sidebar() {
 								<span>General</span>
 							</li>
 
-							<li className="menu-item menu-active">
-								<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-									<path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-								</svg>
-								<span>Teams</span>
-							</li>
 							<li className="menu-item">
-								<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-									<path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-								</svg>
-								<span>Billing</span>
+							<IoStorefrontOutline className="h-5 w-5 opacity-75"  />
+						
+								<span>Store</span>
 							</li>
 							<li>
-								<input type="checkbox" id="menu-1" className="menu-toggle" />
+								<input type="checkbox" id="menu-1" className="menu-toggle hidden" />
 								<label className="menu-item justify-between" htmlFor="menu-1">
 									<div className="flex gap-2">
 										<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -116,35 +109,7 @@ export default function Sidebar() {
 								</svg>
 								Products
 							</li>
-							<li>
-								<input type="checkbox" id="menu-2" className="menu-toggle" />
-								<label className="menu-item justify-between" htmlFor="menu-2">
-									<div className="flex gap-2">
-										<svg xmlns="http://www.w3.org/2000/svg" className="opacity-75" width="22" height="22" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-											<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-											<path d="M15 21h-9a3 3 0 0 1 -3 -3v-1h10v2a2 2 0 0 0 4 0v-14a2 2 0 1 1 2 2h-2m2 -4h-11a3 3 0 0 0 -3 3v11"></path>
-											<path d="M9 7l4 0"></path>
-											<path d="M9 11l4 0"></path>
-										</svg>
-										<span>Contracts</span>
-									</div>
-
-									<span className="menu-icon">
-										<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-											<path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-										</svg>
-									</span>
-								</label>
-
-								<div className="menu-item-collapse">
-									<div className="min-h-0">
-										<label className="menu-item menu-item-disabled ml-6">Create contract</label>
-										<label className="menu-item ml-6">All contracts</label>
-										<label className="menu-item ml-6">Pending contracts</label>
-										<label className="menu-item ml-6">Security</label>
-									</div>
-								</div>
-							</li>
+					
 						</ul>
 					</section>
 				</nav>

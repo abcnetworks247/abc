@@ -1102,7 +1102,7 @@ export default function page() {
                         </svg>
                         <span className="text-black"> Growth oriented</span>
                       </li>
-                      <li className="flex items-center gap-2">
+                      <li className="flex items-center gap-2 mb-12 md:mb-0">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="w-5 h-5 text-gray-300 icon icon-tabler icon-tabler-circle-check"
@@ -1121,7 +1121,7 @@ export default function page() {
                           <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
                           <path d="M9 12l2 2l4 -4"></path>
                         </svg>
-                        <span className="text-black"> Marketing campaigns</span>
+                        <span className="text-black "> Marketing campaigns</span>
                       </li>
                     </ul>
                   </div>

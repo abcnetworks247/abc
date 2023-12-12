@@ -22,7 +22,7 @@ export default function Navbar() {
             Packages
           </Link>
           <a className="navbar-item">About</a>
-          <a className="navbar-item">Contact</a>
+          <Link href="/contact" className="navbar-item">Contact</Link>
         </div>
         <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
