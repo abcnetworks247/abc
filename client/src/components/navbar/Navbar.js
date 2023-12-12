@@ -10,7 +10,7 @@ export default function Navbar() {
   const pathname = usePathname()
   return (
     <div >
-      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[1000] shadow-md h-16 bg-white">
+      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white">
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <a className="navbar-item">Ripple UI</a>
@@ -55,7 +55,7 @@ export default function Navbar() {
               </div>
             </a>
           </div>
-          <div className="avatar avatar-ring avatar-md">
+          <div className="avatar avatar-ring avatar-md hidden md:block">
             <label className="btn btn-ghost  cursor-pointer px-0" tabIndex="0">
               <img
                 src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
@@ -63,7 +63,7 @@ export default function Navbar() {
               />
             </label>
           </div>
-          <div className="avatar avatar-ring avatar-md">
+          <div className="avatar avatar-ring avatar-md ">
             <div className="dropdown-container   text-center ">
               <label
                 htmlFor="sidebar-mobile-fixed"
@@ -73,8 +73,8 @@ export default function Navbar() {
                 <HiOutlineMenuAlt3 className="text-3xl" />
               </label>
 
-              <div className="flex flex-row gap-4">
-                <div className="dropdown">
+              <div className="flex flex-row gap-4 ">
+                <div className="dropdown  hidden md:block">
                   <label
                     className="btn btn-ghost cursor-pointer px-0 hidden sm:block md:block lg:block justify-items-end"
                     tabIndex="0"

@@ -5,7 +5,7 @@ export default function BlogComp() {
   return (
     <div>
       {/* <!-- component --> */}
-      <div className="max-w-screen-lg mx-auto">
+      <div className="max-w-screen-lg mx-auto pt-9">
     
         <main className="mt-12">
           {/* <!-- featured section --> */}
