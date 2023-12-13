@@ -9,36 +9,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 export default function RelatedArticles() {
-  const [swiperRef, setSwiperRef] = useState(null);
 
-  let appendNumber = 4;
-  let prependNumber = 1;
-
-  const prepend2 = () => {
-    swiperRef.prependSlide([
-      '<div className="swiper-slide">Slide ' + --prependNumber + "</div>",
-      '<div className="swiper-slide">Slide ' + --prependNumber + "</div>",
-    ]);
-  };
-
-  const prepend = () => {
-    swiperRef.prependSlide(
-      '<div className="swiper-slide">Slide ' + --prependNumber + "</div>"
-    );
-  };
-
-  const append = () => {
-    swiperRef.appendSlide(
-      '<div className="swiper-slide">Slide ' + ++appendNumber + "</div>"
-    );
-  };
-
-  const append2 = () => {
-    swiperRef.appendSlide([
-      '<div className="swiper-slide">Slide ' + ++appendNumber + "</div>",
-      '<div className="swiper-slide">Slide ' + ++appendNumber + "</div>",
-    ]);
-  };
 
   return (
     <>
@@ -48,7 +19,7 @@ export default function RelatedArticles() {
       <Swiper
         slidesPerView={3}
         // centeredSlides={true}
-        spaceBetween={10}
+        spaceBetween={20}
         autoplay={true}
         navigation={false}
         width={900}
@@ -64,10 +35,10 @@ export default function RelatedArticles() {
                 alt="Image 1"
               />
             </a>
-            <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
+            <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900">
               <a href="#">Our first office</a>
             </h2>
-            <p className="mb-4 text-gray-700 ">
+            <p className="mb-4 text-gray-700 text-sm ">
               Over the past year, Volosoft has undergone many changes! After
               months of preparation.
             </p>
@@ -88,10 +59,10 @@ export default function RelatedArticles() {
                 alt="Image 1"
               />
             </a>
-            <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
+            <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900">
               <a href="#">Our first office</a>
             </h2>
-            <p className="mb-4 text-gray-700 ">
+            <p className="mb-4 text-gray-700 text-sm ">
               Over the past year, Volosoft has undergone many changes! After
               months of preparation.
             </p>
@@ -112,10 +83,10 @@ export default function RelatedArticles() {
                 alt="Image 1"
               />
             </a>
-            <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
+            <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900">
               <a href="#">Our first office</a>
             </h2>
-            <p className="mb-4 text-gray-700 ">
+            <p className="mb-4 text-gray-700 text-sm ">
               Over the past year, Volosoft has undergone many changes! After
               months of preparation.
             </p>
@@ -136,10 +107,10 @@ export default function RelatedArticles() {
                 alt="Image 1"
               />
             </a>
-            <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
+            <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900">
               <a href="#">Our first office</a>
             </h2>
-            <p className="mb-4 text-gray-700 ">
+            <p className="mb-4 text-gray-700 text-sm ">
               Over the past year, Volosoft has undergone many changes! After
               months of preparation.
             </p>
@@ -160,10 +131,10 @@ export default function RelatedArticles() {
                 alt="Image 1"
               />
             </a>
-            <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900">
+            <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900">
               <a href="#">Our first office</a>
             </h2>
-            <p className="mb-4 text-gray-700 ">
+            <p className="mb-4 text-gray-700 text-sm ">
               Over the past year, Volosoft has undergone many changes! After
               months of preparation.
             </p>

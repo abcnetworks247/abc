@@ -11,7 +11,7 @@ export default function page() {
       </div>
 
       <Sidebar />
-      <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white w-auto antialiased">
+      <main className="mt-[90px] pb-16  lg:pb-24 bg-white w-auto  antialiased">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
           <article className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
             <header className=" lg:mb-2 not-format">
@@ -240,13 +240,16 @@ export default function page() {
 
       <aside
         aria-label="Related articles"
-        className="py-8 px-10 bg-gray-50 overflow-hidden"
+        className="py-8 px-14  overflow-hidden"
       >
         <div className="px-4 mx-auto max-w-screen-xl">
   
     
         </div>
+        <div className="">
+
       <RelatedArticles />
+        </div>
       </aside>
 
 
