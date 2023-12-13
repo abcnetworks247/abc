@@ -55,13 +55,15 @@ export default function Navbar() {
           >
             Packages
           </Link>
-          <a
-            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${
+         
+          <Link
+            href="/about"
+            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
               pathname === "/about" ? "border-b-[2px] border-[#077bff]" : ""
             }`}
           >
             About
-          </a>
+          </Link>
           <Link
             href="/contact"
             className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
