@@ -5,6 +5,7 @@ import Navbar from '@/components/navbar/Navbar'
 import { ProductContext } from '../../../contexts/productContext'
 import CartItem from '@/components/Products/CartItem'
 import { useContext, useEffect } from 'react'
+import { UseProductProvider } from '../../../contexts/ProductProvider'
 import Sidebar from '@/components/sidebar/Sidebar'
 
 
