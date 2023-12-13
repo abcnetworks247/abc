@@ -12,11 +12,8 @@ const ProductProvider = ({ children }) => {
   const [Wishlist, setWishlist] = useState([]);
   const MAX_RATING = 5;
   const MIN_RATING = 1;
-  
-  const [rating] = useState(
-     Math.floor(Math.random() * (5 -1 + 1)) + 1
-   );
-  
+
+  const [rating] = useState(Math.floor(Math.random() * (5 - 1 + 1)) + 1);
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -27,9 +24,9 @@ const ProductProvider = ({ children }) => {
     e.stopPropagation();
     setWishlist((prev) => [...prev, product]);
   };
-  const handleAddToWishlist = (e,product) => {
+  const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
-    addToWishlist(e,product)
+    addToWishlist(e, product);
   };
   const openModal = () => {
     setIsModalOpen(true);
@@ -41,13 +38,25 @@ const ProductProvider = ({ children }) => {
 
   const addToCart = (e, product) => {
     e.stopPropagation();
-    setCartProducts((prev) => [...prev, product]);
+    const updatedCart = [...cartProducts, product];
+    setCartProducts(updatedCart);
+    // Update local storage
+    localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
   };
 
   const handleCartClick = (e, product) => {
     e.stopPropagation();
-    addToCart(e,product);
+    addToCart(e, product);
   };
+
+
+  useEffect(() => {
+    // Retrieve cartProducts from local storage when component mounts
+    const storedCartProducts = JSON.parse(
+      localStorage.getItem("cartProducts") || "[]"
+    );
+    setCartProducts(storedCartProducts);
+  }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
   useEffect(() => {
     if (!hasFetchedData) {
@@ -60,11 +69,7 @@ const ProductProvider = ({ children }) => {
     }
   }, [hasFetchedData]);
 
-  useEffect(() => { }, [cartProducts]);
-  
-  
- 
-  
+  useEffect(() => {}, [cartProducts]);
 
   return (
     <ProductContext.Provider
@@ -80,7 +85,7 @@ const ProductProvider = ({ children }) => {
         handleCartClick,
         handleAddToWishlist,
         Wishlist,
-        rating
+        rating,
       }}
     >
       {children}
