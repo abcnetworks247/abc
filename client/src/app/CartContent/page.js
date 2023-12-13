@@ -13,6 +13,10 @@ const page = () => {
 
     const { cartProducts } = UseProductProvider()
 
+    const totalPrice = cartProducts.reduce((total, product) => total + product.price, 0);
+    
+    
+
    console.log('cart value', cartProducts)
   return (
    <>
