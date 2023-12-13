@@ -1,5 +1,5 @@
 const Terms = () => {
-  return ( 
+  return (
     <div>
 {/* terms and condition component */}
 <div className="container mx-auto px-4">
@@ -50,7 +50,7 @@ const Terms = () => {
 
     </div>
   </div>
-  
+
 
    );
 }

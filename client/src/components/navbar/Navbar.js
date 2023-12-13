@@ -95,7 +95,7 @@ export default function Navbar() {
               href="/CartContent"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
             >
-              <div className="text-3xl">
+              <div className="text-2xl">
                 <TiShoppingCart />
               </div>
               <div className="text-xs leading-3">cart</div>
