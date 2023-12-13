@@ -10,8 +10,10 @@ const ProductProvider = ({ children }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
   const [Wishlist, setWishlist] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const MAX_RATING = 5;
   const MIN_RATING = 1;
+
 
   const [rating] = useState(Math.floor(Math.random() * (5 - 1 + 1)) + 1);
 
@@ -47,6 +49,23 @@ const ProductProvider = ({ children }) => {
   const handleCartClick = (e, product) => {
     e.stopPropagation();
     addToCart(e, product);
+  };
+
+  
+  // const searchProducts = (query) => {
+  //   const results = products.filter(
+  //     (product) =>
+  //       product.title.toLowerCase().includes(query.toLowerCase()) ||
+  //       product.category.toLowerCase().includes(query.toLowerCase())
+  //   );
+  //   setSearchResults(results);
+  // };
+  
+  const searchProducts = (query) => {
+    const regex = new RegExp(`^${query}`, "i");
+    const results = products.filter((product) => regex.test(product.title));
+    
+    setSearchResults(results);
   };
 
 
@@ -86,6 +105,9 @@ const ProductProvider = ({ children }) => {
         handleAddToWishlist,
         Wishlist,
         rating,
+        searchProducts,
+        searchResults,
+        setSearchResults
       }}
     >
       {children}

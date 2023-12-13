@@ -1,12 +1,15 @@
 "use client";
 import React from "react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../../../contexts/productContext";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
+
 
 const SingleArrival = ({ product }) => {
   const { handleProductClick, handleCartClick, rating } = useContext(ProductContext);
   const { handleAddToWishlist } = UseProductProvider()
+  const [hoverState, setHoverState] = useState(false)
+  
 
   if (!handleProductClick) {
     console.error("handleProductClick is not available in the context.");
@@ -18,11 +21,13 @@ const SingleArrival = ({ product }) => {
     <div
       className="mt-56 bg-white rounded shadow cursor-pointer"
       onClick={() => handleProductClick(product)}
+      onMouseEnter={()=>setHoverState(true)}
+      
     >
-      <div className="relative z-20 py-6 group">
-        <div className="relative flex items-center justify-center w-full h-64 mb-4  -mt-56 overflow-hidden rounded -top-full ">
+      <div className="relative z-20 py-6 group shadow-md">
+        <div className="relative flex items-center shadow-sm justify-center w-full h-64 mb-4  -mt-56 overflow-hidden rounded -top-full bg-white ">
           <img
-            className="object-contain w-[70%] h-full transition-all group-hover:scale-110"
+            className="object-contain w-[70%] h-full transition-all group-hover:scale-110 bg-transparent"
             src={product.image}
             alt=""
           />
@@ -31,7 +36,13 @@ const SingleArrival = ({ product }) => {
               className="flex items-center"
               onClick={(e) => handleAddToWishlist(e, product)}
             >
-              <div className="relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all bg-white rounded dark:bg-gray-700 dark:text-white  wishlist   dark:hover:bg-blue-600 group">
+              <div
+                className={`relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all ${
+                  window.innerWidth < 640 ?
+                  "group-hover:translate-x-0  translate-x-20" : ''
+                } bg-white rounded dark:bg-gray-700 dark:text-white  wishlist  dark:hover:bg-blue-600 group`}
+              >
+              
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -48,7 +59,7 @@ const SingleArrival = ({ product }) => {
               className="flex items-center"
               onClick={(e) => handleCartClick(e, product)}
             >
-              <div className="relative flex items-center justify-center cursor-pointer hover:scale-125 p-3 mb-3 transition-all  bg-white rounded dark:bg-gray-700 dark:text-white wishlist dark:hover:bg-blue-600 group">
+              <div className={`relative flex items-center justify-center cursor-pointer hover:scale-125 p-3 mb-3 transition-all ${window.innerWidth > 640 ? 'group-hover:translate-x-0 translate-x-20' : (window.innerWidth < 640 && '')}   bg-white rounded dark:bg-gray-700 dark:text-white wishlist dark:hover:bg-blue-600 group`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -95,7 +106,7 @@ const SingleArrival = ({ product }) => {
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
-                    fill="blue"
+                    fill="#D4AF37"
                     className="bi bi-star-fill"
                     viewBox="0 0 16 16"
                   >
