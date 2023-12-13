@@ -7,7 +7,7 @@ const Banner = () => {
     // <div className="bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[38vh]">
     <div
       className="flex flex-col justify-center items-center 
-       bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[50vh] w-[100vw] "
+       bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[50vh]   "
     >
       <div className='flex flex-col items-center justify-center gap-4'>
         <p className="text-xl text-center text-gray-700 mt-10">

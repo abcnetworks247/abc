@@ -26,7 +26,6 @@ const page = () => {
       <Ads />
       <Recommended />
       <FooterComp />
-      <Copyright />
       <ProductModal/>
     </div>
   );
