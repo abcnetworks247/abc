@@ -2,7 +2,8 @@ import React from "react";
 
 const SearchBar = () => {
   return (
-    <form className="w-full h-contain max-w-[50%]">
+  //   <form className=" h-contain max-w-[50%]">
+    <form className="hidden sm:block">
       <div className="flex h-full">
         <label
           for="search-dropdown"
@@ -79,7 +80,7 @@ const SearchBar = () => {
             </li>
           </ul>
         </div>
-        <div className="relative w-fit h-full flex flex-row  rounded-r-lg">
+        <div className="relative w-fit h-full flex flex-row rounded-r-lg">
           <input
             type="search"
             id="search-dropdown"
@@ -87,7 +88,7 @@ const SearchBar = () => {
             placeholder="Search here..."
             required
           />{" "}
-          <button className="bg-blue-500  w-[4vw] flex items-center justify-center h-full rounded-e-lg">
+          <button className="bg-blue-500 absolute right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg">
             <svg
               className="w-6 h-6 "
               aria-hidden="true"

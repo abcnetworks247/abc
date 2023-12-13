@@ -16,27 +16,27 @@ export default function RelatedArticles() {
 
   const prepend2 = () => {
     swiperRef.prependSlide([
-      '<div class="swiper-slide">Slide ' + --prependNumber + "</div>",
-      '<div class="swiper-slide">Slide ' + --prependNumber + "</div>",
+      '<div className="swiper-slide">Slide ' + --prependNumber + "</div>",
+      '<div className="swiper-slide">Slide ' + --prependNumber + "</div>",
     ]);
   };
 
   const prepend = () => {
     swiperRef.prependSlide(
-      '<div class="swiper-slide">Slide ' + --prependNumber + "</div>"
+      '<div className="swiper-slide">Slide ' + --prependNumber + "</div>"
     );
   };
 
   const append = () => {
     swiperRef.appendSlide(
-      '<div class="swiper-slide">Slide ' + ++appendNumber + "</div>"
+      '<div className="swiper-slide">Slide ' + ++appendNumber + "</div>"
     );
   };
 
   const append2 = () => {
     swiperRef.appendSlide([
-      '<div class="swiper-slide">Slide ' + ++appendNumber + "</div>",
-      '<div class="swiper-slide">Slide ' + ++appendNumber + "</div>",
+      '<div className="swiper-slide">Slide ' + ++appendNumber + "</div>",
+      '<div className="swiper-slide">Slide ' + ++appendNumber + "</div>",
     ]);
   };
 

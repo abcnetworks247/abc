@@ -81,28 +81,28 @@ export default function AboutComponent() {
           </section>
         )}
       </div>
-      <section class="bg-gray-100 text-gray-900">
-        <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
-          <div class="mx-auto max-w-lg text-center">
-            <h2 class="text-3xl font-bold sm:text-4xl">
+      <section className="bg-gray-100 text-gray-900">
+        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+          <div className="mx-auto max-w-lg text-center">
+            <h2 className="text-3xl font-bold sm:text-4xl">
               Kickstart your marketing
             </h2>
 
-            <p class="mt-4 text-gray-600">
+            <p className="mt-4 text-gray-600">
               Lorem ipsum, dolor sit amet consectetur adipisicing elit.
               Consequuntur aliquam doloribus nesciunt eos fugiat. Vitae aperiam
               fugit consequuntur saepe laborum.
             </p>
           </div>
 
-          <div class="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             <a
-              class="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
               href="/#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 text-blue-500"
+                className="h-10 w-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -117,23 +117,23 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 class="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-xl font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
-              <p class="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
               </p>
             </a>
             <a
-              class="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
               href="/#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 text-blue-500"
+                className="h-10 w-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -148,23 +148,23 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 class="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-xl font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
-              <p class="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
               </p>
             </a>
             <a
-              class="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
               href="/#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 text-blue-500"
+                className="h-10 w-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -179,23 +179,23 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 class="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-xl font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
-              <p class="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
               </p>
             </a>
             <a
-              class="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
               href="/#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 text-blue-500"
+                className="h-10 w-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -210,23 +210,23 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 class="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-xl font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
-              <p class="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
               </p>
             </a>
             <a
-              class="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
               href="/#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 text-blue-500"
+                className="h-10 w-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -241,23 +241,23 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 class="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-xl font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
-              <p class="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
               </p>
             </a>
             <a
-              class="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
               href="/#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 text-blue-500"
+                className="h-10 w-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -272,11 +272,11 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 class="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-xl font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
-              <p class="mt-1 text-sm text-gray-600">
+              <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
@@ -286,10 +286,10 @@ export default function AboutComponent() {
            
           </div>
 
-          <div class="mt-12 text-center">
+          <div className="mt-12 text-center">
             <a
               href="#"
-              class="inline-block rounded bg-gray-800 px-12 py-3 text-sm font-medium text-white transition hover:bg-gray-900 focus:outline-none focus:ring focus:ring-yellow-400"
+              className="inline-block rounded bg-gray-800 px-12 py-3 text-sm font-medium text-white transition hover:bg-gray-900 focus:outline-none focus:ring focus:ring-yellow-400"
             >
               Get Started Today
             </a>
