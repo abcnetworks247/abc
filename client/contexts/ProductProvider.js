@@ -10,6 +10,13 @@ const ProductProvider = ({ children }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
   const [Wishlist, setWishlist] = useState([]);
+  const MAX_RATING = 5;
+  const MIN_RATING = 1;
+  
+  const [rating] = useState(
+     Math.floor(Math.random() * (5 -1 + 1)) + 1
+   );
+  
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -53,7 +60,11 @@ const ProductProvider = ({ children }) => {
     }
   }, [hasFetchedData]);
 
-  useEffect(() => {}, [cartProducts]);
+  useEffect(() => { }, [cartProducts]);
+  
+  
+ 
+  
 
   return (
     <ProductContext.Provider
@@ -69,6 +80,7 @@ const ProductProvider = ({ children }) => {
         handleCartClick,
         handleAddToWishlist,
         Wishlist,
+        rating
       }}
     >
       {children}

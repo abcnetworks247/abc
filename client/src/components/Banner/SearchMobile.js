@@ -4,13 +4,13 @@ import { useRouter } from 'next/navigation'
 
 const SearchMobile = () => {
   const router =useRouter()
-    const handleCartClick = () => {
+    const handleSearch = () => {
           router.push('/searchproduct')
       }
 
   return (
     
-<form >    
+<form className="lg:hidden" onClick={()=>handleSearch()}>    
     <label for="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
     <div className="relative">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
