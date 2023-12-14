@@ -15,18 +15,18 @@ import Banner from '@/components/Banner/Banner'
 
 const page = () => {
   return (
-    <div className='relative'>
+    <div className="relative">
       <Navbar />
-      <Banner/>
-      <Sidebar/>
-    
+      <Banner />
+      <Sidebar />
+
       <Features />
 
       <NewArrival />
       <Ads />
       <Recommended />
       <FooterComp />
-      <ProductModal/>
+      <ProductModal />
     </div>
   );
 };
