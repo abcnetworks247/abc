@@ -1,7 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const connectDb = require("./db/ConnectDb");
-const blogRouter = require("./routes/blogRoutes");
+const blogRouter = require("./routes/blogRoute");
 const clientRouter = require("./routes/clientAuthRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
@@ -19,14 +19,12 @@ const {
 
 const cookieParser = require("cookie-parser");
 
-const clientUrl = process.env.CLIENT_URL;
-
 const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: [clientUrl],
+    origin: [process.env.CLIENT_URL],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
@@ -38,7 +36,7 @@ postReaction(io);
 
 app.use(
   cors({
-    origin: [clientUrl],
+    origin: [process.env.CLIENT_URL],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
