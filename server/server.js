@@ -1,8 +1,8 @@
 const express = require("express");
 require("dotenv").config();
 const connectDb = require("./db/ConnectDb");
-const blogRouter = require("./routes/blogRoutes");
-const authRouter = require("./routes/clientAuthRoutes");
+const blogRouter = require("./routes/blogRoute");
+const clientRouter = require("./routes/clientAuthRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 
@@ -14,18 +14,17 @@ const { Server } = require("socket.io");
 const {
   handleNewComment,
   postReaction,
+
 } = require("./controllers/blogControllers");
 
 const cookieParser = require("cookie-parser");
-
-const clientUrl = process.env.CLIENT_URL;
 
 const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: [clientUrl],
+    origin: [process.env.CLIENT_URL],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
@@ -37,7 +36,7 @@ postReaction(io);
 
 app.use(
   cors({
-    origin: [clientUrl],
+    origin: [process.env.CLIENT_URL],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
@@ -70,7 +69,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use("/api/v1/client/blog", blogRouter);
-app.use("/api/v1/client/auth", authRouter);
+app.use("/api/v1/client/auth", clientRouter);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));

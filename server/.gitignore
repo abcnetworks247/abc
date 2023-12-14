@@ -1,14 +1,21 @@
-# dependencies
-/node_modules
-/.pnp
+# Dependencies
+node_modules/
+.pnp
 .pnp.js
 
-# production
+# Production build
 /build
 
-# local env files
-.env*.local
-
+# Local environment files
 .env
+.env.local
+.env.*.local
 
-functions
+# Firebase Functions
+/functions/node_modules/
+/functions/.pnp
+/functions/.pnp.js
+/functions/build
+/functions/.env
+/functions/.env.local
+/functions/.env.*.local
