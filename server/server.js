@@ -3,6 +3,7 @@ require("dotenv").config();
 const connectDb = require("./db/ConnectDb");
 const blogRouter = require("./routes/blogRoute");
 const clientRouter = require("./routes/clientAuthRoute");
+const adminRouter = require("./routes/adminAuthRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 
@@ -70,6 +71,7 @@ app.use((err, req, res, next) => {
 
 app.use("/api/v1/client/blog", blogRouter);
 app.use("/api/v1/client/auth", clientRouter);
+app.use("/api/v1/admin/auth", adminRouter);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
