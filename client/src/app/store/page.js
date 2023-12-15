@@ -11,6 +11,7 @@ import ProductModal from '@/components/Products/ProductModal'
 import FooterComp from '@/components/Footer/FooterComp'
 import Sidebar from '@/components/sidebar/Sidebar'
 import Banner from '@/components/Banner/Banner'
+import SearchModal from '@/components/Banner/SearchModal'
 
 
 const page = () => {
@@ -27,6 +28,7 @@ const page = () => {
       <Recommended />
       <FooterComp />
       <ProductModal />
+      {/* <SearchModal/> */}
     </div>
   );
 };

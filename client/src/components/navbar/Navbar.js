@@ -8,6 +8,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { stringify } from "postcss";
+
+
+
 export default function Navbar() {
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
@@ -76,11 +79,11 @@ export default function Navbar() {
         <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
           <div className="flex flex-row items-center gap-3 mr-4">
-            <a
-              href="#"
+            <Link
+              href="/wishlist"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
             >
-              <div className="text-2xl">
+              <div className="text-2xl" >
                 <FaRegHeart />
               </div>
               <div className="text-xs leading-3">Wishlist</div>
@@ -92,7 +95,7 @@ export default function Navbar() {
                   {WishlistValue}
                 </div>
               )}
-            </a>
+            </Link>
             <a
               href="/CartContent"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
