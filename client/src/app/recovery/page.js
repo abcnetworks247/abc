@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import Api from "@/utils/Api";
 import { useState } from "react";
 
 export default function Page() {
