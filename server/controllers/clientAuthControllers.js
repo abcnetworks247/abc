@@ -96,6 +96,7 @@ const signIn = async (req, res) => {
       maxAge: maxAgeInMilliseconds,
       httpOnly: false,
     });
+    
 
     res.status(StatusCodes.OK).json({
       message: "Account signed in successfully.",

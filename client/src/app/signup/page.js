@@ -4,8 +4,11 @@ import Link from "next/link";
 import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+
+  const router = useRouter()
   // Define initial form data state
   const [signUpFormData, setSignUpFormData] = useState({
     fullname: "",
@@ -35,20 +38,22 @@ export default function Page() {
    */
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    const id = toast.loading("creating..", {
+      position: toast.POSITION.TOP_LEFT,
+    });
     try {
+      setTimeout(() => {
+        toast.dismiss(id);
+      }, 1000);
       // Log the current form data to the console
       console.log("formdata", signUpFormData);
 
       // Perform an asynchronous API post request to sign up the user
       console.log("Before API post request");
       const data = await Api.post("client/auth/signup", signUpFormData);
-      const id = toast.loading("creating..", {
-        position: toast.POSITION.TOP_LEFT,
-      });
+     
 
-      setTimeout(() => {
-        toast.dismiss(id);
-      }, 1000);
+
       // Log the response data to the console
       console.log("all data", data);
 
@@ -62,7 +67,8 @@ export default function Page() {
         });
         setTimeout(() => {
           toast.dismiss(successmsg);
-        }, 1000);
+          router.push('/')
+        }, 3000);
       } else if(data.status === 500) {
         const suberrormsg = toast.update(id, {
           render: `user email or name already exist `,
