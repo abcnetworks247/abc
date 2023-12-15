@@ -1,14 +1,14 @@
 import React from 'react'
 import { UseProductProvider } from '../../../contexts/ProductProvider';
 
-const Wishlistcard = () => {
+const Wishlistcard = ({product}) => {
 
-    const { handleRemoveFromWishlist}= UseProductProvider()
+    const { handleRemoveFromWishlist, handleProductClick, rating, handleCartClick}= UseProductProvider()
   return (
     <div
       className="mt-56 bg-white rounded shadow cursor-pointer"
       onClick={() => handleProductClick(product)}
-      onMouseEnter={() => setHoverState(true)}
+      
     >
       {/* <div className="relative z-20 py-6 group shadow-md"> */}
       <div className="relative  py-6 group shadow-md">
@@ -22,7 +22,7 @@ const Wishlistcard = () => {
             <a className="  flex items-center  ">
               <div
                 className={`relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all 
-                 sm:group-hover:translate-x-0  sm:translate-x-20 bg-white rounded   wishlist  group`}
+                bg-white rounded   wishlist  group`}
               >
               
                   <svg
@@ -31,7 +31,7 @@ const Wishlistcard = () => {
                     height="20"
                     className={`bi bi-heart-fill}`}
                     viewBox="0 0 16 16"
-                    style={{ fill: "yellow" }}
+                    style={{ fill: "red" }}
                     onClick={(e) => {
                         handleRemoveFromWishlist(e, product);
                         

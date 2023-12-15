@@ -117,8 +117,8 @@ export default function Navbar() {
         <div className="navbar-center hidden md:block "></div>
         <div className="navbar-end flex flex-row items-center ">
           <div className="flex flex-row items-center gap-3 mr-4">
-            <Link
-              href="/wishlist"
+            <a
+              href="/wish"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
             >
               <div className="text-2xl">
@@ -133,7 +133,7 @@ export default function Navbar() {
                   {WishlistValue}
                 </div>
               )}
-            </Link>
+            </a>
             <a
               href="/CartContent"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
