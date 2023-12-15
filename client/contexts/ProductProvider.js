@@ -82,21 +82,18 @@ const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     // Retrieve cartProducts from local storage when component mounts
-    if(typeof window !== "undefined"){
-
-      const storedCartProducts = JSON.parse(
-        localStorage.getItem("cartProducts") || "[]"
+    
+      const storedCartProducts = JSON.parse( typeof window !== "undefined"? 
+        localStorage.getItem("cartProducts") || "[]" : "[]"
       );
-    }
+    
     setCartProducts(storedCartProducts);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
   // Retrieve products from local storage
 
 
-    const storedProducts = JSON.parse( typeof window !== "undefined" ? 
-      localStorage.getItem("cachedProducts") || "[]" : undefined
-    );
+  const storedProducts = JSON.parse(typeof window !== "undefined" ? localStorage.getItem("cachedProducts") || "[]" : "[]");
 
 
   useEffect(() => {
