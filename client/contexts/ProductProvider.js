@@ -14,7 +14,6 @@ const ProductProvider = ({ children }) => {
   const MAX_RATING = 5;
   const MIN_RATING = 1;
 
-
   const [rating] = useState(Math.floor(Math.random() * (5 - 1 + 1)) + 1);
 
   const handleProductClick = (product) => {
@@ -22,14 +21,25 @@ const ProductProvider = ({ children }) => {
     openModal();
   };
 
-  const addToWishlist = (e, product) => {
-    e.stopPropagation();
+  const addToWishlist = ( product) => {
+    // e.stopPropagation();
     setWishlist((prev) => [...prev, product]);
+   
   };
+
+  const removeFromWishlist = ( product) => {
+    const newWishList = Wishlist.filter((wishproduct) => product.id !== wishproduct.id)
+    setWishlist(newWishList)
+  }
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
-    addToWishlist(e, product);
+    addToWishlist(product);
   };
+
+  const handleRemoveFromWishlist = (e, product) => {
+    e.stopPropagation();
+    removeFromWishlist(product);
+  }
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -51,7 +61,6 @@ const ProductProvider = ({ children }) => {
     addToCart(e, product);
   };
 
-  
   // const searchProducts = (query) => {
   //   const results = products.filter(
   //     (product) =>
@@ -60,14 +69,13 @@ const ProductProvider = ({ children }) => {
   //   );
   //   setSearchResults(results);
   // };
-  
+
   const searchProducts = (query) => {
     const regex = new RegExp(`^${query}`, "i");
     const results = products.filter((product) => regex.test(product.title));
-    
+
     setSearchResults(results);
   };
-
 
   useEffect(() => {
     // Retrieve cartProducts from local storage when component mounts
@@ -77,18 +85,35 @@ const ProductProvider = ({ children }) => {
     setCartProducts(storedCartProducts);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
+  // Retrieve products from local storage
+  const storedProducts = JSON.parse(
+    localStorage.getItem("cachedProducts") || "[]"
+  );
+
   useEffect(() => {
-    if (!hasFetchedData) {
-      fetch("https://fakestoreapi.com/products")
-        .then((res) => res.json())
-        .then((json) => {
-          setProducts(json);
-          setHasFetchedData(true); // Update state to indicate that data has been fetched
-        });
+    if (storedProducts.length > 0) {
+       setProducts(storedProducts);
+       setHasFetchedData(true);
+    } 
+    else {
+       if (!hasFetchedData) {
+         fetch("https://fakestoreapi.com/products")
+           .then((res) => res.json())
+           .then((json) => {
+             setProducts(json);
+             setHasFetchedData(true); // Update state to indicate that data has been fetched
+
+             localStorage.setItem("cachedProducts", JSON.stringify(json));
+           });
+       }
+      
     }
+   
   }, [hasFetchedData]);
 
-  useEffect(() => {}, [cartProducts]);
+  console.log(Wishlist);
+
+  // useEffect(() => {}, [cartProducts]);
 
   return (
     <ProductContext.Provider
@@ -107,7 +132,8 @@ const ProductProvider = ({ children }) => {
         rating,
         searchProducts,
         searchResults,
-        setSearchResults
+        setSearchResults,
+        handleRemoveFromWishlist
       }}
     >
       {children}
