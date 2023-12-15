@@ -28,6 +28,8 @@ export default function Page() {
    * @param {Function} e.preventDefault - prevent default forms submission behaviour
    */
 
+const [data, setdata] = useState([])
+console.log('data', data)
   const HandleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -41,6 +43,7 @@ export default function Page() {
       if (data.status === 200) {
         console.log(data.data, "success message");
         Cookies.set('authToken', value.authToken)
+        setdata(value)
       } else {
 
         console.log(data.data, "error");
