@@ -42,9 +42,7 @@ export default function Page() {
       position: toast.POSITION.TOP_LEFT,
     });
     try {
-      setTimeout(() => {
-        toast.dismiss(id);
-      }, 1000);
+  
       // Log the current form data to the console
       console.log("formdata", signUpFormData);
 
@@ -60,14 +58,16 @@ export default function Page() {
       // Check the status of the response and log success or failure messages
       if (data.status === 201) {
         console.log("post successful", data.data.message);
-        const successmsg = toast.update(id, {
+        setTimeout(() => {
+          toast.dismiss(id);
+        }, 1000);
+       toast.update(id, {
           render: `${data.data.message}`,
           type: "success",
           isLoading: false,
         });
         setTimeout(() => {
-          toast.dismiss(successmsg);
-          router.push('/')
+          router.push('/login')
         }, 3000);
       } else if(data.status === 500) {
         const suberrormsg = toast.update(id, {

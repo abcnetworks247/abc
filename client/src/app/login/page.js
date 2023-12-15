@@ -1,6 +1,7 @@
 "use client";
 import Api from "@/utils/Api";
 import { useState } from "react";
+import Cookies from "js-cookie";
 export default function Page() {
   // Define the initial loginform data
   const [logInFormData, setlogInFormData] = useState({
@@ -33,13 +34,15 @@ export default function Page() {
       // perform an asyncronous request to sigin in the user
       console.log(logInFormData, "response data");
       const data = await Api.post("client/auth/signin", logInFormData,  { withCredentials: true });
-
+       const value = data.data
       // log the response data
-
+      
       // check the staus of the request to see if the request was successful or not
       if (data.status === 200) {
         console.log(data.data, "success message");
+        Cookies.set('authToken', value.authToken)
       } else {
+
         console.log(data.data, "error");
       }
     } catch (error) {
