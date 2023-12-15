@@ -16,7 +16,7 @@ export default function Navbar() {
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
 
-  let a = true;
+  let a = false;
   const [buttonColor, setButtonColor] = useState({
     signUp: "bg-blue-500 text-white",
     login: "bg-white text-gray-800",
