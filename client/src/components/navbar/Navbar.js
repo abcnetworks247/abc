@@ -7,12 +7,18 @@ import { TiShoppingCart } from "react-icons/ti";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
-import { stringify } from "postcss";
+import { UseUserContext } from "../../../contexts/UserContext";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 /**
  * Represents a navigation bar component.
  * @returns {JSX.Element} The JSX element representing the navigation bar.
  */
 export default function Navbar() {
+  const router = useRouter();
+
+  const { HandleLogout,UserData } = UseUserContext();
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
 
@@ -44,6 +50,28 @@ export default function Navbar() {
   const WishlistValue = Wishlist.length;
 
   // wishlist local storage function
+
+  function Logout() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+        router.push("/login");
+        HandleLogout();
+      }
+    });
+  }
 
   return (
     <div>
@@ -103,7 +131,7 @@ export default function Navbar() {
               href="/wishlist"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
             >
-              <div className="text-2xl" >
+              <div className="text-2xl">
                 <FaRegHeart />
               </div>
               <div className="text-xs leading-3">Wishlist</div>
@@ -133,8 +161,14 @@ export default function Navbar() {
               )}
             </a>
           </div>
-                {/* if a === true hide this div else show it */}
-          <div className={`${a ? 'hidden' : 'group font-medium text-sm flex flex-row items-center justify-center border rounded ease-in-out duration-200' }`}>
+          {/* if a === true hide this div else show it */}
+          <div
+            className={`${
+              a
+                ? "hidden"
+                : "group font-medium text-sm flex flex-row items-center justify-center border rounded ease-in-out duration-200"
+            }`}
+          >
             <Link href="/signup">
               <button
                 className={`${buttonColor.signUp} p-2 rounded transition-colors`}
@@ -154,10 +188,8 @@ export default function Navbar() {
             </Link>
           </div>
 
-
-
           <div className="avatar avatar-ring avatar-md ">
-            <div className="dropdown-container   text-center ">
+            <div className="dropdown-container    ">
               <label
                 htmlFor="sidebar-mobile-fixed"
                 className="btn btn-ghost flex cursor-pointer px-0 sm:hidden md:hidden lg:hidden"
@@ -167,20 +199,43 @@ export default function Navbar() {
               </label>
 
               <div className="flex flex-row gap-4 ">
+  
                 <div className="dropdown  hidden md:block">
                   <label
                     className="btn btn-ghost cursor-pointer px-0 hidden sm:block md:block lg:block justify-items-end"
                     tabIndex="0"
                   >
-                    <MdOutlineKeyboardArrowDown className="text-2xl mt-8" />
+            
+            <Image
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                  height={20}
+                  width={33}
+                  quality={100}
+                  loading="lazy"
+                
+                  className="rounded-full cursor-pointer object-cover"
+                  alt="avatar"
+                  // style={{
+                  //   width: '100%',
+                  //   height: 'auto',
+                  // }}
+                />
                   </label>
-                  <div className="dropdown-menu dropdown-menu-bottom-left bg-white">
+    
+                  <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
                     <a className="dropdown-item text-sm -z-50">Profile</a>
                     <a tabIndex="-1" className="dropdown-item text-sm">
                       Account settings
                     </a>
                     <a tabIndex="-1" className="dropdown-item text-sm">
                       Subscriptions
+                    </a>
+                    <a
+                      tabIndex="-1"
+                      className="dropdown-item text-sm"
+                      onClick={Logout}
+                    >
+                      logout
                     </a>
                   </div>
                 </div>
