@@ -36,7 +36,7 @@ const calculateSubtotal = () => {
             </div>
           </div>
           <div className="w-2/3 px-4">
-            <h2 className="mb-2 text-xl font-bold dark:text-gray-400">
+            <h2 className="mb-2 text-md font-bold dark:text-gray-400">
               {product.title}
             </h2>
             <p className="text-gray-500 dark:text-gray-400 ">Picture frame</p>

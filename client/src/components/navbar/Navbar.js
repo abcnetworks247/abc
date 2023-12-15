@@ -100,7 +100,7 @@ export default function Navbar() {
         <div className="navbar-end flex flex-row items-center ">
           <div className="flex flex-row items-center gap-3 mr-4">
             <a
-              href="/wishes"
+              href="/wish"
               className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
             >
               <div className="text-2xl" >
