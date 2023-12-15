@@ -32,7 +32,7 @@ export default function Page() {
     try {
       // perform an asyncronous request to sigin in the user
       console.log(logInFormData, "response data");
-      const data = await Api.post("client/auth/signin", logInFormData);
+      const data = await Api.post("client/auth/signin", logInFormData,  { withCredentials: true });
 
       // log the response data
 

@@ -2,7 +2,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import Api from "@/utils/Api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
+
 export default function Page() {
+
+  const router = useRouter()
   // Define initial form data state
   const [signUpFormData, setSignUpFormData] = useState({
     fullname: "",
@@ -32,33 +38,86 @@ export default function Page() {
    */
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    const id = toast.loading("creating..", {
+      position: toast.POSITION.TOP_LEFT,
+    });
     try {
+      setTimeout(() => {
+        toast.dismiss(id);
+      }, 1000);
       // Log the current form data to the console
       console.log("formdata", signUpFormData);
 
       // Perform an asynchronous API post request to sign up the user
       console.log("Before API post request");
       const data = await Api.post("client/auth/signup", signUpFormData);
-       
-      
+     
+
 
       // Log the response data to the console
       console.log("all data", data);
 
       // Check the status of the response and log success or failure messages
-      if (data.status === 200) {
-        console.log("post successful", data.data);
-      } else {
-        console.log("not successful", data.data);
+      if (data.status === 201) {
+        console.log("post successful", data.data.message);
+        const successmsg = toast.update(id, {
+          render: `${data.data.message}`,
+          type: "success",
+          isLoading: false,
+        });
+        setTimeout(() => {
+          toast.dismiss(successmsg);
+          router.push('/')
+        }, 3000);
+      } else if(data.status === 500) {
+        const suberrormsg = toast.update(id, {
+          render: `user email or name already exist `,
+          type: "error",
+          isLoading: false,
+        });
+        setTimeout(() => {
+          toast.dismiss(suberrormsg);
+        }, 1000);
+
+      }else{
+        const suberrormsg = toast.update(id, {
+          render: `error while creating account `,
+          type: "error",
+          isLoading: false,
+        });
+        setTimeout(() => {
+          toast.dismiss(suberrormsg);
+        }, 1000);
       }
     } catch (error) {
       // Log any errors that occur during the API request
+    
+      const errormsg =  toast.error(`${error} `, {
+        position: toast.POSITION.TOP_LEFT
+      });
+
+      setTimeout(() => {
+        toast.dismiss(errormsg);
+      }, 5000);
+
       console.error(error);
     }
   };
 
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
         <div className="flex-1 bg-blue-900 text-center hidden md:flex">
           <div
