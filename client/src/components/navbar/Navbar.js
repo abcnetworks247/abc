@@ -22,19 +22,9 @@ export default function Navbar() {
     login: "bg-white text-gray-800",
   });
 
-  const handleMouseOver = () => {
-    setButtonColor({
-      signUp: "bg-white text-gray-800",
-      login: "bg-blue-500 text-white",
-    });
-  };
 
-  const handleMouseOut = () => {
-    setButtonColor({
-      signUp: "bg-blue-500 text-white transition-all duration",
-      login: "bg-white text-gray-800 transition-all duration",
-    });
-  };
+
+
 
   // cart value variable
   const cartvalue = cartProducts.length;
@@ -138,8 +128,6 @@ export default function Navbar() {
             <Link href="/signup">
               <button
                 className={`${buttonColor.signUp} p-2 rounded transition-colors`}
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
               >
                 SignUp
               </button>
