@@ -1,5 +1,17 @@
 import Link from "next/link";
+
+import Api from "@/utils/Api";
+import { useState } from "react";
+
 export default function Page() {
+
+// define initial recoveryformdata state
+
+ const [recoveryFormData, setRecoveryFormData] = useState("")
+
+ const HandleSubmit =()=>{
+
+ }
   return (
 
 
@@ -29,7 +41,9 @@ export default function Page() {
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="email"
+                  name="email"
                   placeholder="Enter your email"
+                  onChange={(e)=>{setRecoveryFormData(e.target.value)}}
                 />
             
                 <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
@@ -39,7 +53,7 @@ export default function Page() {
                     stroke="currentColor"
                     stroke-width="2"
                     strokeLinecap="round"
-                    stroke-linejoin="round"
+                   strokeLinejoin="round"
                   >
                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                     <circle cx="8.5" cy="7" r="4" />

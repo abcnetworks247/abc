@@ -1,4 +1,4 @@
-const AuthChecker = require("../middlewares/AuthChecker");
+const authChecker = require('../middlewares/adminAuthChecker'); // Import your admin auth middleware
 const path = require("path");
 const multer = require("multer");
 
@@ -19,7 +19,6 @@ const {
   updateBlog,
   deleteBlog,
   getUserBlog,
-  addComment,
   postReaction,
 } = require("../controllers/blogControllers");
 
@@ -29,12 +28,13 @@ router.route("/").get(getAllBlog);
 router.route("/:id").get(getSingleBlog);
 router
   .route("/create")
-  .post(AuthChecker, upload.single("blogimage"), createBlog);
-router.route("/edit/:id").get(AuthChecker, getUserBlog);
-router.route("/like").post(AuthChecker, postReaction);
+  .post(authChecker, upload.single("blogimage"), createBlog);
+router.route("/edit/:id").get(authChecker, getUserBlog);
+router.route("/like").post(authChecker, postReaction);
+
 router
   .route("/update")
-  .patch(AuthChecker, upload.single("blogimage"), updateBlog);
-router.route("/delete/:id").delete(AuthChecker, deleteBlog);
+  .patch(authChecker, upload.single("blogimage"), updateBlog);
+router.route("/delete/:id").delete(authChecker, deleteBlog);
 
 module.exports = router;

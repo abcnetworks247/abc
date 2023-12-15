@@ -1,45 +1,94 @@
-
+"use client";
+import Api from "@/utils/Api";
+import { useState } from "react";
 export default function Page() {
+  // Define the initial loginform data
+  const [logInFormData, setlogInFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  /**
+   * Handle change in form input
+   * @param {object} e - the event object
+   * @param {string} e.target.name - the name of the input field
+   * @param {string} e.target.value - the value entered in the input field
+   */
+  const HandleInputChange = (e) => {
+    const { name, value } = e.target;
+    setlogInFormData({
+      ...logInFormData,
+      [name]: value,
+    });
+  };
+
+  /**
+   * @param {object} e- the event object
+   * @param {Function} e.preventDefault - prevent default forms submission behaviour
+   */
+
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // perform an asyncronous request to sigin in the user
+      console.log(logInFormData, "response data");
+      const data = await Api.post("client/auth/signin", logInFormData);
+
+      // log the response data
+
+      // check the staus of the request to see if the request was successful or not
+      if (data.status === 200) {
+        console.log(data.data, "success message");
+      } else {
+        console.log(data.data, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-
-
-    <div >
-  
+    <div>
       <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
-        
         <div className="w-full  lg:w-1/2 xl:w-5/12 p-6  lg:flex-none flex items-center flex-col justify-center h-screen sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
               <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900 mb-2">
-              Login
+                Login
               </h1>
               <p className="text-[12px] text-gray-500">
                 Hey enter your details to create your account
               </p>
             </div>
             <div className="w-full flex-1 mt-8">
-              <div className="mx-auto max-w-xs flex flex-col gap-4">
-                
+              <form
+                className="mx-auto max-w-xs flex flex-col gap-4"
+                onSubmit={HandleSubmit}
+              >
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  name="email"
                   type="email"
                   placeholder="Enter your email"
+                  onChange={HandleInputChange}
                 />
 
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
+                  name="password"
                   placeholder="Enter password"
+                  onChange={HandleInputChange}
                 />
-                
+
                 <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                   <svg
                     className="w-6 h-6 -ml-2"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    strokeWidth="2"
                     strokeLinecap="round"
-                    stroke-linejoin="round"
+                    strokeLinejoin="round"
                   >
                     <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
                     <circle cx="8.5" cy="7" r="4" />
@@ -50,10 +99,12 @@ export default function Page() {
                 <p className="mt-6 text-xs text-gray-600 text-center">
                   Dont have an account?{" "}
                   <a href="">
-                    <span className="text-blue-900 font-semibold">Register</span>
+                    <span className="text-blue-900 font-semibold">
+                      Register
+                    </span>
                   </a>
                 </p>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -67,7 +118,5 @@ export default function Page() {
         </div>
       </div>
     </div>
-
-
   );
 }

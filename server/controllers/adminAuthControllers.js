@@ -1,4 +1,4 @@
-const Client = require("../models/clientAuthSchema");
+const Admin = require("../models/adminAuthSchema");
 const Blog = require("../models/blogSchema");
 const { StatusCodes } = require("http-status-codes");
 require("dotenv").config();
@@ -12,10 +12,10 @@ const multer = require("multer");
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const upload = multer({ dest: "public/tmp" });
-const clientUrl = process.env.CLIENT_URL;
+const AdminUrl = process.env.Admin_URL;
 const serverUrl = process.env.SERVER_URL;
 
-const Clientjoi = require("../Utils/ClientJoiSchema");
+const Adminjoi = require("../Utils/AdminJoiSchema");
 const {
   NotFoundError,
   UnAuthorizedError,
@@ -28,7 +28,7 @@ const signUp = async (req, res) => {
   const { fullname, email, password } = req.body;
 
   try {
-    const findUser = await Client.findOne({ email });
+    const findUser = await Admin.findOne({ email });
 
     if (findUser) {
       throw new UnAuthorizedError("Email already exists");
@@ -36,7 +36,7 @@ const signUp = async (req, res) => {
 
     console.log("not found");
 
-    const { error, value } = Clientjoi.validate({
+    const { error, value } = Adminjoi.validate({
       fullname,
       email,
       password,
@@ -49,7 +49,7 @@ const signUp = async (req, res) => {
 
     console.log(value);
 
-    const newUser = await Client.create(value);
+    const newUser = await Admin.create(value);
 
     console.log(newUser);
 
@@ -70,7 +70,7 @@ const signIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const olduser = await Client.findOne({ email });
+    const olduser = await Admin.findOne({ email });
 
     if (!olduser) {
       throw new NotFoundError("User not found");
@@ -113,18 +113,13 @@ const singleUser = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const olduser = await Client.findById(id);
-    const userblog = await Blog.find({ author: id });
+    const olduser = await Admin.findById(id);
 
     if (!olduser) {
       throw new NotFoundError("User not found");
     }
 
-    if (!userblog) {
-      throw new NotFoundError("No Blog found");
-    }
-
-    res.status(StatusCodes.OK).json({ olduser, userblog });
+    res.status(StatusCodes.OK).json({ olduser });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -136,7 +131,7 @@ const userRecovery = async (req, res) => {
   const { email } = req.body;
 
   try {
-    const userexist = await Client.findOne({ email });
+    const userexist = await Admin.findOne({ email });
 
     if (!userexist) {
       throw new NotFoundError("User not found");
@@ -186,12 +181,12 @@ const userVerifyPasswordReset = async (req, res) => {
 
     if (!decodedId) {
       console.log("Invalid token");
-      res.redirect(`${clientUrl}/recovery`);
+      res.redirect(`${AdminUrl}/recovery`);
       throw new UnAuthorizedError("Invalid token");
     }
 
     console.log("Valid token");
-    res.redirect(`${clientUrl}/updatepassword?verified=true&reset=${token}`);
+    res.redirect(`${AdminUrl}/updatepassword?verified=true&reset=${token}`);
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -211,7 +206,7 @@ const userUpdatePassword = async (req, res) => {
 
     const decodedId = VerifyToken(reset);
 
-    const checkuser = await Client.findById(decodedId["id"]["id"]);
+    const checkuser = await Admin.findById(decodedId["id"]["id"]);
 
     if (!checkuser) {
       throw new UnAuthorizedError("User not found");
@@ -219,7 +214,7 @@ const userUpdatePassword = async (req, res) => {
 
     const hashedPassword = await checkuser.newHashPassword(password);
 
-    await Client.findByIdAndUpdate(
+    await Admin.findByIdAndUpdate(
       checkuser._id,
       { password: hashedPassword },
       { new: true }
@@ -243,56 +238,42 @@ const userUpdate = async (req, res) => {
       throw new NotFoundError("User not found");
     }
 
-    if (!req.file) {
-      const olduser = { fullname, email, userbio };
+    const { user, userRole } = req;
 
-      const mainuser = await Client.findByIdAndUpdate(
-        String(req.user._id),
-        olduser,
-        {
-          new: true,
+    // Check if the user has the required role to update
+    if ((userRole === "superadmin" || userRole === "admin") && user.role === "editor") {
+      const updateFields = { fullname, email, userbio };
+
+      if (req.file) {
+        const { path } = req.file;
+        try {
+          const userphoto = await cloudinary.uploader.upload(path, {
+            use_filename: true,
+            folder: "UserDP",
+          });
+
+          console.log(userphoto.secure_url);
+          updateFields.userdp = userphoto.secure_url;
+        } catch (uploadError) {
+          console.error("Error uploading file to Cloudinary:", uploadError);
+          return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ error: "Error uploading file to Cloudinary" });
         }
+      }
+
+      const updatedUser = await Admin.findByIdAndUpdate(
+        user._id,
+        updateFields,
+        { new: true }
       );
 
-      res
-        .status(StatusCodes.OK)
-        .json({ data: mainuser, message: "Account updated successfully" });
+      res.status(StatusCodes.OK).json({
+        message: "Account updated successfully",
+        user: updatedUser,
+      });
     } else {
-      const { path } = req.file;
-
-      try {
-        const userphoto = await cloudinary.uploader.upload(path, {
-          use_filename: true,
-          folder: "UserDP",
-        });
-
-        console.log(userphoto.secure_url);
-
-        const olduser = {
-          fullname,
-          email,
-          userbio,
-          userdp: userphoto.secure_url,
-        };
-
-        const updatedUser = await Client.findByIdAndUpdate(
-          String(req.user._id),
-          olduser,
-          {
-            new: true,
-          }
-        );
-
-        res.status(StatusCodes.OK).json({
-          message: "Account updated successfully",
-          user: updatedUser,
-        });
-      } catch (uploadError) {
-        console.error("Error uploading file to Cloudinary:", uploadError);
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: "Error uploading file to Cloudinary" });
-      }
+      throw new UnAuthorizedError("Unauthorized to update user information");
     }
   } catch (error) {
     console.error(error);
@@ -305,7 +286,7 @@ const userUpdate = async (req, res) => {
 const currentUser = async (req, res) => {
   try {
     if (req.user) {
-      const olduser = await Client.findById(req.user._id);
+      const olduser = await Admin.findById(req.user._id);
 
       return res
         .status(200)
@@ -338,15 +319,30 @@ const userSignOut = async (req, res) => {
 
 const userDelete = async (req, res) => {
   try {
-    if (!req.user) {
+    const { user, userRole } = req;
+
+    if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    const deleteUser = await Client.findByIdAndDelete(req.user);
+    // Allow super admin to delete both admins and editors
+    if (userRole === "superadmin") {
+      const deleteUser = await Admin.findByIdAndDelete(user._id);
 
-    if (deleteUser) {
-      res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
-      console.log("User deleted successfully");
+      if (deleteUser) {
+        res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
+        console.log("User deleted successfully");
+      }
+    } else if ((userRole === "admin" && user.role === "editor") || (userRole === "superadmin" && user.role === "admin")) {
+      // Allow admin to delete editors and super admin to delete admins
+      const deleteUser = await Admin.findByIdAndDelete(user._id);
+
+      if (deleteUser) {
+        res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
+        console.log("User deleted successfully");
+      }
+    } else {
+      throw new UnAuthorizedError("Unauthorized to delete user");
     }
   } catch (error) {
     res
@@ -354,6 +350,7 @@ const userDelete = async (req, res) => {
       .json({ error: error.message });
   }
 };
+
 
 module.exports = {
   signUp,
