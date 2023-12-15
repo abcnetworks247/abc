@@ -9,7 +9,7 @@ const {
     userUpdate,
     userSignOut,
     userDelete,
-  } = require('../controllers/authControllers');
+  } = require('../controllers/adminAuthControllers');
   
   const router = require('express').Router();
   const authChecker = require('../middlewares/adminAuthChecker'); // Import your admin auth middleware

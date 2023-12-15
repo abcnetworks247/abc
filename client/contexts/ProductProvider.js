@@ -53,7 +53,10 @@ const ProductProvider = ({ children }) => {
     const updatedCart = [...cartProducts, product];
     setCartProducts(updatedCart);
     // Update local storage
-    localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+    if(typeof window !== "undefined"){
+
+      localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+    }
   };
 
   const handleCartClick = (e, product) => {
@@ -79,16 +82,19 @@ const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     // Retrieve cartProducts from local storage when component mounts
-    const storedCartProducts = JSON.parse(
-      localStorage.getItem("cartProducts") || "[]"
-    );
+    
+      const storedCartProducts = JSON.parse( typeof window !== "undefined"? 
+        localStorage.getItem("cartProducts") || "[]" : "[]"
+      );
+    
     setCartProducts(storedCartProducts);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
   // Retrieve products from local storage
-  const storedProducts = JSON.parse(
-    localStorage.getItem("cachedProducts") || "[]"
-  );
+
+
+  const storedProducts = JSON.parse(typeof window !== "undefined" ? localStorage.getItem("cachedProducts") || "[]" : "[]");
+
 
   useEffect(() => {
     if (storedProducts.length > 0) {
@@ -102,8 +108,10 @@ const ProductProvider = ({ children }) => {
            .then((json) => {
              setProducts(json);
              setHasFetchedData(true); // Update state to indicate that data has been fetched
+                 if(typeof window !== "undefined"){
 
-             localStorage.setItem("cachedProducts", JSON.stringify(json));
+                   localStorage.setItem("cachedProducts", JSON.stringify(json));
+                 }
            });
        }
       

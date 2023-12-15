@@ -52,10 +52,10 @@ export default function AboutComponent() {
             <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-10">
                 <div className="max-w-lg">
-                  <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                  <h2 className="text-lg font-semibold text-gray-900 sm:text-4xl">
                     About Us
                   </h2>
-                  <p className="mt-4 text-gray-600 text-lg">
+                  <p className="mt-4 text-gray-600">
                     At Oravent, we go beyond decoration – we craft immersive
                     experiences that tell a story. With a passion for
                     transforming spaces, our dedicated team brings creativity
@@ -73,7 +73,7 @@ export default function AboutComponent() {
                     // link to a random image from unsplash source: https://source.unsplash.com/random
                     src="https://source.unsplash.com/random"
                     alt="About Us Image"
-                    className="object-cover rounded-lg shadow-md h-[65vh] lg:w-[65vw] md:w-auto w-auto"
+                    className="object-cover rounded-lg shadow-md h-[60vh] lg:w-[60vw] md:w-auto w-auto"
                   />
                 </div>
               </div>
@@ -84,7 +84,7 @@ export default function AboutComponent() {
       <section className="bg-gray-100 text-gray-900">
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
           <div className="mx-auto max-w-lg text-center">
-            <h2 className="text-3xl font-bold sm:text-4xl">
+            <h2 className="text-3xl font-bold sm:text-3xl">
               Kickstart your marketing
             </h2>
 
@@ -98,7 +98,7 @@ export default function AboutComponent() {
           <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             <a
               className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
-              href="/#"
+              href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +117,7 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 className="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-lg font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
@@ -129,7 +129,7 @@ export default function AboutComponent() {
             </a>
             <a
               className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
-              href="/#"
+              href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +148,7 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 className="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-lg font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
@@ -160,7 +160,7 @@ export default function AboutComponent() {
             </a>
             <a
               className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
-              href="/#"
+              href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -179,7 +179,7 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 className="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-lg font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
@@ -191,7 +191,7 @@ export default function AboutComponent() {
             </a>
             <a
               className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
-              href="/#"
+              href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -210,7 +210,7 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 className="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-lg font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
@@ -222,7 +222,7 @@ export default function AboutComponent() {
             </a>
             <a
               className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
-              href="/#"
+              href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +241,7 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 className="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-lg font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
@@ -253,11 +253,11 @@ export default function AboutComponent() {
             </a>
             <a
               className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
-              href="/#"
+              href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-blue-500"
+                className="h-8 w-8 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -272,7 +272,7 @@ export default function AboutComponent() {
                 />
               </svg>
 
-              <h2 className="mt-4 text-xl font-bold text-gray-900">
+              <h2 className="mt-4 text-lg font-bold text-gray-900">
                 Digital campaigns
               </h2>
 
