@@ -1,12 +1,20 @@
 "use client";
 import React from "react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../../../contexts/productContext";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 
+
 const SingleArrival = ({ product }) => {
   const { handleProductClick, handleCartClick, rating } = useContext(ProductContext);
-  const { handleAddToWishlist } = UseProductProvider()
+  const { handleAddToWishlist , handleRemoveFromWishlist} = UseProductProvider()
+  const [hoverState, setHoverState] = useState(false)
+  const [wishClick, setWishClick] = useState(false)
+
+  const handleWishClick = () => {
+    setWishClick((prev)=>!prev)
+  }
+  
 
   if (!handleProductClick) {
     console.error("handleProductClick is not available in the context.");
@@ -18,37 +26,65 @@ const SingleArrival = ({ product }) => {
     <div
       className="mt-56 bg-white rounded shadow cursor-pointer"
       onClick={() => handleProductClick(product)}
+      onMouseEnter={() => setHoverState(true)}
     >
-      <div className="relative z-20 py-6 group">
-        <div className="relative flex items-center justify-center w-full h-64 mb-4  -mt-56 overflow-hidden rounded -top-full ">
+      {/* <div className="relative z-20 py-6 group shadow-md"> */}
+      <div className="relative  py-6 group shadow-md">
+        <div className="relative flex items-center shadow-sm justify-center w-full h-64 mb-4  -mt-56 overflow-hidden rounded -top-full bg-white ">
           <img
-            className="object-contain w-[70%] h-full transition-all group-hover:scale-110"
+            className="object-contain w-[70%] h-full transition-all group-hover:scale-110 bg-transparent"
             src={product.image}
             alt=""
           />
           <div className="absolute flex flex-col top-4 right-4 z-[2]">
-            <a
-              className="flex items-center"
-              onClick={(e) => handleAddToWishlist(e, product)}
-            >
-              <div className="relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all bg-white rounded dark:bg-gray-700 dark:text-white  wishlist   dark:hover:bg-blue-600 group">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  className={`bi bi-heart-fill}`}
-                  viewBox="0 0 16 16"
-                  style={{ fill: "#FF6666" }}
-                >
-                  <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
-                </svg>
+            <a className="  flex items-center  ">
+              <div
+                className={`relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all 
+                 sm:group-hover:translate-x-0  sm:translate-x-20 bg-white rounded   wishlist  group`}
+              >
+                {wishClick ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    className={`bi bi-heart-fill}`}
+                    viewBox="0 0 16 16"
+                    style={{ fill: "#FF6666" }}
+                    onClick={(e) => {
+                      handleWishClick()
+                    handleRemoveFromWishlist(e, product)} 
+                    }
+                  >
+                    <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    className={`bi bi-heart`}
+                    viewBox="0 0 16 16"
+                    stroke="red"
+                    fill="none"
+                      onClick={(e) => {
+                        handleWishClick()
+                        handleAddToWishlist(e, product);
+                      }}
+                  
+                  >
+                    <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
+                  </svg>
+                )}
               </div>
             </a>
             <a
               className="flex items-center"
               onClick={(e) => handleCartClick(e, product)}
             >
-              <div className="relative flex items-center justify-center cursor-pointer hover:scale-125 p-3 mb-3 transition-all  bg-white rounded dark:bg-gray-700 dark:text-white wishlist dark:hover:bg-blue-600 group">
+              <div
+                className={`relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all 
+                 sm:group-hover:translate-x-0  sm:translate-x-20 bg-white rounded   wishlist  group`}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -95,7 +131,7 @@ const SingleArrival = ({ product }) => {
                     xmlns="http://www.w3.org/2000/svg"
                     width="16"
                     height="16"
-                    fill="blue"
+                    fill="#D4AF37"
                     className="bi bi-star-fill"
                     viewBox="0 0 16 16"
                   >

@@ -10,6 +10,7 @@ const ProductProvider = ({ children }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
   const [Wishlist, setWishlist] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const MAX_RATING = 5;
   const MIN_RATING = 1;
 
@@ -20,14 +21,25 @@ const ProductProvider = ({ children }) => {
     openModal();
   };
 
-  const addToWishlist = (e, product) => {
-    e.stopPropagation();
+  const addToWishlist = ( product) => {
+    // e.stopPropagation();
     setWishlist((prev) => [...prev, product]);
+   
   };
+
+  const removeFromWishlist = ( product) => {
+    const newWishList = Wishlist.filter((wishproduct) => product.id !== wishproduct.id)
+    setWishlist(newWishList)
+  }
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
-    addToWishlist(e, product);
+    addToWishlist(product);
   };
+
+  const handleRemoveFromWishlist = (e, product) => {
+    e.stopPropagation();
+    removeFromWishlist(product);
+  }
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -49,6 +61,21 @@ const ProductProvider = ({ children }) => {
     addToCart(e, product);
   };
 
+  // const searchProducts = (query) => {
+  //   const results = products.filter(
+  //     (product) =>
+  //       product.title.toLowerCase().includes(query.toLowerCase()) ||
+  //       product.category.toLowerCase().includes(query.toLowerCase())
+  //   );
+  //   setSearchResults(results);
+  // };
+
+  const searchProducts = (query) => {
+    const regex = new RegExp(`^${query}`, "i");
+    const results = products.filter((product) => regex.test(product.title));
+
+    setSearchResults(results);
+  };
 
   useEffect(() => {
     // Retrieve cartProducts from local storage when component mounts
@@ -58,18 +85,35 @@ const ProductProvider = ({ children }) => {
     setCartProducts(storedCartProducts);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
+  // Retrieve products from local storage
+  const storedProducts = JSON.parse(
+    localStorage.getItem("cachedProducts") || "[]"
+  );
+
   useEffect(() => {
-    if (!hasFetchedData) {
-      fetch("https://fakestoreapi.com/products")
-        .then((res) => res.json())
-        .then((json) => {
-          setProducts(json);
-          setHasFetchedData(true); // Update state to indicate that data has been fetched
-        });
+    if (storedProducts.length > 0) {
+       setProducts(storedProducts);
+       setHasFetchedData(true);
+    } 
+    else {
+       if (!hasFetchedData) {
+         fetch("https://fakestoreapi.com/products")
+           .then((res) => res.json())
+           .then((json) => {
+             setProducts(json);
+             setHasFetchedData(true); // Update state to indicate that data has been fetched
+
+             localStorage.setItem("cachedProducts", JSON.stringify(json));
+           });
+       }
+      
     }
+   
   }, [hasFetchedData]);
 
-  useEffect(() => {}, [cartProducts]);
+  console.log(Wishlist);
+
+  // useEffect(() => {}, [cartProducts]);
 
   return (
     <ProductContext.Provider
@@ -86,6 +130,10 @@ const ProductProvider = ({ children }) => {
         handleAddToWishlist,
         Wishlist,
         rating,
+        searchProducts,
+        searchResults,
+        setSearchResults,
+        handleRemoveFromWishlist
       }}
     >
       {children}

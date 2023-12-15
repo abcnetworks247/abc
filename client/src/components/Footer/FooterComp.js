@@ -111,18 +111,18 @@ export default function FooterComp() {
           <div className="flex flex-wrap items-center md:justify-between justify-center">
             <div className="w-full md:w-4/12 px-4 mx-auto text-center">
               <div className="text-sm text-white font-semibold py-1">
-                Copyright © <span id="get-current-year">2021</span>
+                Copyright © <span id="get-current-year">2023</span>
                 <a
                   href="https://www.creative-tim.com/product/notus-js"
                   className="text-white hover:text-gray-800"
                   target="_blank"
                 />{" "}
-                Notus JS by
+                ABC Studio
                 <a
                   href="https://www.creative-tim.com?ref=njs-profile"
                   className="text-white hover:text-white"
                 >
-                  Creative Tim
+                  Powered by Klipto inc
                 </a>
               </div>
             </div>

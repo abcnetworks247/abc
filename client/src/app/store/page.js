@@ -11,23 +11,24 @@ import ProductModal from '@/components/Products/ProductModal'
 import FooterComp from '@/components/Footer/FooterComp'
 import Sidebar from '@/components/sidebar/Sidebar'
 import Banner from '@/components/Banner/Banner'
+import SearchModal from '@/components/Banner/SearchModal'
 
 
 const page = () => {
   return (
-    <div className='relative'>
+    <div className="relative">
       <Navbar />
-      <Banner/>
-      <Sidebar/>
-    
+      <Banner />
+      <Sidebar />
+
       <Features />
 
       <NewArrival />
       <Ads />
       <Recommended />
       <FooterComp />
-      <Copyright />
-      <ProductModal/>
+      <ProductModal />
+      {/* <SearchModal/> */}
     </div>
   );
 };
