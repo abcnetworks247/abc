@@ -12,7 +12,7 @@ const {
   } = require('../controllers/authControllers');
   
   const router = require('express').Router();
-  const adminAuthChecker = require('../middlewares/AdminAuthChecker'); // Import your admin auth middleware
+  const authChecker = require('../middlewares/adminAuthChecker'); // Import your admin auth middleware
   const path = require('path');
   const multer = require('multer');
   
@@ -28,15 +28,15 @@ const {
   router.route('/signup').post(signUp);
   router.route('/signin').post(signIn);
   router.route('/recovery').post(userRecovery);
-  router.route('/account/signout').delete(adminAuthChecker, userSignOut);
+  router.route('/account/signout').delete(authChecker, userSignOut);
   
   router.route('/user/:id').get(singleUser);
   
   router.route('/account/updatepassword/:token').get(userVerifyPasswordReset);
   router.route('/account/updatepassword/').post(userUpdatePassword);
-  router.route('/account').get(adminAuthChecker, currentUser); // Change authChecker to adminAuthChecker
-  router.route('/account').patch(adminAuthChecker, upload.single('userphoto'), userUpdate); // Change authChecker to adminAuthChecker
-  router.route('/account').delete(adminAuthChecker, userDelete); // Change authChecker to adminAuthChecker
+  router.route('/account').get(authChecker, currentUser); // Change authChecker to adminAuthChecker
+  router.route('/account').patch(authChecker, upload.single('userphoto'), userUpdate); // Change authChecker to adminAuthChecker
+  router.route('/account').delete(authChecker, userDelete); // Change authChecker to adminAuthChecker
   
   module.exports = router;
   

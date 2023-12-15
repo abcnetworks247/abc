@@ -12,7 +12,7 @@ const {
 } = require('../controllers/clientAuthControllers');
 
 const router = require('express').Router();
-const authChecker = require('../middlewares/AuthChecker');
+const authChecker = require('../middlewares/clientAuthChecker');
 const path = require('path');
 const multer = require('multer');
 

@@ -3,6 +3,7 @@ require("dotenv").config();
 const connectDb = require("./db/ConnectDb");
 const blogRouter = require("./routes/blogRoute");
 const clientRouter = require("./routes/clientAuthRoute");
+const adminRouter = require("./routes/adminAuthRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 
@@ -24,7 +25,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
@@ -36,7 +37,7 @@ postReaction(io);
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
@@ -70,6 +71,7 @@ app.use((err, req, res, next) => {
 
 app.use("/api/v1/client/blog", blogRouter);
 app.use("/api/v1/client/auth", clientRouter);
+app.use("/api/v1/admin/auth", adminRouter);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
