@@ -8,6 +8,7 @@ function page() {
     <div>
         <Navbar />
         <br />
+        <br />
         <AboutComponent />
         <FooterComp />
     </div>

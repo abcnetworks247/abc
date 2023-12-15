@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import { useState, React } from "react";
 import { HiOutlineMenuAlt3 } from "react-icons/hi";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
@@ -8,12 +8,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { stringify } from "postcss";
-
-
-
+/**
+ * Represents a navigation bar component.
+ * @returns {JSX.Element} The JSX element representing the navigation bar.
+ */
 export default function Navbar() {
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
+
+  let a = true;
+  const [buttonColor, setButtonColor] = useState({
+    signUp: "bg-blue-500 text-white",
+    login: "bg-white text-gray-800",
+  });
+
+  const handleMouseOver = () => {
+    setButtonColor({
+      signUp: "bg-white text-gray-800",
+      login: "bg-blue-500 text-white",
+    });
+  };
+
+  const handleMouseOut = () => {
+    setButtonColor({
+      signUp: "bg-blue-500 text-white transition-all duration",
+      login: "bg-white text-gray-800 transition-all duration",
+    });
+  };
 
   // cart value variable
   const cartvalue = cartProducts.length;
@@ -23,10 +44,9 @@ export default function Navbar() {
   const WishlistValue = Wishlist.length;
 
   // wishlist local storage function
-  
 
   return (
-    <div >
+    <div>
       <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
         {/* abcdstudio logo */}
         <div className="navbar-start">
@@ -58,7 +78,7 @@ export default function Navbar() {
           >
             Packages
           </Link>
-         
+
           <Link
             href="/about"
             className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
@@ -113,15 +133,29 @@ export default function Navbar() {
               )}
             </a>
           </div>
+                {/* if a === true hide this div else show it */}
+          <div className={`${a ? 'hidden' : 'group font-medium text-sm flex flex-row items-center justify-center border rounded ease-in-out duration-200' }`}>
+            <Link href="/signup">
+              <button
+                className={`${buttonColor.signUp} p-2 rounded transition-colors`}
+                onMouseOver={handleMouseOver}
+                onMouseOut={handleMouseOut}
+              >
+                SignUp
+              </button>
+            </Link>
 
-          <div className="hidden avatar avatar-ring avatar-md sm:block">
-            <label className="btn btn-ghost  cursor-pointer px-0" tabIndex="0">
-              <img
-                src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-                alt="avatar"
-              />
-            </label>
+            <Link href="/login">
+              <button
+                className={`${buttonColor.login} p-2 rounded transition-colors `}
+              >
+                Login
+              </button>
+            </Link>
           </div>
+
+
+
           <div className="avatar avatar-ring avatar-md ">
             <div className="dropdown-container   text-center ">
               <label
