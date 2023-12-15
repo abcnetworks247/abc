@@ -18,7 +18,7 @@ import pxToRem from "assets/theme/functions/pxToRem";
 
 const icon = {
   defaultProps: {
-    baseClassName: "material-icons-round",
+    baseclassName: "material-icons-round",
     fontSize: "inherit",
   },
 

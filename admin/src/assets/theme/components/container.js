@@ -29,7 +29,7 @@ const LG = `@media (min-width: ${lg}px)`;
 const XL = `@media (min-width: ${xl}px)`;
 const XXL = `@media (min-width: ${xxl}px)`;
 
-const sharedClasses = {
+const sharedclassNamees = {
   paddingRight: `${pxToRem(24)} !important`,
   paddingLeft: `${pxToRem(24)} !important`,
   marginRight: "auto !important",
@@ -41,31 +41,31 @@ const sharedClasses = {
 const container = {
   [SM]: {
     ".MuiContainer-root": {
-      ...sharedClasses,
+      ...sharedclassNamees,
       maxWidth: "540px !important",
     },
   },
   [MD]: {
     ".MuiContainer-root": {
-      ...sharedClasses,
+      ...sharedclassNamees,
       maxWidth: "720px !important",
     },
   },
   [LG]: {
     ".MuiContainer-root": {
-      ...sharedClasses,
+      ...sharedclassNamees,
       maxWidth: "960px !important",
     },
   },
   [XL]: {
     ".MuiContainer-root": {
-      ...sharedClasses,
+      ...sharedclassNamees,
       maxWidth: "1140px !important",
     },
   },
   [XXL]: {
     ".MuiContainer-root": {
-      ...sharedClasses,
+      ...sharedclassNamees,
       maxWidth: "1320px !important",
     },
   },

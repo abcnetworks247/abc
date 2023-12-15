@@ -145,7 +145,7 @@
 @material-ui/core
 @material-ui/icons
 chartist
-classnames
+classNames
 match-sorter
 moment
 node-sass
@@ -212,7 +212,7 @@ web-vitals
 ```
 @material-ui/core         4.10.0   →   4.11.4
 @material-ui/icons         4.9.1   →   4.11.2
-classnames                 2.2.6   →    2.3.1
+classNames                 2.2.6   →    2.3.1
 perfect-scrollbar          1.5.0   →    1.5.1
 react                    16.13.1   →   17.0.2
 react-chartist            0.14.3   →   0.14.4
@@ -516,7 +516,7 @@ ajv                        6.9.1   →   6.10.0
 
 ### Major style changes
 
-- Added styles for `svg`'s, **font-awesome** classes and `.material-icons` class inside
+- Added styles for `svg`'s, **font-awesome** classNamees and `.material-icons` className inside
   - `src/assets/jss/material-dashboard-react/views/dashboardStyle.jsx`
   - `src/assets/jss/material-dashboard-react/components/buttonStyle.jsx`
   - `src/assets/jss/material-dashboard-react/components/cardFooterStyle.jsx`
@@ -603,7 +603,7 @@ ajv                        6.9.1   →   6.10.0
 ### Update dependencies
 
 - `@material-ui/icons@1.0.0-beta.42` to `@material-ui/icons@1.1.0`
-- `classnames@2.2.5` to `classnames@2.2.6`
+- `classNames@2.2.5` to `classNames@2.2.6`
 - `npm-run-all@4.1.2` to `npm-run-all@4.1.3`
 - `perfect-scrollbar@1.3.0` to `perfect-scrollbar@1.4.0`
 - `react@16.2.0` to `react@16.4.0`
@@ -641,9 +641,9 @@ ajv                        6.9.1   →   6.10.0
 - PerfectScrollbar renders only on windows
 - Used [pretier](https://github.com/prettier/prettier) to make the code more readable
 - Optimized images sizes
-- Changed `classes={root:...}` to `classNames={...}` only where it had `classes={root:...}` and not like `classes={root:..., something:... ,...}`
-- Added `classnames()` to avoid doing brittle class name manipulation
-- Classes that do not need states were converted to functions
+- Changed `classNamees={root:...}` to `classNames={...}` only where it had `classNamees={root:...}` and not like `classNamees={root:..., something:... ,...}`
+- Added `classNames()` to avoid doing brittle className name manipulation
+- classNamees that do not need states were converted to functions
 - Moved the style variables in `src/variables/styles.jsx` and all the components styles in `src/variables/styles/{$componentNameStyle}.jsx` files
 - Added `-webkit-overflow-scrolling: touch` css for nice scrolling on mobile devices
 - Updated to latest `Material-UI` version (from `v1.0.0.beta30` to `v1.0.0.beta34`)
