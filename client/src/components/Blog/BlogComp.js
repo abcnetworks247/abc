@@ -29,7 +29,7 @@ export default function BlogComp() {
           {/* <!-- featured section --> */}
           <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
     
-      <div className=" block  md:w-[50vw] p-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+      <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
 
             <Swiper
    spaceBetween={30}
