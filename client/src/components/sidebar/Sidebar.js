@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MdClose } from "react-icons/md";
 import Link from "next/link";
 import { FaRegUser } from "react-icons/fa6";
+import { CgLivePhoto } from "react-icons/cg";
 
 export default function Sidebar() {
   const { loading, UserData, Authtoken } = UseUserContext();
@@ -87,9 +88,9 @@ export default function Sidebar() {
                     <a href="/store">Store</a>
                   </li>
                   <li className="menu-item">
-                    <IoStorefrontOutline className="w-5 h-5 opacity-75" />
+                    <CgLivePhoto className="w-5 h-5 text-red-600 opacity-75" />
 
-                    <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">ABC Live Stream </span>
+                    <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">Live </span>
                   </li>
                   <li>
                     <input
