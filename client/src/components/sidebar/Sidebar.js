@@ -49,7 +49,7 @@ export default function Sidebar() {
 		  <div>
 			<label htmlFor="sidebar-mobile-fixed">
 
-		  <MdClose  className="text-3xl text-blackInverted cursor-pointer" />
+		  <MdClose  className="text-3xl cursor-pointer text-blackInverted" />
 			</label>
 		  </div>
 			</div>
@@ -85,6 +85,11 @@ export default function Sidebar() {
                     <IoStorefrontOutline className="w-5 h-5 opacity-75" />
 
                     <a href="/store">Store</a>
+                  </li>
+                  <li className="menu-item">
+                    <IoStorefrontOutline className="w-5 h-5 opacity-75" />
+
+                    <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">ABC Live Stream </span>
                   </li>
                   <li>
                     <input
@@ -245,7 +250,7 @@ export default function Sidebar() {
                 {Authtoken && UserData && Authtoken.length !== 0 ? (
                   <>
                     {loading === false ? (
-                      <div className="dropdown-container  gap-4 items-center">
+                      <div className="items-center gap-4 dropdown-container">
                         <div className="avatar-square avatar avatar-md">
                           <Image
                             src={UserData && UserData.userdp}
@@ -253,7 +258,7 @@ export default function Sidebar() {
                             width={33}
                             quality={100}
                             loading="lazy"
-                            className="rounded-full cursor-pointer object-cover"
+                            className="object-cover rounded-full cursor-pointer"
                             alt="avatar"
                             // style={{
                             //   width: '100%',
