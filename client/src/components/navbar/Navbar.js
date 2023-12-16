@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
+
 /**
  * Represents a navigation bar component.
  * @returns {JSX.Element} The JSX element representing the navigation bar.
@@ -61,7 +62,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
+      <div className="navbar rounded-lg fixed top-0 px-3 md:px-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
         <div>
           <div className="w-fit ">
             <label htmlFor="sidebar-mobile-fixed" className="  md:hidden">
