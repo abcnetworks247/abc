@@ -22,13 +22,10 @@ const SearchMobile = () => {
     };
 
   return (
-    <form
-      className="sm:hidden h-12 border border-blue-100 shadow-sm "
-    
-    >
+    <form className="sm:hidden h-12 border border-blue-100 shadow-sm ">
       <div class="flex items-center justify-between bg-white h-full px-4 ">
         {/* <!-- Left Arrow Icon --> */}
-        <div onClick={()=>router.push("/store")}>
+        <div onClick={() => router.push("/store")}>
           <svg
             className="text-gray-500 w-6 h-4"
             fill="none"
@@ -48,6 +45,7 @@ const SearchMobile = () => {
           className=" h-full bg-transparent focus:outline-none "
           placeholder="Search..."
           onChange={handleSearch}
+          autoFocus
         />
 
         {/* <!-- Search Icon --> */}
@@ -65,7 +63,7 @@ const SearchMobile = () => {
         </svg>
       </div>
     </form>
-  );
+  ); 
 }
 
 export default SearchMobile

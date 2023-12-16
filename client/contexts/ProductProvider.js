@@ -21,16 +21,26 @@ const ProductProvider = ({ children }) => {
     openModal();
   };
 
-  const addToWishlist = ( product) => {
+  const addToWishlist = (product) => {
     // e.stopPropagation();
-    setWishlist((prev) => [...prev, product]);
-   
+    // setWishlist((prev) => [...prev, product]);
+    const updatedWish = [...Wishlist, product];
+    setWishlist(updatedWish);
+    // Update local storage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("Wishlist", JSON.stringify(updatedWish));
+    }
   };
 
-  const removeFromWishlist = ( product) => {
-    const newWishList = Wishlist.filter((wishproduct) => product.id !== wishproduct.id)
-    setWishlist(newWishList)
-  }
+  const removeFromWishlist = (product) => {
+    const newWishList = Wishlist.filter(
+      (wishproduct) => product.id !== wishproduct.id
+    );
+      setWishlist(newWishList)
+     if (typeof window !== "undefined") {
+       localStorage.setItem("Wishlist", JSON.stringify(newWishList));
+     }
+  };
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
     addToWishlist(product);
@@ -39,7 +49,7 @@ const ProductProvider = ({ children }) => {
   const handleRemoveFromWishlist = (e, product) => {
     e.stopPropagation();
     removeFromWishlist(product);
-  }
+  };
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -53,8 +63,7 @@ const ProductProvider = ({ children }) => {
     const updatedCart = [...cartProducts, product];
     setCartProducts(updatedCart);
     // Update local storage
-    if(typeof window !== "undefined"){
-
+    if (typeof window !== "undefined") {
       localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
     }
   };
@@ -81,42 +90,54 @@ const ProductProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Retrieve cartProducts from local storage when component mounts
     
-      const storedCartProducts = JSON.parse( typeof window !== "undefined"? 
-        localStorage.getItem("cartProducts") || "[]" : "[]"
-      );
-    
-    setCartProducts(storedCartProducts);
+
+    const savedWishItems = JSON.parse(
+      typeof window !== "undefined"
+        ? localStorage.getItem("Wishlist") || "[]"
+        : "[]"
+    );
+
+    setWishlist(savedWishItems);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
   // Retrieve products from local storage
 
+  useEffect(() => {
+    // Retrieve cartProducts from local storage when component mounts
 
-  const storedProducts = JSON.parse(typeof window !== "undefined" ? localStorage.getItem("cachedProducts") || "[]" : "[]");
+    const storedCartProducts = JSON.parse(
+      typeof window !== "undefined"
+        ? localStorage.getItem("cartProducts") || "[]"
+        : "[]"
+    );
 
+    setCartProducts(storedCartProducts);
+  }, []); // Empty dependency array means this useEffect runs only once when the component mounts
+
+  const storedProducts = JSON.parse(
+    typeof window !== "undefined"
+      ? localStorage.getItem("cachedProducts") || "[]"
+      : "[]"
+  );
 
   useEffect(() => {
     if (storedProducts.length > 0) {
-       setProducts(storedProducts);
-       setHasFetchedData(true);
-    } 
-    else {
-       if (!hasFetchedData) {
-         fetch("https://fakestoreapi.com/products")
-           .then((res) => res.json())
-           .then((json) => {
-             setProducts(json);
-             setHasFetchedData(true); // Update state to indicate that data has been fetched
-                 if(typeof window !== "undefined"){
-
-                   localStorage.setItem("cachedProducts", JSON.stringify(json));
-                 }
-           });
-       }
-      
+      setProducts(storedProducts);
+      setHasFetchedData(true);
+    } else {
+      if (!hasFetchedData) {
+        fetch("https://fakestoreapi.com/products")
+          .then((res) => res.json())
+          .then((json) => {
+            setProducts(json);
+            setHasFetchedData(true); // Update state to indicate that data has been fetched
+            if (typeof window !== "undefined") {
+              localStorage.setItem("cachedProducts", JSON.stringify(json));
+            }
+          });
+      }
     }
-   
   }, [hasFetchedData]);
 
   console.log(Wishlist);
@@ -141,7 +162,7 @@ const ProductProvider = ({ children }) => {
         searchProducts,
         searchResults,
         setSearchResults,
-        handleRemoveFromWishlist
+        handleRemoveFromWishlist,
       }}
     >
       {children}
