@@ -99,7 +99,7 @@ export default function Navbar() {
               pathname === "/pricing" ? "border-b-[2px] border-[#077bff]" : ""
             }`}
           >
-            Packages
+            Membership
           </Link>
 
           <Link

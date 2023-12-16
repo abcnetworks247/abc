@@ -24,7 +24,7 @@ const page = () => {
         <Navbar />
       </div>
       <Sidebar />
-      <section className="py-12 bg-white pt-28 font-poppins">
+      <section className="pb-8 bg-white font-poppins">
         <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6 lg:px-36">
           <div>
             <h2 className="mb-8 text-xl font-bold dark:text-gray-700">

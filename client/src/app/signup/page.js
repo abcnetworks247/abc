@@ -92,13 +92,14 @@ export default function Page() {
     } catch (error) {
       // Log any errors that occur during the API request
     
-      const errormsg =  toast.error(`${error} `, {
-        position: toast.POSITION.TOP_LEFT
+      const suberrormsg = toast.update(id, {
+        render: `${error}`,
+        type: "error",
+        isLoading: false,
       });
-
       setTimeout(() => {
-        toast.dismiss(errormsg);
-      }, 5000);
+        toast.dismiss(suberrormsg);
+      }, 2000);
 
       console.error(error);
     }
