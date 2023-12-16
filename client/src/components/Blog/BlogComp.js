@@ -17,7 +17,7 @@ export default function BlogComp() {
                 height={500}
                 width={500}
                 alt="img"
-                className="object-cover w-full h-[65vh] rounded-md"
+                className="object-cover w-full h-60 md:h-[60vh] rounded-md"
               />
               <span className="hidden mt-4 text-sm text-green-700 md:block">
                 {" "}
