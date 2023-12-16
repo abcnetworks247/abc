@@ -1,6 +1,7 @@
 import { IoStorefrontOutline } from "react-icons/io5";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Image from "next/image";
+import { MdClose } from "react-icons/md";
 import Link from "next/link";
 
 export default function Sidebar() {
@@ -18,6 +19,8 @@ export default function Sidebar() {
           className="sidebar-overlay lg:hidden "
         ></label>
         <aside className="justify-start h-full bg-white sidebar md:hidden lg:hidden sidebar-fixed-left sidebar-mobile max-sm:fixed max-sm:-translate-x-full">
+			<div className="flex items-center justify-between pr-6">
+
           <section className="items-center p-4 sidebar-title">
             <svg
               fill="none"
@@ -41,6 +44,13 @@ export default function Sidebar() {
               </span>
             </div>
           </section>
+		  <div>
+			<label htmlFor="sidebar-mobile-fixed">
+
+		  <MdClose  className="text-3xl text-blackInverted cursor-pointer" />
+			</label>
+		  </div>
+			</div>
           <section className="sidebar-content">
             <nav className="rounded-md menu">
               <section className="px-4 menu-section">
