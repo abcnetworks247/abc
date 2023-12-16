@@ -126,7 +126,7 @@ const SearchBar = () => {
             <input
               type="search"
               id="search-dropdown"
-              className="block p-2.5 w-[30vw] py-2 bg-white outline-none border-none  text-lg text-gray-900 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+              className="block p-2.5 w-[30vw] py-2 bg-white outline-none border-none  text-lg text-gray-900 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:border-s-gray-700  dark:border-gray-600 placeholder-gray-400 dark:text-white "
               placeholder="Search here..."
               required
               onFocus={handleFocus}
@@ -135,7 +135,7 @@ const SearchBar = () => {
             />{" "}
             <button className="bg-blue-500 absolute right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg">
               <svg
-                className="w-6 h-6 "
+                className="w-4 h-4 "
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

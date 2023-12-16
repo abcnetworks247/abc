@@ -101,13 +101,13 @@ const SingleArrival = ({ product }) => {
         </div>
         <div className="px-3">
           <a href="#">
-            <h2 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white line-clamp-1">
+            <h2 className="mb-2 text-sm font-semibold text-gray-800 line-clamp-1">
               {product.title}
             </h2>
           </a>
-          <p className="mb-3 text-lg font-bold text-blue-500 dark:text-blue-300 ">
+          <p className="mb-3 text-lg font-bold text-gray-600 flex gap-3 items-center">
             <span>$ {product.price}</span>
-            <span className="text-xs font-semibold text-gray-400 line-through ">
+            <span className="text-xs font-semibold text-gray-500 line-through ">
               $ {product.price}
             </span>
           </p>
