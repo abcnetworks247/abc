@@ -1,17 +1,55 @@
+"use client"
 import Image from "next/image";
 import FooterComp from "../Footer/FooterComp";
 import Newsletter from "../newsletter/Newsletter";
+import React, { useRef, useState } from 'react';
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+// import required modules
+import { Autoplay, Navigation, HashNavigation } from 'swiper/modules';
 
 export default function BlogComp() {
+
+  const progressCircle = useRef(null);
+  const progressContent = useRef(null);
+  const onAutoplayTimeLeft = (s, time, progress) => {
+    progressCircle.current.style.setProperty('--progress', 1 - progress);
+    progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+  };
+
+
   return (
     <div>
       {/* <!-- component --> */}
       <div className="max-w-screen-lg mx-auto md:max-w-screen-xl md:px-10">
         <main className="">
           {/* <!-- featured section --> */}
-          <div className="flex flex-col gap-5 mb-16 space-x-0 lg:flex-row md:flex-row md:space-x-6">
-            {/* <!-- main post --> */}
-            <div className="relative block w-full p-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+          <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
+    
+      <div className=" block  md:w-[50vw] p-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+
+            <Swiper
+   spaceBetween={30}
+   hashNavigation={{
+     watchState: true,
+   }}
+   autoplay={{
+    delay: 5000,
+   }}
+   pagination={{
+     clickable: true,
+   }}
+   navigation={false}
+   modules={[Autoplay, Navigation, HashNavigation]}
+   
+        className="mySwiper"
+      >
+        <SwiperSlide>
+               {/* <!-- main post --> */}
+               <div className="relative block w-full p-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
               <Image
                 src="https://images.unsplash.com/photo-1427751840561-9852520f8ce8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
                 height={500}
@@ -42,6 +80,46 @@ export default function BlogComp() {
               </a>
             </div>
 
+        </SwiperSlide>
+        <SwiperSlide>
+               {/* <!-- main post --> */}
+               <div className="relative block w-full p-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+              <Image
+                src="https://images.unsplash.com/photo-1427751840561-9852520f8ce8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
+                height={500}
+                width={500}
+                alt="img"
+                className="object-cover w-full h-60 md:h-[60vh] rounded-md"
+              />
+              <span className="hidden mt-4 text-sm text-green-700 md:block">
+                {" "}
+                Technology{" "}
+              </span>
+              <h1 className="mt-2 mb-2 text-xl font-bold leading-tight text-gray-800">
+                Ignorant branched humanity led now marianne too.
+              </h1>
+              <p className="mb-4 text-sm text-gray-600">
+                Necessary ye contented newspaper zealously breakfast he
+                prevailed. Melancholy middletons yet understood decisively boy
+                law she. Answer him easily are its barton little. Oh no though
+                mother be things simple itself. Oh be me, sure wise sons, no.
+                Piqued ye of am spirit regret. Stimulated discretion impossible
+                admiration in particular conviction up.
+              </p>
+              <a
+                href="#"
+                className="inline-block px-6 py-3 mt-2 text-gray-100 bg-green-700 rounded-md"
+              >
+                Read more
+              </a>
+            </div>
+
+        </SwiperSlide>
+
+ 
+      </Swiper>
+         
+      </div>
             {/* <!-- sub-main posts --> */}
             <div className="w-full md:w-4/7">
               {/* <!-- post 1 --> */}
