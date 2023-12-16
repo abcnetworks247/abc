@@ -117,6 +117,15 @@ export default function Navbar() {
           >
             Contact
           </Link>
+          <Link
+            href="/contact mr-5"
+            className={`navbar-item mx-1 w-fit  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
+              pathname === "/contact" ? "border-b-[2px] border-[#077bff]" : ""
+            }`}
+          >
+            {/* <CgLivePhoto className="text-red-500" /> */}
+            <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">Live</span>
+          </Link>
         </div>
         <div className="hidden navbar-center md:block "></div>
         <div className="flex flex-row items-center navbar-end ">

@@ -17,7 +17,7 @@ import SearchModal from '@/components/Banner/SearchModal'
 const page = () => {
   return (
     <div className="relative">
-      <div className="bg-white sticky top-0 z-[60] ">
+      <div className="bg-white sticky top-0 z-[20] ">
         <Navbar />
       </div>
       <Banner />
