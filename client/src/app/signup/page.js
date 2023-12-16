@@ -149,6 +149,7 @@ export default function Page() {
                   name="fullname"
                   onChange={HandleChange}
                   value={signUpFormData.fullname}
+                  required
                 />
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
@@ -156,6 +157,7 @@ export default function Page() {
                   name="email"
                   placeholder="Enter your email"
                   onChange={HandleChange}
+                  required
                   value={signUpFormData.email}
                 />
                 <input
@@ -164,6 +166,7 @@ export default function Page() {
                   name="password"
                   placeholder="Enter password"
                   onChange={HandleChange}
+                  required
                   value={signUpFormData.password}
                 />
                 {/* <input
