@@ -13,7 +13,7 @@ const page = () => {
     
     return (
       <div>
-         <div className="bg-white sticky top-0 z-[10] mb-10">
+         <div className="bg-white sticky top-0 z-[10]">
         <Navbar />
       </div>
         <Sidebar />

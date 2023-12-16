@@ -23,7 +23,7 @@ export default function BlogComp() {
                 {" "}
                 Technology{" "}
               </span>
-              <h1 className="mt-2 mb-2 text-xl font-bold leading-tight text-gray-800">
+              <h1 className="my-4 text-xl font-bold leading-tight text-gray-800">
                 Ignorant branched humanity led now marianne too.
               </h1>
               <p className="mb-4 text-sm text-gray-600">
