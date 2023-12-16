@@ -1,41 +1,43 @@
-"use client"
-import React from 'react'
-import { useRouter } from 'next/navigation'
-import { UseProductProvider } from '../../../contexts/ProductProvider'
-import Link from 'next/link'
+"use client";
+import React from "react";
+import { useRouter } from "next/navigation";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
+import Link from "next/link";
 
 const SearchMobile = () => {
-
-  
   const { searchProducts, setSearchResults } = UseProductProvider();
-  const router = useRouter()
-    
-    const handleSearch = (e) => {
-      const query = e.target.value;
-      if (!query || query === "") {
-        // If the query is empty, clear the searchResults
-        setSearchResults([]);
-      } else {
-        // If there is a query, perform the search
-        searchProducts(query);
-      }
-    };
+  const router = useRouter();
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    if (!query || query === "") {
+      // If the query is empty, clear the searchResults
+      setSearchResults([]);
+    } else {
+      // If there is a query, perform the search
+      searchProducts(query);
+    }
+  };
 
   return (
-    <form className="sm:hidden h-12 border border-blue-100 shadow-sm ">
-      <div class="flex items-center justify-between bg-white h-full px-4 ">
+    <form className="sm:hidden h-12 border border-blue-100 shadow-sm p-3">
+      <div class="flex items-center justify-between bg-white h-full px-4">
         {/* <!-- Left Arrow Icon --> */}
         <div onClick={() => router.push("/store")}>
           <svg
-            className="text-gray-500 w-6 h-4"
+            className="w-4 h-4 "
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
             fill="none"
-            stroke="blue"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
+            viewBox="0 0 20 20"
           >
-            <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            <path
+              stroke="white"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
           </svg>
         </div>
 
@@ -63,7 +65,7 @@ const SearchMobile = () => {
         </svg>
       </div>
     </form>
-  ); 
-}
+  );
+};
 
-export default SearchMobile
+export default SearchMobile;
