@@ -23,11 +23,7 @@ export default function Navbar() {
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
 
-  let a = false;
-  const [buttonColor, setButtonColor] = useState({
-    signUp: "bg-blue-500 text-white",
-    login: "bg-white text-gray-800",
-  });
+
 
   // console.log('tokk',Authtoken);
 
@@ -153,7 +149,9 @@ export default function Navbar() {
 
           {/* condition to display user profile picture on first render with token */}
           <div>
-            {Authtoken.length !== 0 ? (
+            {Authtoken &&
+            
+            Authtoken.length !== 0 ? (
               <div className="avatar avatar-ring avatar-md ">
                 {loading === false ? (
                   <div className="dropdown-container">
