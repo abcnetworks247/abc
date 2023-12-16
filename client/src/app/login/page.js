@@ -171,8 +171,8 @@ export default function Page() {
                   <span className="ml-3">Login</span>
                 </button>
                 <div className="flex items-center gap-3 justify-between">
-                  <p className="mt-6 text-xs text-gray-600 text-center">
-                    new?{" "}
+                  <p className="mt-6 text-sm text-gray-600 text-center">
+                    New?{" "}
                     <Link href="/signup">
                       <span className="text-blue-900 font-semibold">
                         Register
