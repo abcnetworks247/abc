@@ -66,12 +66,13 @@ export default function Sidebar() {
                       <span>Home</span>
                     </li>
                   </Link>
+                  <Link href="/about">
+                    <li className="menu-item">
+                      <IoStorefrontOutline className="w-5 h-5 opacity-75" />
 
-                  <li className="menu-item">
-                    <IoStorefrontOutline className="w-5 h-5 opacity-75" />
-
-                    <a href="/store">Store</a>
-                  </li>
+                      <p>Store</p>
+                    </li>
+                  </Link>
 
                   <li className="menu-item">
                     <CgLivePhoto className="w-5 h-5 text-red-600 opacity-75" />
@@ -101,18 +102,20 @@ export default function Sidebar() {
                     </svg>
                     Membership
                   </li>
+                  <Link href="/about">
+                    <li className="menu-item">
+                      <IoInformationCircleOutline className="w-5 h-5 text-black opacity-75" />
+                      About
+                    </li>
+                  </Link>
 
-                  <li className="menu-item">
-                  <IoInformationCircleOutline className="w-5 h-5 text-black opacity-75" />
-                    About
-                  </li>
+                  <Link href="/contact">
+                    <li className="menu-item">
+                      <MdOutlineContacts className="w-5 h-5 text-black opacity-75" />
+                      Contact
+                    </li>
+                  </Link>
 
-                  <li className="menu-item">
-                  <MdOutlineContacts className="w-5 h-5 text-black opacity-75" />
-                    Contact
-                  </li>
-
-          
                   <li>
                     <input
                       type="checkbox"
@@ -200,7 +203,7 @@ export default function Sidebar() {
                     </svg>
                     Payments
                   </li>
-               
+
                   <li className="menu-item">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
