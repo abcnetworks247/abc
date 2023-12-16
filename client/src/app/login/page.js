@@ -56,7 +56,7 @@ export default function Page() {
       // check the staus of the request to see if the request was successful or not
       if (data.status === 200) {
         console.log(data.data, "success message");
-        // setting the token i got from thr server to cookies with the help of cookie js 
+        // setting the token i got from thr server to cookies with the help of cookie js
         Cookies.set("authToken", value.authToken);
         setTimeout(() => {
           toast.dismiss(id);
@@ -68,8 +68,9 @@ export default function Page() {
         });
 
         setTimeout(() => {
-          
           router.push("/");
+
+          
         }, 3000);
 
         setdata(value);
@@ -104,6 +105,9 @@ export default function Page() {
       console.error(error);
     }
   };
+
+
+  
 
   return (
     <div>

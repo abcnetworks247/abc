@@ -1,6 +1,6 @@
 "use client";
 import { useState, React } from "react";
-import { HiOutlineMenuAlt3 } from "react-icons/hi";
+import { RiMenu2Fill } from "react-icons/ri";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
@@ -10,8 +10,8 @@ import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
-import Cookies from "js-cookie";
 /**
  * Represents a navigation bar component.
  * @returns {JSX.Element} The JSX element representing the navigation bar.
@@ -22,8 +22,6 @@ export default function Navbar() {
   const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
-
-
 
   // console.log('tokk',Authtoken);
 
@@ -53,6 +51,9 @@ export default function Navbar() {
           icon: "success",
         });
         router.push("/login");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("hasReloaded");
+        }
         HandleLogout();
       }
     });
@@ -61,6 +62,13 @@ export default function Navbar() {
   return (
     <div>
       <div className="navbar rounded-lg fixed top-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
+        <div>
+          <div className="w-fit ">
+            <label htmlFor="sidebar-mobile-fixed" className="  md:hidden">
+              <RiMenu2Fill className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer" />
+            </label>
+          </div>
+        </div>
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <a className="navbar-item">Ripple UI</a>
@@ -149,12 +157,10 @@ export default function Navbar() {
 
           {/* condition to display user profile picture on first render with token */}
           <div>
-            {Authtoken &&
-            
-            Authtoken.length !== 0 ? (
-              <div className="avatar avatar-ring avatar-md ">
+            {Authtoken && UserData && Authtoken.length !== 0 ? (
+              <div className="avatar avatar-ring avatar-md  hidden md:block">
                 {loading === false ? (
-                  <div className="dropdown-container">
+                  <div className="dropdown-container ">
                     <div className="flex flex-row gap-4 ">
                       <div className="dropdown  hidden md:block">
                         <label
@@ -196,12 +202,36 @@ export default function Navbar() {
                     </div>
                   </div>
                 ) : (
-                  <div className="h-full w-[50px] rounded-full bg-gray-400 animate-pulse"></div>
+                  <>
+                    <div className="h-full w-[50px] rounded-full bg-gray-400 animate-pulse"></div>
+                  </>
                 )}
               </div>
             ) : (
               <div></div>
             )}
+          </div>
+
+          <div className=" dropdown-container ">
+            <label
+               className="btn btn-ghost cursor-pointer px-0 "
+              tabIndex="1"
+            >
+              <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
+            </label>
+
+            <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+              <a className="dropdown-item text-sm -z-50">login or signup</a>
+              <a tabIndex="-2" className="dropdown-item text-sm">
+                Account settings
+              </a>
+              <a tabIndex="-2" className="dropdown-item text-sm">
+                Subscriptions
+              </a>
+              <a tabIndex="-2" className="dropdown-item text-sm">
+                logout
+              </a>
+            </div>
           </div>
         </div>
       </div>

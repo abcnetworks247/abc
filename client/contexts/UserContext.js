@@ -38,6 +38,7 @@ export const UserContextProvider = ({ children }) => {
         setUserData(DataValue);
         setLoading(false);
       }
+      // setLoading(true);
       console.log("data", data);
     } catch (error) {}
   };
@@ -75,7 +76,10 @@ export const UserContextProvider = ({ children }) => {
   };
   useEffect(() => {
     HandleGetUser();
-  }, [Authtoken]);
+    if(!Authtoken){
+      setLoading(false)
+    }
+  }, []);
   return (
     <UserContext.Provider
       value={{ HandleLogout, UserData, loading, Authtoken,HandleUserAccountReset }}
