@@ -20,9 +20,11 @@ const page = () => {
   console.log("cart value", cartProducts);
   return (
     <>
-      <Navbar />
+       <div className="bg-white sticky top-0 z-[10] mb-10">
+        <Navbar />
+      </div>
       <Sidebar />
-      <section className="py-12 pt-28  bg-white font-poppins">
+      <section className="py-12 bg-white pt-28 font-poppins">
         <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6 lg:px-36">
           <div>
             <h2 className="mb-8 text-xl font-bold dark:text-gray-700">
@@ -66,8 +68,8 @@ const page = () => {
                   </button>
                 </div>
               </div>
-              <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 w-full md:w-1/3">
-                <div className="mb-2 flex justify-between">
+              <div className="w-full h-full p-6 mt-6 bg-white border rounded-lg shadow-md md:mt-0 md:w-1/3">
+                <div className="flex justify-between mb-2">
                   <p className="text-gray-700">Subtotal</p>
                   <p className="text-gray-700">$129.99</p>
                 </div>
