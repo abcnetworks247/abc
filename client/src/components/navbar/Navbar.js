@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
 
+
 /**
  * Represents a navigation bar component.
  * @returns {JSX.Element} The JSX element representing the navigation bar.
