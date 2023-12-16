@@ -5,11 +5,11 @@ export default function BlogComp() {
   return (
     <div>
       {/* <!-- component --> */}
-      <div className="max-w-screen-lg mx-auto pt-9">
+      <div className="max-w-screen-lg md:max-w-screen-xl  md:px-10 mx-auto pt-9">
     
         <main className="mt-12">
           {/* <!-- featured section --> */}
-          <div className="flex flex-col lg:flex-row  md:flex-row space-x-0 md:space-x-6 mb-16">
+          <div className="flex flex-col lg:flex-row  md:flex-row space-x-0 gap-5 md:space-x-6 mb-16">
             {/* <!-- main post --> */}
             <div className="mb-4 lg:mb-0  p-4 lg:p-0 w-full md:w-4/7 relative rounded block">
               <img
