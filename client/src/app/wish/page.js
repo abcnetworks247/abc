@@ -29,7 +29,7 @@ const page = () => {
           <div className="sm:flex sm:items-center sm:justify-center h-screen w-auto bg-gray-100  ">
             <div className="bg-white sm:w-[30vw] sm:h-[40vh] h-full  flex flex-col justify-center items-center sm:shadow-md sm:rounded-md">
                             
-                <img src="/assets/images/basket.png" className='h-24 w-24'/>
+                <img src="/assets/images/basket.png" className='h-auto w-32'/>
                 <p className='text-bold'>You have no saved items</p>
 
               <Link href="/store" className="text-sm underline text-blue-500">

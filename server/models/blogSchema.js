@@ -42,7 +42,7 @@ const blogSchema = new mongoose.Schema({
 
   author: {
     type: mongoose.Types.ObjectId,
-    ref: 'Admin',
+    ref: 'Admins',
     required: true,
   }
 }, {timestamps: true});

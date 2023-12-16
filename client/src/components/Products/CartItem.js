@@ -1,26 +1,25 @@
-"use client"
-import React from 'react'
-import { useState } from 'react'
+"use client";
+import React from "react";
+import { useState } from "react";
 
-const CartItem = ({product}) => {
-    console.log(product)
-     
-const [quantity, setQuantity] = useState(1);
+const CartItem = ({ product }) => {
+  console.log(product);
 
+  const [quantity, setQuantity] = useState(1);
 
-const reduceItem = () => {
-  if (quantity > 1) {
-    setQuantity(quantity - 1);
-  }
-};
+  const reduceItem = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
-const increaseItem = () => {
-  setQuantity(quantity + 1);
-};
+  const increaseItem = () => {
+    setQuantity(quantity + 1);
+  };
 
-const calculateSubtotal = () => {
-  return quantity * product.price;
-};
+  const calculateSubtotal = () => {
+    return quantity * product.price;
+  };
 
   return (
     <div className="flex flex-wrap items-center mb-6 -mx-4 md:mb-8">
@@ -36,66 +35,43 @@ const calculateSubtotal = () => {
             </div>
           </div>
           <div className="w-2/3 px-4">
-            <h2 className="mb-2 text-md font-bold dark:text-gray-400">
+            <h2 className="mb-2 text-md font-bold">
               {product.title}
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 ">Picture frame</p>
+            <p className="text-gray-500 ">Picture frame</p>
           </div>
         </div>
       </div>
       <div className="hidden px-4 lg:block lg:w-2/12">
-        <p className="text-lg font-bold text-blue-500 dark:text-gray-400">
+        <p className="text-lg font-bold text-blue-900">
           $ {product.price}
         </p>
-        <span className="text-xs text-gray-500 line-through dark:text-gray-400">
+        <span className="text-xs text-gray-500 line-through">
           $1500
         </span>
       </div>
       <div className="w-auto px-4 md:w-1/6 lg:w-2/12 ">
-        <div className="inline-flex items-center px-4 font-semibold text-gray-500 border border-gray-200 rounded-md dark:border-gray-700 ">
-          <button
-            className="py-2 hover:text-gray-700 dark:text-gray-400"
-            onClick={reduceItem}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-dash"
-              viewBox="0 0 16 16"
-            >
-              <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z" />
-            </svg>
-          </button>
-          <div className="w-12 px-2 py-4 text-center border-0 rounded-md dark:bg-gray-800 bg-gray-50 dark:text-gray-400 md:text-right">
-            {quantity}
-          </div>
-
-          <button
-            className="py-2 hover:text-gray-700 dark:text-gray-400"
-            onClick={increaseItem}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-plus"
-              viewBox="0 0 16 16"
-            >
-              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-            </svg>
-          </button>
+        
+        <div className="flex items-center border-gray-100">
+          <span className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"  onClick={reduceItem}>
+            {" "}
+            -{" "}
+          </span>
+         
+          <span className="h-8 w-8 border flex items-center justify-center bg-white text-center text-xs outline-none">{quantity}</span>
+          <span className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50" onClick={increaseItem}>
+            {" "}
+            +{" "}
+          </span>
         </div>
       </div>
       <div className="w-auto px-4 text-right md:w-1/6 lg:w-2/12 ">
-        <p className="text-lg font-bold text-blue-500 dark:text-gray-400">
+        <p className="text-lg font-bold text-blue-900">
           ${calculateSubtotal().toFixed(2)}
         </p>
       </div>
     </div>
   );
-}
+};
 
-export default CartItem
+export default CartItem;
