@@ -72,7 +72,7 @@ export default function Navbar() {
         </div>
         {/* abcdstudio logo */}
         <div className="navbar-start">
-          <a className="navbar-item">Ripple UI</a>
+          <a className="font-semibold navbar-item">ABC Studio</a>
         </div>
         {/*  Pages  */}
         <div className="hidden navbar-center md:block ">
