@@ -1,3 +1,4 @@
+"use client"
 import { IoStorefrontOutline } from "react-icons/io5";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Image from "next/image";
