@@ -62,6 +62,7 @@ export default function Navbar() {
 
   return (
     <div>
+
       <div className="navbar rounded-lg fixed top-0 px-3 md:px-0 right-0 w-full z-[50] shadow-md h-16 bg-white mb-24">
         <div>
           <div className="w-fit ">
