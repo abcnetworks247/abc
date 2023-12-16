@@ -57,7 +57,7 @@ export default function Page() {
       if (data.status === 200) {
         console.log(data.data, "success message");
         // setting the token i got from thr server to cookies with the help of cookie js 
-        Cookies.set("authToken", data.authToken);
+        Cookies.set("authToken", value.authToken);
         setTimeout(() => {
           toast.dismiss(id);
         }, 1000);
