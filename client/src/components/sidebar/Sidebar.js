@@ -3,6 +3,7 @@ import { UseUserContext } from "../../../contexts/UserContext";
 import Image from "next/image";
 import { MdClose } from "react-icons/md";
 import Link from "next/link";
+import { FaRegUser } from "react-icons/fa6";
 
 export default function Sidebar() {
   const { loading, UserData, Authtoken } = UseUserContext();
