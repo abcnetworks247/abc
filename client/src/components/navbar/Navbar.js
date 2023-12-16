@@ -11,6 +11,7 @@ import { UseUserContext } from "../../../contexts/UserContext";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Cookies from "js-cookie";
 /**
  * Represents a navigation bar component.
  * @returns {JSX.Element} The JSX element representing the navigation bar.
@@ -18,7 +19,7 @@ import Image from "next/image";
 export default function Navbar() {
   const router = useRouter();
 
-  const { HandleLogout,UserData } = UseUserContext();
+  const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
 
@@ -28,19 +29,7 @@ export default function Navbar() {
     login: "bg-white text-gray-800",
   });
 
-  const handleMouseOver = () => {
-    setButtonColor({
-      signUp: "bg-white text-gray-800",
-      login: "bg-blue-500 text-white",
-    });
-  };
-
-  const handleMouseOut = () => {
-    setButtonColor({
-      signUp: "bg-blue-500 text-white transition-all duration",
-      login: "bg-white text-gray-800 transition-all duration",
-    });
-  };
+  // console.log('tokk',Authtoken);
 
   // cart value variable
   const cartvalue = cartProducts.length;
@@ -59,12 +48,12 @@ export default function Navbar() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, log me out!",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
+          title: "loggedOut!",
+          text: "You've been logged out succesfully.",
           icon: "success",
         });
         router.push("/login");
@@ -161,86 +150,60 @@ export default function Navbar() {
               )}
             </a>
           </div>
-          {/* if a === true hide this div else show it */}
-          <div
-            className={`${
-              a
-                ? "hidden"
-                : "group font-medium text-sm flex flex-row items-center justify-center border rounded ease-in-out duration-200"
-            }`}
-          >
-            <Link href="/signup">
-              <button
-                className={`${buttonColor.signUp} p-2 rounded transition-colors`}
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
-              >
-                SignUp
-              </button>
-            </Link>
 
-            <Link href="/login">
-              <button
-                className={`${buttonColor.login} p-2 rounded transition-colors `}
-              >
-                Login
-              </button>
-            </Link>
-          </div>
+          {/* condition to display user profile picture on first render with token */}
+          <div>
+            {Authtoken.length !== 0 ? (
+              <div className="avatar avatar-ring avatar-md ">
+                {loading === false ? (
+                  <div className="dropdown-container">
+                    <div className="flex flex-row gap-4 ">
+                      <div className="dropdown  hidden md:block">
+                        <label
+                          className="btn btn-ghost cursor-pointer px-0 hidden sm:block md:block lg:block justify-items-end"
+                          tabIndex="0"
+                        >
+                          <Image
+                            src={UserData && UserData.userdp}
+                            height={20}
+                            width={33}
+                            quality={100}
+                            loading="lazy"
+                            className="rounded-full cursor-pointer object-cover"
+                            alt="avatar"
+                            // style={{
+                            //   width: '100%',
+                            //   height: 'auto',
+                            // }}
+                          />
+                        </label>
 
-          <div className="avatar avatar-ring avatar-md ">
-            <div className="dropdown-container    ">
-              <label
-                htmlFor="sidebar-mobile-fixed"
-                className="btn btn-ghost flex cursor-pointer px-0 sm:hidden md:hidden lg:hidden"
-                tabIndex="0"
-              >
-                <HiOutlineMenuAlt3 className="text-3xl" />
-              </label>
-
-              <div className="flex flex-row gap-4 ">
-  
-                <div className="dropdown  hidden md:block">
-                  <label
-                    className="btn btn-ghost cursor-pointer px-0 hidden sm:block md:block lg:block justify-items-end"
-                    tabIndex="0"
-                  >
-            
-            <Image
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-                  height={20}
-                  width={33}
-                  quality={100}
-                  loading="lazy"
-                
-                  className="rounded-full cursor-pointer object-cover"
-                  alt="avatar"
-                  // style={{
-                  //   width: '100%',
-                  //   height: 'auto',
-                  // }}
-                />
-                  </label>
-    
-                  <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                    <a className="dropdown-item text-sm -z-50">Profile</a>
-                    <a tabIndex="-1" className="dropdown-item text-sm">
-                      Account settings
-                    </a>
-                    <a tabIndex="-1" className="dropdown-item text-sm">
-                      Subscriptions
-                    </a>
-                    <a
-                      tabIndex="-1"
-                      className="dropdown-item text-sm"
-                      onClick={Logout}
-                    >
-                      logout
-                    </a>
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                          <a className="dropdown-item text-sm -z-50">Profile</a>
+                          <a tabIndex="-1" className="dropdown-item text-sm">
+                            Account settings
+                          </a>
+                          <a tabIndex="-1" className="dropdown-item text-sm">
+                            Subscriptions
+                          </a>
+                          <a
+                            tabIndex="-1"
+                            className="dropdown-item text-sm"
+                            onClick={Logout}
+                          >
+                            logout
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="h-full w-[50px] rounded-full bg-gray-400 animate-pulse"></div>
+                )}
               </div>
-            </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </div>
       </div>

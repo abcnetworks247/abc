@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link";
+import { UseUserContext } from "../../../contexts/UserContext";
 
 import { useState } from "react";
 
@@ -9,7 +10,17 @@ export default function Page() {
 
  const [recoveryFormData, setRecoveryFormData] = useState("")
 
- const HandleSubmit =()=>{
+
+ // account recovery context function 
+
+ const {HandleUserAccountReset} = UseUserContext()
+ /**
+  * 
+  * @param {object} e - for preventing browser default  
+  */
+ const HandleSubmit =(e)=>{
+  e.preventDefault()
+  HandleUserAccountReset()
 
  }
   return (
@@ -36,7 +47,7 @@ export default function Page() {
               </p>
             </div>
             <div className="w-full flex-1 mt-8">
-              <div className="mx-auto max-w-xs flex flex-col gap-4">
+              <form className="mx-auto max-w-xs flex flex-col gap-4" onSubmit={HandleSubmit}>
             
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
@@ -46,7 +57,7 @@ export default function Page() {
                   onChange={(e)=>{setRecoveryFormData(e.target.value)}}
                 />
             
-                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"  onClick={HandleSubmit}>
                   <svg
                     className="w-6 h-6 -ml-2"
                     fill="none"
@@ -68,7 +79,7 @@ export default function Page() {
                   </Link>
                 </p>
            
-              </div>
+              </form>
             </div>
           </div>
         </div>
