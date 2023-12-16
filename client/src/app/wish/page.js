@@ -28,7 +28,7 @@ const page = () => {
             </div>
           </div>
         ) : (
-          <div className="w-auto bg-gray-100 h-[50vh] lg:h-screen sm:flex sm:items-center sm:justify-center ">
+          <div className="w-auto bg-gray-100 h-[85vh] lg:h-screen sm:flex sm:items-center sm:justify-center ">
             <div className="bg-white sm:w-[30vw] sm:h-[40vh] h-full  flex flex-col justify-center items-center sm:shadow-md sm:rounded-md">
                             
                 <img src="/assets/images/basket.png" className='w-32 h-auto'/>
