@@ -62,12 +62,7 @@ export default function Navbar() {
 
   return (
     <div>
-<<<<<<< HEAD
-
-      <div className="navbar rounded-lg fixed top-0 px-3 md:px-0 right-0 w-full z-[50] shadow-md h-16 bg-white mb-24">
-=======
-      <div className="navbar rounded-lg fixed top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
->>>>>>> 39cb7301b0b7a08b9908a3b681c2f85ee471f137
+      <div className="navbar rounded-lg top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-white mb-6">
         <div>
           <div className="w-fit ">
             <label htmlFor="sidebar-mobile-fixed" className=" md:hidden">
@@ -219,13 +214,13 @@ export default function Navbar() {
           </div>
           <div>
             {Authtoken  &&  UserData && Authtoken.length !== 0 ? (
-              <div className="avatar avatar-ring avatar-md  block md:hidden">
+              <div className="block avatar avatar-ring avatar-md md:hidden">
                 {loading === false ? (
                   <div className="dropdown-container ">
                     <div className="flex flex-row gap-4 ">
-                      <div className="dropdown  ">
+                      <div className="dropdown ">
                         <label
-                          className="btn btn-ghost cursor-pointer px-0  block md:hiden lg:block justify-items-end"
+                          className="block px-0 cursor-pointer btn btn-ghost md:hiden lg:block justify-items-end"
                           tabIndex="0"
                         >
                           <Image
@@ -234,7 +229,7 @@ export default function Navbar() {
                             width={33}
                             quality={100}
                             loading="lazy"
-                            className="rounded-full cursor-pointer object-cover"
+                            className="object-cover rounded-full cursor-pointer"
                             alt="avatar"
                             // style={{
                             //   width: '100%',
@@ -244,16 +239,16 @@ export default function Navbar() {
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <a className="dropdown-item text-sm -z-50">Profile</a>
-                          <a tabIndex="-1" className="dropdown-item text-sm">
+                          <a className="text-sm dropdown-item -z-50">Profile</a>
+                          <a tabIndex="-1" className="text-sm dropdown-item">
                             Account settings
                           </a>
-                          <a tabIndex="-1" className="dropdown-item text-sm">
+                          <a tabIndex="-1" className="text-sm dropdown-item">
                             Subscriptions
                           </a>
                           <a
                             tabIndex="-1"
-                            className="dropdown-item text-sm"
+                            className="text-sm dropdown-item"
                             onClick={Logout}
                           >
                             logout
@@ -269,23 +264,23 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className=" dropdown-container ">
+              <div className=" dropdown-container">
               <label
-                 className="btn btn-ghost cursor-pointer px-0 "
+                 className="px-0 cursor-pointer btn btn-ghost "
                 tabIndex="1"
               >
                 <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
               </label>
   
               <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                <a className="dropdown-item text-sm -z-50">login or signup</a>
-                <a tabIndex="-2" className="dropdown-item text-sm">
+                <a className="text-sm dropdown-item -z-50">login or signup</a>
+                <a tabIndex="-2" className="text-sm dropdown-item">
                   Account settings
                 </a>
-                <a tabIndex="-2" className="dropdown-item text-sm">
+                <a tabIndex="-2" className="text-sm dropdown-item">
                   Subscriptions
                 </a>
-                <a tabIndex="-2" className="dropdown-item text-sm">
+                <a tabIndex="-2" className="text-sm dropdown-item">
                   logout
                 </a>
               </div>
