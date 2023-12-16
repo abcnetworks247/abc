@@ -62,7 +62,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="navbar rounded-lg fixed top-0 px-3 md:px-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
+      <div className="navbar rounded-lg fixed top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
         <div>
           <div className="w-fit ">
             <label htmlFor="sidebar-mobile-fixed" className="  md:hidden">
@@ -204,7 +204,7 @@ export default function Navbar() {
                   </div>
                 ) : (
                   <>
-                    <div className="h-full w-[50px] rounded-full bg-gray-400 animate-pulse"></div>
+                    <div className="h-full w-[40px] rounded-full bg-gray-400 animate-pulse"></div>
                   </>
                 )}
               </div>
@@ -212,28 +212,83 @@ export default function Navbar() {
               <div></div>
             )}
           </div>
+          <div>
+            {Authtoken  &&  UserData && Authtoken.length !== 0 ? (
+              <div className="avatar avatar-ring avatar-md  block md:hidden">
+                {loading === false ? (
+                  <div className="dropdown-container ">
+                    <div className="flex flex-row gap-4 ">
+                      <div className="dropdown  ">
+                        <label
+                          className="btn btn-ghost cursor-pointer px-0  block md:hiden lg:block justify-items-end"
+                          tabIndex="0"
+                        >
+                          <Image
+                            src={UserData && UserData.userdp}
+                            height={20}
+                            width={33}
+                            quality={100}
+                            loading="lazy"
+                            className="rounded-full cursor-pointer object-cover"
+                            alt="avatar"
+                            // style={{
+                            //   width: '100%',
+                            //   height: 'auto',
+                            // }}
+                          />
+                        </label>
 
-          <div className=" dropdown-container ">
-            <label
-               className="btn btn-ghost cursor-pointer px-0 "
-              tabIndex="1"
-            >
-              <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
-            </label>
-
-            <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-              <a className="dropdown-item text-sm -z-50">login or signup</a>
-              <a tabIndex="-2" className="dropdown-item text-sm">
-                Account settings
-              </a>
-              <a tabIndex="-2" className="dropdown-item text-sm">
-                Subscriptions
-              </a>
-              <a tabIndex="-2" className="dropdown-item text-sm">
-                logout
-              </a>
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                          <a className="dropdown-item text-sm -z-50">Profile</a>
+                          <a tabIndex="-1" className="dropdown-item text-sm">
+                            Account settings
+                          </a>
+                          <a tabIndex="-1" className="dropdown-item text-sm">
+                            Subscriptions
+                          </a>
+                          <a
+                            tabIndex="-1"
+                            className="dropdown-item text-sm"
+                            onClick={Logout}
+                          >
+                            logout
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="h-full w-[40px] rounded-full bg-gray-400 animate-pulse"></div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className=" dropdown-container ">
+              <label
+                 className="btn btn-ghost cursor-pointer px-0 "
+                tabIndex="1"
+              >
+                <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
+              </label>
+  
+              <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                <a className="dropdown-item text-sm -z-50">login or signup</a>
+                <a tabIndex="-2" className="dropdown-item text-sm">
+                  Account settings
+                </a>
+                <a tabIndex="-2" className="dropdown-item text-sm">
+                  Subscriptions
+                </a>
+                <a tabIndex="-2" className="dropdown-item text-sm">
+                  logout
+                </a>
+              </div>
             </div>
+            )}
           </div>
+
+      
         </div>
       </div>
     </div>
