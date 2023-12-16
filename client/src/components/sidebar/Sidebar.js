@@ -4,10 +4,10 @@ export default function Sidebar() {
   return (
     <div>
 
-<div className="sm:w-full sm:max-w-[18rem] z-[200]">
+<div className="sm:w-full sm:max-w-[18rem] z-[999] ">
 		<input type="checkbox" id="sidebar-mobile-fixed" className="sidebar-state  hidden" />
-		<label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay lg:hidden md:hidden"></label>
-		<aside className="sidebar sm:hidden md:hidden lg:hidden sidebar-fixed-left sidebar-mobile h-full justify-start max-sm:fixed max-sm:-translate-x-full bg-white">
+		<label htmlFor="sidebar-mobile-fixed" className="sidebar-overlay lg:hidden "></label>
+		<aside className="sidebar md:hidden lg:hidden sidebar-fixed-left sidebar-mobile h-full justify-start max-sm:fixed max-sm:-translate-x-full bg-white">
 			<section className="sidebar-title items-center p-4">
 				<svg fill="none" height="42" viewBox="0 0 32 32" width="42" xmlns="http://www.w3.org/2000/svg">
 					<rect height="100%" rx="16" width="100%"></rect>
@@ -117,7 +117,6 @@ export default function Sidebar() {
 			<section className="sidebar-footer justify-end bg-gray-2 pt-2">
 				<div className="divider my-0"></div>
 				<div className="dropdown z-50 flex h-fit w-full cursor-pointer hover:bg-gray-4">
-					<label className="whites mx-2 flex h-fit w-full cursor-pointer p-0 hover:bg-gray-4" tabIndex="0">
 						<div className="flex flex-row gap-4 p-4">
 							<div className="avatar-square avatar avatar-md">
 								<img src="https://i.pravatar.cc/150?img=30" alt="avatar" />
@@ -127,6 +126,7 @@ export default function Sidebar() {
 								<span>Sandra Marx</span>
 							</div>
 						</div>
+					{/* <label className="whites mx-2 flex h-fit w-full cursor-pointer p-0 hover:bg-gray-4" tabIndex="0">
 					</label>
 					<div className="dropdown-menu-right-top dropdown-menu ml-2 bg-white shadow-sm">
 						<a className="dropdown-item text-sm">Profile</a>
@@ -136,7 +136,7 @@ export default function Sidebar() {
 						<a tabIndex="-1" className="dropdown-item text-sm">Change password</a>
 						<a tabIndex="-1" className="dropdown-item text-sm">Refer a friend</a>
 						<a tabIndex="-1" className="dropdown-item text-sm">Settings</a>
-					</div>
+					</div> */}
 				</div>
 			</section>
 		</aside>
