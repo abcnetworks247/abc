@@ -65,24 +65,20 @@ export const UserContextProvider = ({ children }) => {
    * @function (fuction)  functiom for password recovery
    */
 
-  const HandleUserAccountReset = async () => {
-    try {
-      
-      await Api.post('client/auth/recovery')
-    } catch (error) {
-      console.log(error);
-      
-    }
-  };
   useEffect(() => {
     HandleGetUser();
-    if(!Authtoken){
-      setLoading(false)
+    if (!Authtoken) {
+      setLoading(false);
     }
   }, []);
   return (
     <UserContext.Provider
-      value={{ HandleLogout, UserData, loading, Authtoken,HandleUserAccountReset }}
+      value={{
+        HandleLogout,
+        UserData,
+        loading,
+        Authtoken,
+      }}
     >
       {children}
     </UserContext.Provider>

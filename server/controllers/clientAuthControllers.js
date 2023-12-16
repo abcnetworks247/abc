@@ -137,6 +137,7 @@ const userRecovery = async (req, res) => {
   try {
     const userexist = await Client.findOne({ email });
 
+
     if (!userexist) {
       console.log("Couldn't find client");
       throw new NotFoundError("User not found");
@@ -147,7 +148,7 @@ const userRecovery = async (req, res) => {
     const MaxAge = 10 * 60;
     const token = CreateToken({ id: userexist._id }, MaxAge);
 
-    const passwordUpdateUrl = `${serverUrl}/api/v1/auth/account/updatepassword/${token}`;
+    const passwordUpdateUrl = `${serverUrl}/api/v1/client/auth/account/updatepassword/${token}`;
     const templatePath = path.join(__dirname, "../views/passwordRecovery.ejs");
     const renderHtml = await ejs.renderFile(
       templatePath,
@@ -179,6 +180,7 @@ const userRecovery = async (req, res) => {
 const userVerifyPasswordReset = async (req, res) => {
   const { token } = req.params;
 
+  console.log("verify password reset", token);
   try {
     const decodedId = VerifyToken(token);
 

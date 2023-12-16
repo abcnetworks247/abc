@@ -15,7 +15,6 @@ const { Server } = require("socket.io");
 const {
   handleNewComment,
   postReaction,
-
 } = require("./controllers/blogControllers");
 
 const cookieParser = require("cookie-parser");
@@ -25,7 +24,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
@@ -37,12 +36,11 @@ postReaction(io);
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
     credentials: true,
   })
-
 );
 
 app.use(
