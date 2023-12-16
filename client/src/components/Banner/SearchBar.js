@@ -56,13 +56,10 @@ const SearchBar = () => {
           {/* <button
           id="dropdown-button"
           data-dropdown-toggle="dropdown"
-          className="flex-shrink-0  inline-flex items-center 
-        h-full py-2   bg-opacity-25 border border-gray-300  
-        hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:hover:bg-gray-600
-"
+          className="inline-flex items-center flex-shrink-0 h-full py-2 bg-opacity-25 border border-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:hover:bg-gray-600 "
           type="button"
         ></button> */}
-          <div className="h-full px-4 flex flex-row rounded-s-lg items-center justify-center gap-2 mr-1 text-sm font-medium  text-center text-gray-900 bg-white">
+          <div className="flex flex-row items-center justify-center h-full gap-2 px-4 mr-1 text-sm font-medium text-center text-gray-900 bg-white rounded-s-lg">
             All categories{" "}
             <svg
               className="w-2.5 h-2.5 ms-2.5"
@@ -122,7 +119,7 @@ const SearchBar = () => {
               </li>
             </ul>
           </div>
-          <div className="relative w-fit h-full flex flex-row rounded-r-lg">
+          <div className="relative flex flex-row h-full rounded-r-lg w-fit">
             <input
               type="search"
               id="search-dropdown"
@@ -133,7 +130,7 @@ const SearchBar = () => {
               onBlur={handleBlur}
               onChange={handleSearch}
             />{" "}
-            <button className="bg-blue-500 absolute right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg">
+            <button className="bg-blue-500 absolute z-10 right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg">
               <svg
                 className="w-4 h-4 "
                 aria-hidden="true"
@@ -163,7 +160,7 @@ const SearchBar = () => {
 
       {isFocused && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-30 z-10"
+          className="fixed inset-0 z-10 bg-black bg-opacity-30"
           onClick={handleBlur}
         ></div>
       )}
