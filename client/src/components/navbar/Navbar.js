@@ -62,7 +62,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="navbar rounded-lg top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-white mb-6">
+      <div className="navbar rounded-lg top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-white mb-10">
         <div>
           <div className="w-fit ">
             <label htmlFor="sidebar-mobile-fixed" className=" md:hidden">
