@@ -62,10 +62,10 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="navbar rounded-lg fixed top-0 px-3 md:px-0 right-0 w-full z-[100] shadow-md h-16 bg-white mb-24">
+      <div className="navbar rounded-lg fixed top-0 px-3 md:px-0 right-0 w-full z-[50] shadow-md h-16 bg-white mb-24">
         <div>
           <div className="w-fit ">
-            <label htmlFor="sidebar-mobile-fixed" className="  md:hidden">
+            <label htmlFor="sidebar-mobile-fixed" className=" md:hidden">
               <RiMenu2Fill className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer" />
             </label>
           </div>
@@ -75,7 +75,7 @@ export default function Navbar() {
           <a className="navbar-item">Ripple UI</a>
         </div>
         {/*  Pages  */}
-        <div className="navbar-center hidden md:block ">
+        <div className="hidden navbar-center md:block ">
           <Link
             href="/"
             className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${
@@ -118,12 +118,12 @@ export default function Navbar() {
             Contact
           </Link>
         </div>
-        <div className="navbar-center hidden md:block "></div>
-        <div className="navbar-end flex flex-row items-center ">
+        <div className="hidden navbar-center md:block "></div>
+        <div className="flex flex-row items-center navbar-end ">
           <div className="flex flex-row items-center gap-3 mr-4">
             <a
               href="/wish"
-              className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
+              className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
               <div className="text-2xl">
                 <FaRegHeart />
@@ -133,14 +133,14 @@ export default function Navbar() {
               {WishlistValue === 0 ? (
                 <></>
               ) : (
-                <div className="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center bg-red-500 justify-center text-white text-xs">
+                <div className="absolute right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full -top-1">
                   {WishlistValue}
                 </div>
               )}
             </a>
             <a
               href="/CartContent"
-              className="text-center items-center flex flex-col text-gray-700 hover:text-primary transition relative"
+              className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
               <div className="text-2xl">
                 <TiShoppingCart />
@@ -149,7 +149,7 @@ export default function Navbar() {
               {cartProducts.length === 0 ? (
                 <></>
               ) : (
-                <div className="absolute right-0 left-4 -top-1 w-5 h-5 rounded-full flex items-center bg-red-500 justify-center text-white text-xs">
+                <div className="absolute right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full left-4 -top-1">
                   {cartvalue}
                 </div>
               )}
@@ -159,13 +159,13 @@ export default function Navbar() {
           {/* condition to display user profile picture on first render with token */}
           <div>
             {Authtoken && UserData && Authtoken.length !== 0 ? (
-              <div className="avatar avatar-ring avatar-md  hidden md:block">
+              <div className="hidden avatar avatar-ring avatar-md md:block">
                 {loading === false ? (
                   <div className="dropdown-container ">
                     <div className="flex flex-row gap-4 ">
-                      <div className="dropdown  hidden md:block">
+                      <div className="hidden dropdown md:block">
                         <label
-                          className="btn btn-ghost cursor-pointer px-0 hidden sm:block md:block lg:block justify-items-end"
+                          className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
                           tabIndex="0"
                         >
                           <Image
@@ -174,7 +174,7 @@ export default function Navbar() {
                             width={33}
                             quality={100}
                             loading="lazy"
-                            className="rounded-full cursor-pointer object-cover"
+                            className="object-cover rounded-full cursor-pointer"
                             alt="avatar"
                             // style={{
                             //   width: '100%',
@@ -184,16 +184,16 @@ export default function Navbar() {
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <a className="dropdown-item text-sm -z-50">Profile</a>
-                          <a tabIndex="-1" className="dropdown-item text-sm">
+                          <a className="text-sm dropdown-item -z-50">Profile</a>
+                          <a tabIndex="-1" className="text-sm dropdown-item">
                             Account settings
                           </a>
-                          <a tabIndex="-1" className="dropdown-item text-sm">
+                          <a tabIndex="-1" className="text-sm dropdown-item">
                             Subscriptions
                           </a>
                           <a
                             tabIndex="-1"
-                            className="dropdown-item text-sm"
+                            className="text-sm dropdown-item"
                             onClick={Logout}
                           >
                             logout
@@ -213,23 +213,23 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className=" dropdown-container ">
+          <div className=" dropdown-container">
             <label
-               className="btn btn-ghost cursor-pointer px-0 "
+               className="px-0 cursor-pointer btn btn-ghost "
               tabIndex="1"
             >
               <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
             </label>
 
             <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-              <a className="dropdown-item text-sm -z-50">login or signup</a>
-              <a tabIndex="-2" className="dropdown-item text-sm">
+              <a className="text-sm dropdown-item -z-50">login or signup</a>
+              <a tabIndex="-2" className="text-sm dropdown-item">
                 Account settings
               </a>
-              <a tabIndex="-2" className="dropdown-item text-sm">
+              <a tabIndex="-2" className="text-sm dropdown-item">
                 Subscriptions
               </a>
-              <a tabIndex="-2" className="dropdown-item text-sm">
+              <a tabIndex="-2" className="text-sm dropdown-item">
                 logout
               </a>
             </div>
