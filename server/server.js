@@ -22,6 +22,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const server = http.createServer(app);
 
+
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
@@ -34,14 +35,7 @@ const io = new Server(server, {
 handleNewComment(io);
 postReaction(io);
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Authorization", "Content-Type"],
-    credentials: true,
-  })
-);
+
 
 app.use(
   bodyParser.urlencoded({
