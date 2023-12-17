@@ -65,7 +65,6 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-  
   console.log("hit sign");
   const { email, password } = req.body;
 
@@ -96,7 +95,6 @@ const signIn = async (req, res) => {
       maxAge: maxAgeInMilliseconds,
       httpOnly: false,
     });
-    
 
     res.status(StatusCodes.OK).json({
       message: "Account signed in successfully.",
@@ -139,14 +137,18 @@ const userRecovery = async (req, res) => {
   try {
     const userexist = await Client.findOne({ email });
 
+
     if (!userexist) {
+      console.log("Couldn't find client");
       throw new NotFoundError("User not found");
     }
+
+    console.log("Found client");
 
     const MaxAge = 10 * 60;
     const token = CreateToken({ id: userexist._id }, MaxAge);
 
-    const passwordUpdateUrl = `${serverUrl}/api/v1/auth/account/updatepassword/${token}`;
+    const passwordUpdateUrl = `${serverUrl}/api/v1/client/auth/account/updatepassword/${token}`;
     const templatePath = path.join(__dirname, "../views/passwordRecovery.ejs");
     const renderHtml = await ejs.renderFile(
       templatePath,
@@ -168,8 +170,6 @@ const userRecovery = async (req, res) => {
     return res
       .status(StatusCodes.OK)
       .send({ message: `verification email has been sent to ${email}` });
-      
-
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -180,6 +180,7 @@ const userRecovery = async (req, res) => {
 const userVerifyPasswordReset = async (req, res) => {
   const { token } = req.params;
 
+  console.log("verify password reset", token);
   try {
     const decodedId = VerifyToken(token);
 

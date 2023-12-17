@@ -1,52 +1,75 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-require('dotenv').config();
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
+
+const subscriptionSchema = new mongoose.Schema({
+  subscriberName: { type: String, required: true },
+  email: { type: String, required: true },
+  age: { type: Number, required: true, min: 1 },
+  subscriptionAmount: { type: Number, required: true },
+  subscriptionType: {
+    type: String,
+    enum: ["monthly", "yearly"],
+    required: true,
+  },
+  membershipPackage: { type: String, required: true },
+  startDate: { type: Date, required: true, default: Date.now },
+  renewalDate: { type: Date, required: true },
+});
 
 const AuthSchema = new mongoose.Schema(
   {
     fullname: {
-      type: 'string',
+      type: String,
       required: true,
     },
     userdp: {
-      type: 'string',
-      default: "https://i.pinimg.com/originals/a6/f3/c5/a6f3c55ace829310723adcb7a468869b.png"
+      type: String,
+      default:
+        "https://i.pinimg.com/originals/a6/f3/c5/a6f3c55ace829310723adcb7a468869b.png",
     },
     userbio: {
-      type: 'string',
-      default: "Tell us about yourself"
+      type: String,
+      default: "Tell us about yourself",
     },
     email: {
-      type: 'string',
+      type: String,
       unique: true,
       required: true,
     },
     password: {
-      type: 'string',
+      type: String,
       required: true,
     },
     package: {
-      type: 'string',
+      type: String,
       enum: ["basic", "advanced", "pro"],
-      default: "basic"
+      default: "basic",
     },
-    cart: [{
-      type: mongoose.Types.ObjectId,
-      ref: 'Product',
-    }],
-    wishlist: [{
-      type: mongoose.Types.ObjectId,
-      ref: 'Product',
-    }],
-    productpurchasehistory: [{
-      type: mongoose.Types.ObjectId,
-      ref: 'ProductPurchase',
-    }],
+    cart: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    subscriptionhistory: [subscriptionSchema],
+    wishlist: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    productpurchasehistory: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "ProductPurchase",
+      },
+    ],
   },
   { timestamps: true }
 );
 
-AuthSchema.pre('save', async function (next) {
+AuthSchema.pre("save", async function (next) {
   const gensalt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, gensalt);
   next();
@@ -63,4 +86,4 @@ AuthSchema.methods.newHashPassword = async function (password) {
   return hashedPassword;
 };
 
-module.exports = mongoose.model('Client', AuthSchema);
+module.exports = mongoose.model("Client", AuthSchema);

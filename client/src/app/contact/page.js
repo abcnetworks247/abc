@@ -8,7 +8,7 @@ export default function page() {
 
   return (
     <div>
-      <div className="bg-white sticky top-0 z-[10] ">
+       <div className="bg-white sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
 
@@ -16,12 +16,12 @@ export default function page() {
       <div className="grid md:grid-cols-2 gap-16 my-20 items-center relative overflow-hidden p-10 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-3xl max-w-6xl mx-auto bg-white text-[#333]  font-[sans-serif] before:absolute before:right-0 before:w-[300px] before:bg-blue-400 before:h-full max-md:before:hidden">
         <div>
           <h2 className="text-3xl font-extrabold">Get In Touch</h2>
-          <p className="text-sm text-gray-400 mt-3">
+          <p className="mt-3 text-sm text-gray-400">
             Have a specific inquiry or looking to explore new opportunities? Our
             experienced team is ready to engage with you.
           </p>
           <form>
-            <div className="space-y-4 mt-8">
+            <div className="mt-8 space-y-4">
               <input
                 type="text"
                 placeholder="Full Name"
@@ -81,7 +81,7 @@ export default function page() {
               Send Message
             </button>
           </form>
-          <ul className="mt-4 flex justify-center lg:space-x-6 max-lg:flex-col max-lg:items-center max-lg:space-y-2 ">
+          <ul className="flex justify-center mt-4 lg:space-x-6 max-lg:flex-col max-lg:items-center max-lg:space-y-2 ">
             <li className="flex items-center hover:text-blue-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ export default function page() {
               </svg>
               <a
                 href="javascript:void(0)"
-                className="text-current text-sm ml-3"
+                className="ml-3 text-sm text-current"
               >
                 <strong>info@example.com</strong>
               </a>
@@ -117,7 +117,7 @@ export default function page() {
               </svg>
               <a
                 href="javascript:void(0)"
-                className="text-current text-sm ml-3"
+                className="ml-3 text-sm text-current"
               >
                 <strong>+158 996 888</strong>
               </a>
@@ -127,7 +127,7 @@ export default function page() {
         <div className=" relative h-full max-md:min-h-[350px]">
           <iframe
             src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
-            className="left-0 top-0 h-full w-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg"
+            className="top-0 left-0 w-full h-full rounded-t-lg lg:rounded-tr-none lg:rounded-bl-lg"
             frameBorder="0"
             allowFullscreen
           ></iframe>

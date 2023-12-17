@@ -17,6 +17,7 @@ const {
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const getAllBlog = async (req, res) => {
+  console.log('GET ALL POST');
   try {
     const allblog = await blog
       .find()
@@ -108,22 +109,6 @@ const getSingleBlog = async (req, res) => {
     if (!blogdata) {
       throw new NotFoundError("Blog not found");
     }
-
-    // Check if the user has already viewed this post
-    const hasUserViewed = req.cookies[`viewed_${id}`];
-
-    if (!hasUserViewed && req.method === "GET") {
-      // Increment the view count
-      console.log("not viewed yet");
-      blogdata.view = (blogdata.view || 0) + 1;
-
-      // Set a cookie to mark that the user has viewed this post
-      res.cookie(`viewed_${id}`, "true", { maxAge: 24 * 60 * 60 * 1000 }); // 1 day expiry
-
-      await blogdata.save();
-    }
-
-    console.log("has viewed");
 
     return res.status(StatusCodes.OK).json({ blogdata });
   } catch (error) {
