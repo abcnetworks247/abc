@@ -25,7 +25,7 @@ export default function Page() {
     console.log(email);
     try {
       const data = await Api.post("client/auth/recovery", {email});
-      if (data.status === 201) {
+      if (data.status === 200) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
           toast.dismiss(id);

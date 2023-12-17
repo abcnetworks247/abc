@@ -38,7 +38,7 @@ export default function Page() {
     console.log(Allpassword);
     try {
       const data = await Api.post("client/auth/account/updatepassword", Allpassword);
-      if (data.status === 201) {
+      if (data.status === 200) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
           toast.dismiss(id);
