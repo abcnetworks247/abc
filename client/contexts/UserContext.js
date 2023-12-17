@@ -2,6 +2,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import Api from "@/utils/Api";
+import Loading from "@/components/loading/Loading";
 
 const UserContext = createContext();
 
@@ -71,6 +72,11 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     }
   }, []);
+
+
+  if(loading){
+   return <Loading />
+  }
   return (
     <UserContext.Provider
       value={{
@@ -84,6 +90,8 @@ export const UserContextProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
+
+
 
 /**
  * Returns the user provider from the React context.

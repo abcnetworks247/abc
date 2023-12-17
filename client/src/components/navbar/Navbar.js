@@ -225,7 +225,7 @@ export default function Navbar() {
               <div></div>
             )}
           </div>
-{!Authtoken &&           <div className={`hidden lg:block ${loading? "hidden" :"block" }`}>
+{!Authtoken &&  !Authtoken?.length === 0?        <div className={`hidden lg:block ${loading? "hidden" :"block" }`}>
             <div className="flex items-center justify-center h-fit ">
               <div className="border w-fit flex item-center rounded-xl m-5 shadow-sm">
                 <Link href="/login">
@@ -243,7 +243,8 @@ export default function Navbar() {
               </div>
             </div>
           </div>
-
+: 
+<></>
 }
           <div>
             {Authtoken && UserData && Authtoken.length !== 0 ? (
