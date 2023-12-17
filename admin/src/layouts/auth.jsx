@@ -30,6 +30,7 @@ export function Auth() {
       path: "/auth/sign-in",
       icon: ArrowRightOnRectangleIcon,
     },
+
   ];
 
   return (
