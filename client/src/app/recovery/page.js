@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function Page() {
   // define initial recoveryformdata state
 
-  const [recoveryFormData, setRecoveryFormData] = useState("");
+  const [email, setRecoveryFormData] = useState("");
 
   // account recovery context function
 
@@ -24,7 +24,7 @@ export default function Page() {
     });
     console.log(recoveryFormData);
     try {
-      const data = await Api.post("client/auth/recovery", recoveryFormData);
+      const data = await Api.post("client/auth/recovery", email);
       if (data.status === 201) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
