@@ -5,6 +5,7 @@ import Api from "@/utils/Api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 export default function Page() {
   // router for navigating to login page after password update
   const router = useRouter();
@@ -35,52 +36,67 @@ export default function Page() {
     });
   };
 
-  const HandleSubmit = async (e) => {
+
+  const HandleSubmit =async (e) => {
     e.preventDefault();
-    const id = toast.loading("changingpassword..", {
-      position: toast.POSITION.TOP_LEFT,
-    });
-    console.log(Allpassword);
+
     try {
-      const data = await Api.post(
-        "client/auth/account/updatepassword",
-        Allpassword
-      );
-      console.log('data status', data.status);
-      if (data.status !== 200) {
-        toast.update(id, {
-          render: `error on password update`,
-          type: "error",
-          isLoading: false,
-        });
-     
-      }
-      console.log("post successful", data.data.message);
-      setTimeout(() => {
-        toast.dismiss(id);
-      }, 2000);
-      toast.update(id, {
-        render: `${data.data.message}`,
-        type: "success",
-        isLoading: false,
-      });
+      const data = await axios.post('https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/account/updatepassword', Allpassword)
 
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
+         if(data.status === 200){
+          console.log('Success', data.data.message);
+         }
     } catch (error) {
-      const suberrormsg = toast.update(id, {
-        render: `${error}`,
-        type: "error",
-        isLoading: false,
-      });
-      setTimeout(() => {
-        toast.dismiss(suberrormsg);
-      }, 2000);
-
-      console.log(error);
+      console.log('error', error);
     }
-  };
+     
+  }
+  // const HandleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const id = toast.loading("changingpassword..", {
+  //     position: toast.POSITION.TOP_LEFT,
+  //   });
+  //   console.log(Allpassword);
+  //   try {
+  //     const data = await Api.post(
+  //       "client/auth/account/updatepassword",
+  //       Allpassword
+  //     );
+  //     console.log('data status', data.status);
+  //     if (data.status !== 200) {
+  //       toast.update(id, {
+  //         render: `error on password update`,
+  //         type: "error",
+  //         isLoading: false,
+  //       });
+     
+  //     }
+  //     console.log("post successful", data.data.message);
+  //     setTimeout(() => {
+  //       toast.dismiss(id);
+  //     }, 2000);
+  //     toast.update(id, {
+  //       render: `${data.data.message}`,
+  //       type: "success",
+  //       isLoading: false,
+  //     });
+
+  //     setTimeout(() => {
+  //       router.push("/login");
+  //     }, 2000);
+  //   } catch (error) {
+  //     const suberrormsg = toast.update(id, {
+  //       render: `${error}`,
+  //       type: "error",
+  //       isLoading: false,
+  //     });
+  //     setTimeout(() => {
+  //       toast.dismiss(suberrormsg);
+  //     }, 2000);
+
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div>
