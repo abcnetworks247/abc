@@ -233,16 +233,8 @@ export default function Navbar() {
                           className="block px-0 cursor-pointer btn btn-ghost md:hiden lg:block justify-items-end"
                           tabIndex="0"
                         >
-                          <Image
-                            src={UserData && UserData.userdp}
-                            height={200}
-                            width={200}
-                            quality={100}
-                            loading="lazy"
-                            className="object-cover h-full w-[40px] rounded-full cursor-pointer"
-                            alt="avatar"
-                            
-                          />
+                          <Avatar src={UserData && UserData.userdp} alt="avatar" />
+                          
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
