@@ -3,12 +3,14 @@ import { useState } from "react";
 import Link from "next/link";
 import Api from "@/utils/Api";
 import { useSearchParams } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function Page() {
   // using usesearcparams to get the search params
   const params = useSearchParams();
 
   // using paams.get to get the reset query on the search params
-  const reset = params?.get("reset");
+  const reset = params.get("reset");
   //  initial state for update password
   const [Allpassword, setAllpassword] = useState({
     password: "",
