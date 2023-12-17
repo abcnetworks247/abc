@@ -63,7 +63,7 @@ export function SignUp() {
       </div>
       <div className="w-full lg:w-3/5 flex flex-col items-center justify-center">
         <div className="text-center">
-          <Typography variant="h2" className="font-bold mb-4">ABCSTUDIO AAdmin Dashboard</Typography>
+          <Typography variant="h2" className="font-bold mb-4">Abcstudo Admin </Typography>
           <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to register.</Typography>
         </div>
         <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96" onSubmit={HandleSubmit}>
