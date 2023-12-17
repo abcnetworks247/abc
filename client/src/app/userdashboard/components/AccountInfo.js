@@ -1,11 +1,8 @@
-"use client"
-import React from "react";
-import {EditIcon} from  "./components/icons/UserIcon"
+import React from 'react'
 
-
-const page = () => {
+const AccountInfo = () => {
   return (
-    <div className="hidden sm:block sm:basis-3/4 sm:bg-white sm:min-h-max shadow-md sm:rounded-sm">
+    <div className="basis-3/4 bg-white min-h-max shadow-md rounded-sm">
       <p className="accountInformation px-4 py-2 text-bold ">
         Account Overview
       </p>
@@ -46,6 +43,6 @@ const page = () => {
       </div>
     </div>
   );
-};
+}
 
-export default page;
+export default AccountInfo
