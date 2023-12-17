@@ -179,6 +179,7 @@ export default function Navbar() {
                           className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
                           tabIndex="0"
                         >
+                         <div className="avatar-square avatar avatar-md">
                           <Image
                             src={UserData && UserData.userdp}
                             height={20}
@@ -192,6 +193,7 @@ export default function Navbar() {
                             //   height: 'auto',
                             // }}
                           />
+                        </div>
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
