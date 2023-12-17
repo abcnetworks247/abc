@@ -39,6 +39,7 @@ export const UserContextProvider = ({ children }) => {
       if (data.status === 200) {
         setUserData(DataValue);
         setLoading(false);
+        setGenload(false)
       }
       // setLoading(true);
       console.log("data", data);
