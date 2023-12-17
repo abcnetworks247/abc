@@ -15,11 +15,8 @@ export default function Page() {
   // using paams.get to get the reset query on the search params
   const reset = params.get("reset");
   //  initial state for update password
-  const [Allpassword, setAllpassword] = useState({
-    reset,
-    password: "",
-    confirmPassword: "",
-  });
+  const [password, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmpassword] = useState("");
 
   /**
    *
@@ -28,29 +25,30 @@ export default function Page() {
    * @param {string} e.value - the value of the input
    */
 
-  const HandleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAllpassword({
-      ...Allpassword,
-      [name]: value,
-    });
-  };
+  // const HandleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setAllpassword({
+  //     ...Allpassword,
+  //     [name]: value,
+  //   });
+  // };
 
-
-  const HandleSubmit =async (e) => {
+  const HandleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const data = await axios.post('https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/account/updatepassword', Allpassword)
-     console.log('data: ' + data)
-         if(data.status === 200){
-          console.log('Success', data.data.message);
-         }
-    } catch (error) {
-      console.log('error', error);
-    }
-     
-  }
+      const response = await axios.post(
+        "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/account/updatepassword",
+        { password, confirmPassword, reset }
+      );
+
+      if (response.status !== 200) {
+        console.log("error", response);
+      } else {
+        console.log(response);
+      }
+    } catch (error) {}
+  };
   // const HandleSubmit = async (e) => {
   //   e.preventDefault();
   //   const id = toast.loading("changingpassword..", {
@@ -69,7 +67,7 @@ export default function Page() {
   //         type: "error",
   //         isLoading: false,
   //       });
-     
+
   //     }
   //     console.log("post successful", data.data.message);
   //     setTimeout(() => {
@@ -133,14 +131,14 @@ export default function Page() {
                   type="password"
                   name="password"
                   placeholder="Enter new password"
-                  onChange={HandleInputChange}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
                 <input
                   className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirm Password"
-                  onChange={HandleInputChange}
+                  onChange={(e) => setConfirmpassword(e.target.value)}
                 />
 
                 <button
