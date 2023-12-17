@@ -112,31 +112,31 @@ export default function Page() {
         pauseOnHover
         theme="light"
       />
-      <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
-        <div className="w-full  lg:w-1/2 xl:w-5/12 p-6  lg:flex-none flex items-center flex-col justify-center h-screen sm:p-12">
+      <div className="flex justify-center flex-1 h-screen max-w-screen-xl sm:rounded-lg">
+        <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
-              <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900 mb-2">
+              <h1 className="mb-2 text-2xl font-extrabold text-blue-900 xl:text-4xl">
                 Update Password
               </h1>
               <p className="text-[12px] text-gray-500">
                 Enter your New Password
               </p>
             </div>
-            <div className="w-full flex-1 mt-8">
+            <div className="flex-1 w-full mt-8">
               <form
-                className="mx-auto max-w-xs flex flex-col gap-4"
+                className="flex flex-col max-w-xs gap-4 mx-auto"
                 onSubmit={HandleSubmit}
               >
                 <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
                   name="password"
                   placeholder="Enter new password"
                   onChange={HandleInputChange}
                 />
                 <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirm Password"
@@ -144,7 +144,7 @@ export default function Page() {
                 />
 
                 <button
-                  className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+                  className="flex items-center justify-center w-full py-4 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-900 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
                   onClick={HandleSubmit}
                 >
                   <svg
@@ -161,19 +161,19 @@ export default function Page() {
                   </svg>
                   <span className="ml-3">Update Password</span>
                 </button>
-                <p className="mt-6 text-xs text-gray-600 text-center">
+                <p className="mt-6 text-xs text-center text-gray-600">
                   remeber your password?{" "}
                   <Link href="/login">
-                    <span className="text-blue-900 font-semibold">login</span>
+                    <span className="font-semibold text-blue-900">login</span>
                   </Link>
                 </p>
               </form>
             </div>
           </div>
         </div>
-        <div className="flex-1 bg-blue-900 text-center hidden md:flex">
+        <div className="flex-1 hidden text-center bg-blue-900 md:flex">
           <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat "
+            className="w-full m-12 bg-center bg-no-repeat bg-contain xl:m-16 "
             style={{
               backgroundImage: `url(https://www.tailwindtap.com/assets/common/marketing.svg)`,
             }}
