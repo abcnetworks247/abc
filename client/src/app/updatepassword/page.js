@@ -1,5 +1,40 @@
+"use client"
+import { useState } from "react";
 import Link from "next/link"
+import Api from "@/utils/Api";
 export default function Page() {
+//  initial state for update password
+  const [Allpassword, setAllpassword] = useState({
+    password: "",
+    confirmPassword: "",
+  })
+
+  /**
+   * 
+   * @param {object} e - the event object
+   * @param {string} e.name - the name of the input
+   * @param {string} e.value - the value of the input
+   */
+
+  const HandleInputChange =(e) => { 
+    const{ name, value} = e.target
+    setAllpassword({
+      ...Allpassword,
+      [name]: value
+    })
+  }
+
+
+
+  const HandleSubmit = async (e)=> { 
+    e.preventDefault()
+    console.log(Allpassword);
+    try {
+      await Api.post('client/auth/updatepassword', Allpassword)
+    } catch (error) {
+      
+    }
+  }
 
   return (
 
@@ -18,20 +53,24 @@ export default function Page() {
               </p>
             </div>
             <div className="w-full flex-1 mt-8">
-              <div className="mx-auto max-w-xs flex flex-col gap-4">
+              <form className="mx-auto max-w-xs flex flex-col gap-4" onSubmit={HandleSubmit}>
 
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
+                  name="password"
                   placeholder="Enter new password"
+                  onChange={HandleInputChange}
                 />
                 <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
+                  name="confirmPassword"
                   placeholder="Confirm Password"
+                  onChange={HandleInputChange}
                 />
                 
-                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" onClick={HandleSubmit}>
                   <svg
                     className="w-6 h-6 -ml-2"
                     fill="none"
@@ -52,7 +91,7 @@ export default function Page() {
                     <span className="text-blue-900 font-semibold">login</span>
                   </Link>
                 </p>
-              </div>
+              </form>
             </div>
           </div>
         </div>
