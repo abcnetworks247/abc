@@ -42,7 +42,7 @@ export default function Page() {
 
     try {
       const data = await axios.post('https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/account/updatepassword', Allpassword)
-
+     console.log('data: ' + data)
          if(data.status === 200){
           console.log('Success', data.data.message);
          }
