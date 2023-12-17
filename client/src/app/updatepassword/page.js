@@ -39,7 +39,7 @@ export default function Page() {
     try {
       const response = await axios.post(
         "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/account/updatepassword",
-        { password, confirmPassword, reset }
+        { reset, password, confirmPassword }
       );
 
       if (response.status !== 200) {
