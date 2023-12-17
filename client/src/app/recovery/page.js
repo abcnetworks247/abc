@@ -51,6 +51,18 @@ export default function Page() {
   };
   return (
     <div>
+            <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex justify-center flex-1 h-screen max-w-screen-xl sm:rounded-lg">
         <div className="flex-1 hidden text-center bg-blue-900 md:flex">
           <div
