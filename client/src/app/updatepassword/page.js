@@ -35,6 +35,9 @@ export default function Page() {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    const id = toast.loading("changingpassword..", {
+      position: toast.POSITION.TOP_LEFT,
+    });
     console.log(Allpassword);
     try {
       const data = await Api.post("client/auth/account/updatepassword", Allpassword);
@@ -42,15 +45,12 @@ export default function Page() {
         console.log("post successful", data.data.message);
         setTimeout(() => {
           toast.dismiss(id);
-        }, 1000);
+        }, 2000);
         toast.update(id, {
           render: `${data.data.message}`,
           type: "success",
           isLoading: false,
         });
-        setTimeout(() => {
-          router.push("/login");
-        }, 3000);
       }
     } catch (error) {
       const suberrormsg = toast.update(id, {
@@ -61,6 +61,8 @@ export default function Page() {
       setTimeout(() => {
         toast.dismiss(suberrormsg);
       }, 2000);
+
+      console.log(error);
     }
   };
 

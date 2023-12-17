@@ -29,7 +29,7 @@ export default function Page() {
         console.log("post successful", data.data.message);
         setTimeout(() => {
           toast.dismiss(id);
-        }, 1000);
+        }, 2000);
         toast.update(id, {
           render: `${data.data.message}`,
           type: "success",
