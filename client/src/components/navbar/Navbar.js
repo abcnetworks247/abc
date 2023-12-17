@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
 
-
 /**
  * Represents a navigation bar component.
  * @returns {JSX.Element} The JSX element representing the navigation bar.
@@ -125,7 +124,9 @@ export default function Navbar() {
             }`}
           >
             {/* <CgLivePhoto className="text-red-500" /> */}
-            <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">Live</span>
+            <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">
+              Live
+            </span>
           </Link>
         </div>
         <div className="hidden navbar-center md:block "></div>
@@ -223,7 +224,7 @@ export default function Navbar() {
             )}
           </div>
           <div>
-            {Authtoken  &&  UserData && Authtoken.length !== 0 ? (
+            {Authtoken && UserData && Authtoken.length !== 0 ? (
               <div className="block avatar avatar-ring avatar-md md:hidden">
                 {loading === false ? (
                   <div className="dropdown-container ">
@@ -275,30 +276,41 @@ export default function Navbar() {
               </div>
             ) : (
               <div className=" dropdown-container">
-              <label
-                 className="px-0 cursor-pointer btn btn-ghost "
-                tabIndex="1"
-              >
-                <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
-              </label>
-  
-              <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                <a className="text-sm dropdown-item -z-50">login or signup</a>
-                <a tabIndex="-2" className="text-sm dropdown-item">
-                  Account settings
-                </a>
-                <a tabIndex="-2" className="text-sm dropdown-item">
-                  Subscriptions
-                </a>
-                <a tabIndex="-2" className="text-sm dropdown-item">
-                  logout
-                </a>
+                <label
+                  className="px-0 cursor-pointer btn btn-ghost "
+                  tabIndex="1"
+                >
+                  <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
+                </label>
+
+                <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                  <a className="text-sm dropdown-item -z-50">login or signup</a>
+                  <a tabIndex="-2" className="text-sm dropdown-item">
+                    Account settings
+                  </a>
+                  <a tabIndex="-2" className="text-sm dropdown-item">
+                    Subscriptions
+                  </a>
+                  <a tabIndex="-2" className="text-sm dropdown-item">
+                    logout
+                  </a>
+                </div>
+                <div class="flex items-center justify-center min-h-screen">
+                  {
+
+                  <div className="border  w-[auto] rounded-xl  shadow-sm hidden md:block">
+                    <button>
+                      Login
+                    </button>
+                    <button >
+                      Register
+                    </button>
+                  </div>
+                  }
+                </div>
               </div>
-            </div>
             )}
           </div>
-
-      
         </div>
       </div>
     </div>
