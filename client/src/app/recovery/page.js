@@ -5,6 +5,7 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Page() {
   // define initial recoveryformdata state
@@ -24,7 +25,7 @@ export default function Page() {
     });
     console.log(email);
     try {
-      const data = await Api.post("client/auth/recovery", email);
+      const data = await axios.post("https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/recovery", email);
       if (data.status === 201) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
