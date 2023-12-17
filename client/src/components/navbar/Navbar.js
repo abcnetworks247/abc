@@ -179,21 +179,21 @@ export default function Navbar() {
                           className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
                           tabIndex="0"
                         >
-                         <div className="avatar-square avatar avatar-md">
-                          <Image
-                            src={UserData && UserData.userdp}
-                            height={20}
-                            width={33}
-                            quality={100}
-                            loading="lazy"
-                            className="object-cover rounded-full cursor-pointer"
-                            alt="avatar"
-                            // style={{
-                            //   width: '100%',
-                            //   height: 'auto',
-                            // }}
-                          />
-                        </div>
+                          <div className="avatar-square avatar avatar-md">
+                            <Image
+                              src={UserData && UserData.userdp}
+                              height={20}
+                              width={33}
+                              quality={100}
+                              loading="lazy"
+                              className="object-cover rounded-full cursor-pointer"
+                              alt="avatar"
+                              // style={{
+                              //   width: '100%',
+                              //   height: 'auto',
+                              // }}
+                            />
+                          </div>
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
@@ -225,6 +225,26 @@ export default function Navbar() {
               <div></div>
             )}
           </div>
+{!Authtoken &&           <div className="hidden lg:block">
+            <div className="flex items-center justify-center h-fit ">
+              <div className="border w-fit flex item-center rounded-xl m-5 shadow-sm">
+                <Link href="/login">
+                
+                <button className="px-4 py-2 rounded-l-xl text-white m-0 bg-black hover:bg-black/80 transition">
+                  Login
+                </button>
+                </Link>
+                <Link href="/signup">
+                
+                <button className="px-4 py-2 rounded-r-xl bg-neutral-50 hover:bg-neutral-100 transition">
+                  Register
+                </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+}
           <div>
             {Authtoken && UserData && Authtoken.length !== 0 ? (
               <div className="block avatar avatar-ring avatar-md md:hidden">
@@ -274,27 +294,31 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className=" dropdown-container">
-                <label
-                  className="px-0 cursor-pointer btn btn-ghost "
-                  tabIndex="1"
-                >
-                  <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
-                </label>
+              <>
+                  <label
+                    className="px-0 cursor-pointer btn btn-ghost "
+                    tabIndex="1"
+                  >
+                    <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block lg:hidden" />
+                  </label>
+                <div className=" dropdown-container">
 
-                <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                  <a className="text-sm dropdown-item -z-50">login or signup</a>
-                  <a tabIndex="-2" className="text-sm dropdown-item">
-                    Account settings
-                  </a>
-                  <a tabIndex="-2" className="text-sm dropdown-item">
-                    Subscriptions
-                  </a>
-                  <a tabIndex="-2" className="text-sm dropdown-item">
-                    logout
-                  </a>
+                  <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                    <a className="text-sm dropdown-item -z-50">
+                      login or signup
+                    </a>
+                    <a tabIndex="-2" className="text-sm dropdown-item">
+                      Account settings
+                    </a>
+                    <a tabIndex="-2" className="text-sm dropdown-item">
+                      Subscriptions
+                    </a>
+                    <a tabIndex="-2" className="text-sm dropdown-item">
+                      logout
+                    </a>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
