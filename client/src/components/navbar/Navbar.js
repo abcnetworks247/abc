@@ -235,16 +235,13 @@ export default function Navbar() {
                         >
                           <Image
                             src={UserData && UserData.userdp}
-                            height={20}
-                            width={33}
+                            height={200}
+                            width={200}
                             quality={100}
                             loading="lazy"
-                            className="object-cover rounded-full cursor-pointer"
+                            className="object-cover h-[40px] w-[40px] rounded-full cursor-pointer"
                             alt="avatar"
-                            // style={{
-                            //   width: '100%',
-                            //   height: 'auto',
-                            // }}
+                            
                           />
                         </label>
 
