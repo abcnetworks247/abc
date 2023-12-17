@@ -47,21 +47,27 @@ export default function Page() {
         Allpassword
       );
       console.log('data status', data.status);
-      if (data.status === 200) {
-        console.log("post successful", data.data.message);
-        setTimeout(() => {
-          toast.dismiss(id);
-        }, 2000);
+      if (data.status !== 200) {
         toast.update(id, {
-          render: `${data.data.message}`,
-          type: "success",
+          render: `error on password update`,
+          type: "error",
           isLoading: false,
         });
-
-        setTimeout(() => {
-          router.push("/login");
-        }, 2000);
+     
       }
+      console.log("post successful", data.data.message);
+      setTimeout(() => {
+        toast.dismiss(id);
+      }, 2000);
+      toast.update(id, {
+        render: `${data.data.message}`,
+        type: "success",
+        isLoading: false,
+      });
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } catch (error) {
       const suberrormsg = toast.update(id, {
         render: `${error}`,
