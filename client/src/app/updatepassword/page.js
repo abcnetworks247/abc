@@ -13,9 +13,9 @@ export default function Page() {
   const reset = params.get("reset");
   //  initial state for update password
   const [Allpassword, setAllpassword] = useState({
+    reset,
     password: "",
     confirmPassword: "",
-    reset,
   });
 
   /**
@@ -41,7 +41,7 @@ export default function Page() {
     console.log(Allpassword);
     try {
       const data = await Api.post("client/auth/account/updatepassword", Allpassword);
-      if (data.status === 200) {
+      if (data.data.status === 200) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
           toast.dismiss(id);
