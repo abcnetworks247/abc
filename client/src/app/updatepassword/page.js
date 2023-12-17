@@ -6,9 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function Page() {
-
-  // router for navigating to login page after password update 
-  const router =  useRouter();
+  // router for navigating to login page after password update
+  const router = useRouter();
   // using usesearcparams to get the search params
   const params = useSearchParams();
 
@@ -43,7 +42,10 @@ export default function Page() {
     });
     console.log(Allpassword);
     try {
-      const data = await Api.post("client/auth/account/updatepassword", Allpassword);
+      const data = await Api.post(
+        "client/auth/account/updatepassword",
+        Allpassword
+      );
       if (data.status === 200) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
@@ -56,7 +58,7 @@ export default function Page() {
         });
 
         setTimeout(() => {
-          router.push('/login')
+          router.push("/login");
         }, 2000);
       }
     } catch (error) {
