@@ -46,6 +46,7 @@ export default function Page() {
         "client/auth/account/updatepassword",
         Allpassword
       );
+      console.log('data status', data.status);
       if (data.status === 200) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
