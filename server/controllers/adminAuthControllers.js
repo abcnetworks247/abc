@@ -206,7 +206,7 @@ const userUpdatePassword = async (req, res) => {
 
     const decodedId = VerifyToken(reset);
 
-    const checkuser = await Admin.findById(decodedId["id"]["id"]);
+    const checkuser = await Admin.findById(decodedId["id"]);
 
     if (!checkuser) {
       throw new UnAuthorizedError("User not found");
