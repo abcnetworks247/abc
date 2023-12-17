@@ -25,7 +25,7 @@ export default function Page() {
     });
     console.log(email);
     try {
-      const data = await axios.post("https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/recovery", email);
+      const data = await axios.post("https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/recovery", {email});
       if (data.status === 201) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
