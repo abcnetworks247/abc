@@ -37,7 +37,7 @@ export default function Page() {
     e.preventDefault();
     console.log(Allpassword);
     try {
-      const data = await Api.post("client/auth/updatepassword", Allpassword);
+      const data = await Api.post("client/auth/account/updatepassword", Allpassword);
       if (data.status === 201) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
