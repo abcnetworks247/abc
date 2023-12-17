@@ -179,6 +179,7 @@ export default function Navbar() {
                           className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
                           tabIndex="0"
                         >
+                         <div className="avatar-square avatar avatar-md">
                           <Image
                             src={UserData && UserData.userdp}
                             height={20}
@@ -192,6 +193,7 @@ export default function Navbar() {
                             //   height: 'auto',
                             // }}
                           />
+                        </div>
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
@@ -230,10 +232,7 @@ export default function Navbar() {
                   <div className="dropdown-container ">
                     <div className="flex flex-row gap-4 ">
                       <div className="dropdown ">
-                        <label
-                          className="block px-0 cursor-pointer btn btn-ghost md:hiden lg:block justify-items-end"
-                          tabIndex="0"
-                        >
+                        <div className="avatar-square avatar avatar-md">
                           <Image
                             src={UserData && UserData.userdp}
                             height={20}
@@ -247,7 +246,7 @@ export default function Navbar() {
                             //   height: 'auto',
                             // }}
                           />
-                        </label>
+                        </div>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
                           <a className="text-sm dropdown-item -z-50">Profile</a>
@@ -294,19 +293,6 @@ export default function Navbar() {
                   <a tabIndex="-2" className="text-sm dropdown-item">
                     logout
                   </a>
-                </div>
-                <div class="flex items-center justify-center min-h-screen">
-                  {
-
-                  <div className="border  w-[auto] rounded-xl  shadow-sm hidden md:block">
-                    <button>
-                      Login
-                    </button>
-                    <button >
-                      Register
-                    </button>
-                  </div>
-                  }
                 </div>
               </div>
             )}
