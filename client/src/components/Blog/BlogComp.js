@@ -59,10 +59,36 @@ export default function BlogComp() {
     <>
     {/* // if loading is true, show a skeleton loader. Else, show the blog posts. */}
     {loading ? (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
-        <div className="w-20 h-20 border-4 border-green-700 rounded-full animate-spin"></div>
-        <h1 className="mt-4 text-xl font-bold text-green-700">Loading...</h1>
+      // skeleton loader
+     <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
+        {Array.from({ length: 3}).map((_, index) => (
+          <div className="animate-pulse block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
+            <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+              <div className="bg-gray-200 rounded-md h-60 md:h-[60vh]"></div>
+              <span className="hidden mt-4 text-sm text-green-700 md:block">
+                {" "}
+                <div className="bg-gray-200 rounded-md h-4 w-20"></div>{" "}
+              </span>
+              <div className="my-6 text-xl font-bold leading-tight text-gray-800">
+                <div className="bg-gray-200 rounded-md h-4 w-40"></div>
+              </div>
+              <div className="mb-4 text-sm text-gray-600">
+                <div className="bg-gray-200 rounded-md h-4 w-60"></div>
+              </div>
+              <a
+                href="#"
+                className="inline-block px-6 py-3 mt-2 text-gray-100 bg-gray-100 rounded-md animate-bounce"
+              >
+                
+              </a>
+            </div>
+          </div>
+        ))
+
+        }
       </div>
+
+      
     ) : (
       
     <div>
