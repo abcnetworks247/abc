@@ -71,7 +71,7 @@ export const routes = [
       {
         icon: <RectangleStackIcon {...icon} />,
         name: "updatepassword",
-        path: "/updatepassword",
+        path: "/updatepassword?",
         element: <UpdatePassword />,
       },
     ],
