@@ -14,7 +14,7 @@
   }
 
   .accountInformation{
-     @apply  pb-2  border-b border-gray-300
+     @apply  pb-2  border-b border-gray-200
   }
 
   .sidebarInfo{

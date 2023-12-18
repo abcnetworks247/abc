@@ -6,13 +6,23 @@ import {
   AccountIcon,
   VoucherIcon,
   ReviewIcon,
-  ManageIcon
+  ManageIcon,
+  OrderIcon
 } from "./icons/UserIcon";
 import { usePathname } from "next/navigation";
 const Usernav = () => {
   const pathname = usePathname();
   return (
     <div className="w-[100vw] px-2 sm:min-h-max sm:basis-1/4 bg-white py-2 sm:rounded-sm sm:shadow-md">
+      <div className="flex items-center justify-center accountInformation  ">
+        <div class="py-2 shrink-0">
+          <img
+            class="object-cover w-16 h-16 rounded-full"
+            src="https://i.postimg.cc/bNyr5cJq/pexels-anastasia-shuraeva-5704720.jpg"
+            alt="Current profile photo"
+          />
+        </div>
+      </div>
       <div className="h-full">
         <Link
           href="/userdashboard"
@@ -35,8 +45,8 @@ const Usernav = () => {
             pathname == "/userdashboard/orders" ? "bg-blue-400" : ""
           }`}
         >
-          <HeartIcon />
-          <p>Saved Items</p>
+          <OrderIcon />
+          <p>Ordered</p>
         </Link>
         <div className="flex items-center p-4 justify-between hover:bg-gray-100 accountInformation sidebarInfo">
           <VoucherIcon />

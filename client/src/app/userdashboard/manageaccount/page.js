@@ -7,7 +7,7 @@ const page = () => {
       
         <div className='flex items-center justify-between mb-2'>
           <p className='font-bold'>Profile Details</p>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-200">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-200 cursor-pointer">
             <EditIcon />
           </div>
         </div>
@@ -27,11 +27,25 @@ const page = () => {
                 placeholder="Enter a name"
               />
             </div>
-            <div className="flex flex-wrap items-center">
-              <div className="w-full px-4 mb-6 lg:w-2/4">
+            <div className="px-4 mb-6">
+              <label className="block mb-2 text-sm font-medium ">
+                {" "}
+                Email
+              </label>
+              <input
+                className="block w-full px-4 py-3 mb-2 text-sm placeholder-gray-500 bg-white border rounded    "
+                type="email"
+                name=""
+                placeholder="Email"
+              />
+            </div>
+                  
+             <div className="">
+                      
+              <div className="w-full px-4 mb-6">
                 <label className="block mb-2 text-sm font-medium ">
                   {" "}
-                  Active From
+                  Date of Birth
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -54,8 +68,20 @@ const page = () => {
                     placeholder="Select date"
                   />
                 </div>
-              </div>
-              <div className="w-full px-4 mb-6 lg:w-2/4">
+                </div>
+                      
+                    <div className="mb-6">
+                    <label className="mr-2">
+                        <input type="radio" name="inline-radio"/>
+                        <span className="ml-2 dark:text-gray-400">Male</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="inline-radio" value="option 2"/>
+                        <span className="ml-2 dark:text-gray-400">Female</span>
+                    </label>
+                </div>
+                      
+              {/* <div className="w-full px-4 mb-6 lg:w-2/4">
                 <label className="block mb-2 text-sm font-medium ">
                   {" "}
                   Deactive After
@@ -81,9 +107,13 @@ const page = () => {
                     placeholder="Select date"
                   />
                 </div>
-              </div>
-            </div>
-            <div className="px-4 mb-6">
+            </div> */}
+                      {/* stop */}
+                    
+                      
+             </div>
+                  
+            {/* <div className="px-4 mb-6">
               <label
                 className="block mb-2 text-sm font-medium text-gray-900 "
                 for="file_input"
@@ -106,7 +136,10 @@ const page = () => {
                 name=""
                 placeholder="Redirect"
               />
-            </div>
+                  </div>
+                   */}
+                  {/* end */}
+                  
             <div className="px-4 mb-6">
               <label className="block text-sm font-medium text-gray-700 ">
                 {" "}
@@ -126,7 +159,7 @@ const page = () => {
                   type="button"
                   className="px-3 py-2 ml-5 text-sm font-medium leading-4 text-gray-700 bg-white border border-gray-300 rounded shadow-sm dark:hover:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:bg-gray-600 hover:bg-gray-100 "
                 >
-                  Change
+                  Save
                 </button>
               </div>
             </div>
