@@ -59,10 +59,9 @@ export default function BlogComp() {
     <>
     {/* // if loading is true, show a skeleton loader. Else, show the blog posts. */}
     {loading ? (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
-        <div className="w-20 h-20 border-4 border-green-700 rounded-full animate-spin"></div>
-        <h1 className="mt-4 text-xl font-bold text-green-700">Loading...</h1>
-      </div>
+      // skeleton loader
+      
+      
     ) : (
       
     <div>
