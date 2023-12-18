@@ -7,3 +7,17 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+@layer components {
+  .accountbox {
+    @apply  border border-gray-300 px-2 py-4 h-[207px] rounded-md
+  }
+
+  .accountInformation{
+     @apply  pb-2  border-b border-gray-200
+  }
+
+  .sidebarInfo{
+    @apply cursor-pointer
+  }
+}

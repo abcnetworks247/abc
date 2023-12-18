@@ -4,11 +4,11 @@ import Sidebar from "@/components/sidebar/Sidebar";
 export default function page() {
   return (
     <div>
-      <div className="bg-white sticky top-0 z-[10] pt-9">
+       <div className="bg-white sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
       <Sidebar />
-      <section className="bg-white relative overflow-hidden">
+      <section className="relative overflow-hidden bg-white">
         <svg
           className="absolute opacity-20"
           width="100%"

@@ -2,7 +2,16 @@
 import Api from "@/utils/Api";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
+
 export default function Page() {
+  // router for the navigation to another page after account created successfully
+
+  const router = useRouter();
+
   // Define the initial loginform data
   const [logInFormData, setlogInFormData] = useState({
     email: "",
@@ -28,33 +37,93 @@ export default function Page() {
    * @param {Function} e.preventDefault - prevent default forms submission behaviour
    */
 
-const [data, setdata] = useState([])
-console.log('data', data)
+  const [data, setdata] = useState([]);
+  console.log("data", data);
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    const id = toast.loading("loging in..", {
+      position: toast.POSITION.TOP_LEFT,
+    });
     try {
       // perform an asyncronous request to sigin in the user
       console.log(logInFormData, "response data");
-      const data = await Api.post("client/auth/signin", logInFormData,  { withCredentials: true });
-       const value = data.data
+      const data = await Api.post("client/auth/signin", logInFormData, {
+        withCredentials: true,
+      });
+      const value = data.data;
       // log the response data
-      
+
       // check the staus of the request to see if the request was successful or not
       if (data.status === 200) {
         console.log(data.data, "success message");
-        Cookies.set('authToken', value.authToken)
-        setdata(value)
-      } else {
+        // setting the token i got from thr server to cookies with the help of cookie js
+        Cookies.set("authToken", value.authToken);
+        setTimeout(() => {
+          toast.dismiss(id);
+        }, 1000);
+        toast.update(id, {
+          render: `${value.message}`,
+          type: "success",
+          isLoading: false,
+        });
 
-        console.log(data.data, "error");
+        setTimeout(() => {
+          router.push("/");
+
+          
+        }, 3000);
+
+        setdata(value);
+      } else if (data.status === 500) {
+        const suberrormsg = toast.update(id, {
+          render: `user does not exist `,
+          type: "error",
+          isLoading: false,
+        });
+        setTimeout(() => {
+          toast.dismiss(suberrormsg);
+        }, 2000);
+      } else {
+        const suberrormsg = toast.update(id, {
+          render: `error while creating account `,
+          type: "error",
+          isLoading: false,
+        });
+        setTimeout(() => {
+          toast.dismiss(suberrormsg);
+        }, 2000);
       }
     } catch (error) {
-      console.log(error);
+      const suberrormsg = toast.update(id, {
+        render: `${error}`,
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        toast.dismiss(suberrormsg);
+      }, 2000);
+
+      console.error(error);
     }
   };
 
+
+  
+
   return (
     <div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
         <div className="w-full  lg:w-1/2 xl:w-5/12 p-6  lg:flex-none flex items-center flex-col justify-center h-screen sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
@@ -77,6 +146,8 @@ console.log('data', data)
                   type="email"
                   placeholder="Enter your email"
                   onChange={HandleInputChange}
+                  required
+                  
                 />
 
                 <input
@@ -85,6 +156,7 @@ console.log('data', data)
                   name="password"
                   placeholder="Enter password"
                   onChange={HandleInputChange}
+                  required
                 />
 
                 <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
@@ -102,14 +174,23 @@ console.log('data', data)
                   </svg>
                   <span className="ml-3">Login</span>
                 </button>
-                <p className="mt-6 text-xs text-gray-600 text-center">
-                  Dont have an account?{" "}
-                  <a href="">
-                    <span className="text-blue-900 font-semibold">
-                      Register
-                    </span>
-                  </a>
-                </p>
+                <div className="flex items-center gap-3 justify-between">
+                  <p className="mt-6 text-sm text-gray-600 text-center">
+                    New?{" "}
+                    <Link href="/signup">
+                      <span className="text-blue-900 font-semibold">
+                        Register
+                      </span>
+                    </Link>
+                  </p>
+                  <p className="mt-6 text-xs text-gray-600 text-center">
+                    <Link href="/recovery">
+                      <span className="text-blue-900 font-semibold">
+                        Forgot Password?
+                      </span>
+                    </Link>
+                  </p>
+                </div>
               </form>
             </div>
           </div>

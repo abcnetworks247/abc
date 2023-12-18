@@ -1,23 +1,51 @@
-import React from 'react'
-import Sidebar from '@/components/Userdashboard/Sidebar';
-import Usercrumb from '@/components/Userdashboard/Usercrumb';
-import Usernav from '@/components/Userdashboard/Usernav';
-import Info from '@/components/Userdashboard/Info';
-import FooterComp from '@/components/Footer/FooterComp';
-import Navbar from '@/components/navbar/Navbar';
+"use client"
+import React from "react";
+import {EditIcon} from  "./components/icons/UserIcon"
+
+
 const page = () => {
-    return (
-      <>
-          <Navbar />
+  return (
+    <div className="hidden sm:block sm:basis-3/4 sm:bg-white sm:min-h-max shadow-md sm:rounded-sm">
+      <p className="accountInformation px-4 py-2 text-bold ">
+        Account Overview
+      </p>
 
-          <div class="grid grid-cols-12 items-start gap-6 pt-4 pb-16 mt-16 bg-gray-200 w-auto px-6">
-            <Sidebar />
-            <Info />
+      <div className="px-4 mt-2">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="accountbox">
+            <h3 className="accountInformation font-bold">ACCOUNT DETAILS</h3>
+            <p>Awajimijan Igoni</p>
+            <p>mijanigoni@gmail.com</p>
           </div>
-          <FooterComp />
-    
-      </>
-    );
-}
 
-export default page
+          <div className="accountbox ">
+            <h3 className="accountInformation font-bold">STORE CREDIT</h3>
+            <p>Awajimijan Igoni</p>
+            <p>mijanigoni@gmail.com</p>
+          </div>
+
+          <div className="accountbox">
+            <div className="accountInformation flex justify-between items-center">
+              <h3 className="font-bold">ADDRESS BOOK</h3>
+              <div className="cursor-pointer">
+                <EditIcon />
+              </div>
+            </div>
+
+            <p>Awajimijan Igoni</p>
+            <p>3 market Lane Rumuomasi</p>
+            <p>+2347082642998</p>
+          </div>
+
+          <div className="accountbox">
+            <h3 className="accountInformation font-bold">anything</h3>
+            <p>Awajimijan Igoni</p>
+            <p>mijanigoni@gmail.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default page;

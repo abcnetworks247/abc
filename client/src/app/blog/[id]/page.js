@@ -27,21 +27,26 @@ export default function page() {
 
 
   return (
+<<<<<<< HEAD
  
         <div>
       <div className="bg-white sticky top-0 z-[10]">
+=======
+    <div>
+       <div className="bg-white sticky top-0 z-[10] mb-10">
+>>>>>>> 6b2c196da4eaaf2ced7b6108142245d5860ac3f2
         <Navbar />
       </div>
 
       <Sidebar />
       <main className="mt-[90px] pb-16  lg:pb-24 bg-white w-auto  antialiased">
-        <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
-          <article className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+        <div className="flex justify-between max-w-screen-xl px-4 mx-auto ">
+          <article className="w-full max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
             <header className=" lg:mb-2 not-format">
               <address className="flex items-center mb-2 not-italic">
                 <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                   <img
-                    className="mr-4 w-16 h-16 rounded-full"
+                    className="w-16 h-16 mr-4 rounded-full"
                     src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
                     alt="Jese Leos"
                   />
@@ -68,7 +73,7 @@ export default function page() {
                   </div>
                 </div>
               </address>
-              <h1 className="my-7 text-3xl font-bold leading-tight text-gray-900 lg:mb-6 lg:text-2xl">
+              <h1 className="text-3xl font-bold leading-tight text-gray-900 my-7 lg:mb-6 lg:text-2xl">
                 Best practices for successful prototypes
               </h1>
             </header>
@@ -132,20 +137,20 @@ export default function page() {
             </p>
             
             <section className="not-format">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-bold text-gray-900 lg:text-2xl dark:text-white">
                   Discussion (20)
                 </h2>
               </div>
               <form className="mb-6">
-                <div className="py-2 px-4 mb-4 rounded-lg rounded-t-lg border border-gray-200 bg-gray-200">
+                <div className="px-4 py-2 mb-4 bg-gray-200 border border-gray-200 rounded-lg rounded-t-lg">
                   <label for="comment" className="sr-only">
                     Your comment
                   </label>
                   <textarea
                     id="comment"
                     rows="6"
-                    className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 bg-gray-200"
+                    className="w-full px-0 text-sm text-gray-900 bg-gray-200 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400"
                     placeholder="Write a comment..."
                     required
                   ></textarea>
@@ -158,11 +163,11 @@ export default function page() {
                 </button>
               </form>
               <article className="p-6 mb-6 text-base bg-gray-200 rounded-lg ">
-                <footer className="flex justify-between items-center mb-2">
+                <footer className="flex items-center justify-between mb-2">
                   <div className="flex items-center">
-                    <p className="inline-flex items-center mr-3 font-semibold text-sm text-gray-900">
+                    <p className="inline-flex items-center mr-3 text-sm font-semibold text-gray-900">
                       <img
-                        className="mr-2 w-6 h-6 rounded-full"
+                        className="w-6 h-6 mr-2 rounded-full"
                         src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
                         alt="Michael Gough"
                       />
@@ -198,7 +203,7 @@ export default function page() {
                   {/* <!-- Dropdown menu --> */}
                   <div
                     id="dropdownComment1"
-                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-36 dark:bg-gray-700 dark:divide-gray-600"
                   >
                     <ul
                       className="py-1 text-sm text-gray-700 dark:text-gray-200"
@@ -207,7 +212,7 @@ export default function page() {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Edit
                         </a>
@@ -215,7 +220,7 @@ export default function page() {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Remove
                         </a>
@@ -223,7 +228,7 @@ export default function page() {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                         >
                           Report
                         </a>
@@ -240,7 +245,7 @@ export default function page() {
                 <div className="flex items-center mt-4 space-x-4">
                   <button
                     type="button"
-                    className="flex items-center font-medium text-sm text-gray-500 hover:underline dark:text-gray-400"
+                    className="flex items-center text-sm font-medium text-gray-500 hover:underline dark:text-gray-400"
                   >
                     <svg
                       className="mr-1.5 w-3 h-3"
@@ -263,9 +268,9 @@ export default function page() {
 
       <aside
         aria-label="Related articles"
-        className="py-8 px-14  overflow-hidden"
+        className="py-8 overflow-hidden px-14"
       >
-        <div className="px-4 mx-auto max-w-screen-xl">
+        <div className="max-w-screen-xl px-4 mx-auto">
   
     
         </div>

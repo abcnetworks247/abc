@@ -7,7 +7,7 @@ const commentSchema = new mongoose.Schema({
   },
   userid: {
     type: mongoose.Types.ObjectId,
-    ref: 'Users',
+    ref: 'Clients',
     required: true,
   },
   createdAt: {
@@ -38,18 +38,11 @@ const blogSchema = new mongoose.Schema({
   blogimage: {
     type: String,
   },
-  view: {
-    type: Number,
-    default: 0,
-  },
-  like: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'Users',
-  }],
   comment: [commentSchema],
+
   author: {
     type: mongoose.Types.ObjectId,
-    ref: 'Users',
+    ref: 'Admins',
     required: true,
   }
 }, {timestamps: true});
