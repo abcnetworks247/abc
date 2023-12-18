@@ -5,6 +5,7 @@ import Api from "@/utils/Api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 export default function Page() {
   // router for navigating to login page after password update
   const router = useRouter();
@@ -14,11 +15,8 @@ export default function Page() {
   // using paams.get to get the reset query on the search params
   const reset = params.get("reset");
   //  initial state for update password
-  const [Allpassword, setAllpassword] = useState({
-    reset,
-    password: "",
-    confirmPassword: "",
-  });
+  const [password, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmpassword] = useState("");
 
   /**
    *
@@ -27,60 +25,76 @@ export default function Page() {
    * @param {string} e.value - the value of the input
    */
 
-  const HandleInputChange = (e) => {
-    const { name, value } = e.target;
-    setAllpassword({
-      ...Allpassword,
-      [name]: value,
-    });
-  };
+  // const HandleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setAllpassword({
+  //     ...Allpassword,
+  //     [name]: value,
+  //   });
+  // };
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    const id = toast.loading("changingpassword..", {
-      position: toast.POSITION.TOP_LEFT,
-    });
-    console.log(Allpassword);
+
     try {
-      const data = await Api.post(
-        "client/auth/account/updatepassword",
-        Allpassword
+      const response = await axios.post(
+        "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/account/updatepassword",
+        { reset, password, confirmPassword }
       );
-      console.log('data status', data);
-      if (data.status !== 200) {
-        toast.update(id, {
-          render: `error on password update`,
-          type: "error",
-          isLoading: false,
-        });
-     
+
+      if (response.status !== 200) {
+        console.log("error", response);
+      } else {
+        console.log(response);
       }
-      console.log("post successful", data.data.message);
-      setTimeout(() => {
-        toast.dismiss(id);
-      }, 2000);
-      toast.update(id, {
-        render: `${data.data.message}`,
-        type: "success",
-        isLoading: false,
-      });
-
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
-    } catch (error) {
-      const suberrormsg = toast.update(id, {
-        render: `${error}`,
-        type: "error",
-        isLoading: false,
-      });
-      setTimeout(() => {
-        toast.dismiss(suberrormsg);
-      }, 2000);
-
-      console.log(error);
-    }
+    } catch (error) {}
   };
+  // const HandleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const id = toast.loading("changingpassword..", {
+  //     position: toast.POSITION.TOP_LEFT,
+  //   });
+  //   console.log(Allpassword);
+  //   try {
+  //     const data = await Api.post(
+  //       "client/auth/account/updatepassword",
+  //       Allpassword
+  //     );
+  //     console.log('data status', data.status);
+  //     if (data.status !== 200) {
+  //       toast.update(id, {
+  //         render: `error on password update`,
+  //         type: "error",
+  //         isLoading: false,
+  //       });
+
+  //     }
+  //     console.log("post successful", data.data.message);
+  //     setTimeout(() => {
+  //       toast.dismiss(id);
+  //     }, 2000);
+  //     toast.update(id, {
+  //       render: `${data.data.message}`,
+  //       type: "success",
+  //       isLoading: false,
+  //     });
+
+  //     setTimeout(() => {
+  //       router.push("/login");
+  //     }, 2000);
+  //   } catch (error) {
+  //     const suberrormsg = toast.update(id, {
+  //       render: `${error}`,
+  //       type: "error",
+  //       isLoading: false,
+  //     });
+  //     setTimeout(() => {
+  //       toast.dismiss(suberrormsg);
+  //     }, 2000);
+
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div>
@@ -117,14 +131,14 @@ export default function Page() {
                   type="password"
                   name="password"
                   placeholder="Enter new password"
-                  onChange={HandleInputChange}
+                  onChange={(e) => setNewPassword(e.target.value)}
                 />
                 <input
                   className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirm Password"
-                  onChange={HandleInputChange}
+                  onChange={(e) => setConfirmpassword(e.target.value)}
                 />
 
                 <button
