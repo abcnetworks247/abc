@@ -12,8 +12,9 @@ const multer = require("multer");
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const upload = multer({ dest: "public/tmp" });
-const clientUrl = process.env.CLIENT_URL;
+const adminUrl = process.env.ADMIN_URL;
 const serverUrl = process.env.SERVER_URL;
+const clientUrl = process.env.CLIENT_URL;
 
 const Clientjoi = require("../Utils/ClientJoiSchema");
 const {

@@ -206,7 +206,7 @@ export function SignIn() {
   </form>
 
             <Typography variant="small" className="font-medium text-gray-900">
-              <Link to="/auth/recovery">
+              <Link to="/auth/recover">
                 Forgot Password?
               </Link>
             </Typography>

@@ -10,7 +10,7 @@ export default function layout({ children }) {
     <>
       <Navbar />
       <div className="sm:bg-gray-200">
-        <div class="pt-[10px] sm:flex sm:file:flew-row sm:justify-center sm:pb-[12px] sm:px-24 sm:pt-[12px] sm:gap-4 min-h-screen mb-16">
+        <div class="pt-[10px] sm:flex sm:file:flew-row sm:justify-center sm:pb-[12px] sm:px-24 sm:pt-[12px] sm:gap-4 h-fit mb-16">
           <Usernav />
           {children}
         </div>

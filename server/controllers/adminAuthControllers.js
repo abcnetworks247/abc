@@ -12,8 +12,9 @@ const multer = require("multer");
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const upload = multer({ dest: "public/tmp" });
-const AdminUrl = process.env.Admin_URL;
+const adminUrl = process.env.ADMIN_URL;
 const serverUrl = process.env.SERVER_URL;
+const clientUrl = process.env.CLIENT_URL;
 
 const Adminjoi = require("../Utils/AdminJoiSchema");
 const {
@@ -134,13 +135,16 @@ const userRecovery = async (req, res) => {
     const userexist = await Admin.findOne({ email });
 
     if (!userexist) {
+      console.log("Couldn't find client");
       throw new NotFoundError("User not found");
     }
 
-    const MaxAge = 10 * 60;
-    const token = CreateToken({ id: userexist._id }, MaxAge);
+    console.log("Found client");
 
-    const passwordUpdateUrl = `${serverUrl}/api/v1/auth/account/updatepassword/${token}`;
+    const MaxAge = 3 * 24 * 60 * 60;
+    const token = CreateToken(userexist._id, MaxAge);
+
+    const passwordUpdateUrl = `${serverUrl}/api/v1/admin/auth/account/updatepassword/${token}`;
     const templatePath = path.join(__dirname, "../views/passwordRecovery.ejs");
     const renderHtml = await ejs.renderFile(
       templatePath,
@@ -162,8 +166,6 @@ const userRecovery = async (req, res) => {
     return res
       .status(StatusCodes.OK)
       .send({ message: `verification email has been sent to ${email}` });
-      
-
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -174,6 +176,8 @@ const userRecovery = async (req, res) => {
 const userVerifyPasswordReset = async (req, res) => {
   const { token } = req.params;
 
+  console.log("verify password reset", token);
+
   try {
     const decodedId = VerifyToken(token);
 
@@ -181,12 +185,12 @@ const userVerifyPasswordReset = async (req, res) => {
 
     if (!decodedId) {
       console.log("Invalid token");
-      res.redirect(`${AdminUrl}/recovery`);
+      res.redirect(`${adminUrl}/recovery`);
       throw new UnAuthorizedError("Invalid token");
     }
 
     console.log("Valid token");
-    res.redirect(`${AdminUrl}/updatepassword?verified=true&reset=${token}`);
+    res.redirect(`${adminUrl}/auth/updatepassword?verified=true&reset=${token}`);
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -201,8 +205,6 @@ const userUpdatePassword = async (req, res) => {
     if (password !== confirmPassword) {
       throw new ValidationError("Passwords do not match");
     }
-
-    console.log("hit...");
 
     const decodedId = VerifyToken(reset);
 
