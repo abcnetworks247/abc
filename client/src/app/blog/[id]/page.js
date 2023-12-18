@@ -7,34 +7,31 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 
+
 export default function page() {
  //fetch blog api
   const [blog, setBlog] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchBlog = async () => {
-    setLoading(true);
-    const res = await axios.get("https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog");
-    setBlog(res.data);
-    setLoading(false);
-    console.log("blogs", blog);
-
-  };
   useEffect(() => {
-    fetchBlog();
+    axios
+    // use the base url and the endpoint to fetch the blog posts
+      .get("https://bloggi-server.onrender.com/api/v1/blog/6562769dd40ae681b3fd33cc")
+      .then((res) => {
+        const data = res.data;
+        setBlog(data);
+        // update the highlight, trending, top news and popular posts state
+        // set the loading state to false
+        setLoading(false);
+        console.log("the blog", data);
+      })
+      .catch((err) => console.log(err));
   }, []);
-  console.log("blogs", blog);
-
 
   return (
-<<<<<<< HEAD
- 
-        <div>
-      <div className="bg-white sticky top-0 z-[10]">
-=======
+    <>
     <div>
        <div className="bg-white sticky top-0 z-[10] mb-10">
->>>>>>> 6b2c196da4eaaf2ced7b6108142245d5860ac3f2
         <Navbar />
       </div>
 
@@ -44,34 +41,9 @@ export default function page() {
           <article className="w-full max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
             <header className=" lg:mb-2 not-format">
               <address className="flex items-center mb-2 not-italic">
-                <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
-                  <img
-                    className="w-16 h-16 mr-4 rounded-full"
-                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-                    alt="Jese Leos"
-                  />
-                  <div>
-                    <a
-                      href="#"
-                      rel="author"
-                      className="text-xl font-bold text-gray-900"
-                    >
-                      Jese Leos
-                    </a>
-                    <p className="text-base text-gray-500 dark:text-gray-400">
-                      Graphic Designer, educator & CEO Flowbite
-                    </p>
-                    <p className="text-base text-gray-500 dark:text-gray-400">
-                      <time
-                        pubdate
-                        datetime="2022-02-08"
-                        title="February 8th, 2022"
-                      >
-                        Feb. 8, 2022
-                      </time>
-                    </p>
-                  </div>
-                </div>
+                {/* map through fetched data */}
+  
+               
               </address>
               <h1 className="text-3xl font-bold leading-tight text-gray-900 my-7 lg:mb-6 lg:text-2xl">
                 Best practices for successful prototypes
@@ -138,7 +110,7 @@ export default function page() {
             
             <section className="not-format">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold text-gray-900 lg:text-2xl dark:text-white">
+                <h2 className="text-lg font-bold text-gray-900 lg:text-2xl">
                   Discussion (20)
                 </h2>
               </div>
@@ -150,7 +122,7 @@ export default function page() {
                   <textarea
                     id="comment"
                     rows="6"
-                    className="w-full px-0 text-sm text-gray-900 bg-gray-200 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                    className="w-full px-0 text-sm text-gray-900 bg-gray-200 border-0 focus:ring-0 dark:placeholder-gray-400"
                     placeholder="Write a comment..."
                     required
                   ></textarea>
@@ -283,5 +255,6 @@ export default function page() {
 
       <FooterComp />
     </div>
+    </>
       )
     };
