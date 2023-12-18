@@ -144,8 +144,8 @@ const userRecovery = async (req, res) => {
 
     console.log("Found client");
 
-    const MaxAge = 10 * 60;
-    const token = CreateToken({ id: userexist._id }, MaxAge);
+    const MaxAge = 3 * 24 * 60 * 60;
+    const token = CreateToken(userexist._id, MaxAge);
 
     const passwordUpdateUrl = `${serverUrl}/api/v1/client/auth/account/updatepassword/${token}`;
     const templatePath = path.join(__dirname, "../views/passwordRecovery.ejs");

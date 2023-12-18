@@ -17,10 +17,25 @@ const {
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const getAllBlog = async (req, res) => {
-  console.log('GET ALL POST');
   try {
     const allblog = await blog
       .find()
+      .populate("author", "fullname username userdp");
+
+    const highlight = await blog
+      .find({ type: "top" })
+      .populate("author", "fullname username userdp");
+
+    const popular = await blog
+      .find({ type: "popular" })
+      .populate("author", "fullname username userdp");
+
+    const top = await blog
+      .find({ type: "top" })
+      .populate("author", "fullname username userdp");
+
+    const trending = await blog
+      .find({ type: "top" })
       .populate("author", "fullname username userdp");
 
     if (allblog.length === 0) {
@@ -29,7 +44,7 @@ const getAllBlog = async (req, res) => {
         .json({ message: "No blogs found" });
     }
 
-    return res.status(StatusCodes.OK).json({ allblog, message: "All blog" });
+    return res.status(StatusCodes.OK).json({ allblog, highlight, popular, top, trending });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -38,7 +53,7 @@ const getAllBlog = async (req, res) => {
 };
 
 const createBlog = async (req, res) => {
-  const { title, shortdescription, longdescription, category } = req.body;
+  const { title, shortdescription, longdescription, category, type } = req.body;
 
   try {
     const currentUser = req.user;
@@ -68,6 +83,7 @@ const createBlog = async (req, res) => {
       longdescription,
       category,
       blogimage: blogphoto.secure_url,
+      type,
       author: currentUser._id,
     };
 
@@ -97,6 +113,7 @@ const createBlog = async (req, res) => {
 const getSingleBlog = async (req, res) => {
   const { id } = req.params;
 
+  console.log(id);
   try {
     const blogdata = await blog
       .findById(id)
@@ -120,7 +137,7 @@ const getSingleBlog = async (req, res) => {
 };
 
 const updateBlog = async (req, res) => {
-  const { title, shortdescription, longdescription, category, blogid } =
+  const { title, shortdescription, longdescription, category, blogid, type } =
     req.body;
 
   try {
@@ -140,6 +157,7 @@ const updateBlog = async (req, res) => {
         shortdescription,
         longdescription,
         category,
+        type,
       };
 
       const updatedBlog = await blog.findByIdAndUpdate(blogid, oldpost, {
@@ -164,6 +182,7 @@ const updateBlog = async (req, res) => {
       longdescription,
       category,
       blogimage: blogphoto.secure_url,
+      type,
     };
 
     const updatedBlog = await blog.findByIdAndUpdate(blogid, oldpost, {

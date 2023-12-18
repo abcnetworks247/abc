@@ -2,7 +2,7 @@
 import Image from "next/image";
 import FooterComp from "../Footer/FooterComp";
 import Newsletter from "../newsletter/Newsletter";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -10,22 +10,70 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 // import required modules
 import { Autoplay, Navigation, HashNavigation } from "swiper/modules";
+// import axios
+import axios from "axios";
+
 
 export default function BlogComp() {
+  const [loading, setLoading] = useState(true);
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
+  // autoplay progress bar
   const onAutoplayTimeLeft = (s, time, progress) => {
     progressCircle.current.style.setProperty("--progress", 1 - progress);
     progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
   };
+  // store the base url in a constant
+  const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
+  // fetch blog posts from the server
+  const [posts, setPosts] = useState([]);
+  // store the highlighted post in a state
+  const [highlight, setHighlight] = useState([]);
+  // store the trending post in a state
+  const [trending, setTrending] = useState([]);
+  // store the top news posts in a state
+  const [topNews, setTopNews] = useState([]);
+  // store the popular posts in a state
+  const [popular, setPopular] = useState([]);
+
+  useEffect(() => {
+    axios
+    // use the base url and the endpoint to fetch the blog posts
+      .get(`${baseUrl}/client/blog`)
+      .then((res) => {
+        const data = res.data;
+        setPosts(data);
+        // update the highlight, trending, top news and popular posts
+        setHighlight(data.highlight);
+        setTrending(data.trending);
+        setTopNews(data.top);
+        setPopular(data.popular);
+        // set the loading state to false
+        setLoading(false);
+        console.log("the blog", data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
+    <>
+    {/* // if loading is true, show a skeleton loader. Else, show the blog posts. */}
+    {loading ? (
+      <div className="flex flex-col items-center justify-center w-full h-screen">
+        <div className="w-20 h-20 border-4 border-green-700 rounded-full animate-spin"></div>
+        <h1 className="mt-4 text-xl font-bold text-green-700">Loading...</h1>
+      </div>
+    ) : (
+      
     <div>
       {/* <!-- component --> */}
       <div className="max-w-screen-lg mx-auto md:max-w-screen-xl md:px-10">
         <main className="">
           {/* <!-- featured section --> */}
           <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
+            {/* map throught the the fetched data.highlight */}
+
+
             <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
               <Swiper
                 spaceBetween={30}
@@ -42,213 +90,73 @@ export default function BlogComp() {
                 modules={[Autoplay, Navigation, HashNavigation]}
                 className="mySwiper"
               >
-                <SwiperSlide>
-                  {/* <!-- main post --> */}
-                  <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
-                    <Image
-                      src="https://images.unsplash.com/photo-1427751840561-9852520f8ce8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                      height={500}
-                      width={500}
-                      alt="img"
-                      className="object-cover w-full h-60 md:h-[60vh] rounded-md"
-                    />
-                    <span className="hidden mt-4 text-sm text-green-700 md:block">
-                      {" "}
-                      Technology{" "}
-                    </span>
-                    <h1 className="my-6 text-xl font-bold leading-tight text-gray-800">
-                      Ignorant branched humanity led now marianne too.
-                    </h1>
-                    <p className="mb-4 text-sm text-gray-600">
-                      Necessary ye contented newspaper zealously breakfast he
-                      prevailed. Melancholy middletons yet understood decisively
-                      boy law she. Answer him easily are its barton little. Oh
-                      no though mother be things simple itself. Oh be me, sure
-                      wise sons, no. Piqued ye of am spirit regret. Stimulated
-                      discretion impossible admiration in particular conviction
-                      up.
-                    </p>
-                    <a
-                      href="#"
-                      className="inline-block px-6 py-3 mt-2 text-gray-100 bg-green-700 rounded-md"
-                    >
-                      Read more
-                    </a>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  {/* <!-- main post --> */}
-                  <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
-                    <Image
-                      src="https://images.unsplash.com/photo-1427751840561-9852520f8ce8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                      height={500}
-                      width={500}
-                      alt="img"
-                      className="object-cover w-full h-60 md:h-[60vh] rounded-md"
-                    />
-                    <span className="hidden mt-4 text-sm text-green-700 md:block">
-                      {" "}
-                      Technology{" "}
-                    </span>
-                    <h1 className="my-6 text-xl font-bold leading-tight text-gray-800">
-                      Ignorant branched humanity led now marianne too.
-                    </h1>
-                    <p className="mb-4 text-sm text-gray-600">
-                      Necessary ye contented newspaper zealously breakfast he
-                      prevailed. Melancholy middletons yet understood decisively
-                      boy law she. Answer him easily are its barton little. Oh
-                      no though mother be things simple itself. Oh be me, sure
-                      wise sons, no. Piqued ye of am spirit regret. Stimulated
-                      discretion impossible admiration in particular conviction
-                      up.
-                    </p>
-                    <a
-                      href="#"
-                      className="inline-block px-6 py-3 mt-2 text-gray-100 bg-green-700 rounded-md"
-                    >
-                      Read more
-                    </a>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  {/* <!-- main post --> */}
-                  <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
-                    <Image
-                      src="https://images.unsplash.com/photo-1427751840561-9852520f8ce8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                      height={500}
-                      width={500}
-                      alt="img"
-                      className="object-cover w-full h-60 md:h-[60vh] rounded-md"
-                    />
-                    <span className="hidden mt-4 text-sm text-green-700 md:block">
-                      {" "}
-                      Technology{" "}
-                    </span>
-                    <h1 className="my-6 text-xl font-bold leading-tight text-gray-800">
-                      Ignorant branched humanity led now marianne too.
-                    </h1>
-                    <p className="mb-4 text-sm text-gray-600">
-                      Necessary ye contented newspaper zealously breakfast he
-                      prevailed. Melancholy middletons yet understood decisively
-                      boy law she. Answer him easily are its barton little. Oh
-                      no though mother be things simple itself. Oh be me, sure
-                      wise sons, no. Piqued ye of am spirit regret. Stimulated
-                      discretion impossible admiration in particular conviction
-                      up.
-                    </p>
-                    <a
-                      href="#"
-                      className="inline-block px-6 py-3 mt-2 text-gray-100 bg-green-700 rounded-md"
-                    >
-                      Read more
-                    </a>
-                  </div>
-                </SwiperSlide>
+                {/* map through the fetched data.highlight */}
+                {
+                  highlight.map((post) => (
+                    <SwiperSlide>
+                      {/* <!-- main post --> */}
+                      <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+                        <Image
+                          src={post.blogimage}
+                          height={500}
+                          width={500}
+                          alt="img"
+                          className="object-cover w-full h-60 md:h-[60vh] rounded-md"
+                        />
+                        <span className="hidden mt-4 text-sm text-green-700 md:block">
+                          {" "}
+                          {post.category}{" "}
+                        </span>
+                        <h1 className="my-6 text-xl font-bold leading-tight text-gray-800">
+                          {post.title}
+                        </h1>
+                        <p className="mb-4 text-sm text-gray-600">
+                          {post.shortdescription}
+                        </p>
+                        <a
+                          href="#"
+                          className="inline-block px-6 py-3 mt-2 text-gray-100 bg-green-700 rounded-md"
+                        >
+                          Read more
+                        </a>
+                      </div>
+                    </SwiperSlide>
+                  ))
+                }
+
               </Swiper>
             </div>
             {/* <!-- sub-main posts --> */}
             <div className="w-full md:w-4/7">
-              {/* <!-- post 1 --> */}
-              <div className="flex flex-col w-full mb-10 rounded md:flex-row">
-                <Image
-                  src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                  height={500}
-                  width={500}
-                  alt="img"
-                  className="block object-cover w-auto h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
-                />
-                <div className="px-4 bg-white rounded">
-                  <span className="hidden text-sm text-green-700 md:block">
-                    {" "}
-                    Gadgets{" "}
-                  </span>
-                  <div className="mb-2 text-base font-semibold text-gray-800 md:mt-0">
-                    At every tiled on ye defer do. No attention suspected oh
-                    difficult.
+              {/* map through trending posts */}
+               {
+                  trending.map((post) => (
+                    <div className="flex flex-col w-full mb-10 rounded md:flex-row">
+                    <Image
+                      src={post.blogimage}
+                      height={500}
+                      width={500}
+                      alt="img"
+                      className="block object-cover w-auto h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
+                    />
+                    <div className="px-4 bg-white rounded">
+                      <span className="hidden text-sm text-green-700 md:block">
+                        {" "}
+                        {post.category}{" "}
+                      </span>
+                      <div className="mb-2 text-base font-semibold text-gray-800 md:mt-0">
+                        {post.title}
+                      </div>
+                      <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden ">
+                        {post.shortdescription}
+                      </p>
+                    </div>
                   </div>
-                  <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden ">
-                    Wonder matter now can estate esteem assure fat roused. Am
-                    performed on existence as discourse is. Pleasure friendly at
-                    marriage blessing or
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex flex-col w-full mb-10 rounded md:flex-row">
-                <Image
-                  src="https://images.unsplash.com/photo-1489844097929-c8d5b91c456e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                  height={500}
-                  width={500}
-                  alt="img"
-                  className="block object-cover w-auto h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
-                />
-                <div className="px-4 bg-white rounded">
-                  <span className="hidden text-sm text-green-700 md:block">
-                    {" "}
-                    Gadgets{" "}
-                  </span>
-                  <div className="mb-2 text-base font-semibold text-gray-800 md:mt-0">
-                    At every tiled on ye defer do. No attention suspected oh
-                    difficult.
-                  </div>
-                  <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden ">
-                    Wonder matter now can estate esteem assure fat roused. Am
-                    performed on existence as discourse is. Pleasure friendly at
-                    marriage blessing or
-                  </p>
-                </div>
-              </div>
+                  ))
+               }
 
-              {/* <!-- post 2 --> */}
 
-              {/* <!-- post 3 --> */}
-              <div className="flex flex-col w-full mb-10 rounded md:flex-row">
-                <Image
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                  height={500}
-                  width={500}
-                  alt="img"
-                  className="block object-cover w-auto h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
-                />
-                <div className="px-4 bg-white rounded">
-                  <span className="hidden text-sm text-green-700 md:block">
-                    {" "}
-                    Insights{" "}
-                  </span>
-                  <div className="mb-2 text-base font-semibold text-gray-800 md:mt-0">
-                    Advice me cousin an spring of needed. Tell use paid law ever
-                    yet new.
-                  </div>
-                  <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden">
-                    Meant to learn of vexed if style allow he there. Tiled man
-                    stand tears ten joy there terms any widen.
-                  </p>
-                </div>
-              </div>
-              {/* <!-- post 4 --> */}
-              <div className="flex flex-col w-full mb-10 rounded md:flex-row">
-                <Image
-                  src="https://images.unsplash.com/photo-1489844097929-c8d5b91c456e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                  height={500}
-                  width={500}
-                  alt="img"
-                  className="block object-cover w-auto h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
-                />
-                <div className="px-4 bg-white rounded">
-                  <span className="hidden text-sm text-green-700 md:block">
-                    {" "}
-                    Cryptocurrency{" "}
-                  </span>
-                  <div className="mb-2 text-base font-semibold text-gray-800 md:mt-0">
-                    Advice me cousin an spring of needed. Tell use paid law ever
-                    yet new.
-                  </div>
-                  <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden">
-                    Meant to learn of vexed if style allow he there. Tiled man
-                    stand tears ten joy there terms any widen.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
           {/* <!-- end featured section --> */}
@@ -261,91 +169,36 @@ export default function BlogComp() {
             </a>
           </div>
           <div className="block space-x-0 lg:flex lg:space-x-6">
-            <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
-              <Image
-                src="https://images.unsplash.com/photo-1526666923127-b2970f64b422?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                height={500}
-                width={500}
-                alt="img"
-                className="rounded"
-              />
-              <div className="p-4 pl-0">
-                <h2 className="text-base font-bold text-gray-800">
-                  Put all speaking her delicate recurred possible.
-                </h2>
-                <p className="mt-2 text-gray-700">
-                  Set indulgence inquietude discretion insensible bed why
-                  announcing. Middleton fat two satisfied additions. So
-                  continued he or commanded household smallness delivered. Door
-                  poor on do walk in half. Roof his head the what.
-                </p>
+            {/* map through the fetched data.popular */}
+            {
+              popular.map((post) => (
+                <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
+                <Image
+                  src={post.blogimage}
+                  className="rounded"
+                  height={500}
+                  width={500}
+                  alt="img"
+                />
+                <div className="p-4 pl-0">
+                  <h2 className="text-base font-bold text-gray-800">
+                    {post.title}
+                  </h2>
+                  <p className="mt-2 text-sm text-gray-700">
+                    {post.shortdescription}
+                  </p>
 
-                <a
-                  href="#"
-                  className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                >
-                  {" "}
-                  Read more{" "}
-                </a>
+                  <a
+                    href="#"
+                    className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
+                  >
+                    {" "}
+                    Read more{" "}
+                  </a>
+                </div>
               </div>
-            </div>
-
-            <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
-              <Image
-                src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                className="rounded"
-                height={500}
-                width={500}
-                alt="img"
-              />
-              <div className="p-4 pl-0">
-                <h2 className="text-base font-bold text-gray-800">
-                  Is at purse tried jokes china ready decay an.{" "}
-                </h2>
-                <p className="mt-2 text-sm text-gray-700">
-                  Small its shy way had woody downs power. To denoting admitted
-                  speaking learning my exercise so in. Procured shutters mr it
-                  feelings. To or three offer house begin taken am at.
-                </p>
-
-                <a
-                  href="#"
-                  className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                >
-                  {" "}
-                  Read more{" "}
-                </a>
-              </div>
-            </div>
-
-            <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
-              <Image
-                src="https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80"
-                className="rounded"
-                height={500}
-                width={500}
-                alt="img"
-              />
-              <div className="p-4 pl-0">
-                <h2 className="text-base font-bold text-gray-800">
-                  As dissuade cheerful overcame so of friendly he indulged
-                  unpacked.
-                </h2>
-                <p className="mt-2 text-sm text-gray-700">
-                  Alteration connection to so as collecting me. Difficult in
-                  delivered extensive at direction allowance. Alteration put use
-                  diminution can considered sentiments interested discretion.
-                </p>
-
-                <a
-                  href="#"
-                  className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                >
-                  {" "}
-                  Read more{" "}
-                </a>
-              </div>
-            </div>
+              ))
+            }
           </div>
           {/* <!-- end recent posts --> */}
 
@@ -355,97 +208,43 @@ export default function BlogComp() {
 
           {/* <!-- popular posts --> */}
           <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-            <h2 className="text-3xl font-bold">Popular news</h2>
+            <h2 className="text-3xl font-bold">Top news</h2>
             <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
               View all
             </a>
           </div>
           <div className="block space-x-0 lg:flex lg:space-x-6">
-            <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
-              <Image
-                src="https://images.unsplash.com/photo-1526666923127-b2970f64b422?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                className="rounded"
-                height={500}
-                width={500}
-                alt="img"
-              />
-              <div className="p-4 pl-0">
-                <h2 className="text-base font-bold text-gray-800">
-                  Put all speaking her delicate recurred possible.
-                </h2>
-                <p className="mt-2 text-sm text-gray-700">
-                  Set indulgence inquietude discretion insensible bed why
-                  announcing. Middleton fat two satisfied additions. So
-                  continued he or commanded household smallness delivered. Door
-                  poor on do walk in half. Roof his head the what.
-                </p>
+            {/* map through top news */}
+            {
+              topNews.map((post) => (
+                <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
+                <Image
+                  src={post.blogimage}
+                  className="rounded"
+                  height={500}
+                  width={500}
+                  alt="img"
+                />
+                <div className="p-4 pl-0">
+                  <h2 className="text-base font-bold text-gray-800">
+                    {post.title}
+                  </h2>
+                  <p className="mt-2 text-sm text-gray-700">
+                    {post.shortdescription}
+                  </p>
 
-                <a
-                  href="#"
-                  className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                >
-                  {" "}
-                  Read more{" "}
-                </a>
+                  <a
+                    href="#"
+                    className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
+                  >
+                    {" "}
+                    Read more{" "}
+                  </a>
+                </div>
               </div>
-            </div>
+              ))
+            }
 
-            <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
-              <Image
-                src="https://images.unsplash.com/photo-1504384764586-bb4cdc1707b0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60"
-                className="rounded"
-                height={500}
-                width={500}
-                alt="img"
-              />
-              <div className="p-4 pl-0">
-                <h2 className="text-base font-bold text-gray-800">
-                  Is at purse tried jokes china ready decay an.{" "}
-                </h2>
-                <p className="mt-2 text-sm text-gray-700">
-                  Small its shy way had woody downs power. To denoting admitted
-                  speaking learning my exercise so in. Procured shutters mr it
-                  feelings. To or three offer house begin taken am at.
-                </p>
-
-                <a
-                  href="#"
-                  className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                >
-                  {" "}
-                  Read more{" "}
-                </a>
-              </div>
-            </div>
-
-            <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
-              <Image
-                src="https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80"
-                className="rounded"
-                height={500}
-                width={500}
-                alt="img"
-              />
-              <div className="p-4 pl-0">
-                <h2 className="text-base font-bold text-gray-800">
-                  As dissuade cheerful overcame so of friendly he indulged
-                  unpacked.
-                </h2>
-                <p className="mt-2 text-sm text-gray-700">
-                  Alteration connection to so as collecting me. Difficult in
-                  delivered extensive at direction allowance. Alteration put use
-                  diminution can considered sentiments interested discretion.
-                </p>
-
-                <a
-                  href="#"
-                  className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                >
-                  {" "}
-                  Read more{" "}
-                </a>
-              </div>
-            </div>
           </div>
           {/* <!-- end popular posts --> */}
         </main>
@@ -453,5 +252,7 @@ export default function BlogComp() {
       </div>
       <FooterComp />
     </div>
-  );
-}
+    )}
+    </>
+  )
+};
