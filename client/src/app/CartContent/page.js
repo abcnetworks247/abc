@@ -27,14 +27,14 @@ const page = () => {
       <Sidebar />
       <section className="pb-8 bg-white font-poppins">
         {cartProducts.length === 0 ? (
-          <div className="flex items-center h-[80vh] justify-center mx-12 shadow-lg py-7 ">
-            <div className="flex flex-col items-center gap-2">
+          <div className="flex items-center justify-center sm:h-[80vh]  sm:mx-12 sm:shadow-lg sm:py-7 ">
+            <div className="flex flex-col items-center  gap-2">
               <img
                 src="/assets/images/emptycart.jpg"
                 className="w-[200px] h-[200px] object-contain"
               />
               <p className="text-[#575746]">Your cart is empty</p>
-              <p className="text-sm text-[#313133] ">
+              <p className="text-sm ml-3  text-center text-[#313133]  ">
                 Why not explore our latest products and discover something you
                 love
               </p>
