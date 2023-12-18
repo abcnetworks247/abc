@@ -1,11 +1,34 @@
+"use client";
 import FooterComp from "@/components/Footer/FooterComp";
 import Navbar from "@/components/navbar/Navbar";
 import RelatedArticles from "@/components/relatedArticles/RelatedArticles";
 import Sidebar from "@/components/sidebar/Sidebar";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 
 export default function page() {
+ //fetch blog api
+  const [blog, setBlog] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchBlog = async () => {
+    setLoading(true);
+    const res = await axios.get("https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog");
+    setBlog(res.data);
+    setLoading(false);
+    console.log("blogs", blog);
+
+  };
+  useEffect(() => {
+    fetchBlog();
+  }, []);
+  console.log("blogs", blog);
+
+
   return (
-    <div>
+ 
+        <div>
       <div className="bg-white sticky top-0 z-[10]">
         <Navbar />
       </div>
@@ -255,5 +278,5 @@ export default function page() {
 
       <FooterComp />
     </div>
-  );
-}
+      )
+    };

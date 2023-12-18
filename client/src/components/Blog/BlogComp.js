@@ -1,13 +1,57 @@
+"use client";
+import { useState, useEffect } from "react";
 import FooterComp from "../Footer/FooterComp";
 import Newsletter from "../newsletter/Newsletter";
-
+import axios from "axios";
 export default function BlogComp() {
+  
+  //fetch blog api
+  const [blog, setBlog] = useState([]);
+  
+  const [loading, setLoading] = useState(false);
+
+  const fetchBlog = async () => {
+    setLoading(true);
+    const res = await axios.get("https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog");
+    const value = res.data.allblog;
+    setBlog(value);
+    setLoading(false);
+    console.log("blogs", blog);
+
+  };
+  useEffect(() => {
+    fetchBlog();
+  }, []);
+  console.log("blogs", blog);
+
   return (
+    // if loading is true, show a skeleton loader. Else, show the blog posts.
+    <>
+{
+  loading ? (
+    <div className="flex flex-wrap justify-center items-center">
+      <div className="w-full h-full flex flex-wrap justify-center items-center">
+        <div className="w-64 h-64 border-2 border-gray-200 rounded-full animate-spin"></div>
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-wrap justify-center items-center">
+      {blog && blog.map((blogItem) => (
+        <div key={blogItem.id} className="w-full h-full flex flex-wrap justify-center items-center">
+          {/* Render content for each blog item here */}
+          <p>{blogItem.title}</p>
+        </div>
+      ))}
+    </div>
+  )
+};
+
     <div>
       {/* <!-- component --> */}
       <div className="max-w-screen-lg mx-auto pt-9">
     
         <main className="mt-12">
+          
           {/* <!-- featured section --> */}
           <div className="flex flex-col lg:flex-row  md:flex-row space-x-0 md:space-x-6 mb-16">
             {/* <!-- main post --> */}
@@ -322,5 +366,6 @@ export default function BlogComp() {
       </div>
        <FooterComp />
     </div>
+    </>
   );
 }
