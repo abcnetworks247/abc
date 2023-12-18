@@ -177,7 +177,7 @@ const userVerifyPasswordReset = async (req, res) => {
   const { token } = req.params;
 
   console.log("verify password reset", token);
-  
+
   try {
     const decodedId = VerifyToken(token);
 
@@ -190,7 +190,7 @@ const userVerifyPasswordReset = async (req, res) => {
     }
 
     console.log("Valid token");
-    res.redirect(`${adminUrl}/admin/updatepassword?verified=true&reset=${token}`);
+    res.redirect(`${adminUrl}/auth/updatepassword?verified=true&reset=${token}`);
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
