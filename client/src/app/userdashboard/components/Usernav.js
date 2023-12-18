@@ -46,16 +46,16 @@ const Usernav = () => {
           }`}
         >
           <OrderIcon />
-          <p>Ordered</p>
+          <p>Orders</p>
         </Link>
-        <div className="flex items-center p-4 justify-between hover:bg-gray-100 accountInformation sidebarInfo">
+        {/* <div className="flex items-center p-4 justify-between hover:bg-gray-100 accountInformation sidebarInfo">
           <VoucherIcon />
           <p>voucher</p>
-        </div>
-        <div className="flex items-center p-4 justify-between hover:bg-gray-100 accountInformation sidebarInfo">
+        </div> */}
+        {/* <div className="flex items-center p-4 justify-between hover:bg-gray-100 accountInformation sidebarInfo">
           <ReviewIcon />
           <p>Reviews</p>
-        </div>
+        </div> */}
         <Link
           href="/userdashboard/manageaccount"
           className={`flex items-center p-4 justify-between hover:bg-gray-100 accountInformation sidebarInfo ${
