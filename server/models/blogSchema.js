@@ -30,7 +30,10 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+  type: {
+    type: String,
+    required: true,
+  },
   longdescription: {
     type: String,
     required: true,

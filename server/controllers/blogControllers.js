@@ -22,13 +22,29 @@ const getAllBlog = async (req, res) => {
       .find()
       .populate("author", "fullname username userdp");
 
+    const highlight = await blog
+      .find({ type: "top" })
+      .populate("author", "fullname username userdp");
+
+    const popular = await blog
+      .find({ type: "popular" })
+      .populate("author", "fullname username userdp");
+
+    const top = await blog
+      .find({ type: "top" })
+      .populate("author", "fullname username userdp");
+
+    const trending = await blog
+      .find({ type: "top" })
+      .populate("author", "fullname username userdp");
+
     if (allblog.length === 0) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "No blogs found" });
     }
 
-    return res.status(StatusCodes.OK).json({ allblog, message: "All blog" });
+    return res.status(StatusCodes.OK).json({ allblog, highlight, popular, top, trending });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -37,7 +53,7 @@ const getAllBlog = async (req, res) => {
 };
 
 const createBlog = async (req, res) => {
-  const { title, shortdescription, longdescription, category } = req.body;
+  const { title, shortdescription, longdescription, category, type } = req.body;
 
   try {
     const currentUser = req.user;
@@ -67,6 +83,7 @@ const createBlog = async (req, res) => {
       longdescription,
       category,
       blogimage: blogphoto.secure_url,
+      type,
       author: currentUser._id,
     };
 
@@ -120,7 +137,7 @@ const getSingleBlog = async (req, res) => {
 };
 
 const updateBlog = async (req, res) => {
-  const { title, shortdescription, longdescription, category, blogid } =
+  const { title, shortdescription, longdescription, category, blogid, type } =
     req.body;
 
   try {
@@ -140,6 +157,7 @@ const updateBlog = async (req, res) => {
         shortdescription,
         longdescription,
         category,
+        type,
       };
 
       const updatedBlog = await blog.findByIdAndUpdate(blogid, oldpost, {
@@ -164,6 +182,7 @@ const updateBlog = async (req, res) => {
       longdescription,
       category,
       blogimage: blogphoto.secure_url,
+      type,
     };
 
     const updatedBlog = await blog.findByIdAndUpdate(blogid, oldpost, {

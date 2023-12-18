@@ -7,6 +7,7 @@ const BlogJoiSchema = joi.object({
   longdescription: joi.string().required(),
   category: joi.string().required(),
   author: joi.object().required(),
+  type: joi.string().required(),
   blogimage: joi.string().required(),
   view: joi.number(),
   like: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),
