@@ -9,16 +9,22 @@ import {
   import { useState } from "react";
   import Api from "@/utils/Api";
   import { toast, ToastContainer } from "react-toastify";
+  import { useSearchParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+
   
   
   export function UpdatePassword() {
   
+    const [params] = useSearchParams();
+
+      const reset = params.get('reset');
+    console.log(params.get('reset'));
       // initial state for form data 
       const[formData, setFormData] =useState({
         password: "",
         confrimpassword : "",
+        reset,
        })
      
        /**
@@ -92,6 +98,19 @@ import axios from "axios";
     }
   };
     return (
+      <>
+            <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <section className="m-8 flex gap-4">
         <div className="w-full lg:w-3/5 mt-24">
           <div className="text-center">
@@ -151,6 +170,7 @@ import axios from "axios";
         </div>
   
       </section>
+      </>
     );
   }
   
