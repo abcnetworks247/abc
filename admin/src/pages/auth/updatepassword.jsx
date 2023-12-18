@@ -8,13 +8,16 @@ import {
   import { Link } from "react-router-dom";
   import { useState } from "react";
   import Api from "@/utils/Api";
+  import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
   
   
   export function UpdatePassword() {
   
       // initial state for form data 
       const[formData, setFormData] =useState({
-        email: "",
+        password: "",
         confrimpassword : "",
        })
      
@@ -42,17 +45,52 @@ import {
         */
      
      
-       const HandleSubmit =async (e)=>{
-         e.preventDefault()
-         console.log(formData);
-         try {
-           const data = Api.post('', formData)
-     
-         } catch (error) {
-           
-         }
-     
-       }
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    const id = toast.loading("changingpassword..", {
+      position: toast.POSITION.TOP_LEFT,
+    });
+    console.log(Allpassword);
+    try {
+      const data = await Api.post(
+        "admin/auth/account/updatepassword",
+        Allpassword
+      );
+      console.log('data status', data.status);
+      if (data.status !== 200) {
+        toast.update(id, {
+          render: `error on password update`,
+          type: "error",
+          isLoading: false,
+        });
+
+      }
+      console.log("post successful", data.data.message);
+      setTimeout(() => {
+        toast.dismiss(id);
+      }, 2000);
+      toast.update(id, {
+        render: `${data.data.message}`,
+        type: "success",
+        isLoading: false,
+      });
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } catch (error) {
+      const suberrormsg = toast.update(id, {
+        render: `${error}`,
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        toast.dismiss(suberrormsg);
+      }, 2000);
+
+      console.log(error);
+    }
+  };
     return (
       <section className="m-8 flex gap-4">
         <div className="w-full lg:w-3/5 mt-24">

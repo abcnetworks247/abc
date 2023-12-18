@@ -8,6 +8,8 @@ import {
   import { Link } from "react-router-dom";
   import { useState } from "react";
   import Api from "@/utils/Api";
+  import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
   
   
   export function Recover() {
@@ -41,25 +43,60 @@ import {
         */
      
      
-       const HandleSubmit =async (e)=>{
-         e.preventDefault()
-         console.log(formData);
-         try {
-           const data = Api.post('', formData)
-     
-         } catch (error) {
-           
-         }
-     
-       }
+       const HandleSubmit = async (e) => {
+        e.preventDefault();
+        const id = toast.loading("sending..", {
+          position: toast.POSITION.TOP_LEFT,
+        });
+        console.log(formData);
+        try {
+          const data = await Api.post("admin/auth/recovery", formData);
+          if (data.status === 200) {
+            console.log("post successful", data.data.message);
+            setTimeout(() => {
+              toast.dismiss(id);
+            }, 2000);
+            toast.update(id, {
+              render: `${data.data.message}`,
+              type: "success",
+              isLoading: false,
+            });
+          }
+        } catch (error) {
+          const suberrormsg = toast.update(id, {
+            render: `${error}`,
+            type: "error",
+            isLoading: false,
+          });
+          setTimeout(() => {
+            toast.dismiss(suberrormsg);
+          }, 2000);
+    
+          console.log(error);
+        }
+      };
+
     return (
+      <>
+            <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <section className="m-8 flex gap-4">
         <div className="w-full lg:w-3/5 mt-24">
           <div className="text-center">
             <Typography variant="h2" className="font-bold mb-4">Recover your Account</Typography>
             <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal"> Hey take the next step in recovering your account.</Typography>
           </div>
-          <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2"  onChange={HandleSubmit}>
+          <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2"  onSubmit={HandleSubmit}>
             <div className="mb-1 flex flex-col gap-6">
               <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
                 Your email
@@ -96,6 +133,7 @@ import {
         </div>
   
       </section>
+      </>
     );
   }
   
