@@ -140,7 +140,7 @@ const userRecovery = async (req, res) => {
     const MaxAge = 10 * 60;
     const token = CreateToken({ id: userexist._id }, MaxAge);
 
-    const passwordUpdateUrl = `${serverUrl}/api/v1/auth/account/updatepassword/${token}`;
+    const passwordUpdateUrl = `${serverUrl}/api/v1/admin/auth/updatepassword/${token}`;
     const templatePath = path.join(__dirname, "../views/passwordRecovery.ejs");
     const renderHtml = await ejs.renderFile(
       templatePath,
