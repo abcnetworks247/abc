@@ -54,11 +54,11 @@ export default function Page() {
     const id = toast.loading("changingpassword..", {
       position: toast.POSITION.TOP_LEFT,
     });
-    console.log(Allpassword);
+    console.log({ reset, password, confirmPassword });
     try {
       const data = await Api.post(
         "client/auth/account/updatepassword",
-        Allpassword
+        { reset, password, confirmPassword }
       );
       console.log('data status', data.status);
       if (data.status !== 200) {
