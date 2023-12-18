@@ -78,24 +78,24 @@ export default function Navbar() {
         <div className="hidden navbar-center md:block ">
           <Link
             href="/"
-            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${
-              pathname === "/" ? "border-b-[2px] border-[#077bff]" : ""
+            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
+              pathname === "/" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
             Home
           </Link>
           <Link
             href="/store"
-            className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#077bff] transition-all ${
-              pathname === "/store" ? "border-b-[2px] border-[#077bff]" : ""
+            className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/store" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
             Store
           </Link>
           <Link
             href="/pricing"
-            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#077bff] transition-all ${
-              pathname === "/pricing" ? "border-b-[2px] border-[#077bff]" : ""
+            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
+              pathname === "/pricing" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
             Membership
@@ -103,24 +103,24 @@ export default function Navbar() {
 
           <Link
             href="/about"
-            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
-              pathname === "/about" ? "border-b-[2px] border-[#077bff]" : ""
+            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/about" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
             About
           </Link>
           <Link
             href="/contact"
-            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
-              pathname === "/contact" ? "border-b-[2px] border-[#077bff]" : ""
+            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
             Contact
           </Link>
           <Link
             href="/contact mr-5"
-            className={`navbar-item mx-1 w-fit  rounded-none hover:border-b-[2px] border-[#077bff] transition-all ${
-              pathname === "/contact" ? "border-b-[2px] border-[#077bff]" : ""
+            className={`navbar-item mx-1 w-fit  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
             {/* <CgLivePhoto className="text-red-500" /> */}
@@ -132,7 +132,7 @@ export default function Navbar() {
         <div className="hidden navbar-center md:block "></div>
         <div className="flex flex-row items-center navbar-end ">
           <div className="flex flex-row items-center gap-3 mr-4">
-            <a
+            <Link
               href="/wish"
               className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
@@ -148,8 +148,8 @@ export default function Navbar() {
                   {WishlistValue}
                 </div>
               )}
-            </a>
-            <a
+            </Link>
+            <Link
               href="/CartContent"
               className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
@@ -164,7 +164,7 @@ export default function Navbar() {
                   {cartvalue}
                 </div>
               )}
-            </a>
+            </Link>
           </div>
 
           {/* condition to display user profile picture on first render with token */}
@@ -179,19 +179,21 @@ export default function Navbar() {
                           className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
                           tabIndex="0"
                         >
-                          <Image
-                            src={UserData && UserData.userdp}
-                            height={20}
-                            width={33}
-                            quality={100}
-                            loading="lazy"
-                            className="object-cover rounded-full cursor-pointer"
-                            alt="avatar"
-                            // style={{
-                            //   width: '100%',
-                            //   height: 'auto',
-                            // }}
-                          />
+                          <div className="avatar-square avatar avatar-md">
+                            <Image
+                              src={UserData && UserData.userdp}
+                              height={20}
+                              width={33}
+                              quality={100}
+                              loading="lazy"
+                              className="object-cover rounded-full cursor-pointer"
+                              alt="avatar"
+                              // style={{
+                              //   width: '100%',
+                              //   height: 'auto',
+                              // }}
+                            />
+                          </div>
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
@@ -223,6 +225,26 @@ export default function Navbar() {
               <div></div>
             )}
           </div>
+          {!Authtoken || !Authtoken?.length === 0 ? (
+            <div className={`hidden lg:block ${loading ? "hidden" : "block"}`}>
+              <div className="flex items-center justify-center h-fit ">
+                <div className="flex m-5 border shadow-sm w-fit item-center rounded-xl">
+                  <Link href="/login">
+                    <button className="px-4 py-2 m-0 text-white transition bg-black rounded-l-xl hover:bg-black/80">
+                      Login
+                    </button>
+                  </Link>
+                  <Link href="/signup">
+                    <button className="px-4 py-2 transition rounded-r-xl bg-neutral-50 hover:bg-neutral-100">
+                      Register
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
           <div>
             {Authtoken && UserData && Authtoken.length !== 0 ? (
               <div className="block avatar avatar-ring avatar-md md:hidden">
@@ -272,27 +294,30 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className=" dropdown-container">
+              <>
                 <label
                   className="px-0 cursor-pointer btn btn-ghost "
                   tabIndex="1"
                 >
-                  <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
+                  <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block lg:hidden" />
                 </label>
-
-                <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                  <a className="text-sm dropdown-item -z-50">login or signup</a>
-                  <a tabIndex="-2" className="text-sm dropdown-item">
-                    Account settings
-                  </a>
-                  <a tabIndex="-2" className="text-sm dropdown-item">
-                    Subscriptions
-                  </a>
-                  <a tabIndex="-2" className="text-sm dropdown-item">
-                    logout
-                  </a>
+                <div className=" dropdown-container">
+                  <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                    <a className="text-sm dropdown-item -z-50">
+                      login or signup
+                    </a>
+                    <a tabIndex="-2" className="text-sm dropdown-item">
+                      Account settings
+                    </a>
+                    <a tabIndex="-2" className="text-sm dropdown-item">
+                      Subscriptions
+                    </a>
+                    <a tabIndex="-2" className="text-sm dropdown-item">
+                      logout
+                    </a>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>

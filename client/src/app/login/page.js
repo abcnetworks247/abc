@@ -82,7 +82,7 @@ export default function Page() {
         });
         setTimeout(() => {
           toast.dismiss(suberrormsg);
-        }, 1000);
+        }, 2000);
       } else {
         const suberrormsg = toast.update(id, {
           render: `error while creating account `,
@@ -91,7 +91,7 @@ export default function Page() {
         });
         setTimeout(() => {
           toast.dismiss(suberrormsg);
-        }, 1000);
+        }, 2000);
       }
     } catch (error) {
       const suberrormsg = toast.update(id, {

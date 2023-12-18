@@ -27,7 +27,7 @@ export default function Newsletter() {
                 type="email"
                 name=""
                 id=""
-                className="w-full px-4 py-2 border-gray-200 outline-none rounded-xl"
+                className="w-full px-4 py-2 border-2 border-gray-300 outline-none rounded-md"
                 placeholder="john@tech.com"
               />
               <button className="px-4 py-2 text-gray-100 bg-green-800 rounded focus:outline-none">

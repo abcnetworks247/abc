@@ -2,6 +2,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
 import Api from "@/utils/Api";
+import Loading from "@/components/loading/Loading";
 
 const UserContext = createContext();
 
@@ -15,6 +16,7 @@ export const UserContextProvider = ({ children }) => {
   // loading state for user incoming data
 
   const [loading, setLoading] = useState(true);
+  const [genLoading, setGenload] = useState(true);
 
   // log out user
   console.log("user info", UserData);
@@ -37,6 +39,7 @@ export const UserContextProvider = ({ children }) => {
       if (data.status === 200) {
         setUserData(DataValue);
         setLoading(false);
+        setGenload(false)
       }
       // setLoading(true);
       console.log("data", data);
@@ -68,9 +71,14 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     HandleGetUser();
     if (!Authtoken) {
-      setLoading(false);
+      setGenload(false);
     }
   }, []);
+
+
+  if(genLoading){
+   return <Loading />
+  }
   return (
     <UserContext.Provider
       value={{
@@ -84,6 +92,8 @@ export const UserContextProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
+
+
 
 /**
  * Returns the user provider from the React context.

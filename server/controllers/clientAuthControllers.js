@@ -137,7 +137,6 @@ const userRecovery = async (req, res) => {
   try {
     const userexist = await Client.findOne({ email });
 
-
     if (!userexist) {
       console.log("Couldn't find client");
       throw new NotFoundError("User not found");
@@ -209,11 +208,9 @@ const userUpdatePassword = async (req, res) => {
       throw new ValidationError("Passwords do not match");
     }
 
-    console.log("hit...");
-
     const decodedId = VerifyToken(reset);
 
-    const checkuser = await Client.findById(decodedId["id"]["id"]);
+    const checkuser = await Client.findById(decodedId["id"]);
 
     if (!checkuser) {
       throw new UnAuthorizedError("User not found");

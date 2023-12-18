@@ -2,12 +2,14 @@
 import Link from "next/link";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Api from "@/utils/Api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 
 export default function Page() {
   // define initial recoveryformdata state
 
-  const [recoveryFormData, setRecoveryFormData] = useState("");
+  const [email, setRecoveryFormData] = useState("");
 
   // account recovery context function
 
@@ -15,17 +17,52 @@ export default function Page() {
    *
    * @param {object} e - for preventing browser default
    */
-  const HandleSubmit = async(e) => {
+  const HandleSubmit = async (e) => {
     e.preventDefault();
-     console.log(recoveryFormData);
-      try {
-        await Api.post("client/auth/recovery", recoveryFormData);
-      } catch (error) {
-        console.log(error);
+    const id = toast.loading("sending..", {
+      position: toast.POSITION.TOP_LEFT,
+    });
+    console.log(email);
+    try {
+      const data = await Api.post("client/auth/recovery", {email});
+      if (data.status === 200) {
+        console.log("post successful", data.data.message);
+        setTimeout(() => {
+          toast.dismiss(id);
+        }, 2000);
+        toast.update(id, {
+          render: `${data.data.message}`,
+          type: "success",
+          isLoading: false,
+        });
       }
+    } catch (error) {
+      const suberrormsg = toast.update(id, {
+        render: `${error}`,
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        toast.dismiss(suberrormsg);
+      }, 2000);
+
+      console.log(error);
+    }
   };
   return (
     <div>
+            <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex justify-center flex-1 h-screen max-w-screen-xl sm:rounded-lg">
         <div className="flex-1 hidden text-center bg-blue-900 md:flex">
           <div
