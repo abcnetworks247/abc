@@ -16,6 +16,7 @@ const icon = {
 };
 
 export const routes = [
+  
   {
     layout: "dashboard",
     pages: [

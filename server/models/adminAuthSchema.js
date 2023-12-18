@@ -10,6 +10,8 @@ const AdminSchema = new mongoose.Schema(
     },
     userdp: {
       type: String,
+      default:
+        "https://i.pinimg.com/originals/a6/f3/c5/a6f3c55ace829310723adcb7a468869b.png",
     },
     userbio: {
       type: String,

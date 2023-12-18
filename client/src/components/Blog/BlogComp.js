@@ -20,6 +20,27 @@ export default function BlogComp() {
   };
 
   return (
+    // if loading is true, show a skeleton loader. Else, show the blog posts.
+    <>
+{
+  loading ? (
+    <div className="flex flex-wrap justify-center items-center">
+      <div className="w-full h-full flex flex-wrap justify-center items-center">
+        <div className="w-64 h-64 border-2 border-gray-200 rounded-full animate-spin"></div>
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-wrap justify-center items-center">
+      {blog && blog.map((blogItem) => (
+        <div key={blogItem.id} className="w-full h-full flex flex-wrap justify-center items-center">
+          {/* Render content for each blog item here */}
+          <p>{blogItem.title}</p>
+        </div>
+      ))}
+    </div>
+  )
+};
+
     <div>
       {/* <!-- component --> */}
       <div className="max-w-screen-lg mx-auto md:max-w-screen-xl md:px-10">
@@ -453,5 +474,6 @@ export default function BlogComp() {
       </div>
       <FooterComp />
     </div>
+    </>
   );
 }

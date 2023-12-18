@@ -30,7 +30,10 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
+  type: {
+    type: String,
+    required: true,
+  },
   longdescription: {
     type: String,
     required: true,
@@ -39,10 +42,9 @@ const blogSchema = new mongoose.Schema({
     type: String,
   },
   comment: [commentSchema],
-
   author: {
     type: mongoose.Types.ObjectId,
-    ref: 'Admins',
+    ref: 'Admin',
     required: true,
   }
 }, {timestamps: true});

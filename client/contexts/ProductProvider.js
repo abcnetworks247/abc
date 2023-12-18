@@ -41,10 +41,26 @@ const ProductProvider = ({ children }) => {
        localStorage.setItem("Wishlist", JSON.stringify(newWishList));
      }
   };
+  const removeFromCart = (product) => {
+    const newCartList = cartProducts.filter(
+      (cartProduct) => product.id !== cartProduct.id
+    );
+      setCartProducts(newCartList)
+     if (typeof window !== "undefined") {
+       localStorage.setItem("cartProducts", JSON.stringify(newCartList));
+     }
+  };
+
+   const handleRemoveFromCart = (e, product) => {
+     e.stopPropagation();
+     removeFromCart(product);
+   };
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
     addToWishlist(product);
   };
+
+  
 
   const handleRemoveFromWishlist = (e, product) => {
     e.stopPropagation();
@@ -163,6 +179,8 @@ const ProductProvider = ({ children }) => {
         searchResults,
         setSearchResults,
         handleRemoveFromWishlist,
+        removeFromCart,
+        handleRemoveFromCart
       }}
     >
       {children}
