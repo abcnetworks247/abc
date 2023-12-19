@@ -78,7 +78,7 @@ export default function page() {
                     {parse(blog.longdescription)}
                   </div>
 
-                  <section className="not-format mt-5">
+                  <section className="not-format mt-6">
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-lg font-bold text-gray-900 lg:text-2xl">
                         Discussion (20)
