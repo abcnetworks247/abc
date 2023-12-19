@@ -1,16 +1,71 @@
-
 "use client";
 import React from "react";
 import { EditIcon } from "../components/icons/UserIcon";
 import { UseProductProvider } from "../../../../contexts/ProductProvider";
 
+
 const page = () => {
-  const { screen }= UseProductProvider()
+  const { screen , handleUser } = UseProductProvider();
   return (
-    
     <div
-      className={` p-8 px-4 bg-red-500 basis-2/3`}
+      className={` ${
+        screen ? "hidden" : ""
+      }  h-auto w-full md:hidden absolute sm:static sm:block top-0 z-30 p-8 px-4 bg-white `}
     >
+      <div className="flex flex-row-reverse w-full mb-3 ">
+       
+              <svg
+            onClick={()=>handleUser()}
+            className="w-4 h-4 self-end"
+            viewBox="0 0 512 512"
+            version="1.1"
+            fill="#000000"
+          >
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <g id="_x37_12-_close__x2C__cross__x2C__cancel__x2C_">
+                <g>
+                  <line
+                    style={{
+                      fill: "none",
+                      stroke: "#000000",
+                      strokeWidth: 30,
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      strokeMiterlimit: 2.6131,
+                    }}
+                    x1="486.21"
+                    x2="26.739"
+                    y1="26.814"
+                    y2="486.139"
+                  ></line>
+                  <line
+                    style={{
+                      fill: "none",
+                      stroke: "#000000",
+                      strokeWidth: 30,
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      strokeMiterlimit: 2.6131,
+                    }}
+                    x1="486.21"
+                    x2="26.739"
+                    y1="486.139"
+                    y2="26.814"
+                  ></line>
+                </g>
+              </g>
+              <g id="Layer_1"></g>
+            </g>
+          </svg>
+        
+      </div>
+
       <div className="flex items-center justify-between mb-2">
         <p className="font-bold">Profile Details</p>
         <div className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-blue-200 cursor-pointer">

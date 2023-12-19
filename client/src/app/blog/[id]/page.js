@@ -75,7 +75,7 @@ export default function page() {
                   </figure>
 
                   <div className="w-full text-base leading-relaxed text-gray-700 lg:px-0 lg:w-full">
-                    {parse(blog.longdescription)}
+                    {parse(`${blog.longdescription}`)}
                   </div>
 
                   <section className="not-format mt-6">

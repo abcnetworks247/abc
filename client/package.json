@@ -19,6 +19,11 @@
     "react-fast-marquee": "^1.6.2",
     "react-icons": "^4.12.0",
     "react-loader-spinner": "^6.1.0",
+<<<<<<< HEAD
+    "react-quill": "^2.0.0",
+=======
+    "react-responsive": "^9.0.2",
+>>>>>>> 81a1c1439276b93e22cb10fb6f2221943c62df82
     "react-toastify": "^9.1.3",
     "rippleui": "^1.12.1",
     "sweetalert2": "^11.10.1",
