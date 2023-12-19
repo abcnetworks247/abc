@@ -92,6 +92,13 @@ export default function Page() {
   const HandleSubmit = async (e) => {
     e.preventDefault();
     setIsValidData(allFieldsValid);
+
+    if(!allFieldsValid){
+      toast.error("please fill in all the fields correctly", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return
+    }
     const id = toast.loading("creating..", {
       position: toast.POSITION.TOP_LEFT,
     });
