@@ -17,11 +17,33 @@ export default function RelatedArticles() {
             Related articles
           </h2>
       <Swiper
-        slidesPerView={3}
+        slidesPerView={4}
         // centeredSlides={true}
         spaceBetween={20}
         autoplay={true}
         navigation={false}
+        //make it infinite
+        loop={true}
+    cardsEffect={"coverflow"}
+        pagination={{
+          type: "progressbar",
+        }}
+        breakpoints={{
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 2,
+            spaceBetween: 40,
+          },
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 50,
+          },
+        }}
+        // autoplay duration
+        speed={3000}
         width={900}
         modules={[Pagination, Navigation]}
         className="mySwiper"
