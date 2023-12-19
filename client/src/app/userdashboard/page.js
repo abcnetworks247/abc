@@ -1,11 +1,18 @@
 "use client"
 import React from "react";
 import {EditIcon} from  "./components/icons/UserIcon"
+import { UseProductProvider } from "../../../contexts/ProductProvider";
 
 
 const page = () => {
+  const {screen} = UseProductProvider()
+  
   return (
-    <div className="hidden sm:block sm:basis-3/4 sm:bg-white sm:min-h-max shadow-md sm:rounded-sm">
+    <div
+      className={` ${
+        screen ? "hidden" : ""
+      } h-full w-full absolute sm:static sm:block top-0 z-30  basis-3/4 bg-white min-h-max shadow-md sm:rounded-sm`}
+    >
       <p className="accountInformation px-4 py-2 text-bold ">
         Account Overview
       </p>
