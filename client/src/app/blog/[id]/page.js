@@ -74,11 +74,11 @@ export default function page() {
                     />
                   </figure>
 
-                  <div className="w-full text-lg leading-relaxed text-gray-700 lg:px-0 lg:w-full">
+                  <div className="w-full text-base leading-relaxed text-gray-700 lg:px-0 lg:w-full">
                     {parse(blog.longdescription)}
                   </div>
 
-                  <section className="not-format">
+                  <section className="not-format mt-5">
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-lg font-bold text-gray-900 lg:text-2xl">
                         Discussion (20)
