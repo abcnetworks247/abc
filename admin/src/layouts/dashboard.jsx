@@ -6,9 +6,10 @@ import {
   DashboardNavbar,
   Configurator,
   Footer,
-} from "@/widgets/layout";
-import routes from "@/routes";
-import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
+} from "../widgets/layout";
+import route from "../route";
+import { useMaterialTailwindController, setOpenConfigurator } from "../context/index";
+import { Home } from "../pages/dashboard";
 
 export function Dashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -17,7 +18,7 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-blue-gray-50/50">
       <Sidenav
-        routes={routes}
+        route={route}
         brandImg={
           sidenavType === "dark" ? "/img/logo-ct.png" : "/img/logo-ct-dark.png"
         }
@@ -35,14 +36,15 @@ export function Dashboard() {
           <Cog6ToothIcon className="h-5 w-5" />
         </IconButton>
         <Routes>
-          {routes.map(
-            ({ layout, pages }) =>
+          {route.map(
+            ({  pages ,layout }) =>
               layout === "dashboard" &&
               pages.map(({ path, element }) => (
-                <Route exact path={path} element={element} />
+                <Route  path={path} element={element} key={path} />
               ))
           )}
         </Routes>
+        <Home />
         <div className="text-blue-gray-600">
           <Footer />
         </div>
