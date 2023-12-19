@@ -76,9 +76,9 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
 
-  if(genLoading){
-   return <Loading />
-  }
+  // if(genLoading){
+  //  return <Loading />
+  // }
   return (
     <UserContext.Provider
       value={{
