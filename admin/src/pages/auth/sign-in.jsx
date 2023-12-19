@@ -1,13 +1,9 @@
 import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
   Typography,
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Api from "@/utils/Api";
+import Api from "../../utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -211,10 +207,7 @@ export function SignIn() {
               </Link>
             </Typography>
           </div>
-          <Typography variant="paragraph" className="text-center text-blue-gray-500 font-medium mt-4">
-            Not registered?
-            <Link to="/auth/sign-up" className="text-gray-900 ml-1">Create account</Link>
-          </Typography>
+     
         </div>
 
       </div>

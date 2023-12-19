@@ -14,10 +14,17 @@
   }
 
   .accountInformation{
-     @apply  pb-2  border-b border-gray-200
+     @apply  pb-2  border-b border-gray-100
   }
 
   .sidebarInfo{
     @apply cursor-pointer
+  }
+
+  .description {
+    @apply text-sm text-gray-600
+  }
+  .stats {
+    @apply py-4
   }
 }

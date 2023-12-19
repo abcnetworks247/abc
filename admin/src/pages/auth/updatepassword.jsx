@@ -1,13 +1,12 @@
 import {
-    Card,
     Input,
-    Checkbox,
     Button,
     Typography,
   } from "@material-tailwind/react";
   import { Link } from "react-router-dom";
   import { useState } from "react";
-  import Api from "@/utils/Api";
+  import Api from "../../utils/Api";
+import { useNavigate } from "react-router-dom";
   import { toast, ToastContainer } from "react-toastify";
   import { useSearchParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
   
   
   export function UpdatePassword() {
-  
+    const navigate = useNavigate()
     const [params] = useSearchParams();
 
       const reset = params.get('reset');
@@ -56,11 +55,11 @@ import "react-toastify/dist/ReactToastify.css";
     const id = toast.loading("changingpassword..", {
       position: toast.POSITION.TOP_LEFT,
     });
-    console.log(Allpassword);
+    console.log(formData);
     try {
       const data = await Api.post(
         "admin/auth/account/updatepassword",
-        Allpassword
+        formData
       );
       console.log('data status', data.status);
       if (data.status !== 200) {
@@ -82,7 +81,7 @@ import "react-toastify/dist/ReactToastify.css";
       });
 
       setTimeout(() => {
-        router.push("/login");
+        navigate("/login");
       }, 2000);
     } catch (error) {
       const suberrormsg = toast.update(id, {
