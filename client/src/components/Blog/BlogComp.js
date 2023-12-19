@@ -12,6 +12,8 @@ import "swiper/css/navigation";
 import { Autoplay, Navigation, HashNavigation } from "swiper/modules";
 // import axios
 import axios from "axios";
+// import link
+import Link from "next/link";
 
 
 export default function BlogComp() {
@@ -25,6 +27,8 @@ export default function BlogComp() {
   };
   // store the base url in a constant
   const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
+  // store path url in a constant
+  const pathUrl = "/blog";
   // fetch blog posts from the server
   const [posts, setPosts] = useState([]);
   // store the highlighted post in a state
@@ -59,10 +63,36 @@ export default function BlogComp() {
     <>
     {/* // if loading is true, show a skeleton loader. Else, show the blog posts. */}
     {loading ? (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
-        <div className="w-20 h-20 border-4 border-green-700 rounded-full animate-spin"></div>
-        <h1 className="mt-4 text-xl font-bold text-green-700">Loading...</h1>
+      // skeleton loader
+     <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6 px-10">
+        {Array.from({ length: 3}).map((_, index) => (
+          <div className="animate-pulse block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
+            <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+              <div className="bg-gray-200 rounded-md h-60 md:h-[60vh]"></div>
+              <span className="hidden mt-4 text-sm text-green-700 md:block">
+                {" "}
+                <div className="bg-gray-200 rounded-md h-4 w-20"></div>{" "}
+              </span>
+              <div className="my-6 text-xl font-bold leading-tight text-gray-800">
+                <div className="bg-gray-200 rounded-md h-4 w-40"></div>
+              </div>
+              <div className="mb-4 text-sm text-gray-600">
+                <div className="bg-gray-200 rounded-md h-4 w-60"></div>
+              </div>
+              <a
+                href="#"
+                className="inline-block px-6 py-3 mt-2 text-gray-100 bg-gray-100 rounded-md animate-bounce"
+              >
+                
+              </a>
+            </div>
+          </div>
+        ))
+
+        }
       </div>
+
+      
     ) : (
       
     <div>
@@ -113,12 +143,12 @@ export default function BlogComp() {
                         <p className="mb-4 text-sm text-gray-600">
                           {post.shortdescription}
                         </p>
-                        <a
-                          href="#"
+                        <Link
+                          href={`${pathUrl}/${post._id}`}
                           className="inline-block px-6 py-3 mt-2 text-gray-100 bg-green-700 rounded-md"
                         >
                           Read more
-                        </a>
+                        </Link>
                       </div>
                     </SwiperSlide>
                   ))
@@ -131,6 +161,7 @@ export default function BlogComp() {
               {/* map through trending posts */}
                {
                   trending.map((post) => (
+                    <Link href={`${pathUrl}/${post._id}`}>
                     <div className="flex flex-col w-full mb-10 rounded md:flex-row">
                     <Image
                       src={post.blogimage}
@@ -152,6 +183,9 @@ export default function BlogComp() {
                       </p>
                     </div>
                   </div>
+                    </Link>
+
+                    
 
                   ))
                }
@@ -164,7 +198,7 @@ export default function BlogComp() {
           {/* <!-- recent posts --> */}
           <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
             <h2 className="text-3xl font-bold">Latest news</h2>
-            <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+            <a  className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
               View all
             </a>
           </div>
@@ -173,6 +207,7 @@ export default function BlogComp() {
             {
               popular.map((post) => (
                 <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
+                  <Link href={`${pathUrl}/${post._id}`}>
                 <Image
                   src={post.blogimage}
                   className="rounded"
@@ -196,6 +231,7 @@ export default function BlogComp() {
                     Read more{" "}
                   </a>
                 </div>
+              </Link>
               </div>
               ))
             }
@@ -218,6 +254,7 @@ export default function BlogComp() {
             {
               topNews.map((post) => (
                 <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
+                  <Link href={`${pathUrl}/${post._id}`}>
                 <Image
                   src={post.blogimage}
                   className="rounded"
@@ -241,8 +278,10 @@ export default function BlogComp() {
                     Read more{" "}
                   </a>
                 </div>
+              </Link>
               </div>
               ))
+              
             }
 
           </div>

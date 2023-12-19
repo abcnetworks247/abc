@@ -13,7 +13,7 @@ import {
   setSidenavColor,
   setSidenavType,
   setFixedNavbar,
-} from "@/context";
+} from "../../context/index";
 
 function formatNumber(number, decPlaces) {
   decPlaces = Math.pow(10, decPlaces);

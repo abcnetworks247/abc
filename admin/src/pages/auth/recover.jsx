@@ -1,13 +1,11 @@
 import {
-    Card,
     Input,
-    Checkbox,
     Button,
     Typography,
   } from "@material-tailwind/react";
   import { Link } from "react-router-dom";
   import { useState } from "react";
-  import Api from "@/utils/Api";
+  import Api from "../../utils/Api";
   import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
   
@@ -120,7 +118,7 @@ import "react-toastify/dist/ReactToastify.css";
   
             <Typography variant="paragraph" className="text-center text-blue-gray-500 font-medium mt-4">
               remember your password?
-              <Link to="/auth/sign-in" className="text-gray-900 ml-1">Login</Link>
+              <Link to="/" className="text-gray-900 ml-1">Login</Link>
             </Typography>
           </form>
   

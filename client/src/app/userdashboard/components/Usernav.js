@@ -131,20 +131,20 @@ const Usernav = () => {
             </div>
           </div>
         </div>
-        <div className="h-full">
+        <div className="h-full mt-8">
           <Link
             href="/userdashboard"
-            className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 accountInformation sidebarInfo   ${
+            className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
               pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
             }`}
           >
             <AccountIcon />
-            <p>My account</p>
+            <p className="text-sm text-gray-600">My account</p>
           </Link>
 
           <Link href="/userdashboard/orders">
             <div
-              className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 accountInformation sidebarInfo  ${
+              className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
                 pathname == "/userdashboard/orders" ? "sm:bg-gray-200" : ""
               }`}
               onClick={() => {
@@ -152,13 +152,13 @@ const Usernav = () => {
               }}
             >
               <OrderIcon />
-              <p>Orders</p>
+              <p className="text-sm text-gray-600">Orders</p>
             </div>
           </Link>
 
           <Link href="/userdashboard/EditDetails">
             <div
-              className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 accountInformation sidebarInfo  ${
+              className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
                 pathname == "/userdashboard/EditDetails" ? "sm:bg-gray-200" : ""
               }`}
               onClick={() => {
@@ -166,7 +166,7 @@ const Usernav = () => {
               }}
             >
               <OrderIcon />
-              <p>EditDetails</p>
+              <p className="text-sm text-gray-600">EditDetails</p>
             </div>
           </Link>
 
@@ -183,23 +183,24 @@ const Usernav = () => {
             className="hidden sm:block"
           >
             <div
-              className={`flex items-center  px-4 py-2 gap-3  hover:bg-gray-100 accountInformation sidebarInfo ${
+              className={`flex items-center  px-4 py-2 gap-4 rounded-sm  hover:bg-gray-100 accountInformation sidebarInfo ${
                 pathname == "/userdashboard/manageaccount"
                   ? "sm:bg-gray-300"
                   : ""
               }`}
             >
               <ManageIcon />
-              <p >Manage Account</p>
+              <p className="text-sm text-gray-600">Manage Account</p>
             </div>
           </Link>
 
-          <div className="flex items-center gap-3  px-4 py-2  text-blue-500  border-b border-gray-300">
+          <div className="flex items-center hover:bg-gray-100 cursor-pointer gap-3  px-4 py-2 text-blue-500 border-b border-gray-300">
             <svg
               className="w-6 h-6"
-              viewBox="0 0 24 24"
+              viewBox="0 -0.5 25 25"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              stroke="#737373"
             >
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g
@@ -210,23 +211,19 @@ const Usernav = () => {
               <g id="SVGRepo_iconCarrier">
                 {" "}
                 <path
-                  d="M12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4"
-                  stroke="#1C274C"
-                  stroke-width="1.5"
-                  stroke-linecap="round"
+                  d="M7.04401 9.53165C7.33763 9.23949 7.33881 8.76462 7.04665 8.47099C6.75449 8.17737 6.27962 8.17619 5.98599 8.46835L7.04401 9.53165ZM2.97099 11.4683C2.67737 11.7605 2.67619 12.2354 2.96835 12.529C3.26051 12.8226 3.73538 12.8238 4.02901 12.5317L2.97099 11.4683ZM4.02901 11.4683C3.73538 11.1762 3.26051 11.1774 2.96835 11.471C2.67619 11.7646 2.67737 12.2395 2.97099 12.5317L4.02901 11.4683ZM5.98599 15.5317C6.27962 15.8238 6.75449 15.8226 7.04665 15.529C7.33881 15.2354 7.33763 14.7605 7.04401 14.4683L5.98599 15.5317ZM3.5 11.25C3.08579 11.25 2.75 11.5858 2.75 12C2.75 12.4142 3.08579 12.75 3.5 12.75V11.25ZM17.5 12.75C17.9142 12.75 18.25 12.4142 18.25 12C18.25 11.5858 17.9142 11.25 17.5 11.25V12.75ZM5.98599 8.46835L2.97099 11.4683L4.02901 12.5317L7.04401 9.53165L5.98599 8.46835ZM2.97099 12.5317L5.98599 15.5317L7.04401 14.4683L4.02901 11.4683L2.97099 12.5317ZM3.5 12.75L17.5 12.75V11.25L3.5 11.25V12.75Z"
+                  fill="#737373"
                 ></path>{" "}
                 <path
-                  d="M10 12H20M20 12L17 9M20 12L17 15"
-                  stroke="#1C274C"
+                  d="M9.5 15C9.5 17.2091 11.2909 19 13.5 19H17.5C19.7091 19 21.5 17.2091 21.5 15V9C21.5 6.79086 19.7091 5 17.5 5H13.5C11.2909 5 9.5 6.79086 9.5 9"
+                  stroke="#737373"
                   stroke-width="1.5"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 ></path>{" "}
               </g>
             </svg>
-            <p className="px-2 py-2 hover:bg-gray-100 rounded-sm text-center cursor-pointer">
-              LOG OUT
-            </p>
+            <p className="rounded-sm text-center text-sm">Logout</p>
           </div>
           <Upgrade />
         </div>

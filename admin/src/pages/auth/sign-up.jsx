@@ -1,14 +1,9 @@
 import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
   Typography,
 } from "@material-tailwind/react";
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import Api from "@/utils/Api";
+import Api from "../../utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -217,9 +212,9 @@ export function SignUp() {
     </button>
     <p className="block mt-4 font-sans text-base antialiased font-normal leading-relaxed text-center text-gray-700">
       Already have an account?
-      <a href="#" className="font-medium text-gray-900">
+      <Link to="/signin" className="font-medium text-gray-900">
         Sign In
-      </a>
+      </Link>
     </p>
   </form>
 </div>  

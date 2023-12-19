@@ -14,6 +14,7 @@ export function Footer({ brandName, brandLink, routes }) {
           <a
             href={brandLink}
             target="_blank"
+            rel="noreferrer"
             className="transition-colors hover:text-blue-500 font-bold"
           >
             {brandName}
