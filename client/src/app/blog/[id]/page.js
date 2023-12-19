@@ -6,6 +6,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import parse from "html-react-parser";
 
 export default function page() {
   // store fetched data in state
@@ -73,7 +74,9 @@ export default function page() {
                     />
                   </figure>
 
-                  <span className="mt-10">{blog.longdescription}</span>
+                  <div className="w-full text-lg leading-relaxed text-gray-700 lg:px-0 lg:w-full">
+                    {parse(blog.longdescription)}
+                  </div>
 
                   <section className="not-format">
                     <div className="flex items-center justify-between mb-6">
