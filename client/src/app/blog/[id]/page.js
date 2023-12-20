@@ -21,15 +21,21 @@ export default function page() {
 
   //fetch blog api
   const fetchBlog = async () => {
-    setLoading(true);
-    const res = await axios.get(`${baseUrl}/${id}`);
-    const data = await res.data.blogdata;
-    const author = await res.data.blogdata.author;
-    setBlog(data);
-    setAuthor(author);
-    console.log("hey", res.data.blogdata.author);
-    console.log(data);
-    setLoading(false);
+    try {
+      
+      setLoading(true);
+      const res = await axios.get(`${baseUrl}/${id}`);
+      const data = await res.data.blogdata;
+      const author = await res.data.blogdata.author;
+      setBlog(data);
+      setAuthor(author);
+      console.log("hey", res.data.blogdata.author);
+      console.log(data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      
+    }
   };
 
   useEffect(() => {
