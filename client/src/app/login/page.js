@@ -25,7 +25,7 @@ export default function Page() {
     password: "",
   });
 
-ccc
+
   /**
    * Handle change in form input
    * @param {object} e - the event object
