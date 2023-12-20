@@ -17,6 +17,7 @@ const ProductProvider = ({ children }) => {
   const isDesktop = useMediaQuery({
     query: "(min-width: 600px)",
   });
+   const [clickState, setClickState] = useState(false);
  
 
  
@@ -27,6 +28,7 @@ const ProductProvider = ({ children }) => {
   
   
   const handleUser = () => {
+    setClickState(true)
     // Open the modal when the link is clicked on mobile
     if (isTabletOrMobile) {
       // e.preventDefault(); // Prevent default navigation
@@ -210,7 +212,8 @@ const ProductProvider = ({ children }) => {
         isDesktop,
         isTabletOrMobile,
         screen,
-        handleUser
+        handleUser,
+        clickState
         
       }}
     >
