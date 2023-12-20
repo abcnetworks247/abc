@@ -5,7 +5,10 @@ import Api from "@/utils/Api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import {
+  PASSWORD_REGEX,
+
+} from "@/utils/regex";
 export default function Page() {
   // router for navigating to login page after password update
   const router = useRouter();
@@ -25,32 +28,69 @@ export default function Page() {
    * @param {string} e.value - the value of the input
    */
 
-  // const HandleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setAllpassword({
-  //     ...Allpassword,
-  //     [name]: value,
-  //   });
-  // };
+    //Define state for universal error
 
-  // const HandleSubmit = async (e) => {
-  //   e.preventDefault();
+    const [universalError, setUniversalError] = useState("");
 
-  //   try {
-  //     const response = await axios.post(
-  //       "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/auth/account/updatepassword",
-  //       { reset, password, confirmPassword }
-  //     );
+    // Define initial validation state
+    const [isValidData, setIsValidData] = useState(true);
+  
+    // Define initial form error state
+  
+    const [errorMessages, setErrorMessages] = useState({
+      confirmPassword: "",
+      password: "",
+    });
 
-  //     if (response.status !== 200) {
-  //       console.log("error", response);
-  //     } else {
-  //       console.log(response);
-  //     }
-  //   } catch (error) {}
-  // };
+    
+      /**
+   *
+   * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
+   * @param {Object} regex - for checkking if the regex meet up the chaeteria required
+   * @param {Object} value - the value for regex test
+   * @param {Error} errorMessage -to indeciate the error
+   */
+
+  function signUpValidate(fieldName, regex, value, errorMessage) {
+    if (!regex.test(value)) {
+      setUniversalError("");
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: errorMessage,
+      }));
+      setIsValidData(false);
+    } else {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: "",
+      }));
+      setIsValidData(true);
+
+      setUniversalError("");
+    }
+  }
+
+    // Define Variable for allfield valid
+
+    const allFieldsValid = Object.keys(errorMessages).every(
+      (field) => !errorMessages[field]
+    );
+
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    if(!isValidData){
+      toast.error("please fill in all the fields correctly", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return
+    }
+
+    if(password !== confirmPassword){
+      toast.error("passwords do not match", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return
+    }
     const id = toast.loading("changingpassword..", {
       position: toast.POSITION.TOP_LEFT,
     });
@@ -126,20 +166,47 @@ export default function Page() {
                 className="flex flex-col max-w-xs gap-4 mx-auto"
                 onSubmit={HandleSubmit}
               >
-                <input
-                  className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
+              <input
+                   className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.password && password &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="password"
                   name="password"
-                  placeholder="Enter new password"
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Enter password"
+                  onChange={(e) => {
+                    setNewPassword(e.target.value);
+                    signUpValidate(
+                      "password",
+                      PASSWORD_REGEX,
+                      e.target.value,
+                      "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
+                    );
+                  }}
+                  required
+                  value={password}
                 />
-                <input
-                  className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
+                {errorMessages.password && password && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.password}</span>
+                )}
+
+<input
+                   className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.confirmPassword && confirmPassword &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  onChange={(e) => setConfirmpassword(e.target.value)}
+                  name="password"
+                  placeholder="Enter password"
+                  onChange={(e) => {
+                    setConfirmpassword(e.target.value);
+                    signUpValidate(
+                      "password",
+                      PASSWORD_REGEX,
+                      e.target.value,
+                      "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
+                    );
+                  }}
+                  required
+                  value={confirmPassword}
                 />
+                {errorMessages.confirmPassword && confirmPassword && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.confirmPassword}</span>
+                )}
 
                 <button
                   className="flex items-center justify-center w-full py-4 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-900 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none"

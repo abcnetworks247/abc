@@ -25,55 +25,7 @@ export default function Page() {
     password: "",
   });
 
-    //Define state for universal error
-
-    const [universalError, setUniversalError] = useState("");
-
-    // Define initial validation state
-    const [isValidData, setIsValidData] = useState(true);
-  
-    // Define initial form error state
-  
-    const [errorMessages, setErrorMessages] = useState({
-      email: "",
-      fullname: "",
-      password: "",
-    });
-
-    
-      /**
-   *
-   * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
-   * @param {Object} regex - for checkking if the regex meet up the chaeteria required
-   * @param {Object} value - the value for regex test
-   * @param {Error} errorMessage -to indeciate the error
-   */
-
-  function signUpValidate(fieldName, regex, value, errorMessage) {
-    if (!regex.test(value)) {
-      setUniversalError("");
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        [fieldName]: errorMessage,
-      }));
-      setIsValidData(false);
-    } else {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        [fieldName]: "",
-      }));
-      setIsValidData(true);
-
-      setUniversalError("");
-    }
-  }
-
-    // Define Variable for allfield valid
-
-    const allFieldsValid = Object.keys(errorMessages).every(
-      (field) => !errorMessages[field]
-    );
-
+ccc
   /**
    * Handle change in form input
    * @param {object} e - the event object
