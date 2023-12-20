@@ -24,7 +24,12 @@ export default function Page() {
     email: "",
     password: "",
   });
-
+  
+   const [errorMessages, setErrorMessages] = useState({
+     email: "",
+     fullname: "",
+     password: "",
+   });
 
   /**
    * Handle change in form input
