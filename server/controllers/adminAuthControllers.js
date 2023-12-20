@@ -141,7 +141,7 @@ const userRecovery = async (req, res) => {
 
     console.log("Found client");
 
-    const MaxAge = 3 * 24 * 60 * 60;
+    const MaxAge = 5 * 60;
     const token = CreateToken(userexist._id, MaxAge);
 
     const passwordUpdateUrl = `${serverUrl}/api/v1/admin/auth/account/updatepassword/${token}`;

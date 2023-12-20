@@ -18,7 +18,7 @@ const Ordered = ({product}) => {
         </div>
       </div>
 
-      <div className="text-sm cursor-pointer text-red-500 shrink-0 flex items-center justify-center p-2 rounded-sm hover:bg-red-200">
+      <div className="text-sm cursor-pointer text-blue-500 shrink-0 flex items-center justify-center p-2 rounded-sm hover:bg-red-200">
         <p className="">
           See details
         </p>

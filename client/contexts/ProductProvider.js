@@ -2,8 +2,10 @@
 import React from "react";
 import { ProductContext } from "./productContext";
 import { useEffect, useState, useContext } from "react";
+import { useMediaQuery } from "react-responsive";
 
 const ProductProvider = ({ children }) => {
+
   const [products, setProducts] = useState([]);
   const [hasFetchedData, setHasFetchedData] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,11 +13,36 @@ const ProductProvider = ({ children }) => {
   const [cartProducts, setCartProducts] = useState([]);
   const [Wishlist, setWishlist] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
+  const isDesktop = useMediaQuery({
+    query: "(min-width: 600px)",
+  });
+   const [clickState, setClickState] = useState(false);
+ 
+
+ 
+  const [screen, setScreen] = useState(!isTabletOrMobile)
+  
+  
+  console.log(screen)
+  
+  
+  const handleUser = () => {
+    setClickState(true)
+    // Open the modal when the link is clicked on mobile
+    if (isTabletOrMobile) {
+      // e.preventDefault(); // Prevent default navigation
+      setScreen(prev => !prev)
+    } 
+   
+  };
+  
   const MAX_RATING = 5;
   const MIN_RATING = 1;
 
   const [rating] = useState(Math.floor(Math.random() * (5 - 1 + 1)) + 1);
 
+  const handleLinkClick=()=> setUserNav(!isTabletOrMobile)
   const handleProductClick = (product) => {
     setSelectedProduct(product);
     openModal();
@@ -156,7 +183,7 @@ const ProductProvider = ({ children }) => {
     }
   }, [hasFetchedData]);
 
-  console.log(Wishlist);
+  
 
   // useEffect(() => {}, [cartProducts]);
 
@@ -180,7 +207,14 @@ const ProductProvider = ({ children }) => {
         setSearchResults,
         handleRemoveFromWishlist,
         removeFromCart,
-        handleRemoveFromCart
+        handleRemoveFromCart,
+        handleLinkClick,
+        isDesktop,
+        isTabletOrMobile,
+        screen,
+        handleUser,
+        clickState
+        
       }}
     >
       {children}
