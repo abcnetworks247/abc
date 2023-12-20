@@ -9,8 +9,7 @@ import { useRouter } from "next/navigation";
 import {
   EMAIL_REGEX,
   PASSWORD_REGEX,
-  USERNAME_REGEX,
-  DOB_REGEX,
+
 } from "@/utils/regex";
 
 

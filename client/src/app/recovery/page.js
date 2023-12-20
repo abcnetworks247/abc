@@ -5,11 +5,57 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import {
+  EMAIL_REGEX,
+
+} from "@/utils/regex";
 
 export default function Page() {
   // define initial recoveryformdata state
 
   const [email, setRecoveryFormData] = useState("");
+
+
+    //Define state for universal error
+
+    const [universalError, setUniversalError] = useState("");
+
+    // Define initial validation state
+    const [isValidData, setIsValidData] = useState(true);
+  
+    // Define initial form error state
+  
+    const [errorMessages, setErrorMessages] = useState({
+      email: "",
+    });
+
+    
+      /**
+   *
+   * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
+   * @param {Object} regex - for checkking if the regex meet up the chaeteria required
+   * @param {Object} value - the value for regex test
+   * @param {Error} errorMessage -to indeciate the error
+   */
+
+  function signUpValidate(fieldName, regex, value, errorMessage) {
+    if (!regex.test(value)) {
+      setUniversalError("");
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: errorMessage,
+      }));
+      setIsValidData(false);
+    } else {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: "",
+      }));
+      setIsValidData(true);
+
+      setUniversalError("");
+    }
+  }
 
   // account recovery context function
 
@@ -19,6 +65,13 @@ export default function Page() {
    */
   const HandleSubmit = async (e) => {
     e.preventDefault();
+
+    if(!isValidData){
+      toast.error("please fill in all the fields correctly", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return
+    }
     const id = toast.loading("sending..", {
       position: toast.POSITION.TOP_LEFT,
     });
@@ -87,15 +140,26 @@ export default function Page() {
                 className="flex flex-col max-w-xs gap-4 mx-auto"
                 onSubmit={HandleSubmit}
               >
-                <input
-                  className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
+                       <input
+                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.email && email &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="email"
                   name="email"
                   placeholder="Enter your email"
                   onChange={(e) => {
                     setRecoveryFormData(e.target.value);
+                    signUpValidate(
+                      "email",
+                      EMAIL_REGEX,
+                      e.target.value,
+                      "Please enter a valid email address."
+                    );
                   }}
+                  required
+                  value={email}
                 />
+                {errorMessages.email && email && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.email}</span>
+                )}
 
                 <button
                   className="flex items-center justify-center w-full py-4 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-900 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
