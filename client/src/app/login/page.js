@@ -6,6 +6,12 @@ import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import {
+  EMAIL_REGEX,
+  PASSWORD_REGEX,
+
+} from "@/utils/regex";
+
 
 
 export default function Page() {
@@ -19,6 +25,7 @@ export default function Page() {
     password: "",
   });
 
+ccc
   /**
    * Handle change in form input
    * @param {object} e - the event object
@@ -42,6 +49,14 @@ export default function Page() {
   console.log("data", data);
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    setIsValidData(allFieldsValid);
+
+    if(!allFieldsValid){
+      toast.error("please fill in all the fields correctly", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return
+    }
     const id = toast.loading("loging in..", {
       position: toast.POSITION.TOP_LEFT,
     });
@@ -142,23 +157,45 @@ export default function Page() {
                 onSubmit={HandleSubmit}
               >
                 <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  name="email"
+                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.email && logInFormData.email &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="email"
+                  name="email"
                   placeholder="Enter your email"
-                  onChange={HandleInputChange}
+                  onChange={(e) => {
+                    HandleInputChange(e);
+                    signUpValidate(
+                      "email",
+                      EMAIL_REGEX,
+                      e.target.value,
+                      "Please enter a valid email address."
+                    );
+                  }}
                   required
-                  
+                  value={logInFormData.email}
                 />
-
+                {errorMessages.email && logInFormData.email && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.email}</span>
+                )}
                 <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                   className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.password && logInFormData.password &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="password"
                   name="password"
                   placeholder="Enter password"
-                  onChange={HandleInputChange}
+                  onChange={(e) => {
+                    HandleInputChange(e);
+                    signUpValidate(
+                      "password",
+                      PASSWORD_REGEX,
+                      e.target.value,
+                      "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
+                    );
+                  }}
                   required
+                  value={logInFormData.password}
                 />
+                {errorMessages.password && logInFormData.password && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.password}</span>
+                )}
 
                 <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                   <svg

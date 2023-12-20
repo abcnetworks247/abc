@@ -5,14 +5,34 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import {
+  EMAIL_REGEX,
+  PASSWORD_REGEX,
+  USERNAME_REGEX,
+  DOB_REGEX,
+} from "@/utils/regex";
 
 export default function Page() {
-
-  const router = useRouter()
+  const router = useRouter();
   // Define initial form data state
   const [signUpFormData, setSignUpFormData] = useState({
     fullname: "",
     email: "",
+    password: "",
+  });
+
+  //Define state for universal error
+
+  const [universalError, setUniversalError] = useState("");
+
+  // Define initial validation state
+  const [isValidData, setIsValidData] = useState(true);
+
+  // Define initial form error state
+
+  const [errorMessages, setErrorMessages] = useState({
+    email: "",
+    fullname: "",
     password: "",
   });
 
@@ -32,25 +52,63 @@ export default function Page() {
   };
 
   /**
+   *
+   * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
+   * @param {Object} regex - for checkking if the regex meet up the chaeteria required
+   * @param {Object} value - the value for regex test
+   * @param {Error} errorMessage -to indeciate the error
+   */
+
+  function signUpValidate(fieldName, regex, value, errorMessage) {
+    if (!regex.test(value)) {
+      setUniversalError("");
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: errorMessage,
+      }));
+      setIsValidData(false);
+    } else {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: "",
+      }));
+      setIsValidData(true);
+
+      setUniversalError("");
+    }
+  }
+
+  // Define Variable for allfield valid
+
+  const allFieldsValid = Object.keys(errorMessages).every(
+    (field) => !errorMessages[field]
+  );
+
+  /**
    * Handle form submission
    * @param {Object} e - The event object
    * @param {Function} e.preventDefault - Prevents the default form submission behavior
    */
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    setIsValidData(allFieldsValid);
+
+    if(!allFieldsValid){
+      toast.error("please fill in all the fields correctly", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return
+    }
     const id = toast.loading("creating..", {
       position: toast.POSITION.TOP_LEFT,
     });
     try {
-  
       // Log the current form data to the console
       console.log("formdata", signUpFormData);
 
       // Perform an asynchronous API post request to sign up the user
       console.log("Before API post request");
       const data = await Api.post("client/auth/signup", signUpFormData);
-     
-
 
       // Log the response data to the console
       console.log("all data", data);
@@ -61,15 +119,15 @@ export default function Page() {
         setTimeout(() => {
           toast.dismiss(id);
         }, 1000);
-       toast.update(id, {
+        toast.update(id, {
           render: `${data.data.message}`,
           type: "success",
           isLoading: false,
         });
         setTimeout(() => {
-          router.push('/login')
+          router.push("/login");
         }, 3000);
-      } else if(data.status === 500) {
+      } else if (data.status === 500) {
         const suberrormsg = toast.update(id, {
           render: `user email or name already exist `,
           type: "error",
@@ -78,8 +136,7 @@ export default function Page() {
         setTimeout(() => {
           toast.dismiss(suberrormsg);
         }, 1000);
-
-      }else{
+      } else {
         const suberrormsg = toast.update(id, {
           render: `error while creating account `,
           type: "error",
@@ -91,7 +148,7 @@ export default function Page() {
       }
     } catch (error) {
       // Log any errors that occur during the API request
-    
+
       const suberrormsg = toast.update(id, {
         render: `${error}`,
         type: "error",
@@ -138,38 +195,71 @@ export default function Page() {
                 Hey enter your details to create your account
               </p>
             </div>
-            <div className="w-full flex-1 mt-8">
+            <div className="w-full flex-1 mt-8 text-center">
               <form
                 className="mx-auto max-w-xs flex flex-col gap-4"
                 onSubmit={HandleSubmit}
               >
                 <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.fullname && signUpFormData.fullname &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="text"
                   placeholder="Enter your fullname"
                   name="fullname"
-                  onChange={HandleChange}
+                  onChange={(e) => {
+                    HandleChange(e);
+                    signUpValidate(
+                      "fullname",
+                      USERNAME_REGEX,
+                      e.target.value,
+                      "username start with letter, may include numbers or underscore(_)"
+                    );
+                  }}
                   value={signUpFormData.fullname}
                   required
                 />
+                {errorMessages.fullname && signUpFormData.fullname && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.fullname}</span>
+                )}
                 <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.email && signUpFormData.email &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="email"
                   name="email"
                   placeholder="Enter your email"
-                  onChange={HandleChange}
+                  onChange={(e) => {
+                    HandleChange(e);
+                    signUpValidate(
+                      "email",
+                      EMAIL_REGEX,
+                      e.target.value,
+                      "Please enter a valid email address."
+                    );
+                  }}
                   required
                   value={signUpFormData.email}
                 />
+                {errorMessages.email && signUpFormData.email && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.email}</span>
+                )}
                 <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                   className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.password && signUpFormData.password &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="password"
                   name="password"
                   placeholder="Enter password"
-                  onChange={HandleChange}
+                  onChange={(e) => {
+                    HandleChange(e);
+                    signUpValidate(
+                      "password",
+                      PASSWORD_REGEX,
+                      e.target.value,
+                      "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
+                    );
+                  }}
                   required
                   value={signUpFormData.password}
                 />
+                {errorMessages.password && signUpFormData.password && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.password}</span>
+                )}
                 {/* <input
                   className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
