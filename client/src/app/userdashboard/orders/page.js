@@ -20,7 +20,7 @@ const page = () => {
     handleUser
 
   } = UseProductProvider();
-  console.log(screen)
+  
 
   return (
     <>

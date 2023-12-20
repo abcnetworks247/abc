@@ -132,9 +132,19 @@ const Usernav = () => {
           </div>
         </div>
         <div className="h-full mt-8">
+          <div
+            className={`sm:hidden  flex items-center px-4 py-2 gap-4 bg-gray-200 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo `}
+          >
+            <AccountIcon />
+            <p className="text-sm text-gray-600">My ABC account</p>
+          </div>
+
           <Link
+            onClick={() => {
+              handleUser();
+            }}
             href="/userdashboard"
-            className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
+            className={`hidden  sm:flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
               pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
             }`}
           >

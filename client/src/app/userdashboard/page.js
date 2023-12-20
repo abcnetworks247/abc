@@ -1,11 +1,12 @@
 "use client";
 import React from "react";
 import { EditIcon } from "./components/icons/UserIcon";
+
 import { UseProductProvider } from "../../../contexts/ProductProvider";
-
 const page = () => {
-  const { screen } = UseProductProvider();
 
+  const { screen } = UseProductProvider();
+console.log(screen)
   return (
     <div
       className={` ${
@@ -13,7 +14,7 @@ const page = () => {
       } h-full w-full absolute sm:static sm:block top-0 z-30  basis-3/4 bg-white min-h-max shadow-md sm:rounded-lg`}
     >
       <div className="m-6">
-        <div className="flex flex-row items-center gap-3">
+        <div className="flex flex-col sm:flex-col lg:flex-row  items-center gap-3">
 
           <div className="w-full">
             <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
