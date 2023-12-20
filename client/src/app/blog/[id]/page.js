@@ -222,7 +222,7 @@ export default function page() {
             >
               <div className="max-w-screen-xl px-4 mx-auto"></div>
               <div className="">
-                <RelatedArticles />
+                <RelatedArticles id={id} />
               </div>
             </aside>
           </>
