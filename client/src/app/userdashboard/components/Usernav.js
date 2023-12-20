@@ -26,7 +26,10 @@ const Usernav = () => {
     userNav,
     userModal,
     handleDesktopState,
+    clickState
   } = UseProductProvider();
+
+ 
 
   return (
     <>
@@ -132,8 +135,18 @@ const Usernav = () => {
           </div>
         </div>
         <div className="h-full mt-8">
+          {/* <div
+            className={`sm:hidden  flex items-center px-4 py-2 gap-4 bg-gray-200 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo `}
+          >
+            <AccountIcon />
+            <p className="text-sm text-gray-600">My ABC account</p>
+          </div> */}
+
           <Link
-            href="/userdashboard"
+            onClick={() => {
+              handleUser();
+            }}
+            href={clickState ? `/userdashboard` : ``}
             className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
               pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
             }`}
@@ -156,6 +169,15 @@ const Usernav = () => {
             </div>
           </Link>
 
+          <div>
+            <div
+              className={`sm:hidden flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo bg-gray-200 `}
+            >
+              {/* <OrderIcon /> */}
+              <p className="text-sm text-gray-600">Account Management</p>
+            </div>
+          </div>
+
           <Link href="/userdashboard/EditDetails">
             <div
               className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
@@ -165,8 +187,50 @@ const Usernav = () => {
                 handleUser();
               }}
             >
-              <OrderIcon />
-              <p className="text-sm text-gray-600">EditDetails</p>
+              <svg
+                className="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="#737373"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.91"
+                  d="M13 2a2 2 0 100 4h7a2 2 0 110 4h-7a2 2 0 100 4h7a2 2 0 110 4h-7a2 2 0 100 4h7a2 2 0 110 4h-7v2m-5-2.5L3 9l5-4.5V6h9v3.5L21 9l-5 4.5V14H9v-3.5z"
+                />
+              </svg>
+
+              <p className="text-sm text-gray-600">Edit Profile</p>
+            </div>
+          </Link>
+
+          <Link href="/userdashboard/closeaccount">
+            <div
+              className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
+                pathname == "/userdashboard/EditDetails" ? "sm:bg-gray-200" : ""
+              }`}
+              onClick={() => {
+                handleUser();
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="#737373"
+                className="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.91"
+                  d="M3 6h18M4 10h16m-8 4h8m-16 0h8m-8 4h8m-16 0h8"
+                />
+              </svg>
+
+              <p className="text-sm text-gray-600">Close account</p>
             </div>
           </Link>
 

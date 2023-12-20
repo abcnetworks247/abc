@@ -20,7 +20,7 @@ const page = () => {
     handleUser
 
   } = UseProductProvider();
-  console.log(screen)
+  
 
   return (
     <>
@@ -51,57 +51,28 @@ const page = () => {
           </div>
         ) : (
           <>
-            
             <div className="flex items-center justify-between accountInformation px-4 py-2 text-bold ">
               <p className="px-4 py-2 text-bold ">Orders</p>
-              <div className="">
+              <div className="sm:hidden">
                 <svg
-                  onClick={() => handleUser()}
-                  className="w-4 h-4 self-end"
-                  viewBox="0 0 512 512"
+                  viewBox="0 0 1024 1024"
+                  className="w-6 h-6"
                   version="1.1"
-                  fill="#000000"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#737373"
+                  stroke="#737373"
                 >
-                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                   <g
                     id="SVGRepo_tracerCarrier"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   ></g>
                   <g id="SVGRepo_iconCarrier">
-                    <g id="_x37_12-_close__x2C__cross__x2C__cancel__x2C_">
-                      <g>
-                        <line
-                          style={{
-                            fill: "none",
-                            stroke: "#000000",
-                            strokeWidth: 30,
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round",
-                            strokeMiterlimit: 2.6131,
-                          }}
-                          x1="486.21"
-                          x2="26.739"
-                          y1="26.814"
-                          y2="486.139"
-                        ></line>
-                        <line
-                          style={{
-                            fill: "none",
-                            stroke: "#000000",
-                            strokeWidth: 30,
-                            strokeLinecap: "round",
-                            strokeLinejoin: "round",
-                            strokeMiterlimit: 2.6131,
-                          }}
-                          x1="486.21"
-                          x2="26.739"
-                          y1="486.139"
-                          y2="26.814"
-                        ></line>
-                      </g>
-                    </g>
-                    <g id="Layer_1"></g>
+                    <path
+                      d="M704 288h-281.6l177.6-202.88a32 32 0 0 0-48.32-42.24l-224 256a30.08 30.08 0 0 0-2.24 3.84 32 32 0 0 0-2.88 4.16v1.92a32 32 0 0 0 0 5.12A32 32 0 0 0 320 320a32 32 0 0 0 0 4.8 32 32 0 0 0 0 5.12v1.92a32 32 0 0 0 2.88 4.16 30.08 30.08 0 0 0 2.24 3.84l224 256a32 32 0 1 0 48.32-42.24L422.4 352H704a224 224 0 0 1 224 224v128a224 224 0 0 1-224 224H320a232 232 0 0 1-28.16-1.6 32 32 0 0 0-35.84 27.84 32 32 0 0 0 27.84 35.52A295.04 295.04 0 0 0 320 992h384a288 288 0 0 0 288-288v-128a288 288 0 0 0-288-288zM103.04 760a32 32 0 0 0-62.08 16A289.92 289.92 0 0 0 140.16 928a32 32 0 0 0 40-49.92 225.6 225.6 0 0 1-77.12-118.08zM64 672a32 32 0 0 0 22.72-9.28 37.12 37.12 0 0 0 6.72-10.56A32 32 0 0 0 96 640a33.6 33.6 0 0 0-9.28-22.72 32 32 0 0 0-10.56-6.72 32 32 0 0 0-34.88 6.72A32 32 0 0 0 32 640a32 32 0 0 0 2.56 12.16 37.12 37.12 0 0 0 6.72 10.56A32 32 0 0 0 64 672z"
+                      fill="#737373"
+                    ></path>
                   </g>
                 </svg>
               </div>

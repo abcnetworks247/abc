@@ -299,7 +299,10 @@ export default function Navbar() {
                   className="px-0 cursor-pointer btn btn-ghost "
                   tabIndex="1"
                 >
-                  <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block lg:hidden" />
+                  {" "}
+                  <Link href="/userdashboard">
+                    <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block lg:hidden" />
+                  </Link>
                 </label>
                 <div className=" dropdown-container">
                   <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
