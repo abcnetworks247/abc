@@ -24,6 +24,13 @@ export default function Page() {
     email: "",
     password: "",
   });
+
+
+  const [universalError, setUniversalError] = useState("");
+
+  // Define initial validation state
+  const [isValidData, setIsValidData] = useState(true);
+  
   
    const [errorMessages, setErrorMessages] = useState({
      email: "",
@@ -31,6 +38,26 @@ export default function Page() {
      password: "",
    });
 
+
+
+   function signUpValidate(fieldName, regex, value, errorMessage) {
+    if (!regex.test(value)) {
+      setUniversalError("");
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: errorMessage,
+      }));
+      setIsValidData(false);
+    } else {
+      setErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: "",
+      }));
+      setIsValidData(true);
+
+      setUniversalError("");
+    }
+  }
   /**
    * Handle change in form input
    * @param {object} e - the event object
