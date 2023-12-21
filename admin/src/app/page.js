@@ -7,10 +7,6 @@ export default function Home() {
   return (
     <>
       <main className="flex flex-row w-[100%]">
-        <Sidebar />
-        <div className="w-[100%]">
-          <ComplexNavbar />
-        </div>
         
       </main>
     </>

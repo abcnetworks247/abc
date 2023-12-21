@@ -10,7 +10,7 @@ import { ProductContext } from '../../../contexts/productContext'
 const Recommended = () => {
     const {products} = useContext(ProductContext)
   return (
-    <div className=" py-10 px-4 mx-2 lg:px-28">
+    <div className=" py-10 px-4 lg:px-28">
       <h2 className="text-xl font-semibold text-gray-800  mb-6">
         Recomended for you
       </h2>
