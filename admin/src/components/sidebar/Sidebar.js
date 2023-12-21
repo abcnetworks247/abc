@@ -1,6 +1,41 @@
+"use client"
 import React from "react";
-import Link from "next/link"
+import {
+  Card,
+  Typography,
+  List,
+  ListItem,
+  ListItemPrefix,
+  ListItemSuffix,
+  Chip,
+  Accordion,
+  AccordionHeader,
+  AccordionBody,
+  Alert,
+  Input,
+} from "@material-tailwind/react";
+import {
+  PresentationChartBarIcon,
+  ShoppingBagIcon,
+  UserCircleIcon,
+  Cog6ToothIcon,
+  InboxIcon,
+  PowerIcon,
+} from "@heroicons/react/24/solid";
+import {
+  ChevronRightIcon,
+  ChevronDownIcon,
+  CubeTransparentIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
 export default function Sidebar() {
+  const [open, setOpen] = React.useState(0);
+  const [openAlert, setOpenAlert] = React.useState(true);
+ 
+  const handleOpen = (value) => {
+    setOpen(open === value ? 0 : value);
+  };
   return (
     <div className="w-auto sticky top-0 z-0 h-[100vh] hidden md:block">
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
@@ -32,6 +67,56 @@ export default function Sidebar() {
                 <span>Dashboard</span>
               </Link>
             </li>
+
+            <Accordion
+          open={open === 2}
+          icon={
+            <ChevronDownIcon
+              strokeWidth={2.5}
+              className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
+            />
+          }
+        >
+          <ListItem className="p-0 text-[#FFFFFF]  bg-[#121E31] active:bg-gray-700 hover:bg-gray-700 focus:text-[#ffff] focus:bg-gray-700" selected={open === 2}>
+            <AccordionHeader onClick={() => handleOpen(2)} className="border-b-0 p-3 hover:text-[#ffffff] text-[#FFFFFF]">
+              <ListItemPrefix>
+                <ShoppingBagIcon className="h-5 w-5 text-[#FFFFFF]" />
+              </ListItemPrefix>
+              <Typography color="#FFFFFF" className="mr-auto font-normal text-[#FFFFFF]">
+                E-Commerce
+              </Typography>
+            </AccordionHeader>
+          </ListItem>
+          <AccordionBody className="py-1">
+            <List className="p-0 text-[#FFFFFF] ">
+              <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                </ListItemPrefix>
+                Orders
+              </ListItem>
+ 
+              <Link href="/dashboard/eccomerce/product">
+                      <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                </ListItemPrefix>
+                Products
+              </ListItem>
+      
+              </Link>
+              <Link href="/dashboard/eccomerce/product">
+                      <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                </ListItemPrefix>
+                 New Product
+              </ListItem>
+      
+              </Link>
+            </List>
+          </AccordionBody>
+        </Accordion>
             <li>
               <a
                 href="javascript:void(0)"
@@ -52,15 +137,24 @@ export default function Sidebar() {
               </a>
             </li>
             <li>
-          
               <Link
                 href="/dashboard/users"
                 className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" data-slot="icon"  className="w-[18px] h-[18px] mr-4">
-  <path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clip-rule="evenodd" />
-  <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
-</svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  data-slot="icon"
+                  className="w-[18px] h-[18px] mr-4"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"
+                    clip-rule="evenodd"
+                  />
+                  <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+                </svg>
 
                 <span>Users</span>
               </Link>
@@ -122,27 +216,18 @@ export default function Sidebar() {
               </a>
             </li>
             <li>
-              <a
-                href="javascript:void(0)"
+              <Link
+                href="transactions"
                 className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  className="w-[18px] h-[18px] mr-4"
-                  viewBox="0 0 193.769 193.769"
-                >
-                  <path
-                    d="m149.203 41.104-9.348 12.009c20.15 15.679 30.201 41.063 26.234 66.253-2.906 18.484-12.838 34.73-27.964 45.748-15.131 11.012-33.64 15.488-52.124 12.567-38.157-6.008-64.32-41.938-58.322-80.098C30.585 79.097 40.52 62.85 55.648 51.835c13.208-9.615 28.991-14.233 45.086-13.317L87.579 52.319l9.759 9.313 20.766-21.801.005.008 9.303-9.769-9.752-9.303-.005.003L95.862 0l-9.31 9.769 14.2 13.525c-19.303-.913-38.21 4.702-54.059 16.242C28.28 52.943 16.19 72.717 12.65 95.221c-7.302 46.445 24.54 90.184 70.985 97.493a86.181 86.181 0 0 0 13.434 1.055c17.89 0 35.273-5.623 50.011-16.356 18.415-13.409 30.503-33.183 34.043-55.682 4.829-30.654-7.403-61.55-31.92-80.627z"
-                    data-original="#000000"
-                  />
-                  <path
-                    d="M105.24 151.971v-.003h.001v-8.757c10.383-1.159 20.485-7.718 20.485-20.17 0-16.919-15.732-18.859-27.223-20.274-7.347-.878-12.97-1.897-12.97-6.348 0-6.188 8.722-6.855 12.473-6.855 5.567 0 11.507 2.617 13.525 5.957l.586.971 11.542-5.341-.571-1.164c-4.301-8.793-12.009-11.337-17.85-12.364v-7.71H91.723v7.677c-12.582 1.856-20.054 8.839-20.054 18.829 0 16.29 14.791 17.943 25.582 19.153 9.617 1.134 14.094 3.51 14.094 7.469 0 7.563-10.474 8.154-13.685 8.154-7.147 0-14.038-3.566-16.031-8.301l-.495-1.169-12.539 5.316.5 1.169c3.713 8.691 11.725 14.137 22.63 15.425v8.336h13.515z"
-                    data-original="#000000"
-                  />
-                </svg>
-                <span>Refunds</span>
-              </a>
+              
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" data-slot="icon"   className="w-[18px] h-[18px] mr-4">
+  <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
+  <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+</svg>
+
+                <span>Transactions</span>
+              </Link>
             </li>
             <li>
               <Link
