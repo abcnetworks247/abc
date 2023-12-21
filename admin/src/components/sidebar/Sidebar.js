@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import {
   Card,
@@ -32,7 +32,7 @@ import Link from "next/link";
 export default function Sidebar() {
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
- 
+
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -47,11 +47,11 @@ export default function Sidebar() {
               className="w-[150px]"
             />
           </a>
-          <ul className="space-y-3 my-10 flex-1">
+          <ul className="flex-1 my-10 space-y-1">
             <li>
               <Link
                 href="/dashboard"
-                className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -69,58 +69,67 @@ export default function Sidebar() {
             </li>
 
             <Accordion
-          open={open === 2}
-          icon={
-            <ChevronDownIcon
-              strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
-            />
-          }
-        >
-          <ListItem className="p-0 text-[#FFFFFF]  bg-[#121E31] active:bg-gray-700 hover:bg-gray-700 focus:text-[#ffff] focus:bg-gray-700" selected={open === 2}>
-            <AccordionHeader onClick={() => handleOpen(2)} className="border-b-0 p-3 hover:text-[#ffffff] text-[#FFFFFF]">
-              <ListItemPrefix>
-                <ShoppingBagIcon className="h-5 w-5 text-[#FFFFFF]" />
-              </ListItemPrefix>
-              <Typography color="#FFFFFF" className="mr-auto font-normal text-[#FFFFFF]">
-                E-Commerce
-              </Typography>
-            </AccordionHeader>
-          </ListItem>
-          <AccordionBody className="py-1">
-            <List className="p-0 text-[#FFFFFF] ">
-              <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Orders
+              open={open === 2}
+              icon={
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`mx-auto h-4 w-4 transition-transform ${
+                    open === 2 ? "rotate-180" : ""
+                  }`}
+                />
+              }
+            >
+              <ListItem
+                className="p-0 text-[#FFFFFF]  bg-[#121E31] active:bg-gray-700 hover:bg-gray-700 focus:text-[#ffff] focus:bg-gray-700"
+                selected={open === 2}
+              >
+                <AccordionHeader
+                  onClick={() => handleOpen(2)}
+                  className="border-b-0 p-3 hover:text-[#ffffff] text-[#FFFFFF]"
+                >
+                  <ListItemPrefix>
+                    <ShoppingBagIcon className="h-5 w-5 text-[#FFFFFF]" />
+                  </ListItemPrefix>
+                  <Typography
+                    color="#FFFFFF"
+                    className="mr-auto font-normal text-[#FFFFFF]"
+                  >
+                    E-Commerce
+                  </Typography>
+                </AccordionHeader>
               </ListItem>
- 
-              <Link href="/dashboard/eccomerce/product">
-                      <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Products
-              </ListItem>
-      
-              </Link>
-              <Link href="/dashboard/eccomerce/product">
-                      <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                 New Product
-              </ListItem>
-      
-              </Link>
-            </List>
-          </AccordionBody>
-        </Accordion>
+              <AccordionBody className="py-1">
+                <List className="p-0 text-[#FFFFFF] ">
+                  <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                    <ListItemPrefix>
+                      <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                    </ListItemPrefix>
+                    Orders
+                  </ListItem>
+
+                  <Link href="/dashboard/eccomerce/product">
+                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                      </ListItemPrefix>
+                      Products
+                    </ListItem>
+                  </Link>
+                  <Link href="/dashboard/eccomerce/product">
+                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                      </ListItemPrefix>
+                      New Product
+                    </ListItem>
+                  </Link>
+                </List>
+              </AccordionBody>
+            </Accordion>
             <li>
               <a
                 href="javascript:void(0)"
-                className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +148,7 @@ export default function Sidebar() {
             <li>
               <Link
                 href="/dashboard/users"
-                className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +171,7 @@ export default function Sidebar() {
             <li>
               <a
                 href="javascript:void(0)"
-                className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -178,53 +187,75 @@ export default function Sidebar() {
                 <span>Product</span>
               </a>
             </li>
-            <li>
-              <a
-                href="javascript:void(0)"
-                className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
+            <Accordion
+              open={open === 2}
+              icon={
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`mx-auto h-4 w-4 transition-transform ${
+                    open === 2 ? "rotate-180" : ""
+                  }`}
+                />
+              }
+            >
+              <ListItem
+                className="p-0 text-[#FFFFFF]  bg-[#121E31] active:bg-gray-700 hover:bg-gray-700 focus:text-[#ffff] focus:bg-gray-700"
+                selected={open === 2}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  stroke="currentColor"
-                  className="w-[18px] h-[18px] mr-4"
-                  viewBox="0 0 682.667 682.667"
+                <AccordionHeader
+                  onClick={() => handleOpen(2)}
+                  className="border-b-0 p-3 hover:text-[#ffffff] text-[#FFFFFF]"
                 >
-                  <defs>
-                    <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                      <path d="M0 512h512V0H0Z" data-original="#000000" />
-                    </clipPath>
-                  </defs>
-                  <g
-                    clipPath="url(#a)"
-                    transform="matrix(1.33 0 0 -1.33 0 682.667)"
+                  <ListItemPrefix>
+                    <ShoppingBagIcon className="h-5 w-5 text-[#FFFFFF]" />
+                  </ListItemPrefix>
+                  <Typography
+                    color="#FFFFFF"
+                    className="mr-auto font-normal text-[#FFFFFF]"
                   >
-                    <path
-                      fill="none"
-                      strokeMiterlimit={10}
-                      strokeWidth={40}
-                      d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
-                      data-original="#000000"
-                    />
-                    <path
-                      d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
-                      data-original="#000000"
-                    />
-                  </g>
-                </svg>
-                <span>Inbox</span>
-              </a>
-            </li>
+                    ABC News
+                  </Typography>
+                </AccordionHeader>
+              </ListItem>
+              <AccordionBody className="py-1">
+                <List className="p-0 text-[#FFFFFF] ">
+                  <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                    <ListItemPrefix>
+                      <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                    </ListItemPrefix>
+                    All News
+                  </ListItem>
+
+                  <Link href="/dashboard/eccomerce/product">
+                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                      </ListItemPrefix>
+                      Create News
+                    </ListItem>
+                  </Link>
+                </List>
+              </AccordionBody>
+            </Accordion>
             <li>
               <Link
                 href="transactions"
-                className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
-              
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" data-slot="icon"   className="w-[18px] h-[18px] mr-4">
-  <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
-  <path fill-rule="evenodd" d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
-</svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  data-slot="icon"
+                  className="w-[18px] h-[18px] mr-4"
+                >
+                  <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
 
                 <span>Transactions</span>
               </Link>
@@ -232,7 +263,7 @@ export default function Sidebar() {
             <li>
               <Link
                 href="/dashboard/profile"
-                className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -249,14 +280,14 @@ export default function Sidebar() {
               </Link>
             </li>
           </ul>
-          <div className="flex flex-wrap items-center cursor-pointer border border-gray-500 rounded-full px-2 py-1">
+          <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
             <img
               src="https://readymadeui.com/profile.webp"
-              className="w-9 h-9 rounded-full border-2 border-white"
+              className="border-2 border-white rounded-full w-9 h-9"
             />
             <div className="ml-4">
               <p className="text-sm text-white">John Doe</p>
-              <p className="text-xs text-gray-300">Active free account</p>
+              <p className="text-xs text-gray-300">Active admin account</p>
             </div>
           </div>
         </div>
