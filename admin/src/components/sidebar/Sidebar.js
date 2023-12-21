@@ -287,7 +287,7 @@ export default function Sidebar() {
             />
             <div className="ml-4">
               <p className="text-sm text-white">John Doe</p>
-              <p className="text-xs text-gray-300">Active free account</p>
+              <p className="text-xs text-gray-300">Active admin account</p>
             </div>
           </div>
         </div>
