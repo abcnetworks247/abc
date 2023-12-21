@@ -1,53 +1,18 @@
 "use client"
 import React from 'react'
 import { useState } from 'react';
+import { useRef } from 'react';
 
-const Editform = () => {
+const Editform = ({formData, handleEdit, setFormData,handleInputChange, handleSubmit}) => {
 
-   const [isEditable, setIsEditable] = useState(false);
-    const userData = {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phoneNumber: "123-456-7890",
-      gender: "Male",
-    }
+    // const inputRef = useRef(null)
 
-    console.log(isEditable)
 
-    // Local state to store form data
-    const [formData, setFormData] = useState({
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      phoneNumber: userData.phoneNumber,
-      gender: userData.gender,
-    })
-
-    // Function to handle form input changes
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-
-    // Function to handle form submission
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      // Add logic to submit the form data (e.g., send it to the server)
-      console.log("Form data submitted:", formData)
-      // Set isEditable back to false after submission
-      setIsEditable(false)
-    };
-
-    const handleEdit = () => {
-        setIsEditable(true)
-    }
+  
 
   return (
-    <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+    // <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
+    <form className="mx-auto" onSubmit={(e) => handleSubmit(e)}>
       <div className="flex flex-row-reverse cursor-pointer ">
         <div
           className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200"
@@ -77,120 +42,75 @@ const Editform = () => {
           </svg>
         </div>
       </div>
-      {/* first and last name */}
+      {/* First and last name */}
       <div className="grid md:grid-cols-2 md:gap-6">
         <div className="relative z-0 w-full mb-5 group">
+          {/* <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
+            <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
+              First name
+            </div>
+            <p>Awajimijan</p>
+          </div> */}
           <input
+            className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
             type="text"
-            name="floating_first_name"
-            id="floating_first_name"
-            className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0  peer ${
-              isEditable ? " focus:border-blue-600" : ""
-            }`}
-            placeholder=" "
+            name="firstName"
+            placeholder="FirstName"
             value={formData.firstName}
-            onChange={handleInputChange}
-            readOnly={!isEditable}
-          />
-          <label
-            for="floating_first_name"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            First name
-          </label>
+            onChange={(e) => handleInputChange(e)}
+          ></input>
         </div>
         <div className="relative z-0 w-full mb-5 group">
           <input
+            className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
             type="text"
-            name="floating_last_name"
-            id="floating_last_name"
-            className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0  peer ${
-              isEditable ? "focus:border-blue-600" : ""
-            }`}
-            placeholder=" "
+            name="lastName"
+            placeholder="last name"
             value={formData.lastName}
-            onChange={handleInputChange}
-            readOnly={!isEditable}
+            onChange={(e) => handleInputChange(e)}
           />
-          <label
-            for="floating_last_name"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Last name
-          </label>
         </div>
       </div>
       {/* Email address */}
       <div className="relative z-0 w-full mb-5 group">
         <input
-          type="email"
-          name="floating_email"
-          id="floating_email"
-          className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0  peer ${
-            isEditable ? " focus:border-blue-600" : ""
-          }`}
-          placeholder=" "
+          className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
+          type="text"
+          name="email"
+          placeholder="Email"
           value={formData.email}
-          onChange={handleInputChange}
-          readOnly={!isEditable}
+          onChange={(e) => handleInputChange(e)}
         />
-        <label
-          for="floating_email"
-          className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-        >
-          Email address
-        </label>
       </div>
-
-      {/*phone number  */}
+      {/* Phone number */}
       <div className="relative z-0 w-full mb-5 group">
         <input
-          type="text"
-          name="floating_email"
-          id="floating_email"
-          className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0  peer ${
-            isEditable ? " focus:border-blue-600" : ""
-          }`}
-          placeholder=" "
+          className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
+          type="tel"
+          name="phoneNumber"
+          placeholder="phone number"
           value={formData.phoneNumber}
-          onChange={handleInputChange}
-          readOnly={!isEditable}
+          onChange={(e) => handleInputChange(e)}
         />
-        <label
-          for="floating_email"
-          className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-        >
-          Phone Number
-        </label>
       </div>
-
-      {/* gender */}
+      {/* Gender */}
       <div className="relative z-0 w-full mb-5 group">
-        <input
-          type="text"
+        <select
+          className="appearence-none dark:text-gray-400 dark:bg-gray-800  dark:border-gray-800  w-full py-2.5 px-4 text-gray-700 text-base font-normal border border-gray-200 rounded-lg "
           name="gender"
-          id="floating_email"
-          className={`block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0  peer ${
-            isEditable ? " focus:border-blue-600" : ""
-          }`}
-          placeholder=" "
           value={formData.gender}
-          onChange={handleInputChange}
-          readOnly={!isEditable}
-        />
-        <label
-          for="floating_email"
-          className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+          id=""
+          onChange={(e)=>handleInputChange(e)}
         >
-          Gender
-        </label>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
       </div>
-
       <button
         type="submit"
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
-        {isEditable ? "Save" : "Submit"}
+        Save
       </button>
     </form>
   );
