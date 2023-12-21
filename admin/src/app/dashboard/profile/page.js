@@ -26,7 +26,7 @@ import {
   export default function Page() {
     return (
       <>
-         <main className="flex flex-row w-[100%]">
+         <main className="flex flex-row w-[100%] *:mt-3">
         <Card className="mx-3 -mt-16 mb-6 lg:mx-4 border border-blue-gray-100">
           <CardBody className="p-4">
             <div className="mb-10 flex items-center justify-between flex-wrap gap-6">
