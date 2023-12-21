@@ -47,7 +47,7 @@ const Page = () => {
   ];
 
   return (
-    <div className="px-10 py-20">
+    <div className="px-10 py-10">
       <div className="flex flex-row items-center justify-between">
         <p>All uploaded files</p>
         <Button variant="" className="flex items-center gap-3 bg-red-600">
