@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
   Navbar,
@@ -12,7 +13,7 @@ import {
   Card,
   IconButton,
 } from "@material-tailwind/react";
-
+import Link from "next/link";
 
 import {
   CubeTransparentIcon,
@@ -34,22 +35,27 @@ const profileMenuItems = [
   {
     label: "My Profile",
     icon: UserCircleIcon,
+    path: "/dashboard/profile"
   },
   {
     label: "Edit Profile",
     icon: Cog6ToothIcon,
+    path: "/dashboard/profile"
   },
   {
     label: "Inbox",
     icon: InboxArrowDownIcon,
+    path: "/dashboard/inbox"
   },
   {
     label: "Help",
     icon: LifebuoyIcon,
+    path: "/dashboard/help"
   },
   {
     label: "Sign Out",
     icon: PowerIcon,
+    path: "/dashboard/signout"
   },
 ];
  
@@ -84,11 +90,12 @@ function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+        {profileMenuItems.map(({ label, icon, path }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
+            <Link href={path} key={label}>
             <MenuItem
-              key={label}
+              
               onClick={closeMenu}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
@@ -96,6 +103,8 @@ function ProfileMenu() {
                   : ""
               }`}
             >
+          
+              
               {React.createElement(icon, {
                 className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
                 strokeWidth: 2,
@@ -108,10 +117,13 @@ function ProfileMenu() {
               >
                 {label}
               </Typography>
+             
             </MenuItem>
+            </Link>
           );
         })}
       </MenuList>
+      
     </Menu>
   );
 }

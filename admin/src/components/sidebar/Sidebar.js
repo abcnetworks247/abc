@@ -158,8 +158,8 @@ export default function Sidebar() {
               </a>
             </li>
             <li>
-              <a
-                href="javascript:void(0)"
+              <Link
+                href="/dashboard/profile"
                 className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
               >
                 <svg
@@ -174,7 +174,7 @@ export default function Sidebar() {
                   />
                 </svg>
                 <span>Profile</span>
-              </a>
+              </Link>
             </li>
           </ul>
           <div className="flex flex-wrap items-center cursor-pointer border border-gray-500 rounded-full px-2 py-1">
