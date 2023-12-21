@@ -1,14 +1,15 @@
 "use client";
 import React from "react";
-import { useState } from "react";
-import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { useState, useEffect } from "react";
+import { UseProductProvider} from "../../../contexts/ProductProvider";
 
 
-const CartItem = ({ product }) => {
-  const { handleRemoveFromCart} = UseProductProvider()
+const CartItem = ({ product, updatePriceArray }) => {
+  
+  const { handleRemoveFromCart} =
+    UseProductProvider();
   console.log(product);
-
-  const [quantity, setQuantity] = useState(1);
+   const [quantity, setQuantity]= useState(1)
 
   const reduceItem = () => {
     if (quantity > 1) {
@@ -20,9 +21,19 @@ const CartItem = ({ product }) => {
     setQuantity(quantity + 1);
   };
 
+
   const calculateSubtotal = () => {
     return quantity * product.price;
   };
+
+  useEffect(() => {
+    const subtotal = calculateSubtotal();
+    updatePriceArray(subtotal);
+  }, [quantity]);
+
+
+
+
 
   return (
     <div className="flex flex-wrap items-center mb-6 -mx-4 md:mb-8">

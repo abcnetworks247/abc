@@ -9,14 +9,24 @@ import { UseProductProvider } from "../../../contexts/ProductProvider";
 import Sidebar from "@/components/sidebar/Sidebar";
 import FooterComp from "@/components/Footer/FooterComp";
 import Link from "next/link"
+import { useState } from "react";
 
 const page = () => {
   const { cartProducts } = UseProductProvider();
+  const [priceArray, setPriceArray] = useState([]);
+  const shippingFee = 300;
 
-  const totalPrice = cartProducts.reduce(
-    (total, product) => total + product.price,
+  const updatePriceArray = (subtotal) => {
+    setPriceArray((prev) => [...prev, subtotal]);
+  };
+
+  const totalPrice = priceArray.reduce(
+    (total, subtotal) => total + subtotal,
     0
   );
+ 
+ 
+  const totalWithShipping = totalPrice + shippingFee;
 
   console.log("cart value", cartProducts);
   return (
@@ -69,7 +79,11 @@ const page = () => {
                 </div>
                 <div className="py-4 mb-8 border-t border-b border-gray-300 border-opacity-[80%]">
                   {cartProducts.map((product) => (
-                    <CartItem key={product.id} product={product} />
+                    <CartItem
+                      key={product.id}
+                      product={product}
+                      updatePriceArray={updatePriceArray}
+                    />
                   ))}
                 </div>
               </div>
@@ -93,17 +107,19 @@ const page = () => {
                 <div className="w-full h-full p-6 mt-6 bg-white border rounded-lg shadow-md md:mt-0 md:w-1/3">
                   <div className="flex justify-between mb-2">
                     <p className="text-gray-700">Subtotal</p>
-                    <p className="text-gray-700">$129.99</p>
+                    <p className="text-gray-700">${totalPrice.toFixed(2)}</p>
                   </div>
                   <div className="flex justify-between">
                     <p className="text-gray-700">Shipping</p>
-                    <p className="text-gray-700">$4.99</p>
+                      <p className="text-gray-700">${shippingFee}</p>
                   </div>
                   <hr className="my-4" />
                   <div className="flex justify-between">
                     <p className="text-lg font-bold">Total</p>
                     <div className="" Name>
-                      <p className="mb-1 text-lg font-bold">$134.98 USD</p>
+                      <p className="mb-1 text-lg font-bold">
+                        ${totalWithShipping.toFixed(2)}
+                      </p>
                       <p className="text-sm text-gray-700">including VAT</p>
                     </div>
                   </div>

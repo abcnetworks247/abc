@@ -19,10 +19,9 @@ const ProductProvider = ({ children }) => {
     query: "(min-width: 600px)",
   });
    const [clickState, setClickState] = useState(false);
- 
-
- 
   const [screen, setScreen] = useState(!isTabletOrMobile)
+  
+
   
   
   
@@ -215,8 +214,8 @@ const ProductProvider = ({ children }) => {
         isTabletOrMobile,
         screen,
         handleUser,
-        clickState
-        
+        clickState,
+       
       }}
     >
       {children}
