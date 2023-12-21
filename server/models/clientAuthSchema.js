@@ -2,17 +2,16 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-const subscriptionSchema = new mongoose.Schema({
-  subscriberName: { type: String, required: true },
-  email: { type: String, required: true },
-  age: { type: Number, required: true, min: 1 },
-  subscriptionAmount: { type: Number, required: true },
+const subscriptionSchema =  new mongoose.Schema({
+  user: { type: mongoose.Types.ObjectId, ref: "Client" },
+  price: { type: Number, required: true },
   subscriptionType: {
     type: String,
-    enum: ["monthly", "yearly"],
+    enum: ["monthly", " yearly"],
     required: true,
   },
-  membershipPackage: { type: String, required: true },
+  paymentType: { type: String, required: true },
+  package: { type: String, required: true },
   startDate: { type: Date, required: true, default: Date.now },
   renewalDate: { type: Date, required: true },
 });
