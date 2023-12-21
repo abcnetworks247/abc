@@ -17,7 +17,7 @@ import {
     HomeIcon,
     ChatBubbleLeftEllipsisIcon,
     Cog6ToothIcon,
-    PencilIcon,
+    PencilIcon
   } from "@heroicons/react/24/solid";
   import Link from "next/link"
   import { ProfileInfoCard, MessageCard } from "@/components/widget/cards";
