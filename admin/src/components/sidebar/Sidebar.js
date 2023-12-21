@@ -95,12 +95,25 @@ export default function Sidebar() {
                 </ListItemPrefix>
                 Orders
               </ListItem>
-              <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+ 
+              <Link href="/dashboard/eccomerce/product">
+                      <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
                 Products
               </ListItem>
+      
+              </Link>
+              <Link href="/dashboard/eccomerce/product">
+                      <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                <ListItemPrefix>
+                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
+                </ListItemPrefix>
+                 New Product
+              </ListItem>
+      
+              </Link>
             </List>
           </AccordionBody>
         </Accordion>
