@@ -1,13 +1,18 @@
-import Image from 'next/image'
-import NavbarDashboard from '@/components/AllNavbar/NavbarDashboard'
-import Sidebar from '@/components/sidebar/Sidebar'
+"use client";
+import { ComplexNavbar } from "@/components/navbar/Navbar";
+import Sidebar from "@/components/sidebar/Sidebar";
+import Image from "next/image";
+
 export default function Home() {
   return (
-   <main>
-    <NavbarDashboard />
-
-    <Sidebar />
-    <h1>hello</h1>
-   </main>
-  )
+    <>
+      <main className="flex flex-row w-[100%]">
+        <Sidebar />
+        <div className="w-[100%]">
+          <ComplexNavbar />
+        </div>
+        
+      </main>
+    </>
+  );
 }
