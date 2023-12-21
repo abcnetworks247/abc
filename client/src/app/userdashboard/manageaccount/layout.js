@@ -12,6 +12,7 @@ const layout = ({ children }) => {
       <p className="accountInformation px-4 py-2 text-bold ">
         Manage your accout
       </p>
+      {/* <div className="py-8 px-4"> */}
       <div className="py-8 px-4">
         <div className='flex flex-row gap-6 '>
           <SettingNav />

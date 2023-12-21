@@ -12,6 +12,7 @@ const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   // initial state for user incoming data
   const [UserData, setUserData] = useState([]);
+  const [dummyUser, setDummyUser] = useState([])
 
   // loading state for user incoming data
 

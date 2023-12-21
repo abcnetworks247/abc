@@ -18,7 +18,7 @@ const page = () => {
       </div>
         <Sidebar />
         {Wishlist.length > 0 ? (
-          <div className="px-4 py-10 lg:px-28 bg-gray-50 h-contain">
+          <div className="px-1 py-10 lg:px-28 bg-gray-50 h-contain">
             <h2 className="mb-6 text-xl font-medium text-gray-800 ">
               Saved Items
             </h2>
