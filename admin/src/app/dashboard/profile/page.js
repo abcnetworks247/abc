@@ -22,19 +22,11 @@ import {
   import Link from "next/link"
   import { ProfileInfoCard, MessageCard } from "@/components/widget/cards";
   import { platformSettingsData, conversationsData, projectsData } from "@/data";
-import { ComplexNavbar } from "@/components/navbar/Navbar";
-import Sidebar from "@/components/sidebar/Sidebar";
   
   export default function Page() {
     return (
       <>
          <main className="flex flex-row w-[100%]">
-        <Sidebar />
-        <div className="w-[100%]">
-          <ComplexNavbar />
-        <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
-          <div className="absolute inset-0 h-full w-full bg-gray-900/75" />
-        </div>
         <Card className="mx-3 -mt-16 mb-6 lg:mx-4 border border-blue-gray-100">
           <CardBody className="p-4">
             <div className="mb-10 flex items-center justify-between flex-wrap gap-6">
@@ -221,7 +213,6 @@ import Sidebar from "@/components/sidebar/Sidebar";
             </div>
           </CardBody>
         </Card>
-        </div>
         
       </main>
       </>

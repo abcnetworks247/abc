@@ -1,8 +1,8 @@
 import React from "react";
-
+import Link from "next/link"
 export default function Sidebar() {
   return (
-    <div className="w-auto">
+    <div className="w-auto sticky top-0 z-0 h-[100vh] hidden md:block">
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
           <a href="javascript:void(0)">
@@ -14,8 +14,8 @@ export default function Sidebar() {
           </a>
           <ul className="space-y-3 my-10 flex-1">
             <li>
-              <a
-                href="javascript:void(0)"
+              <Link
+                href="/dashboard"
                 className="text-white text-sm flex items-center hover:bg-gray-700 rounded px-4 py-3 transition-all"
               >
                 <svg
@@ -30,7 +30,7 @@ export default function Sidebar() {
                   />
                 </svg>
                 <span>Dashboard</span>
-              </a>
+              </Link>
             </li>
             <li>
               <a
