@@ -49,7 +49,7 @@ const FileComp = () => {
     <div>
       <div className="">
         <div className="flex flex-wrap items-center justify-between pt-8 border-t-gray-600">
-          <div className="p border-t-gray-500">
+          <div className=" border-t-gray-500">
             <Checkbox label="Select All" className="text-gray-900" />
           </div>
           <div className="flex flex-row items-center gap-5">
@@ -89,7 +89,7 @@ const FileComp = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-4">
           {data.map(({ imageLink }, index) => (
             <div
               className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"

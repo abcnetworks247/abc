@@ -7,10 +7,19 @@ import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
   const [isFocused, setIsFocused] = useState(false);
-  const { searchProducts, setSearchResults, searchResults } =
-    UseProductProvider();
-  const modalRef = useRef(null);
+  const {
+    searchProducts,
+    setSearchResults,
+    searchResults,
+    fetchProductsByCategory,
+  } = UseProductProvider();
+  const dropDownRef = useRef(null)
 
+  const handleDropdownRef = () => {
+    dropDownRef.current.style.display = "none"
+    handleDropdown()
+  }
+  
   const router = useRouter();
 
   const handleFocus = () => {
@@ -23,13 +32,10 @@ const SearchBar = () => {
 
   const [isDropdown, setIsDropdown] = useState(false);
   const handleDropdown = () => {
-    setIsDropdown((prev) => !prev);
-  };
-
-  const handleModalRef = () => {
-    modalRef.current.style.display = "none";
-    handleDropdown();
-  };
+      setIsDropdown(prev => !prev)
+  } 
+  
+ 
   const hasSearchResults = searchResults && searchResults.length > 0;
 
   const handleSearch = (e) => {
@@ -45,7 +51,7 @@ const SearchBar = () => {
   return (
     <>
       <form
-        className={`${isFocused ? "z-20" : "z-10"}  ${
+        className={`${isFocused && "z-40"}  ${
           isDropdown && "z-[1000]"
         } hidden sm:block transition-all duration-300 relative`}
       >
@@ -95,34 +101,40 @@ const SearchBar = () => {
                 >
                   <li>
                     <button
+                      onClick={() => fetchProductsByCategory("men's clothing")}
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
-                      Mockups
+                      Men
                     </button>
                   </li>
                   <li>
                     <button
+                      onClick={() => fetchProductsByCategory("jewelery")}
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
-                      Templates
+                      Jewelry
                     </button>
                   </li>
                   <li>
                     <button
+                      onClick={() => fetchProductsByCategory("electronics")}
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
-                      Design
+                      Electronics
                     </button>
                   </li>
                   <li>
                     <button
+                      onClick={() =>
+                        fetchProductsByCategory("women's clothing")
+                      }
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
-                      Logos
+                      Women'sclothing
                     </button>
                   </li>
                 </ul>
@@ -130,15 +142,17 @@ const SearchBar = () => {
             </>
           )}
 
-          <div className="relative flex flex-row h-full rounded-r-lg w-fit">
+          <div
+            className={`relative flex flex-row h-full rounded-r-lg w-fit ${
+              isFocused && "z-40"
+            }`}
+          >
             <input
               type="search"
               id="search-dropdown"
               className="block p-2.5 w-[30vw] py-2 bg-white outline-none border-none  text-lg text-gray-900 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:border-s-gray-700  dark:border-gray-600 placeholder-gray-400 dark:text-white "
               placeholder="Search here..."
-              required
               onFocus={handleFocus}
-              onBlur={handleBlur}
               onChange={handleSearch}
             />{" "}
             <button className="bg-blue-500 absolute z-10 right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg">
@@ -164,21 +178,24 @@ const SearchBar = () => {
           <AllResults
             searchResults={searchResults}
             setSearchResults={setSearchResults}
+            hasSearchResults={hasSearchResults}
+            isFocused={isFocused}
+            handleFocus={handleFocus}
           />
         )}
       </form>
 
-      {isFocused && (
+      {/* {isFocused &&  (
         <div
           className="fixed inset-0 z-10 bg-black bg-opacity-30"
           onClick={handleModalRef}
         ></div>
-      )}
+      )} */}
       {isDropdown && (
         <div
           className="fixed inset-0 z-10 bg-black bg-opacity-30"
-          ref={modalRef}
-          onClick={handleModalRef}
+          ref={dropDownRef}
+          onClick={handleDropdownRef}
         ></div>
       )}
     </>
