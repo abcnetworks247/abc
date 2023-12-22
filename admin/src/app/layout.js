@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
-
+import Head from 'next/head'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -11,6 +11,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <Head>
+      <link rel="stylesheet" href="soft-ui-dashboard-tailwind.css" />
+      <script src="https://soft-ui-dashboard-pro-tall.creative-tim.com/assets/js/plugins/datatables.min.js"   type="text/javascript"   defer></script>
+      </Head>
       <body className={inter.className}>{children}</body>
     </html>
   )
