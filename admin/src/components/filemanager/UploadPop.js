@@ -54,9 +54,7 @@ const UploadPop = () => {
           >
             <span>Cancel</span>
           </Button>
-          <Button variant="gradient" onClick={() => handleOpen(null)}>
-            <span>Upload</span>
-          </Button>
+        
         </div>
       </div>
     </div>
