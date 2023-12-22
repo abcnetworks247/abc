@@ -7,7 +7,8 @@ const AllResults = ({ searchResults, setSearchResults }) => {
     const router = useRouter()
     const handleRoute = () => {
        router.push("/searchResults")
-         setSearchResults(searchResults);
+      setSearchResults(searchResults);
+      console.log("route change")
        
     };
 
