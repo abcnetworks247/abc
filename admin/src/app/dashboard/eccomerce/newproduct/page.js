@@ -2,7 +2,18 @@
 import { Button } from "@material-tailwind/react"
 
 import { useState } from 'react';
-import Editor from 'react-simple-wysiwyg';
+import { 
+  BtnBold, 
+  BtnItalic, 
+  createButton, 
+  BtnStrikeThrough,
+  Editor, 
+  EditorProvider,
+  BtnLink, 
+  Toolbar,
+  BtnStyles,
+  Separator,
+} from 'react-simple-wysiwyg';
 
 
 export default function page() {
@@ -135,7 +146,22 @@ export default function page() {
             >
               Product Details
             </label>
-            <Editor value={html} onChange={onChange} />
+            <EditorProvider>
+      <Editor value={html} onChange={onChange}>
+        <Toolbar>
+          <BtnBold />
+          <Separator />
+          <BtnItalic />
+          <Separator />
+          <BtnLink />
+          <Separator />
+          <BtnStrikeThrough />
+          <Separator />
+          <BtnStyles />
+
+        </Toolbar>
+      </Editor>
+    </EditorProvider>
           </div>
         </div>
         <div className="mt-3">
