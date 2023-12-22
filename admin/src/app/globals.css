@@ -33,6 +33,10 @@ border-radius: 4px;
  ::-webkit-scrollbar-corner {
   background-color: #817c7c9a;
  }
+ .has-mask {
+  position: absolute;
+  clip: rect(10px, 150px, 130px, 10px);
+}
 
 
  

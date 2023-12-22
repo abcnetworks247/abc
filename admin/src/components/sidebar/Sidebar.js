@@ -228,7 +228,7 @@ export default function Sidebar() {
                   </ListItem>
                   </Link>
 
-                  <Link href="/dashboard/eccomerce/product">
+                  <Link href="/dashboard/ABC/create">
                     <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
