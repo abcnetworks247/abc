@@ -31,10 +31,14 @@ import {
 import Link from "next/link";
 export default function Sidebar() {
   const [open, setOpen] = React.useState(0);
+  const [open2, setOpen2] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
+  };
+  const handleOpen2 = (value) => {
+    setOpen2(open2 === value ? 0 : value);
   };
   return (
     <div className="w-auto sticky top-0 z-0 h-[100vh] hidden md:block">
@@ -188,22 +192,22 @@ export default function Sidebar() {
               </a>
             </li>
             <Accordion
-              open={open === 2}
+              open={open2 === 2}
               icon={
                 <ChevronDownIcon
                   strokeWidth={2.5}
                   className={`mx-auto h-4 w-4 transition-transform ${
-                    open === 2 ? "rotate-180" : ""
+                    open2 === 2 ? "rotate-180" : ""
                   }`}
                 />
               }
             >
               <ListItem
                 className="p-0 text-[#FFFFFF]  bg-[#121E31] active:bg-gray-700 hover:bg-gray-700 focus:text-[#ffff] focus:bg-gray-700"
-                selected={open === 2}
+                selected={open2 === 2}
               >
                 <AccordionHeader
-                  onClick={() => handleOpen(2)}
+                  onClick={() => handleOpen2(2)}
                   className="border-b-0 p-3 hover:text-[#ffffff] text-[#FFFFFF]"
                 >
                   <ListItemPrefix>
