@@ -1,15 +1,25 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import Editor from 'react-simple-wysiwyg';
-
+import {
+  BtnBold,
+  BtnItalic,
+  createButton,
+  BtnStrikeThrough,
+  Editor,
+  EditorProvider,
+  BtnLink,
+  Toolbar,
+  BtnStyles,
+  Separator,
+} from "react-simple-wysiwyg";
 import { useState } from "react";
 
 function page() {
-    const [html, setHtml] = useState('');
-    function onChange(e) {
-        setHtml(e.target.value);
-      }
+  const [html, setHtml] = useState("");
+  function onChange(e) {
+    setHtml(e.target.value);
+  }
   const [imageSrc, setImageSrc] = useState(
     "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
   );
@@ -67,8 +77,21 @@ function page() {
               <label className="text-sm font-bold text-gray-500 tracking-wide">
                 Full Details
               </label>
-              <Editor value={html} onChange={onChange} className="h-24" />
-
+              <EditorProvider>
+                <Editor value={html} onChange={onChange}>
+                  <Toolbar>
+                    <BtnBold />
+                    <Separator />
+                    <BtnItalic />
+                    <Separator />
+                    <BtnLink />
+                    <Separator />
+                    <BtnStrikeThrough />
+                    <Separator />
+                    <BtnStyles />
+                  </Toolbar>
+                </Editor>
+              </EditorProvider>
             </div>
             <div className=" grid-cols-1 space-y-2 hidden">
               <label className="text-sm font-bold text-gray-500 tracking-wide">
@@ -115,20 +138,23 @@ function page() {
               </div>
             </div>
             <div className="border rounded h-80 w-full flex items-center shadow-lg justify-center">
-                <div>
-                <Image src="/upload.jpg"
-                height={280}
-                width={280}
-                alt="upload"
+              <div>
+                <Image
+                  src="/upload.jpg"
+                  height={280}
+                  width={280}
+                  alt="upload"
                 />
                 <p className="border text-center text-base ">
-                    {full ? (
-                        <span className="text-green-500">Image Uploaded</span>
-                    ) : (
-                        <span className="text-blue-500 cursor-pointer">Click here to select image</span>
-                    )}
+                  {full ? (
+                    <span className="text-green-500">Image Uploaded</span>
+                  ) : (
+                    <span className="text-blue-500 cursor-pointer">
+                      Click here to select image
+                    </span>
+                  )}
                 </p>
-                </div>
+              </div>
             </div>
             <p className="text-sm text-gray-300">
               <span>File type: doc,pdf,types of images</span>
