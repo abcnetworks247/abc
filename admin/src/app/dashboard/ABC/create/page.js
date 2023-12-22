@@ -1,9 +1,15 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import Editor from 'react-simple-wysiwyg';
+
 import { useState } from "react";
 
 function page() {
+    const [html, setHtml] = useState('');
+    function onChange(e) {
+        setHtml(e.target.value);
+      }
   const [imageSrc, setImageSrc] = useState(
     "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
   );
@@ -61,14 +67,8 @@ function page() {
               <label className="text-sm font-bold text-gray-500 tracking-wide">
                 Full Details
               </label>
-              <textarea
-                name=""
-                id=""
-                cols="10"
-                rows="10"
-                placeholder=" News details"
-                className="text-base p-2 border h-24 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-              ></textarea>
+              <Editor value={html} onChange={onChange} className="h-24" />
+
             </div>
             <div className=" grid-cols-1 space-y-2 hidden">
               <label className="text-sm font-bold text-gray-500 tracking-wide">

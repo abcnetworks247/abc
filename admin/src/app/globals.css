@@ -37,6 +37,8 @@ border-radius: 4px;
   position: absolute;
   clip: rect(10px, 150px, 130px, 10px);
 }
-
+.rsw-editor {
+  height: 100svh !important;
+}
 
  
