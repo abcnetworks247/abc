@@ -9,21 +9,27 @@ import { useRouter } from "next/navigation";
 const SearchBar = () => {
   const [isFocused, setIsFocused] = useState(false);
   const { searchProducts, setSearchResults, searchResults } = UseProductProvider();
-  // const searchBarRef = useRef(null);
+  const modalRef = useRef(null);
   
    const router = useRouter();
 
   const handleFocus = () => {
-    setIsFocused(true);
+    setIsFocused( prev => !prev);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
   };
-
  
+  const [isDropdown, setIsDropdown] = useState(false)
+  const handleDropdown = () => {
+      setIsDropdown(prev => !prev)
+  } 
   
-  
+  const handleModalRef = () => {
+    modalRef.current.style.display = "none"
+    handleDropdown()
+  }  
   const hasSearchResults = searchResults && searchResults.length > 0;
   
   
@@ -43,23 +49,25 @@ const SearchBar = () => {
       <form
         className={`${
           isFocused ? "z-20" : "z-10"
-        } hidden sm:block transition-all duration-300 relative`}
-      
+        }  ${isDropdown && 'z-[1000]'} hidden sm:block transition-all duration-300 relative`}
       >
-        <div className="flex h-full">
+        <div className="flex relative h-full">
           <label
             for="search-dropdown"
             className="mb-2 text-sm font-medium sr-only dark:text-white"
           >
             Your Email
           </label>
-          {/* <button
-          id="dropdown-button"
-          data-dropdown-toggle="dropdown"
-          className="inline-flex items-center flex-shrink-0 h-full py-2 bg-opacity-25 border border-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:hover:bg-gray-600 "
-          type="button"
-        ></button> */}
-          <div className="flex flex-row items-center justify-center h-full gap-2 px-4 mr-1 text-sm font-medium text-center text-gray-900 bg-white rounded-s-lg">
+          <button
+            id="dropdown-button"
+            data-dropdown-toggle="dropdown"
+            className="inline-flex items-center flex-shrink-0 h-full py-2 bg-opacity-25 border border-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:hover:bg-gray-600 "
+            type="button"
+          ></button>
+          <div
+            onClick={handleDropdown}
+            className="flex flex-row items-center justify-center h-full gap-2 px-4 mr-1 text-sm font-medium text-center text-gray-900 bg-white rounded-s-lg"
+          >
             All categories{" "}
             <svg
               className="w-2.5 h-2.5 ms-2.5"
@@ -77,48 +85,53 @@ const SearchBar = () => {
               />
             </svg>
           </div>
-          <div
-            id="dropdown"
-            className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-          >
-            <ul
-              className="py-2 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby="dropdown-button"
-            >
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+          {isDropdown && (
+            <>
+              <div
+                id="dropdown"
+                className={` absolute top-[3rem] left-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+              >
+                <ul
+                  className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdown-button"
                 >
-                  Mockups
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Templates
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Design
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Logos
-                </button>
-              </li>
-            </ul>
-          </div>
+                  <li>
+                    <button
+                      type="button"
+                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Mockups
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Templates
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Design
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Logos
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </>
+          )}
+
           <div className="relative flex flex-row h-full rounded-r-lg w-fit">
             <input
               type="search"
@@ -149,21 +162,29 @@ const SearchBar = () => {
             </button>
           </div>
         </div>
-        {hasSearchResults && (
+        {isFocused && hasSearchResults && (
           <AllResults
             searchResults={searchResults}
             setSearchResults={setSearchResults}
-            isFocused={isFocused}
+          
           />
         )}
       </form>
 
-      {isFocused && (
+      {isFocused &&  (
         <div
           className="fixed inset-0 z-10 bg-black bg-opacity-30"
-          onClick={handleBlur}
+          onClick={handleModalRef}
         ></div>
       )}
+      {isDropdown &&  (
+        <div
+          className="fixed inset-0 z-10 bg-black bg-opacity-30"
+          ref={modalRef}
+          onClick={handleModalRef}
+        ></div>
+      )}
+      
     </>
   );
 };

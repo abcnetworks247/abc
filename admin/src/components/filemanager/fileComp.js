@@ -1,12 +1,11 @@
 "use client";
 
-import { ComplexNavbar } from "@/components/navbar/Navbar";
-import Sidebar from "@/components/sidebar/Sidebar";
 import { Button, Checkbox, Option, Select } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
 import React from "react";
 
-const Page = () => {
+const FileComp = () => {
+
   const data = [
     {
       imageLink:
@@ -45,37 +44,19 @@ const Page = () => {
         "https://images.unsplash.com/photo-1620064916958-605375619af8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1493&q=80",
     },
   ];
-
+  
   return (
-    <div className="px-10 py-10">
-      <div className="flex flex-row items-center justify-between">
-        <p>All uploaded files</p>
-        <Button variant="" className="flex items-center gap-3 bg-red-600">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-            />
-          </svg>
-          Upload Files
-        </Button>
-      </div>
-
+    <div>
       <div className="">
-        <div className="flex flex-row items-center justify-between pt-8 border-t-gray-600">
-          <div className="p border-t-gray-500">
+        <div className="flex flex-wrap items-center justify-between pt-8 border-t-gray-600">
+          <div className=" border-t-gray-500">
             <Checkbox label="Select All" className="text-gray-900" />
           </div>
           <div className="flex flex-row items-center gap-5">
-            <button variant="" className="flex flex-row items-center gap-1 px-2 py-1 text-sm text-white bg-gray-900 rounded-md">
+            <button
+              variant=""
+              className="flex flex-row items-center gap-1 px-2 py-1 text-sm text-white bg-gray-900 rounded-md"
+            >
               <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
               Delete
             </button>
@@ -108,7 +89,7 @@ const Page = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 mt-3 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-4">
           {data.map(({ imageLink }, index) => (
             <div
               className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
@@ -135,4 +116,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default FileComp;
