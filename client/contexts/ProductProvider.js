@@ -20,6 +20,7 @@ const ProductProvider = ({ children }) => {
   });
    const [clickState, setClickState] = useState(false);
   const [screen, setScreen] = useState(!isTabletOrMobile)
+  console.log(cartProducts)
   
 
   
@@ -73,7 +74,8 @@ const ProductProvider = ({ children }) => {
     const newCartList = cartProducts.filter(
       (cartProduct) => product.id !== cartProduct.id
     );
-      setCartProducts(newCartList)
+    setCartProducts(newCartList)
+    
      if (typeof window !== "undefined") {
        localStorage.setItem("cartProducts", JSON.stringify(newCartList));
      }
@@ -104,7 +106,8 @@ const ProductProvider = ({ children }) => {
 
   const addToCart = (e, product) => {
     e.stopPropagation();
-    const updatedCart = [...cartProducts, product];
+    const updatedProduct ={...product, quantity:1}
+    const updatedCart = [...cartProducts, updatedProduct];
     setCartProducts(updatedCart);
     // Update local storage
     if (typeof window !== "undefined") {
@@ -112,19 +115,25 @@ const ProductProvider = ({ children }) => {
     }
   };
 
+ const updateProduct = (updatedProduct) => {
+   const updatedCart = cartProducts.map((product) =>
+     product.id === updatedProduct.id ? updatedProduct : product
+   );
+
+   setCartProducts(updatedCart);
+
+   // Update local storage
+   if (typeof window !== "undefined") {
+     localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+   }
+ };
+
+
   const handleCartClick = (e, product) => {
     e.stopPropagation();
     addToCart(e, product);
   };
 
-  // const searchProducts = (query) => {
-  //   const results = products.filter(
-  //     (product) =>
-  //       product.title.toLowerCase().includes(query.toLowerCase()) ||
-  //       product.category.toLowerCase().includes(query.toLowerCase())
-  //   );
-  //   setSearchResults(results);
-  // };
 
   const searchProducts = (query) => {
     const regex = new RegExp(`^${query}`, "i");
@@ -215,6 +224,7 @@ const ProductProvider = ({ children }) => {
         screen,
         handleUser,
         clickState,
+        updateProduct
        
       }}
     >

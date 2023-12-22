@@ -11,7 +11,7 @@ export default function Page() {
         <div className="">
           <div className="grid grid-cols-12 gap-3 ">
             <div className="col-span-12 sm:col-span-4">
-              <div className="p-4 relative h-32  bg-gray-800 border border-gray-800 shadow-lg  rounded-2xl">
+              <div className="p-4 relative h-32   bg-[#121E31] border border-gray-800 shadow-lg  rounded-2xl">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-14 w-14  absolute bottom-4 right-3 text-green-400"
@@ -28,7 +28,7 @@ export default function Page() {
               </div>
             </div>
             <div className="col-span-12 sm:col-span-4">
-              <div className="p-4 relative h-32 bg-gray-800 border border-gray-800 shadow-lg  rounded-2xl">
+              <div className="p-4 relative h-32  bg-[#121E31] border border-gray-800 shadow-lg  rounded-2xl">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-14 w-14  absolute bottom-4 right-3 text-blue-500"
@@ -47,7 +47,7 @@ export default function Page() {
               </div>
             </div>
             <div className="col-span-12 sm:col-span-4">
-              <div className="p-4 relative h-32 bg-gray-800 border border-gray-800 shadow-lg  rounded-2xl">
+              <div className="p-4 relative h-32  bg-[#121E31] border border-gray-800 shadow-lg  rounded-2xl">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-14 w-14  absolute bottom-4 right-3 text-yellow-300"
