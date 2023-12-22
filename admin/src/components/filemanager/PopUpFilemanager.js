@@ -15,7 +15,7 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import { LuFiles } from "react-icons/lu";
-import FileComp from "./FileComp";
+import FileComp from "@/components/filemanager/fileComp";
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import UploadPop from "./UploadPop";
 
