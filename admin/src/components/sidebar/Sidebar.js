@@ -44,7 +44,7 @@ export default function Sidebar() {
     setOpen2(open2 === value ? 0 : value);
   };
   return (
-    <div className="w-auto sticky top-0 z-0 h-[100vh] hidden md:block">
+    <div className="w-auto sticky top-0 z-0 h-[100vh] hidden lg:block">
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
           <a href="javascript:void(0)">
@@ -276,7 +276,7 @@ export default function Sidebar() {
             </Accordion>
             <li>
               <Link
-                href="transactions"
+                href="/dashboard/transactions"
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg
