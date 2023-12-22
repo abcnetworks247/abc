@@ -1,8 +1,9 @@
+import { Button, Spinner } from "@material-tailwind/react";
 import React from "react";
 
 const UploadPop = () => {
   return (
-    <div>
+    <div className="flex flex-col justify-start">
       <div
         className="relative w-full p-6 border-2 border-gray-300 border-dashed rounded-lg h-[50vh] flex flex-col items-center justify-center"
         id="dropzone"
@@ -37,6 +38,26 @@ const UploadPop = () => {
           {/* <span>{selectedphoto}</span> */}
         </div>
         <img src="" className="hidden mx-auto mt-4 max-h-40" id="preview" />
+      </div>
+
+      <div className="flex flex-row items-center justify-between mt-10">
+        <div className="flex flex-row items-center gap-4">
+          <Spinner />
+          <span className="text-sm">70% Uploaded</span>
+        </div>
+        <div className="">
+          <Button
+            variant="text"
+            color="red"
+            onClick={() => handleOpen(null)}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button variant="gradient" onClick={() => handleOpen(null)}>
+            <span>Upload</span>
+          </Button>
+        </div>
       </div>
     </div>
   );
