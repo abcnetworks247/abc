@@ -276,7 +276,7 @@ export default function Sidebar() {
             </Accordion>
             <li>
               <Link
-                href="transactions"
+                href="/dashboard/transactions"
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg

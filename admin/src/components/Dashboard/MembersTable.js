@@ -125,7 +125,7 @@ import {
             </div>
           </div>
         </CardHeader>
-        <CardBody className="overflow-scroll px-0">
+        <CardBody className="overflow-x-scroll px-0">
           <table className="mt-4 w-full min-w-max table-auto text-left">
             <thead>
               <tr>
