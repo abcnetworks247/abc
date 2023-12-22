@@ -20,10 +20,11 @@ const ProductProvider = ({ children }) => {
   });
    const [clickState, setClickState] = useState(false);
   const [screen, setScreen] = useState(!isTabletOrMobile)
+  const [category, setCategory] = useState([]);
   console.log(cartProducts)
   
 
-  
+  console.log(products)
   
   
   
@@ -174,6 +175,23 @@ const ProductProvider = ({ children }) => {
       : "[]"
   );
 
+ const fetchProductsByCategory = async (category) => {
+   try {
+     // Assuming you have an API endpoint for fetching products by category
+     const response = await fetch(
+       `https://fakestoreapi.com/products/category/${category}`
+     );
+     const data = await response.json();
+
+     // Update the products state with the fetched data
+     setCategory(data);
+     router.push(`/store/category/${category}`)
+   } catch (error) {
+     console.error("Error fetching products:", error);
+   }
+ };
+
+
   useEffect(() => {
     if (storedProducts.length > 0) {
       setProducts(storedProducts);
@@ -224,7 +242,9 @@ const ProductProvider = ({ children }) => {
         screen,
         handleUser,
         clickState,
-        updateProduct
+        updateProduct,
+        fetchProductsByCategory,
+        category
        
       }}
     >
