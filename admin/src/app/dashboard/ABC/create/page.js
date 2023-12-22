@@ -87,7 +87,7 @@ function page() {
                       <path
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeWidth="2"
                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                       />
                     </svg>
@@ -115,20 +115,23 @@ function page() {
               </div>
             </div>
             <div className="border rounded h-80 w-full flex items-center shadow-lg justify-center">
-                <div>
-                <Image src="/upload.jpg"
-                height={280}
-                width={280}
-                alt="upload"
+              <div>
+                <Image
+                  src="/upload.jpg"
+                  height={280}
+                  width={280}
+                  alt="upload"
                 />
                 <p className="border text-center text-base ">
-                    {full ? (
-                        <span className="text-green-500">Image Uploaded</span>
-                    ) : (
-                        <span className="text-blue-500 cursor-pointer">Click here to select image</span>
-                    )}
+                  {full ? (
+                    <span className="text-green-500">Image Uploaded</span>
+                  ) : (
+                    <span className="text-blue-500 cursor-pointer">
+                      Click here to select image
+                    </span>
+                  )}
                 </p>
-                </div>
+              </div>
             </div>
             <p className="text-sm text-gray-300">
               <span>File type: doc,pdf,types of images</span>

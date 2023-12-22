@@ -1,17 +1,17 @@
-'use client'
-import React from 'react'
-import SearchMobile from '@/components/Banner/SearchMobile'
-import { UseProductProvider } from '../../../contexts/ProductProvider'
-import { useRouter } from 'next/navigation'
+"use client";
+import React from "react";
+import SearchMobile from "@/components/Banner/SearchMobile";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { useRouter } from "next/navigation";
 
 const page = () => {
-  const router = useRouter()
+  const router = useRouter();
   const { searchResults, setSearchResults } = UseProductProvider();
   const hasSearchResults = searchResults && searchResults.length > 0;
   const handleRoute = () => {
-    router.push('/searchResults')
-    setSearchResults(searchResults)
-  }
+    router.push("/searchResults");
+    setSearchResults(searchResults);
+  };
   return (
     <>
       <SearchMobile />
@@ -33,8 +33,8 @@ const page = () => {
               <path
                 stroke="currentColor"
                 stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
               />
             </svg>
@@ -44,6 +44,6 @@ const page = () => {
       </div>
     </>
   );
-}
+};
 
-export default page
+export default page;

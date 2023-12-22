@@ -5,34 +5,32 @@ import AllResults from "./AllResults";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useRouter } from "next/navigation";
 
-
 const SearchBar = () => {
   const [isFocused, setIsFocused] = useState(false);
-  const { searchProducts, setSearchResults, searchResults } = UseProductProvider();
+  const { searchProducts, setSearchResults, searchResults } =
+    UseProductProvider();
   const modalRef = useRef(null);
-  
-   const router = useRouter();
+
+  const router = useRouter();
 
   const handleFocus = () => {
-    setIsFocused( prev => !prev);
+    setIsFocused((prev) => !prev);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
   };
- 
-  const [isDropdown, setIsDropdown] = useState(false)
+
+  const [isDropdown, setIsDropdown] = useState(false);
   const handleDropdown = () => {
-      setIsDropdown(prev => !prev)
-  } 
-  
+    setIsDropdown((prev) => !prev);
+  };
+
   const handleModalRef = () => {
-    modalRef.current.style.display = "none"
-    handleDropdown()
-  }  
+    modalRef.current.style.display = "none";
+    handleDropdown();
+  };
   const hasSearchResults = searchResults && searchResults.length > 0;
-  
-  
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -47,9 +45,9 @@ const SearchBar = () => {
   return (
     <>
       <form
-        className={`${
-          isFocused ? "z-20" : "z-10"
-        }  ${isDropdown && 'z-[1000]'} hidden sm:block transition-all duration-300 relative`}
+        className={`${isFocused ? "z-20" : "z-10"}  ${
+          isDropdown && "z-[1000]"
+        } hidden sm:block transition-all duration-300 relative`}
       >
         <div className="flex relative h-full">
           <label
@@ -79,8 +77,8 @@ const SearchBar = () => {
               <path
                 stroke="currentColor"
                 stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 1 4 4 4-4"
               />
             </svg>
@@ -154,8 +152,8 @@ const SearchBar = () => {
                 <path
                   stroke="white"
                   stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                 />
               </svg>
@@ -166,25 +164,23 @@ const SearchBar = () => {
           <AllResults
             searchResults={searchResults}
             setSearchResults={setSearchResults}
-          
           />
         )}
       </form>
 
-      {isFocused &&  (
+      {isFocused && (
         <div
           className="fixed inset-0 z-10 bg-black bg-opacity-30"
           onClick={handleModalRef}
         ></div>
       )}
-      {isDropdown &&  (
+      {isDropdown && (
         <div
           className="fixed inset-0 z-10 bg-black bg-opacity-30"
           ref={modalRef}
           onClick={handleModalRef}
         ></div>
       )}
-      
     </>
   );
 };

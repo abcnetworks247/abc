@@ -98,7 +98,7 @@ export default function Sidebar() {
                     <ShoppingBagIcon className="h-5 w-5 text-[#FFFFFF]" />
                   </ListItemPrefix>
                   <Typography
-                    color="#FFFFFF"
+                    color="white"
                     className="mr-auto font-normal text-[#FFFFFF]"
                   >
                     E-Commerce
@@ -135,7 +135,7 @@ export default function Sidebar() {
                 </List>
               </AccordionBody>
             </Accordion>
-            <li>
+            <li>j
               <Link
                 href="/dashboard/filemanager"
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
@@ -146,11 +146,11 @@ export default function Sidebar() {
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-[18px] h-[18px] mr-4"
                 >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                   <g
                     id="SVGRepo_tracerCarrier"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   ></g>
                   <g id="SVGRepo_iconCarrier">
                     {" "}
@@ -158,24 +158,22 @@ export default function Sidebar() {
                       opacity="0.5"
                       d="M18 10L13 10"
                       stroke="#ffffff"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
                     ></path>{" "}
                     <path
                       opacity="0.5"
                       d="M10 3H16.5C16.9644 3 17.1966 3 17.3916 3.02567C18.7378 3.2029 19.7971 4.26222 19.9743 5.60842C20 5.80337 20 6.03558 20 6.5"
                       stroke="#ffffff"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                     ></path>{" "}
                     <path
                       d="M2 6.94975C2 6.06722 2 5.62595 2.06935 5.25839C2.37464 3.64031 3.64031 2.37464 5.25839 2.06935C5.62595 2 6.06722 2 6.94975 2C7.33642 2 7.52976 2 7.71557 2.01738C8.51665 2.09229 9.27652 2.40704 9.89594 2.92051C10.0396 3.03961 10.1763 3.17633 10.4497 3.44975L11 4C11.8158 4.81578 12.2237 5.22367 12.7121 5.49543C12.9804 5.64471 13.2651 5.7626 13.5604 5.84678C14.0979 6 14.6747 6 15.8284 6H16.2021C18.8345 6 20.1506 6 21.0062 6.76946C21.0849 6.84024 21.1598 6.91514 21.2305 6.99383C22 7.84935 22 9.16554 22 11.7979V14C22 17.7712 22 19.6569 20.8284 20.8284C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.8284C2 19.6569 2 17.7712 2 14V6.94975Z"
                       stroke="#ffffff"
-                      stroke-width="1.5"
+                      strokeWidth="1.5"
                     ></path>{" "}
                   </g>
                 </svg>
-
-                
 
                 <span>File Manager</span>
               </Link>
@@ -195,7 +193,7 @@ export default function Sidebar() {
                   <path
                     fill-rule="evenodd"
                     d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                   <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
                 </svg>
@@ -245,7 +243,7 @@ export default function Sidebar() {
                     <ShoppingBagIcon className="h-5 w-5 text-[#FFFFFF]" />
                   </ListItemPrefix>
                   <Typography
-                    color="#FFFFFF"
+                    color="white"
                     className="mr-auto font-normal text-[#FFFFFF]"
                   >
                     ABC News
@@ -290,7 +288,7 @@ export default function Sidebar() {
                   <path
                     fill-rule="evenodd"
                     d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
 

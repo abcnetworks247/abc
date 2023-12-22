@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const Usercard = () => {
   return (
@@ -12,11 +12,11 @@ const Usercard = () => {
               width="42"
               height="42"
               viewBox="0 0 24 24"
-              stroke-width="1.3"
+              strokeWidth="1.3"
               stroke="currentColor"
               fill="none"
               stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinejoin="round"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <line x1="12" y1="12" x2="12" y2="12.01"></line>
@@ -33,11 +33,11 @@ const Usercard = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-6"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   fill="none"
                   stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinejoin="round"
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                   <line x1="17" y1="7" x2="7" y2="17"></line>
@@ -56,11 +56,11 @@ const Usercard = () => {
               width="28"
               height="28"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke=""
               fill="none"
               stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinejoin="round"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill=""></path>
               <path
@@ -76,11 +76,11 @@ const Usercard = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   className="w-6"
                   viewBox="0 0 24 24"
-                  stroke-width="1.5"
+                  strokeWidth="1.5"
                   stroke="currentColor"
                   fill="none"
                   stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinejoin="round"
                 >
                   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                   <line x1="7" y1="7" x2="17" y2="17"></line>
@@ -94,6 +94,6 @@ const Usercard = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Usercard
+export default Usercard;

@@ -1,10 +1,9 @@
-"use client"
-import React from 'react'
-import { UseProductProvider } from '../../../../contexts/ProductProvider';
-import Ordered from '../components/Ordered'
-import { usePathname } from 'next/navigation';
-import { useMediaQuery } from 'react-responsive';
-
+"use client";
+import React from "react";
+import { UseProductProvider } from "../../../../contexts/ProductProvider";
+import Ordered from "../components/Ordered";
+import { usePathname } from "next/navigation";
+import { useMediaQuery } from "react-responsive";
 
 const page = () => {
   const pathname = usePathname();
@@ -17,10 +16,8 @@ const page = () => {
     userModal,
     desktopState,
     screen,
-    handleUser
-
+    handleUser,
   } = UseProductProvider();
-  
 
   return (
     <>
@@ -62,11 +59,11 @@ const page = () => {
                   fill="#737373"
                   stroke="#737373"
                 >
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                   <g
                     id="SVGRepo_tracerCarrier"
                     stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeLinejoin="round"
                   ></g>
                   <g id="SVGRepo_iconCarrier">
                     <path
@@ -92,4 +89,4 @@ const page = () => {
   );
 };
 
-export default page
+export default page;
