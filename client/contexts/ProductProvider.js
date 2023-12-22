@@ -3,9 +3,10 @@ import React from "react";
 import { ProductContext } from "./productContext";
 import { useEffect, useState, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
+import { useRouter } from "next/navigation";
 
 const ProductProvider = ({ children }) => {
-
+  const router = useRouter()
   const [products, setProducts] = useState([]);
   const [hasFetchedData, setHasFetchedData] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,13 +19,12 @@ const ProductProvider = ({ children }) => {
     query: "(min-width: 600px)",
   });
    const [clickState, setClickState] = useState(false);
- 
-
- 
   const [screen, setScreen] = useState(!isTabletOrMobile)
   
+
   
-  console.log(screen)
+  
+  
   
   
   const handleUser = () => {
@@ -42,10 +42,11 @@ const ProductProvider = ({ children }) => {
 
   const [rating] = useState(Math.floor(Math.random() * (5 - 1 + 1)) + 1);
 
-  const handleLinkClick=()=> setUserNav(!isTabletOrMobile)
+  const handleLinkClick = () => setUserNav(!isTabletOrMobile)
+  
   const handleProductClick = (product) => {
     setSelectedProduct(product);
-    openModal();
+    router.push(`/store/${product.id}}`)
   };
 
   const addToWishlist = (product) => {
@@ -213,8 +214,8 @@ const ProductProvider = ({ children }) => {
         isTabletOrMobile,
         screen,
         handleUser,
-        clickState
-        
+        clickState,
+       
       }}
     >
       {children}
