@@ -6,30 +6,37 @@ import { UseProductProvider} from "../../../contexts/ProductProvider";
 
 const CartItem = ({ product, updatePriceArray }) => {
   
-  const { handleRemoveFromCart} =
-    UseProductProvider();
-  console.log(product);
-   const [quantity, setQuantity]= useState(1)
+  const { handleRemoveFromCart, cartProducts, updateProduct} =UseProductProvider();
+  
+  const [quantity, setQuantity] = useState(product.quantity)
+  console.log(quantity)
 
   const reduceItem = () => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+      const decreasevalue = product.quantity = quantity - 1
+      console.log('decrease value', decreasevalue);
+      console.log("decrease  cartProducts", cartProducts);
+      setQuantity(decreasevalue);
+      const updatedProduct = { ...product, quantity: decreasevalue };
+      updateProduct(updatedProduct);
+      }
+   
   };
 
   const increaseItem = () => {
-    setQuantity(quantity + 1);
+    const value = product.quantity = quantity + 1;
+    console.log('increased value', value);
+    console.log('increased cartProduct', cartProducts);
+    setQuantity(value);
+    const updatedProduct = { ...product, quantity: value };
+    updateProduct(updatedProduct);
+   
   };
 
 
   const calculateSubtotal = () => {
     return quantity * product.price;
   };
-
-  useEffect(() => {
-    const subtotal = calculateSubtotal();
-    updatePriceArray(subtotal);
-  }, [quantity]);
 
 
 
@@ -72,7 +79,7 @@ const CartItem = ({ product, updatePriceArray }) => {
           </span>
 
           <span className="h-8 w-8 border flex items-center justify-center bg-white text-center text-xs outline-none">
-            {quantity}
+            {product.quantity}
           </span>
           <span
             className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
