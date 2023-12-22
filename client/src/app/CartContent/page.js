@@ -25,6 +25,7 @@ const page = () => {
   )
   console.log(totalPrice)
  
+  const grandTotal = totalPrice + shippingFee
   
   
  
@@ -129,7 +130,7 @@ const page = () => {
                     <p className="text-lg font-bold">Total</p>
                     <div className="" Name>
                       <p className="mb-1 text-lg font-bold">
-                        $ 900
+                        ${grandTotal.toFixed(2)}
                       </p>
                       <p className="text-sm text-gray-700">including VAT</p>
                     </div>

@@ -51,7 +51,7 @@ const CartItem = ({ product, updatePriceArray }) => {
               <img
                 src={product.image}
                 alt=""
-                className="object-cover w-full h-full"
+                className="object-contain w-full h-full"
               />
             </div>
           </div>
