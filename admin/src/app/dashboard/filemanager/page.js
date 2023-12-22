@@ -3,7 +3,7 @@
 import React from "react";
 import { Button, Checkbox, Option, Select } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import FileComp from "@/components/filemanager/FileComp";
+import FileComp from "@/components/filemanager/fileComp";
 import UploadComp from "@/components/filemanager/UploadComp";
 
 const Page = () => {
