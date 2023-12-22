@@ -1,11 +1,20 @@
 "use client"
 import { Button } from "@material-tailwind/react"
 
+import { useState } from 'react';
+import Editor from 'react-simple-wysiwyg';
+
+
 export default function page() {
+  const [html, setHtml] = useState('my <b>HTML</b>');
   const inputStyles = {
+
     textDecoration: 'line-through',
     color: 'gray', // Adjust the color as needed
   };
+  function onChange(e) {
+    setHtml(e.target.value);
+  }
   return (
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
@@ -126,15 +135,7 @@ export default function page() {
             >
               Product Details
             </label>
-            <textarea
-              id="product-details"
-              rows={6}
-              className="block p-4 w-full text-gray-900 border border-gray-300 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300"
-              placeholder="e.g. 3.8GHz 8-core 10th-generation Intel Core i7 processor, Turbo Boost up to 5.0GHz, Ram 16 GB DDR4 2300Mhz"
-              data-gramm="false"
-              wt-ignore-input="true"
-              defaultValue={""}
-            />
+            <Editor value={html} onChange={onChange} />
           </div>
         </div>
         <div className="mt-3">
