@@ -25,6 +25,8 @@ export default function Page() {
     password: "",
   });
 
+
+
   const [universalError, setUniversalError] = useState("");
 
   // Define initial validation state
@@ -35,6 +37,8 @@ export default function Page() {
     fullname: "",
     password: "",
   });
+
+
 
   function signUpValidate(fieldName, regex, value, errorMessage) {
     if (!regex.test(value)) {
@@ -54,6 +58,14 @@ export default function Page() {
       setUniversalError("");
     }
   }
+
+        // Define Variable for allfield valid
+
+        const allFieldsValid = Object.keys(errorMessages).every(
+          (field) => !errorMessages[field]
+        );
+        
+  
   /**
    * Handle change in form input
    * @param {object} e - the event object
@@ -73,11 +85,7 @@ export default function Page() {
    * @param {Function} e.preventDefault - prevent default forms submission behaviour
    */
 
-  // Define Variable for allfield valid
 
-  const allFieldsValid = Object.keys(errorMessages).every(
-    (field) => !errorMessages[field]
-  );
   
   const [data, setdata] = useState([]);
   console.log("data", data);
@@ -169,20 +177,20 @@ export default function Page() {
         pauseOnHover
         theme="light"
       />
-      <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
-        <div className="w-full  lg:w-1/2 xl:w-5/12 p-6  lg:flex-none flex items-center flex-col justify-center h-screen sm:p-12">
+      <div className="flex justify-center flex-1 h-screen max-w-screen-xl sm:rounded-lg">
+        <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
-              <h1 className="text-2xl xl:text-4xl font-extrabold text-blue-900 mb-2">
+              <h1 className="mb-2 text-2xl font-extrabold text-blue-900 xl:text-4xl">
                 Login
               </h1>
               <p className="text-[12px] text-gray-500">
                 Hey enter your details to create your account
               </p>
             </div>
-            <div className="w-full flex-1 mt-8">
+            <div className="flex-1 w-full mt-8">
               <form
-                className="mx-auto max-w-xs flex flex-col gap-4"
+                className="flex flex-col max-w-xs gap-4 mx-auto"
                 onSubmit={HandleSubmit}
               >
                 <input
@@ -238,7 +246,7 @@ export default function Page() {
                   </span>
                 )}
 
-                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                <button className="flex items-center justify-center w-full py-4 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-900 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none">
                   <svg
                     className="w-6 h-6 -ml-2"
                     fill="none"
@@ -253,18 +261,18 @@ export default function Page() {
                   </svg>
                   <span className="ml-3">Login</span>
                 </button>
-                <div className="flex items-center gap-3 justify-between">
-                  <p className="mt-6 text-sm text-gray-600 text-center">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="mt-6 text-sm text-center text-gray-600">
                     New?{" "}
                     <Link href="/signup">
-                      <span className="text-blue-900 font-semibold">
+                      <span className="font-semibold text-blue-900">
                         Register
                       </span>
                     </Link>
                   </p>
-                  <p className="mt-6 text-xs text-gray-600 text-center">
+                  <p className="mt-6 text-xs text-center text-gray-600">
                     <Link href="/recovery">
-                      <span className="text-blue-900 font-semibold">
+                      <span className="font-semibold text-blue-900">
                         Forgot Password?
                       </span>
                     </Link>
@@ -274,9 +282,9 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="flex-1 bg-blue-900 text-center hidden md:flex">
+        <div className="flex-1 hidden text-center bg-blue-900 md:flex">
           <div
-            className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat "
+            className="w-full m-12 bg-center bg-no-repeat bg-contain xl:m-16 "
             style={{
               backgroundImage: `url(https://www.tailwindtap.com/assets/common/marketing.svg)`,
             }}
