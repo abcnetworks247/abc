@@ -1,5 +1,6 @@
-"use client"
+'use client'
 import { createContext, useContext, useState } from "react";
+
 /**
  * creating context to for filemanger
  */

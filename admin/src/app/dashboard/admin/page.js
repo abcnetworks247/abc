@@ -1,5 +1,6 @@
 "use client"
-import { AddMember } from "@/components/User/AddUser";
+import { AddAdminMeMber } from "@/components/AdminMemeber/AddAdminMember";
+import { UseFileManager } from "@/context/FileManagerProvidert";
 import {
     MagnifyingGlassIcon,
     ChevronUpDownIcon,
@@ -38,7 +39,7 @@ import { useState } from "react";
     },
   ];
    
-  const TABLE_HEAD = ["Member", "Function", "Status", "Employed", ""];
+  const TABLE_HEAD = ["Member", "Function", "Roles", "Employed", ""];
    
   const TABLE_ROWS = [
     {
@@ -99,7 +100,7 @@ import { useState } from "react";
           <div className="mb-8 flex items-center justify-between gap-8">
             <div>
               <Typography variant="h5" color="blue-gray">
-                Members list
+                Admin list
               </Typography>
               <Typography color="gray" className="mt-1 font-normal">
                 See information about all members
@@ -110,7 +111,7 @@ import { useState } from "react";
                 view all
               </Button>
               <Button className="flex items-center gap-3" size="sm" onClick={handleOpen}>
-                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add user
+                <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Admin
               </Button>
             </div>
           </div>
@@ -249,7 +250,7 @@ import { useState } from "react";
               Next
             </Button>
           </div>
-          <AddMember open={open} handleOpen={handleOpen}/>
+          <AddAdminMeMber open={open} handleOpen={handleOpen} />
         </CardFooter>
       </Card>
     );
