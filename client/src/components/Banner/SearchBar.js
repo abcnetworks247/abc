@@ -6,6 +6,7 @@ import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
+  const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const {
     searchProducts,
@@ -20,7 +21,7 @@ const SearchBar = () => {
     handleDropdown()
   }
   
-  const router = useRouter();
+ 
 
   const handleFocus = () => {
     setIsFocused((prev) => !prev);
@@ -101,7 +102,9 @@ const SearchBar = () => {
                 >
                   <li>
                     <button
-                      onClick={() => fetchProductsByCategory("men's clothing")}
+                      onClick={() =>
+                        router.push(`/store/category/${"men's clothing"}`)
+                      }
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
@@ -110,7 +113,9 @@ const SearchBar = () => {
                   </li>
                   <li>
                     <button
-                      onClick={() => fetchProductsByCategory("jewelery")}
+                      onClick={() =>
+                        router.push(`/store/category/${"jewelery"}`)
+                      }
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
@@ -119,7 +124,9 @@ const SearchBar = () => {
                   </li>
                   <li>
                     <button
-                      onClick={() => fetchProductsByCategory("electronics")}
+                      onClick={() =>
+                        router.push(`/store/category/${"electronics"}`)
+                      }
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
@@ -129,8 +136,11 @@ const SearchBar = () => {
                   <li>
                     <button
                       onClick={() =>
-                        fetchProductsByCategory("women's clothing")
+                        router.push(
+                          `/store/category/${"women's clothing"}`
+                        )
                       }
+                    
                       type="button"
                       className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >

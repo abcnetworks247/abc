@@ -4,13 +4,34 @@ import { UseProductProvider } from '../../../../../contexts/ProductProvider'
 import { useParams } from 'next/navigation'
 import SingleArrival from '@/components/NewArrival/SingleArrival'
 import Navbar from '@/components/navbar/Navbar'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import FooterComp from '@/components/Footer/FooterComp'
 
 
 const page = () => {
     const params = useParams()
-    const { category } = UseProductProvider()
+    const [category, setCategory] = useState([])
+
+
+
+    useEffect(() => {
+         const fetchProductsByCategory = async () => {
+        try {
+            // Assuming you have an API endpoint for fetching products by category
+            const response = await fetch(
+            `https://fakestoreapi.com/products/category/${params.slug}`
+            );
+            const data = await response.json();
+
+            // Update the products state with the fetched data
+            setCategory(data);
+            router.push(`/store/category/${category}`);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    };
+        fetchProductsByCategory()
+    }, [])
     
     return (
       <>
