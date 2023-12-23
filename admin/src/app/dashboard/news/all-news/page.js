@@ -8,7 +8,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
-  const pathUrl = "/dashboard/abc/all-news";
+  const pathUrl = "/dashboard/news/all-news";
 
   useEffect(() => {
     axios
@@ -69,18 +69,18 @@ const Page = () => {
         <article class="rounded-xl border border-gray-100 m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
           <div class="lg:flex md:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
             <div
-              className=" rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full "
+              className="rounded  lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
               aria-hidden="true"
             >
               {/* random image from unsplash*/}
               <img
                 src={item.blogimage}
                 alt="random image from unsplash"
-                className=" object-cover rounded w-full h-full lg:mb-0 md:flex md:mb-0 mb-2"
+                className="object-cover w-full h-full mb-2 rounded  lg:mb-0 md:flex md:mb-0"
               />
             </div>
 
-            <div className="sm:space-y-1 flex gap-2 flex-col">
+            <div className="flex flex-col gap-2 sm:space-y-1">
                 <span>
                     <strong class="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
                 Episode #101
@@ -152,18 +152,18 @@ const Page = () => {
         <article class="rounded-xl m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
           <div class="lg:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
             <div
-              className=" rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full "
+              className="rounded  lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
               aria-hidden="true"
             >
               {/* random image from unsplash*/}
               <img
                 src={item.blogimage}
                 alt="random image from unsplash"
-                className=" object-cover rounded w-full h-full lg:mb-0 md:flex md:mb-0 mb-2"
+                className="object-cover w-full h-full mb-2 rounded  lg:mb-0 md:flex md:mb-0"
               />
             </div>
 
-            <div className="sm:space-y-1 flex gap-2 flex-col">
+            <div className="flex flex-col gap-2 sm:space-y-1">
                 <span>
                     <strong class="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
                 Episode #101
