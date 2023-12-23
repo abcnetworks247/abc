@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import { AdminProvider } from "@/context/AdminContext";
 import { FileManagerProvider } from "@/context/FileManagerProvidert";
 import { Provider } from "@/utils/Provider";
 const inter = Inter({ subsets: ["latin"] });
@@ -14,12 +14,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-         <Provider>
-
         <FileManagerProvider>
-          {children}
-          </FileManagerProvider>
-         </Provider>
+          <Provider>
+            <AdminProvider>{children}</AdminProvider>
+          </Provider>
+        </FileManagerProvider>
       </body>
     </html>
   );

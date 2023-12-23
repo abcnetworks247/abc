@@ -1,5 +1,6 @@
 "use client";
 import { AddMember } from "@/components/User/AddUser";
+import { useQuery } from "react-query";
 import Api from "@/utils/Api";
 import {
   MagnifyingGlassIcon,
@@ -125,7 +126,10 @@ console.log('authToken', authToken);
    useEffect(()=>{
     HanldeFetUser()
    },[])
+
+
   return (
+
     <Card className="h-full w-full px-3">
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-8 flex items-center justify-between gap-8">
