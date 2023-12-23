@@ -130,10 +130,10 @@ export default function Page(){
 
 
             <div className="w-2/5 h-full hidden lg:block">
-        <img
+        {/* <img
           src="/img/pattern.png"
           className="h-full w-full object-cover rounded-3xl"
-        />
+        /> */}
       </div>
       <div className="w-full lg:w-3/5 flex flex-col items-center justify-center">
         <div className="text-center">
@@ -189,12 +189,7 @@ export default function Page(){
           id="remember" />
         <span
           className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
-            stroke="currentColor" strokeWidth="1">
-            <path fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"></path>
-          </svg>
+  
         </span>
       </label>
       <label className="mt-px font-light text-gray-700 cursor-pointer select-none" htmlFor="remember">
