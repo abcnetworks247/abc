@@ -10,7 +10,7 @@ import axios from "axios";
 import Api from "@/utils/Api";
 
 const page = () => {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({});
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -24,7 +24,7 @@ const page = () => {
   }, []);
 
   useEffect(() => {
-    setUserData(UserData);
+    setUserData(UserData && UserData);
   }, [UserData]);
 
   // console.log("userdashboard", UserData && UserData);
