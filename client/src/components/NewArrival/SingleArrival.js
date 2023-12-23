@@ -28,7 +28,7 @@ const SingleArrival = ({ product }) => {
       onClick={() => handleProductClick(product)}
       onMouseEnter={() => setHoverState(true)}
     >
-      <div className="relative  py-6 group shadow-md">
+      <div className="relative  py-6 group ">
         <div className="relative flex items-center shadow-sm justify-center w-full h-64 mb-4  -mt-56 overflow-hidden rounded -top-full bg-white ">
           <img
             className="object-contain w-[70%] h-full transition-all group-hover:scale-110 bg-transparent"
