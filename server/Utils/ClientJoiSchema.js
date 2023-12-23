@@ -6,6 +6,8 @@ const Clientjoi = joi.object({
   email: joi.string().email().required(),
   userdp: joi.string(),
   userbio: joi.string(),
+  phonenumber: joi.number(),
+  shippingaddress: joi.string(),
   password: joi.string().required(),
   package: joi.string(),
   cart: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),

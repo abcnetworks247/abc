@@ -30,7 +30,7 @@ router.route("/signin").post(signIn);
 router.route("/recovery").post(userRecovery);
 router.route("/account/signout").delete(authChecker, userSignOut);
 
-router.route("/user/:id").get(singleUser);
+router.route("/user/:id").get( authChecker, singleUser);
 
 router.route("/account/updatepassword/:token").get(userVerifyPasswordReset);
 router.route("/account/updatepassword").post(userUpdatePassword);

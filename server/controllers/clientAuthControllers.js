@@ -1,4 +1,5 @@
 const Client = require("../models/clientAuthSchema");
+const Admin = require("../models/adminAuthSchema");
 const Blog = require("../models/blogSchema");
 const { StatusCodes } = require("http-status-codes");
 require("dotenv").config();
@@ -236,7 +237,7 @@ const userUpdatePassword = async (req, res) => {
 };
 
 const userUpdate = async (req, res) => {
-  const { fullname, email, userbio } = req.body;
+  const { fullname, email, userbio, phonenumber, shippingaddress } = req.body;
 
   try {
     if (!req.user) {
@@ -244,7 +245,13 @@ const userUpdate = async (req, res) => {
     }
 
     if (!req.file) {
-      const olduser = { fullname, email, userbio };
+      const olduser = {
+        fullname,
+        email,
+        userbio,
+        phonenumber,
+        shippingaddress,
+      };
 
       const mainuser = await Client.findByIdAndUpdate(
         String(req.user._id),
@@ -272,6 +279,8 @@ const userUpdate = async (req, res) => {
           fullname,
           email,
           userbio,
+          phonenumber,
+          shippingaddress,
           userdp: userphoto.secure_url,
         };
 
