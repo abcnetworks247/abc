@@ -148,7 +148,11 @@ const ProductProvider = ({ children }) => {
     );
 
     setCartProducts(updatedCart);
-    updateProduct(updatedCart); // Update local storage with the modified cart
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+    }
+  
+    
   } else {
     // If the item is not in the cart, add it
     addToCart(e, product);
