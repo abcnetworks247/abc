@@ -1,7 +1,6 @@
 "use client";
 
-import BarChart from "@/components/ApexChart/BarChart";
-import FlowChart from "@/components/ApexChart/FlowChart";
+// Fix the casing here
 import { MembersTable } from "@/components/Dashboard/MembersTable";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
@@ -77,10 +76,10 @@ export default function Page() {
         </div>
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
           <div className="">
-            <FlowChart />
+           hi
           </div>
           <div className="">
-            <BarChart />
+            hi
           </div>
         </div>
         <div className="">
