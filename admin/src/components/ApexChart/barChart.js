@@ -5,10 +5,10 @@ import {
     Typography,
   } from "@material-tailwind/react";
   import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
-   
+  import Chart from "react-apexcharts"
   // If you're using Next.js please use the dynamic import for react-apexcharts and remove the import from the top for the react-apexcharts
-  import dynamic from "next/dynamic";
-  const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+  // import dynamic from "next/dynamic";
+  // const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
    
   const chartConfig = {
     type: "bar",
