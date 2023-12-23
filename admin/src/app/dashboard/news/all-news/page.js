@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const Page = () => {
@@ -9,6 +10,8 @@ const Page = () => {
   const [error, setError] = useState(false);
   const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
   const pathUrl = "/dashboard/news/all-news";
+  const editUrl = "/dashboard/news/edit";
+  const router = useRouter();
 
   useEffect(() => {
     axios
@@ -73,29 +76,31 @@ const Page = () => {
               aria-hidden="true"
             >
               {/* random image from unsplash*/}
+              <Link href={`${pathUrl}/${item._id}`}>
               <img
                 src={item.blogimage}
                 alt="random image from unsplash"
                 className="object-cover w-full h-full mb-2 rounded  lg:mb-0 md:flex md:mb-0"
               />
+              </Link>
             </div>
 
             <div className="flex flex-col gap-2 sm:space-y-1">
                 <span>
-                    <strong class="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
-                Episode #101
-              </strong>
-              <strong class="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white">
-                Episode #101
-              </strong>
+                    <button onClick={() => {router.push(`${editUrl}/${item._id}`)}} class="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
+                Edit
+              </button>
+              <button class="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white">
+                Delete
+              </button>
 
                 </span>
               
               <h3 class="mt-4 text-lg font-medium sm:text-xl">
-                <a href="" class="hover:underline">
+                <Link href={`${pathUrl}/${item._id}`} className="hover:underline">
                   {" "}
                   {item.title}{" "}
-                </a>
+                </Link>
               </h3>
 
               <p class="mt-1 text-sm text-gray-700">
