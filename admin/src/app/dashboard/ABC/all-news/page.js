@@ -10,7 +10,7 @@ const Page = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
-    const pathUrl = "/dashboard/ABC/all-news";
+    const pathUrl = "/dashboard/abc/all-news";
 
     useEffect(() => {
         axios
@@ -29,11 +29,9 @@ const Page = () => {
     if (error === true) {
         return (
             // create a professinal error page
-            <div className="flex justify-center items-center h-96 flex-col gap-3">
+            <div className="flex flex-col items-center justify-center gap-3 h-96">
                 <h1 className="text-3xl font-bold">Something went wrong</h1>
-                <p className="
-                    text-xl font-semibold text-gray-500 
-                ">
+                <p className="text-xl font-semibold text-gray-500 ">
                     Please check your internet connection and try again
                 </p>
                 {/* internet error svg */}
@@ -47,9 +45,9 @@ const Page = () => {
         <br />
         {
             loading ? (
-                <div className="flex justify-center items-center h-96">
+                <div className="flex items-center justify-center h-96">
                     <svg
-                        className="animate-spin -ml-1 mr-3 h-20 w-20 text-blue-500"
+                        className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24">
@@ -71,25 +69,25 @@ const Page = () => {
             ) : (
                 <div className="flex flex-col gap-4">
                     {news.map((item) => (
-                        <div className="lg:h-44 flex lg:flex-row flex-col w-full rounded shadow-sm p-2 items-center justify-between lg:my-4 my-3">
+                        <div className="flex flex-col items-center justify-between w-full p-2 my-3 rounded shadow-sm lg:h-44 lg:flex-row lg:my-4">
                             <Link href={`${pathUrl}/${item._id}`}>
-                            <div className=" rounded lg:w-80 w-full lg:h-36 h-40 ">
+                            <div className="w-full h-40 rounded  lg:w-80 lg:h-36">
                                 <img
                                     src={item.blogimage}
                                     alt={item.title}
-                                    className="w-full h-full object-cover rounded"
+                                    className="object-cover w-full h-full rounded"
                                 />
                             </div>
                             </Link>
-                            <div className="h-36 px-3">
+                            <div className="px-3 h-36">
                             <Link href={`${pathUrl}/${item._id}`}>
                                 <h1 className="text-xl font-bold">{item.title}</h1>
                             </Link>
-                                <br  /><br className="lg:block hidden"/>
+                                <br  /><br className="hidden lg:block"/>
                                 <p className="text-sm">{item.shortdescription}</p>
                             </div>
-                            <div className="flex gap-3 lg:w-auto lg:justify-normal justify-end w-full">
-                                <button className="bg-blue-500 hover:bg-blue-700 text-white lg:font-bold font-semibold lg:py-2 py-1 lg:px-3 px-1 rounded flex flex-row items-center">
+                            <div className="flex justify-end w-full gap-3 lg:w-auto lg:justify-normal">
+                                <button className="flex flex-row items-center px-1 py-1 font-semibold text-white bg-blue-500 rounded hover:bg-blue-700 lg:font-bold lg:py-2 lg:px-3">
                                     {/* pen svg */}
                                     <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path
@@ -100,7 +98,7 @@ const Page = () => {
                                     </svg>
                                      Edit
                                 </button>
-                                <button className="bg-red-500 hover:bg-red-700 text-white lg:font-bold font-semibold lg:py-2 py-1 lg:px-3 px-1 rounded">
+                                <button className="px-1 py-1 font-semibold text-white bg-red-500 rounded hover:bg-red-700 lg:font-bold lg:py-2 lg:px-3">
                                     Delete
                                 </button>
                             </div>

@@ -83,5 +83,7 @@ app.use("/api/v1/client/auth", clientRouter);
 app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/", productRouter);
 
+
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));

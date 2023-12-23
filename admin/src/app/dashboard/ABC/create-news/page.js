@@ -48,8 +48,8 @@ function page() {
   };
   return (
     <div>
-      <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 ">
-        <div className="sm:max-w-lg w-full p-10 bg-white rounded-xl z-10">
+      <div className="relative flex items-center justify-center min-h-screen px-4 py-12 bg-gray-50 sm:px-6 lg:px-8 ">
+        <div className="z-10 w-full p-10 bg-white sm:max-w-lg rounded-xl">
           <div className="text-center">
             <h2 className="mt-5 text-3xl font-bold text-gray-900">
               Create a post!
@@ -60,17 +60,17 @@ function page() {
           </div>
           <form className="mt-8 space-y-3" action="#" method="POST">
             <div className="grid grid-cols-1 space-y-2">
-              <label className="text-sm font-bold text-gray-500 tracking-wide">
+              <label className="text-sm font-bold tracking-wide text-gray-500">
                 Title
               </label>
               <input
-                className="text-base p-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                className="p-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                 type=""
                 placeholder="mail@gmail.com"
               />
             </div>
             <div className="grid grid-cols-1 space-y-2">
-              <label className="text-sm font-bold text-gray-500 tracking-wide">
+              <label className="text-sm font-bold tracking-wide text-gray-500">
                 Short Description
               </label>
               <textarea
@@ -79,9 +79,9 @@ function page() {
                 cols="10"
                 rows="10"
                 placeholder=" News details"
-                className="text-base p-2 border h-20 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                className="h-20 p-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               ></textarea>
-              <label className="text-sm font-bold text-gray-500 tracking-wide">
+              <label className="text-sm font-bold tracking-wide text-gray-500">
                 Full Details
               </label>
               <EditorProvider>
@@ -100,13 +100,13 @@ function page() {
                 </Editor>
               </EditorProvider>
             </div>
-            <div className=" grid-cols-1 space-y-2 hidden">
-              <label className="text-sm font-bold text-gray-500 tracking-wide">
+            <div className="hidden grid-cols-1 space-y-2 ">
+              <label className="text-sm font-bold tracking-wide text-gray-500">
                 Attach Document
               </label>
               <div className="flex items-center justify-center w-full">
-                <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
-                  <div className="h-full w-full text-center flex flex-col justify-center items-center  ">
+                <label className="flex flex-col w-full p-10 text-center border-4 border-dashed rounded-lg h-60 group">
+                  <div className="flex flex-col items-center justify-center w-full h-full text-center ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
@@ -121,14 +121,14 @@ function page() {
                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                       />
                     </svg>
-                    <div className="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
+                    <div className="flex flex-auto w-2/5 mx-auto -mt-10 max-h-48">
                       <img
-                        className="has-mask h-36 object-center"
+                        className="object-center has-mask h-36"
                         src="https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
                         alt="freepik image"
                       />
                     </div>
-                    <p className="pointer-none text-gray-500 ">
+                    <p className="text-gray-500 pointer-none ">
                       <span className="text-sm">Drag and drop</span> files here{" "}
                       <br /> or{" "}
                       <a
@@ -144,7 +144,7 @@ function page() {
                 </label>
               </div>
             </div>
-            <div className="border rounded h-80 w-full flex items-center shadow-lg justify-center">
+            <div className="flex items-center justify-center w-full border rounded shadow-lg h-80">
               <div>
                 <Image
                   src="/upload.jpg"
@@ -152,7 +152,7 @@ function page() {
                   width={280}
                   alt="upload"
                 />
-                <p className="border text-center text-base ">
+                <p className="text-base text-center border ">
                   {full ? (
                     <span className="text-green-500">Image Uploaded</span>
                   ) : (
@@ -169,8 +169,7 @@ function page() {
             <div>
               <button
                 type="submit"
-                className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4  rounded-full tracking-wide
-                                    font-semibold  focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
+                className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
               >
                 Upload
               </button>
