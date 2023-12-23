@@ -25,22 +25,18 @@ export default function Page() {
     password: "",
   });
 
-
   const [universalError, setUniversalError] = useState("");
 
   // Define initial validation state
   const [isValidData, setIsValidData] = useState(true);
-  
-  
-   const [errorMessages, setErrorMessages] = useState({
-     email: "",
-     fullname: "",
-     password: "",
-   });
 
+  const [errorMessages, setErrorMessages] = useState({
+    email: "",
+    fullname: "",
+    password: "",
+  });
 
-
-   function signUpValidate(fieldName, regex, value, errorMessage) {
+  function signUpValidate(fieldName, regex, value, errorMessage) {
     if (!regex.test(value)) {
       setUniversalError("");
       setErrorMessages((prevErrors) => ({
@@ -77,17 +73,23 @@ export default function Page() {
    * @param {Function} e.preventDefault - prevent default forms submission behaviour
    */
 
+  // Define Variable for allfield valid
+
+  const allFieldsValid = Object.keys(errorMessages).every(
+    (field) => !errorMessages[field]
+  );
+  
   const [data, setdata] = useState([]);
   console.log("data", data);
   const HandleSubmit = async (e) => {
     e.preventDefault();
     setIsValidData(allFieldsValid);
 
-    if(!allFieldsValid){
+    if (!allFieldsValid) {
       toast.error("please fill in all the fields correctly", {
         position: toast.POSITION.TOP_LEFT,
       });
-      return
+      return;
     }
     const id = toast.loading("loging in..", {
       position: toast.POSITION.TOP_LEFT,
@@ -117,8 +119,6 @@ export default function Page() {
 
         setTimeout(() => {
           router.push("/");
-
-          
         }, 3000);
 
         setdata(value);
@@ -155,9 +155,6 @@ export default function Page() {
     }
   };
 
-
-  
-
   return (
     <div>
       <ToastContainer
@@ -189,7 +186,11 @@ export default function Page() {
                 onSubmit={HandleSubmit}
               >
                 <input
-                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.email && logInFormData.email &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
+                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${
+                    errorMessages.email &&
+                    logInFormData.email &&
+                    "border-red-500"
+                  } placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="email"
                   name="email"
                   placeholder="Enter your email"
@@ -206,10 +207,16 @@ export default function Page() {
                   value={logInFormData.email}
                 />
                 {errorMessages.email && logInFormData.email && (
-                  <span className="text-red-500 text-[13px]">{errorMessages.email}</span>
+                  <span className="text-red-500 text-[13px]">
+                    {errorMessages.email}
+                  </span>
                 )}
                 <input
-                   className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.password && logInFormData.password &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
+                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${
+                    errorMessages.password &&
+                    logInFormData.password &&
+                    "border-red-500"
+                  } placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="password"
                   name="password"
                   placeholder="Enter password"
@@ -226,7 +233,9 @@ export default function Page() {
                   value={logInFormData.password}
                 />
                 {errorMessages.password && logInFormData.password && (
-                  <span className="text-red-500 text-[13px]">{errorMessages.password}</span>
+                  <span className="text-red-500 text-[13px]">
+                    {errorMessages.password}
+                  </span>
                 )}
 
                 <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
