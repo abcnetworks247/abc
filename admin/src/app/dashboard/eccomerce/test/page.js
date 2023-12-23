@@ -10,7 +10,7 @@ const getRandomColor = () => {
   return color;
 };
 
-const UserImage = () => {
+const page = () => {
   const firstName = 'peace';
   const canvasRef = useRef(null);
   const [dataUrl, setDataUrl] = useState(null);
@@ -58,4 +58,4 @@ const UserImage = () => {
   return <img src={dataUrl} alt={`User: ${firstName}`} width={200} height={200} />;
 };
 
-export default UserImage;
+export default page;

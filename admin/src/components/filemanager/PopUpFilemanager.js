@@ -48,11 +48,16 @@ const PopUpFilemanager = ({ handleOpen, size }) => {
           size === "lg" ||
           size === "xl" ||
           size === "xxl"
+          
         }
+
+      
+        style={{ animation: 'none' }} 
+        key={Math.random()}
         size={size || "sm"}
         handler={handleOpen}
       >
-        <DialogBody className="px-6">
+        <DialogBody className="px-6"  >
           <Tabs value="select" className="h-[85vh]">
             <TabsHeader className="m-0 w-fit h-fit">
               {data.map(({ label, value, icon }) => (
