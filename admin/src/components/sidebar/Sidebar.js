@@ -15,6 +15,7 @@ import {
   Input,
 } from "@material-tailwind/react";
 import { MdAdminPanelSettings } from "react-icons/md";
+import { IoMdGlobe } from "react-icons/io";
 
 import {
   PresentationChartBarIcon,
@@ -109,7 +110,7 @@ export default function Sidebar() {
               <AccordionBody className="py-1">
                 <List className="p-0 text-[#FFFFFF] ">
                   <Link href="/dashboard/eccomerce/orders">
-                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                    <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
                       </ListItemPrefix>
@@ -118,7 +119,7 @@ export default function Sidebar() {
                   </Link>
 
                   <Link href="/dashboard/eccomerce/product">
-                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                    <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
                       </ListItemPrefix>
@@ -126,7 +127,7 @@ export default function Sidebar() {
                     </ListItem>
                   </Link>
                   <Link href="/dashboard/eccomerce/newproduct">
-                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                    <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
                       </ListItemPrefix>
@@ -233,20 +234,20 @@ export default function Sidebar() {
                   className="border-b-0 p-3 hover:text-[#ffffff] text-[#FFFFFF]"
                 >
                   <ListItemPrefix>
-                    <ShoppingBagIcon className="h-5 w-5 text-[#FFFFFF]" />
+                    <IoMdGlobe className="h-5 w-5 text-[#FFFFFF]" />
                   </ListItemPrefix>
                   <Typography
                     color="white"
                     className="mr-auto font-normal text-[#FFFFFF]"
                   >
-                    ABC News
+                    News
                   </Typography>
                 </AccordionHeader>
               </ListItem>
               <AccordionBody className="py-1">
                 <List className="p-0 text-[#FFFFFF] ">
                   <Link href="/dashboard/ABC/all-news">
-                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] text-sm focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
                       </ListItemPrefix>
@@ -255,7 +256,7 @@ export default function Sidebar() {
                   </Link>
 
                   <Link href="/dashboard/ABC/create">
-                    <ListItem className="hover:bg-gray-700 hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                    <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
                       </ListItemPrefix>
