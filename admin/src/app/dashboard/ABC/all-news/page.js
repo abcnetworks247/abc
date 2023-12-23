@@ -66,8 +66,8 @@ const Page = () => {
       ) : (
         <div className="flex flex-col gap-4">
               {news.map((item) => (
-        <article class="rounded-xl m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
-          <div class="lg:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
+        <article class="rounded-xl border border-gray-100 m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
+          <div class="lg:flex md:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
             <div
               className=" rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full "
               aria-hidden="true"
