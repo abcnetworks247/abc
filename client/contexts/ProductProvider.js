@@ -175,21 +175,6 @@ const ProductProvider = ({ children }) => {
       : "[]"
   );
 
- const fetchProductsByCategory = async (category) => {
-   try {
-     // Assuming you have an API endpoint for fetching products by category
-     const response = await fetch(
-       `https://fakestoreapi.com/products/category/${category}`
-     );
-     const data = await response.json();
-
-     // Update the products state with the fetched data
-     setCategory(data);
-     router.push(`/store/category/${category}`)
-   } catch (error) {
-     console.error("Error fetching products:", error);
-   }
- };
 
 
   useEffect(() => {
@@ -243,7 +228,7 @@ const ProductProvider = ({ children }) => {
         handleUser,
         clickState,
         updateProduct,
-        fetchProductsByCategory,
+      
         category
        
       }}
