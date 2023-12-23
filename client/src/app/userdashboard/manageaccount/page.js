@@ -10,22 +10,21 @@ import axios from "axios";
 import Api from "@/utils/Api";
 
 const page = () => {
-  const [userData, setUserData] = useState(null);
+
   const [formData, setFormData] = useState({});
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
 
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  
+  console.log('UserData in form',UserData)
+  // useEffect(() => {
+  //   // Fetch user data when the component mounts
+  //   HandleGetUser();
+  // }, []);
 
-  useEffect(() => {
-    // Fetch user data when the component mounts
-    HandleGetUser();
-  }, []);
 
-  useEffect(() => {
-    setUserData(UserData && UserData);
-  }, [UserData]);
 
   // console.log("userdashboard", UserData && UserData);
 
@@ -34,15 +33,15 @@ const page = () => {
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      fullname: userData.fullname || "",
-      email: userData.email || "",
-      userdp: userData.userdp || "",
-      phonenumber: userData.phonenumber || "",
-      shippingaddress: userData.shippingaddress || "",
+      fullname: UserData.fullname || "",
+      email: UserData.email || "",
+      userdp: UserData.userdp || "",
+      // phonenumber: userData.phonenumber || "",
+      // shippingaddress: userData.shippingaddress || "",
     });
 
-    setSelectedPhoto(userData.userdp);
-  }, [userData]);
+    setSelectedPhoto(UserData.userdp);
+  }, [UserData]);
 
   
   // console.log("this is user data", userData.userdp);
@@ -140,7 +139,7 @@ const page = () => {
           selectedPhoto={selectedPhoto}
         />
       ) : (
-        <StaticForm userData={userData} handleEdit={handleEdit} />
+        <StaticForm userData={UserData} handleEdit={handleEdit} />
       )}
     </div>
   );

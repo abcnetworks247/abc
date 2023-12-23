@@ -24,7 +24,8 @@ export default function Navbar() {
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
 
-  // console.log('tokk',Authtoken);
+  // console.log('tokk',Authtoken)
+  
 
   // cart value variable
   const cartvalue = cartProducts.length;

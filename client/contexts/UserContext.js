@@ -19,8 +19,7 @@ export const UserContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [genLoading, setGenload] = useState(true);
 
-  // log out user
-  console.log("user info", UserData);
+
 
   // get user token from session
   const Authtoken = Cookies.get("authToken");
@@ -75,6 +74,10 @@ export const UserContextProvider = ({ children }) => {
       setGenload(false);
     }
   }, []);
+
+
+    // log out user
+    console.log("UserData", UserData);
 
 
   // if(genLoading){

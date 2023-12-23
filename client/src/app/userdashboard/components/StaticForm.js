@@ -1,6 +1,8 @@
 import React from "react";
-
-const StaticForm = ({ userData, handleEdit }) => {
+import { UseUserContext } from "../../../../contexts/UserContext";
+const StaticForm = ({  handleEdit }) => {
+  const {UserData} = UseUserContext()
+  console.log('user static', UserData);
   return (
     <div className="mx-auto">
       <div className="flex flex-row-reverse cursor-pointer ">
@@ -39,7 +41,7 @@ const StaticForm = ({ userData, handleEdit }) => {
             <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               First name
             </div>
-            <p>{userData.fullname}</p>
+            <p>{UserData.fullname}</p>
           </div>
         </div>
         {/* <div className="relative z-0 w-full mb-5 group">
@@ -47,7 +49,7 @@ const StaticForm = ({ userData, handleEdit }) => {
             <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               Last name
             </div>
-            <p>{userData.lastName}</p>
+            <p>{UserData.lastName}</p>
           </div>
         </div> */}
       </div>
@@ -57,7 +59,7 @@ const StaticForm = ({ userData, handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Email address
           </div>
-          <p>{userData.email}</p>
+          <p>{UserData.email}</p>
         </div>
       </div>
       {/* Phone number */}
@@ -66,7 +68,7 @@ const StaticForm = ({ userData, handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Phone Number
           </div>
-          <p>{userData.phonenumber}</p>
+          {/* <p>{UserData.phonenumber}</p> */}
         </div>
       </div>
       {/* shipping Address */}
@@ -75,7 +77,7 @@ const StaticForm = ({ userData, handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Shipping Address
           </div>
-          <p>{userData.shippingaddress}</p>
+          {/* <p>{userData.shippingaddress}</p> */}
         </div>
       </div>
     </div>
