@@ -1,7 +1,9 @@
 "use client";
+
 import React from "react";
 import { useState } from "react";
 import { useRef } from "react";
+
 
 const Editform = ({
   formData,
@@ -9,6 +11,8 @@ const Editform = ({
   setFormData,
   handleInputChange,
   handleSubmit,
+  handleImageChange,
+  selectedPhoto,
 }) => {
   // const inputRef = useRef(null)
 
@@ -44,36 +48,21 @@ const Editform = ({
           </svg>
         </div>
       </div>
-      {/* First and last name */}
-      <div className="grid md:grid-cols-2 md:gap-6">
-        <div className="relative z-0 w-full mb-5 group">
-          {/* <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-            <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
-              First name
-            </div>
-            <p>Awajimijan</p>
-          </div> */}
-          <input
-            className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
-            type="text"
-            name="fullname"
-            placeholder="fullname"
-            value={formData.fullname}
-            onChange={(e) => handleInputChange(e)}
-          ></input>
-        </div>
-        {/* <div className="relative z-0 w-full mb-5 group">
-          <input
-            className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
-            type="text"
-            name="lastName"
-            placeholder="last name"
-            value={formData.lastName}
-            onChange={(e) => handleInputChange(e)}
-          />
-        </div> */}
+
+      <div className="relative z-0 w-full mb-5 group">
+        <input
+          className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
+          type="text"
+          name="fullname"
+          placeholder="Fulll name"
+          value={formData.fullname}
+          onChange={(e) => handleInputChange(e)}
+        />
       </div>
+      {/* First and last name */}
+
       {/* Email address */}
+
       <div className="relative z-0 w-full mb-5 group">
         <input
           className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
@@ -84,30 +73,55 @@ const Editform = ({
           onChange={(e) => handleInputChange(e)}
         />
       </div>
-      {/* Phone number */}
-      {/* <div className="relative z-0 w-full mb-5 group">
+      <div className="relative z-0 w-full mb-5 group">
         <input
           className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
-          type="tel"
-          name="phoneNumber"
-          placeholder="phone number"
-          value={formData.phoneNumber}
+          type="text"
+          name="phonenumber"
+          placeholder="Phone"
+          value={formData.phonenumber}
           onChange={(e) => handleInputChange(e)}
         />
-      </div> */}
-      {/* Gender */}
-      {/* <div className="relative z-0 w-full mb-5 group">
-        <select
-          className="appearence-none dark:text-gray-400 dark:bg-gray-800  dark:border-gray-800  w-full py-2.5 px-4 text-gray-700 text-base font-normal border border-gray-200 rounded-lg "
-          name="gender"
-          value={formData.gender}
-          id=""
-          onChange={(e) => handleInputChange(e)}
+      </div>
+
+      <div className="mb-6">
+        <label
+          for=""
+          className="block mb-2 text-sm font-medium dark:text-gray-400"
         >
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-      </div> */}
+          Shippping Address
+        </label>
+        <textarea
+          name="shippingaddress"
+          value={formData.shippingaddress}
+          onChange={(e) => handleInputChange(e)}
+          type="text"
+          placeholder="3 Market Avenue, Port Harcourt "
+          className="block w-full px-4 py-6 leading-tight placeholder-gray-400  border rounded dark:placeholder-gray-400 dark:text-gray-400 dark:border-gray-800 dark:bg-gray-800 "
+        ></textarea>
+      </div>
+
+      <div class="mb-6 ">
+        <label for="" class="block mb-2 text-sm font-medium dark:text-gray-400">
+          Profile picture
+        </label>
+        <div className="py-2 shrink-0">
+          <img
+            src={selectedPhoto}
+            alt=""
+            className="object-cover rounded-full w-11 h-11"
+          />
+        </div>
+        <label for="" className="block pt-2">
+          <input
+            type="file"
+            onChange={(e) => handleImageChange(e)}
+            id="userphoto"
+            accept="image/*"
+            className="block w-full text-sm text-slate-500 "
+          />
+        </label>
+      </div>
       <button
         type="submit"
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
