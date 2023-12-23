@@ -14,10 +14,17 @@ import {
   Separator,
 } from "react-simple-wysiwyg";
 import { useState } from "react";
+import { UseFileManager } from "@/context/FileManagerProvidert";
+import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 
 function page() {
+
   const [html, setHtml] = useState("");
+
+      // dialog open state thaat is recieved from filemanger context
+      const {handleOpen, size } = UseFileManager()
   function onChange(e) {
+
     setHtml(e.target.value);
   }
   const [imageSrc, setImageSrc] = useState(
@@ -149,7 +156,7 @@ function page() {
                   {full ? (
                     <span className="text-green-500">Image Uploaded</span>
                   ) : (
-                    <span className="text-blue-500 cursor-pointer">
+                    <span className="text-blue-500 cursor-pointer"  onClick={() => handleOpen("lg")}>
                       Click here to select image
                     </span>
                   )}
@@ -171,6 +178,8 @@ function page() {
           </form>
         </div>
       </div>
+      
+      <PopUpFilemanager handleOpen={handleOpen} size={size}  />
     </div>
   );
 }
