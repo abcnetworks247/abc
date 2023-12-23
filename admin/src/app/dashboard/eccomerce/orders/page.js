@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { PencilIcon } from "@heroicons/react/24/solid";
 import {
@@ -18,9 +18,17 @@ import {
   Tooltip,
   Input,
 } from "@material-tailwind/react";
- 
-const TABLE_HEAD = [ "id", "Transaction", "Amount", "Date", "Status", "Account", ""];
- 
+
+const TABLE_HEAD = [
+  "id",
+  "Transaction",
+  "Amount",
+  "Date",
+  "Status",
+  "Account",
+  "",
+];
+
 const TABLE_ROWS = [
   {
     img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
@@ -73,7 +81,7 @@ const TABLE_ROWS = [
     expiry: "06/2026",
   },
 ];
- 
+
 export default function Page() {
   return (
     <Card className="h-full w-full px-3">
@@ -133,13 +141,13 @@ export default function Page() {
                   accountNumber,
                   expiry,
                 },
-                index,
+                index
               ) => {
                 const isLast = index === TABLE_ROWS.length - 1;
                 const classes = isLast
                   ? "p-4"
                   : "p-4 border-b border-blue-gray-50";
- 
+
                 return (
                   <tr key={name}>
                     <td className={classes}>
@@ -229,17 +237,24 @@ export default function Page() {
                     <td className={classes}>
                       <Tooltip content="download">
                         <IconButton variant="text">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-  <path fill-rule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V3a.75.75 0 0 1 .75-.75Zm-9 13.5a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
-</svg>
-
-
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            class="w-4 h-4"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M12 2.25a.75.75 0 0 1 .75.75v11.69l3.22-3.22a.75.75 0 1 1 1.06 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0l-4.5-4.5a.75.75 0 1 1 1.06-1.06l3.22 3.22V3a.75.75 0 0 1 .75-.75Zm-9 13.5a.75.75 0 0 1 .75.75v2.25a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5V16.5a.75.75 0 0 1 1.5 0v2.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V16.5a.75.75 0 0 1 .75-.75Z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
                         </IconButton>
                       </Tooltip>
                     </td>
                   </tr>
                 );
-              },
+              }
             )}
           </tbody>
         </table>
