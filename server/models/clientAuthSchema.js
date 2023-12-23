@@ -36,13 +36,19 @@ const AuthSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    phonenumber: {
+      type: Number,
+    },
+    shippingaddress: {
+      type: String,
+    },
     password: {
       type: String,
       required: true,
     },
-    package: {
+    userpackage: {
       type: String,
-      enum: ["basic", "advanced", "pro"],
+      enum: ["basic", "coper", "silver", "gold", "diamond", "titanium"],
       default: "basic",
     },
     cart: [

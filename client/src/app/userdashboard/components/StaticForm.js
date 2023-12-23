@@ -39,17 +39,17 @@ const StaticForm = ({ userData, handleEdit }) => {
             <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               First name
             </div>
-            <p>{userData.firstName}</p>
+            <p>{userData.fullname}</p>
           </div>
         </div>
-        <div className="relative z-0 w-full mb-5 group">
+        {/* <div className="relative z-0 w-full mb-5 group">
           <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
             <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               Last name
             </div>
             <p>{userData.lastName}</p>
           </div>
-        </div>
+        </div> */}
       </div>
       {/* Email address */}
       <div className="relative z-0 w-full mb-5 group">
@@ -66,16 +66,16 @@ const StaticForm = ({ userData, handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Phone Number
           </div>
-          <p>{userData.phoneNumber}</p>
+          <p>{userData.phonenumber}</p>
         </div>
       </div>
-      {/* Gender */}
+      {/* shipping Address */}
       <div className="relative z-0 w-full mb-5 group">
         <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
-            Gender
+            Shipping Address
           </div>
-          <p>{userData.gender}</p>
+          <p>{userData.shippingaddress}</p>
         </div>
       </div>
     </div>

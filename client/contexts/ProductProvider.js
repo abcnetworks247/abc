@@ -21,10 +21,11 @@ const ProductProvider = ({ children }) => {
    const [clickState, setClickState] = useState(false);
   const [screen, setScreen] = useState(!isTabletOrMobile)
   const [category, setCategory] = useState([]);
-  console.log(cartProducts)
+  // console.log(cartProducts)
   
 
-  console.log(products)
+  // console.log(products)
+  console.log("hasFetchedData", hasFetchedData)
   
   
   
@@ -132,12 +133,41 @@ const ProductProvider = ({ children }) => {
 
   const handleCartClick = (e, product) => {
     e.stopPropagation();
+    //check first if the item exist in the cart
+  const existingCartItem = cartProducts.find(
+    (cartItem) => cartItem.id === product.id
+    );
+  console.log("existing item", existingCartItem)
+
+  if (existingCartItem) {
+    // If the item already exists in the cart, increase its quantity
+    const updatedCart = cartProducts.map((cartItem) =>
+      cartItem.id === product.id
+        ? { ...cartItem, quantity: cartItem.quantity + 1 }
+        : cartItem
+    );
+
+    setCartProducts(updatedCart);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+    }
+  
+    
+  } else {
+    // If the item is not in the cart, add it
     addToCart(e, product);
+  }
   };
 
 
   const searchProducts = (query) => {
-    const regex = new RegExp(`^${query}`, "i");
+    // const regex = new RegExp(`^${query}`, "i");
+    // Escape special characters in the query to avoid regex syntax errors
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // Create a regular expression with the escaped query
+    const regex = new RegExp(`^${escapedQuery}`, "i");
+
     const results = products.filter((product) => regex.test(product.title));
 
     setSearchResults(results);
@@ -166,35 +196,42 @@ const ProductProvider = ({ children }) => {
         : "[]"
     );
 
-    setCartProducts(storedCartProducts);
-  }, []); // Empty dependency array means this useEffect runs only once when the component mounts
-
-  const storedProducts = JSON.parse(
+    
+  
+    const storedProducts = JSON.parse(
     typeof window !== "undefined"
       ? localStorage.getItem("cachedProducts") || "[]"
       : "[]"
   );
 
+    setCartProducts(storedCartProducts);
+    setProducts(storedProducts)
+  }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
+  
 
-  useEffect(() => {
-    if (storedProducts.length > 0) {
-      setProducts(storedProducts);
-      setHasFetchedData(true);
-    } else {
+useEffect(() => {
+  const fetchData = async () => {
+    try {
       if (!hasFetchedData) {
-        fetch("https://fakestoreapi.com/products")
-          .then((res) => res.json())
-          .then((json) => {
-            setProducts(json);
-            setHasFetchedData(true); // Update state to indicate that data has been fetched
-            if (typeof window !== "undefined") {
-              localStorage.setItem("cachedProducts", JSON.stringify(json));
-            }
-          });
+        const response = await fetch("https://fakestoreapi.com/products");
+        const json = await response.json();
+
+         const uniqueProducts = Array.from(new Set([...products, ...json]));
+         setProducts(uniqueProducts);
+        setHasFetchedData(true);
+
+        if (typeof window !== "undefined") {
+          localStorage.setItem("cachedProducts", JSON.stringify(json));
+        }
       }
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-  }, [hasFetchedData]);
+  };
+
+  fetchData();
+}, [hasFetchedData]);
 
   
 

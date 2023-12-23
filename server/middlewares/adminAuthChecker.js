@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { StatusCodes } = require("http-status-codes");
-const User = require("../models/clientAuthSchema");
+const Admin = require("../models/adminAuthSchema");
 const { VerifyToken } = require("../Helper/authToken");
 const { UnAuthorizedError } = require("../errors");
 
@@ -20,10 +20,10 @@ const checkUser = async (req, res, next) => {
   try {
     const decodedToken = VerifyToken(token);
 
-    const user = await User.findById(decodedToken.id);
+    const user = await Admin.findById(decodedToken.id);
 
     if (!user) {
-      throw new UnAuthorizedError("User not found");
+      throw new UnAuthorizedError("Admin not found");
     }
 
     req.user = user;
