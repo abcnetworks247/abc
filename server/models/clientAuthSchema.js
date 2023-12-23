@@ -46,9 +46,9 @@ const AuthSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    package: {
+    userpackage: {
       type: String,
-      enum: ["basic", "advanced", "pro"],
+      enum: ["basic", "coper", "silver", "gold", "diamond", "titanium"],
       default: "basic",
     },
     cart: [

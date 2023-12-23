@@ -246,7 +246,7 @@ export default function Sidebar() {
               </ListItem>
               <AccordionBody className="py-1">
                 <List className="p-0 text-[#FFFFFF] ">
-                  <Link href="/dashboard/abc/all-news">
+                  <Link href="/dashboard/news/all-news">
                     <ListItem className="hover:bg-gray-700 hover:text-[#fff] text-sm focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -255,7 +255,7 @@ export default function Sidebar() {
                     </ListItem>
                   </Link>
 
-                  <Link href="/dashboard/abc/create-news">
+                  <Link href="/dashboard/news/create-news">
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />

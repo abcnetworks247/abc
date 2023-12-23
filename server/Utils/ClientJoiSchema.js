@@ -9,7 +9,7 @@ const Clientjoi = joi.object({
   phonenumber: joi.number(),
   shippingaddress: joi.string(),
   password: joi.string().required(),
-  package: joi.string(),
+  userpackage: joi.string(),
   cart: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),
   wishlist: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),
   productpurchasehistory: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),
