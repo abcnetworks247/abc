@@ -1,4 +1,6 @@
 "use client";
+import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
+import { UseFileManager } from "@/context/FileManagerProvidert";
 import { Button } from "@material-tailwind/react";
 
 import { useState } from "react";
@@ -16,6 +18,8 @@ import {
 } from "react-simple-wysiwyg";
 
 export default function page() {
+    // dialog open state thaat is recieved from filemanger context
+    const {handleOpen, size } = UseFileManager()
   const [html, setHtml] = useState("my <b>HTML</b>");
   const inputStyles = {
     textDecoration: "line-through",
@@ -27,27 +31,7 @@ export default function page() {
   return (
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
-        {/* <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
-    <img
-      className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
-      src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGZhY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
-      alt="Bordered avatar"
-    />
-    <div className="flex flex-col space-y-5 sm:ml-8">
-      <button
-        type="button"
-        className="py-3.5 px-7 text-base font-medium text-indigo-100 focus:outline-none bg-[#202142] rounded-lg border border-indigo-200 hover:bg-indigo-900 focus:z-10 focus:ring-4 focus:ring-indigo-200 "
-      >
-        Change picture
-      </button>
-      <button
-        type="button"
-        className="py-3.5 px-7 text-base font-medium text-indigo-900 focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200 "
-      >
-        Delete picture
-      </button>
-    </div>
-  </div> */}
+
 
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
           <div className="relative bg-white rounded-lg shadow-md shadow-gray-300">
@@ -182,7 +166,7 @@ export default function page() {
                     </div>
                   </div>
                   <div className="flex items-center justify-center w-full">
-                    <label className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50">
+                    <div className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -206,7 +190,7 @@ export default function page() {
                         </p>
                       </div>
                       <input type="file" className="hidden" />
-                    </label>
+                    </div>
                   </div>
                 </div>
 
@@ -280,7 +264,7 @@ export default function page() {
                     </div>
                   </div>
                   <div className="flex items-center justify-center w-full">
-                    <label className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50">
+                    <div className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -304,7 +288,7 @@ export default function page() {
                         </p>
                       </div>
                       <input type="file" className="hidden" />
-                    </label>
+                    </div>
                   </div>
                 </div>
               </form>
@@ -316,6 +300,7 @@ export default function page() {
             </div>
           </div>
         </div>
+        <PopUpFilemanager handleOpen={handleOpen} size={size}  />
       </div>
     </div>
   );

@@ -5,32 +5,27 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
-import {
-  EMAIL_REGEX,
-
-} from "@/utils/regex";
+import { EMAIL_REGEX } from "@/utils/regex";
 
 export default function Page() {
   // define initial recoveryformdata state
 
   const [email, setRecoveryFormData] = useState("");
 
+  //Define state for universal error
 
-    //Define state for universal error
+  const [universalError, setUniversalError] = useState("");
 
-    const [universalError, setUniversalError] = useState("");
+  // Define initial validation state
+  const [isValidData, setIsValidData] = useState(true);
 
-    // Define initial validation state
-    const [isValidData, setIsValidData] = useState(true);
-  
-    // Define initial form error state
-  
-    const [errorMessages, setErrorMessages] = useState({
-      email: "",
-    });
+  // Define initial form error state
 
-    
-      /**
+  const [errorMessages, setErrorMessages] = useState({
+    email: "",
+  });
+
+  /**
    *
    * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
    * @param {Object} regex - for checkking if the regex meet up the chaeteria required
@@ -66,18 +61,18 @@ export default function Page() {
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!isValidData){
+    if (!isValidData) {
       toast.error("please fill in all the fields correctly", {
         position: toast.POSITION.TOP_LEFT,
       });
-      return
+      return;
     }
     const id = toast.loading("sending..", {
       position: toast.POSITION.TOP_LEFT,
     });
     console.log(email);
     try {
-      const data = await Api.post("client/auth/recovery", {email});
+      const data = await Api.post("client/auth/recovery", { email });
       if (data.status === 200) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
@@ -104,7 +99,7 @@ export default function Page() {
   };
   return (
     <div>
-            <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={2000}
         hideProgressBar={false}
@@ -140,8 +135,10 @@ export default function Page() {
                 className="flex flex-col max-w-xs gap-4 mx-auto"
                 onSubmit={HandleSubmit}
               >
-                       <input
-                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${errorMessages.email && email &&  "border-red-500"} placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
+                <input
+                  className={`w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 ${
+                    errorMessages.email && email && "border-red-500"
+                  } placeholder-gray-500 text-sm focus:outline-none  focus:bg-white`}
                   type="email"
                   name="email"
                   placeholder="Enter your email"
@@ -158,7 +155,9 @@ export default function Page() {
                   value={email}
                 />
                 {errorMessages.email && email && (
-                  <span className="text-red-500 text-[13px]">{errorMessages.email}</span>
+                  <span className="text-red-500 text-[13px]">
+                    {errorMessages.email}
+                  </span>
                 )}
 
                 <button
@@ -169,7 +168,7 @@ export default function Page() {
                     className="w-6 h-6 -ml-2"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
+                    strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >

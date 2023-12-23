@@ -3,14 +3,13 @@
 import React from "react";
 import { Button, Checkbox, Option, Select } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import FileComp from "@/components/filemanager/FileComp";
+import FileComp from "@/components/filemanager/fileComp";
 import UploadComp from "@/components/filemanager/UploadComp";
+import { UseFileManager } from "@/context/FileManagerProvidert";
 
 const Page = () => {
-
-  const [size, setSize] = React.useState(null);
- 
-  const handleOpen = (value) => setSize(value);
+  // dialog open state thaat is recieved from filemanger context
+const {handleOpen, size } = UseFileManager()
   
   return (
     <div className="px-10 py-10">

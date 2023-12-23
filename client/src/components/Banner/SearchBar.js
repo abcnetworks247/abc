@@ -5,7 +5,6 @@ import AllResults from "./AllResults";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useRouter } from "next/navigation";
 
-
 const SearchBar = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
@@ -25,22 +24,20 @@ const SearchBar = () => {
  
 
   const handleFocus = () => {
-    setIsFocused( prev => !prev);
+    setIsFocused((prev) => !prev);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
   };
- 
-  const [isDropdown, setIsDropdown] = useState(false)
+
+  const [isDropdown, setIsDropdown] = useState(false);
   const handleDropdown = () => {
       setIsDropdown(prev => !prev)
   } 
   
  
   const hasSearchResults = searchResults && searchResults.length > 0;
-  
-  
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -87,8 +84,8 @@ const SearchBar = () => {
               <path
                 stroke="currentColor"
                 stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 1 4 4 4-4"
               />
             </svg>
@@ -179,8 +176,8 @@ const SearchBar = () => {
                 <path
                   stroke="white"
                   stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                 />
               </svg>
