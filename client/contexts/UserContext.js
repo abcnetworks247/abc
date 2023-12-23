@@ -87,6 +87,7 @@ export const UserContextProvider = ({ children }) => {
         UserData,
         loading,
         Authtoken,
+        HandleGetUser
       }}
     >
       {children}

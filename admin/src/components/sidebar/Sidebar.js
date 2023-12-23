@@ -255,7 +255,7 @@ export default function Sidebar() {
                     </ListItem>
                   </Link>
 
-                  <Link href="/dashboard/abc/create">
+                  <Link href="/dashboard/abc/create-news">
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />

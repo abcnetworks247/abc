@@ -56,13 +56,13 @@ const Editform = ({
           <input
             className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
             type="text"
-            name="firstName"
-            placeholder="FirstName"
-            value={formData.firstName}
+            name="fullname"
+            placeholder="fullname"
+            value={formData.fullname}
             onChange={(e) => handleInputChange(e)}
           ></input>
         </div>
-        <div className="relative z-0 w-full mb-5 group">
+        {/* <div className="relative z-0 w-full mb-5 group">
           <input
             className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
             type="text"
@@ -71,7 +71,7 @@ const Editform = ({
             value={formData.lastName}
             onChange={(e) => handleInputChange(e)}
           />
-        </div>
+        </div> */}
       </div>
       {/* Email address */}
       <div className="relative z-0 w-full mb-5 group">
@@ -85,7 +85,7 @@ const Editform = ({
         />
       </div>
       {/* Phone number */}
-      <div className="relative z-0 w-full mb-5 group">
+      {/* <div className="relative z-0 w-full mb-5 group">
         <input
           className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
           type="tel"
@@ -94,9 +94,9 @@ const Editform = ({
           value={formData.phoneNumber}
           onChange={(e) => handleInputChange(e)}
         />
-      </div>
+      </div> */}
       {/* Gender */}
-      <div className="relative z-0 w-full mb-5 group">
+      {/* <div className="relative z-0 w-full mb-5 group">
         <select
           className="appearence-none dark:text-gray-400 dark:bg-gray-800  dark:border-gray-800  w-full py-2.5 px-4 text-gray-700 text-base font-normal border border-gray-200 rounded-lg "
           name="gender"
@@ -107,7 +107,7 @@ const Editform = ({
           <option>Male</option>
           <option>Female</option>
         </select>
-      </div>
+      </div> */}
       <button
         type="submit"
         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

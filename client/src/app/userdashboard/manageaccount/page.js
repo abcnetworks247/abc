@@ -2,7 +2,7 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
-import { EditIcon } from "../components/icons/UserIcon";
+import { EditIcon} from "../components/icons/UserIcon";
 import { UseProductProvider } from "../../../../contexts/ProductProvider";
 import Editform from "../components/Editform";
 import StaticForm from "../components/StaticForm";
@@ -11,30 +11,42 @@ import { UseUserContext } from "../../../../contexts/UserContext";
 const page = () => {
   const { screen } = UseProductProvider()
   const [isEditable, setIsEditable] = useState(false);
-  const { UserData } = UseUserContext();
-  console.log("Userdata", UserData)
- 
-    const [userData, setUserData] = useState({
-      firstName: "mijan",
-      lastName: "richard",
-      email: "igoni@gmail.com",
-      phoneNumber: "0807032836",
-      gender: "male",
-    });
+  const { UserData , HandleGetUser} = UseUserContext();
+   
+  const [userData, setUserData] = useState({});
+  const [formData, setFormData] = useState({});
   
-  console.log(userData)
+  useEffect(() => {
+    // Fetch user data when the component mounts
+    HandleGetUser();
+  
+  }, []);
 
-    // Local state to store form data
-    const [formData, setFormData] = useState({
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      phoneNumber: userData.phoneNumber,
-      gender: userData.gender,
-    });
+
+  useEffect(() => {
+    setUserData(UserData)
+  }, [UserData])
+
+  console.log("userdashboard", UserData && UserData);
+ 
+
+   
+  console.log("state", userData)
   
-  console.log(formData)
-  console.log(userData)
+
+useEffect(() => {
+  // Update formData when userData changes
+  setFormData({
+    fullname: userData.fullname || "",
+    email: userData.email || "",
+    
+  });
+}, [userData]);
+
+  
+  
+  console.log("form", formData)
+  
 
     // Function to handle form input changes
     const handleInputChange = (e) => {
@@ -49,7 +61,7 @@ const page = () => {
     const handleSubmit = (e) => {
       e.preventDefault();
       setUserData({...formData})
-      console.log(userData)
+      
       
 
      
@@ -66,6 +78,7 @@ const page = () => {
     }
   return (
     <div className={` p-8 px-4 basis-2/3`}>
+      <p></p>
       {isEditable ?
         <Editform
           formData={formData}
