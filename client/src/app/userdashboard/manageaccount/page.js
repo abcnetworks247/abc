@@ -10,7 +10,7 @@ import axios from "axios";
 import Api from "@/utils/Api";
 
 const page = () => {
-
+  const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({});
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -23,7 +23,9 @@ const page = () => {
     HandleGetUser();
   }, []);
 
-
+  useEffect(() => {
+    setUserData(UserData && UserData);
+  }, [UserData]);
 
   // console.log("userdashboard", UserData && UserData);
 
@@ -32,15 +34,15 @@ const page = () => {
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      fullname: UserData.fullname || "",
-      email: UserData.email || "",
-      userdp: UserData.userdp || "",
-      phonenumber: UserData.phonenumber || "",
-      shippingaddress: UserData.shippingaddress || "",
+      fullname: userData.fullname || "",
+      email: userData.email || "",
+      userdp: userData.userdp || "",
+      phonenumber: userData.phonenumber || "",
+      shippingaddress: userData.shippingaddress || "",
     });
 
-    setSelectedPhoto(UserData.userdp);
-  }, [UserData]);
+    setSelectedPhoto(userData.userdp);
+  }, [userData]);
 
   
   // console.log("this is user data", userData.userdp);
