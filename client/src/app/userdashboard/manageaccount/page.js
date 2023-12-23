@@ -6,12 +6,14 @@ import { EditIcon } from "../components/icons/UserIcon";
 import { UseProductProvider } from "../../../../contexts/ProductProvider";
 import Editform from "../components/Editform";
 import StaticForm from "../components/StaticForm";
+import { UseUserContext } from "../../../../contexts/UserContext";
 
 const page = () => {
   const { screen } = UseProductProvider()
   const [isEditable, setIsEditable] = useState(false);
-  
-
+  const { UserData } = UseUserContext();
+  console.log("Userdata", UserData)
+ 
     const [userData, setUserData] = useState({
       firstName: "mijan",
       lastName: "richard",
