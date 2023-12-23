@@ -13,6 +13,8 @@ import axios from "axios";
 // import useParams fron next/navigation
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import parse from "html-react-parser";
+
 export default function BlogCard() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +41,7 @@ export default function BlogCard() {
   if (error === true) {
     return (
       // create a professinal error page
-      <div className="flex justify-center items-center h-96 flex-col gap-3">
+      <div className="flex flex-col items-center justify-center gap-3 h-96">
         <h1 className="text-3xl font-bold">Something went wrong</h1>
         <p className="text-xl font-semibold text-gray-500 ">
           Please check your internet connection and try again
@@ -51,9 +53,9 @@ export default function BlogCard() {
   return (
     <main className="flex items-center justify-center my-10">
       {loading ? (
-        <div className="flex justify-center items-center h-96">
+        <div className="flex items-center justify-center h-96">
           <svg
-            className="animate-spin -ml-1 mr-3 h-20 w-20 text-blue-500"
+            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -75,52 +77,51 @@ export default function BlogCard() {
         </div>
       ) : (
         <Card className="lg:max-w-[70%] max-w-[90%] overflow-hidden">
-        <CardHeader
-          floated={false}
-          shadow={false}
-          color="transparent"
-          className="m-0 rounded-none"
-        >
-          <img
-            src={news.blogimage}
-            alt="ui/ux review check"
-          />
-        </CardHeader>
-        <CardBody>
-          <Typography variant="h4" color="blue-gray">
-            {news.title}
-          </Typography>
-          <Typography variant="lead" color="gray" className="mt-3 font-normal">
-            {news.longdescription}
-          </Typography>
-        </CardBody>
-        <CardFooter className="flex items-center justify-between">
-          <div className="flex items-center -space-x-3">
-            <Tooltip content="Natali Craig">
-              <Avatar
-                size="sm"
-                variant="circular"
-                alt="natali craig"
-                src={news.blogimage}
-                className="border-2 border-white hover:z-10"
-              />
-            </Tooltip>
-            <Tooltip content="Tania Andrew">
-              <Avatar
-                size="sm"
-                variant="circular"
-                alt="tania andrew"
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-                className="border-2 border-white hover:z-10"
-              />
-            </Tooltip>
-          </div>
-          <Typography className="font-normal">
-            2 days ago
-          </Typography>
-        </CardFooter>
-      </Card>
+          <CardHeader
+            floated={false}
+            shadow={false}
+            color="transparent"
+            className="m-0 rounded-none"
+          >
+            <img src={news.blogimage} alt="ui/ux review check" />
+          </CardHeader>
+          <CardBody>
+            <Typography variant="h4" color="blue-gray">
+              {news.title}
+            </Typography>
 
+            <Typography
+              variant="lead"
+              color="gray"
+              className="mt-3 font-normal"
+            >
+              {parse(`${news.longdescription}`)}
+            </Typography>
+          </CardBody>
+          <CardFooter className="flex items-center justify-between">
+            <div className="flex items-center -space-x-3">
+              <Tooltip content="Natali Craig">
+                <Avatar
+                  size="sm"
+                  variant="circular"
+                  alt="natali craig"
+                  src={news.blogimage}
+                  className="border-2 border-white hover:z-10"
+                />
+              </Tooltip>
+              <Tooltip content="Tania Andrew">
+                <Avatar
+                  size="sm"
+                  variant="circular"
+                  alt="tania andrew"
+                  src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+                  className="border-2 border-white hover:z-10"
+                />
+              </Tooltip>
+            </div>
+            <Typography className="font-normal">2 days ago</Typography>
+          </CardFooter>
+        </Card>
       )}
     </main>
   );
