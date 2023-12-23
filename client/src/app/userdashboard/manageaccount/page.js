@@ -16,7 +16,7 @@ const page = () => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
 
-  const { UserData, HandleGetUser } = UseUserContext();
+  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
   useEffect(() => {
     // Fetch user data when the component mounts
@@ -100,6 +100,9 @@ const page = () => {
         `${process.env.NEXT_PUBLIC_BASEURL}client/auth/account`,
         submitForm,
         {
+           headers: {
+            Authorization: "Bearer " + Authtoken
+          },
           "Content-Type": "multipart/form-data",
         }
       );
