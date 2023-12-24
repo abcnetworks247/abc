@@ -70,7 +70,7 @@ export default function Page(){
            console.log("post successful", data.data.message);
 
            // storing the user token after successful login
-           Cookies.set("authToken", value.authToken);
+           Cookies.set("adminToken", value.authToken);
            setTimeout(() => {
              toast.dismiss(id);
            }, 1000);

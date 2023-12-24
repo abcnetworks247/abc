@@ -38,7 +38,7 @@ router.route("/account/admin/:id").get(authChecker, singleAdmin);
 
 router.route("/account/updatepassword/:token").get(userVerifyPasswordReset);
 router.route("/account/updatepassword/").post(userUpdatePassword);
-router.route("/account/admin").get(authChecker, currentUser); // Change authChecker to adminAuthChecker
+router.route("/account/").get(authChecker, currentUser); // Change authChecker to adminAuthChecker
 router
   .route("/account")
   .patch(authChecker, upload.single("userphoto"), userUpdate); // Change authChecker to adminAuthChecker

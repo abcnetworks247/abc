@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import {
   Navbar,
@@ -29,64 +29,78 @@ import {
   Bars2Icon,
 } from "@heroicons/react/24/solid";
 import NotificationsMenu from "../notification/Notification";
- 
+import { UseAdminContext } from "@/context/AdminContext";
+
 // profile menu component
 const profileMenuItems = [
   {
     label: "My Profile",
     icon: UserCircleIcon,
-    path: "/dashboard/profile"
+    path: "/dashboard/profile",
   },
   {
     label: "Edit Profile",
     icon: Cog6ToothIcon,
-    path: "/dashboard/profile"
+    path: "/dashboard/profile",
   },
   {
     label: "Inbox",
     icon: InboxArrowDownIcon,
-    path: "/dashboard/inbox"
+    path: "/dashboard/inbox",
   },
   {
     label: "Help",
     icon: LifebuoyIcon,
-    path: "/dashboard/help"
+    path: "/dashboard/help",
   },
   {
     label: "Sign Out",
     icon: PowerIcon,
-    path: "/dashboard/signout"
+    path: "/dashboard/signout",
   },
 ];
- 
+
 function ProfileMenu() {
+  const {
+    UserInfo,
+    CurrentUsererror,
+    CurrentUserloading,
+    CurrentUserisSuccess,
+  } = UseAdminContext();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
+
   const closeMenu = () => setIsMenuOpen(false);
- 
+
+  console.log("CurrentUser", UserInfo);
+
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-
-     <NotificationsMenu />
+      <NotificationsMenu />
       <MenuHandler>
         <Button
           variant="text"
           color="blue-gray"
           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
         >
-          <Avatar
-            variant="circular"
-            size="sm"
-            alt="tania andrew"
-            className="border border-gray-900 p-0.5"
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-          />
-          <ChevronDownIcon
-            strokeWidth={2.5}
-            className={`h-3 w-3 transition-transform ${
-              isMenuOpen ? "rotate-180" : ""
-            }`}
-          />
+          {CurrentUserloading ? (
+            <div className="w-8 h-8 animate-pulse bg-blue-gray-200 rounded-full border-2 border-blue-gray-200 border-l-transparent"></div>
+          ) : (
+            <>
+              <Avatar
+                variant="circular"
+                size="sm"
+                alt="tania andrew"
+                className="border border-gray-900 p-0.5"
+                src={UserInfo?.userdp}
+              />
+              <ChevronDownIcon
+                strokeWidth={2.5}
+                className={`h-3 w-3 transition-transform ${
+                  isMenuOpen ? "rotate-180" : ""
+                }`}
+              />
+            </>
+          )}
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
@@ -94,40 +108,35 @@ function ProfileMenu() {
           const isLastItem = key === profileMenuItems.length - 1;
           return (
             <Link href={path} key={label}>
-            <MenuItem
-              
-              onClick={closeMenu}
-              className={`flex items-center gap-2 rounded ${
-                isLastItem
-                  ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                  : ""
-              }`}
-            >
-          
-              
-              {React.createElement(icon, {
-                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                strokeWidth: 2,
-              })}
-              <Typography
-                as="span"
-                variant="small"
-                className="font-normal"
-                color={isLastItem ? "red" : "inherit"}
+              <MenuItem
+                onClick={closeMenu}
+                className={`flex items-center gap-2 rounded ${
+                  isLastItem
+                    ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                    : ""
+                }`}
               >
-                {label}
-              </Typography>
-             
-            </MenuItem>
+                {React.createElement(icon, {
+                  className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                  strokeWidth: 2,
+                })}
+                <Typography
+                  as="span"
+                  variant="small"
+                  className="font-normal"
+                  color={isLastItem ? "red" : "inherit"}
+                >
+                  {label}
+                </Typography>
+              </MenuItem>
             </Link>
           );
         })}
       </MenuList>
-      
     </Menu>
   );
 }
- 
+
 // nav list menu
 const navListMenuItems = [
   {
@@ -146,10 +155,10 @@ const navListMenuItems = [
       "A complete set of UI Elements for building faster websites in less time.",
   },
 ];
- 
+
 function NavListMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
- 
+
   const renderItems = navListMenuItems.map(({ title, description }) => (
     <a href="#" key={title}>
       <MenuItem>
@@ -162,7 +171,7 @@ function NavListMenu() {
       </MenuItem>
     </a>
   ));
- 
+
   return (
     <React.Fragment>
       <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
@@ -204,7 +213,7 @@ function NavListMenu() {
     </React.Fragment>
   );
 }
- 
+
 // nav list component
 const navListItems = [
   {
@@ -220,7 +229,7 @@ const navListItems = [
     icon: CodeBracketSquareIcon,
   },
 ];
- 
+
 function NavList() {
   return (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
@@ -243,19 +252,19 @@ function NavList() {
     </ul>
   );
 }
- 
+
 export function ComplexNavbar() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
- 
+
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
- 
+
   React.useEffect(() => {
     window.addEventListener(
       "resize",
-      () => window.innerWidth >= 960 && setIsNavOpen(false),
+      () => window.innerWidth >= 960 && setIsNavOpen(false)
     );
   }, []);
- 
+
   return (
     <Navbar className="mx-auto w-full p-2 z-30  bg-white lg:pl-6 sticky top-0  ">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
@@ -278,7 +287,7 @@ export function ComplexNavbar() {
         >
           <Bars2Icon className="h-6 w-6" />
         </IconButton>
- 
+
         <Button size="sm" variant="text">
           <span>Log In</span>
         </Button>

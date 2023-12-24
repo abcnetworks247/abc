@@ -5,7 +5,7 @@ import { UseProductProvider } from "../../../../contexts/ProductProvider";
 
 import Editform from "../components/Editform";
 
-const page = () => {
+export default function Page() {
   const { screen , handleUser } = UseProductProvider();
   return (
     <div
@@ -16,6 +16,4 @@ const page = () => {
          <Editform/>
     </div>
   );
-};
-
-export default page;
+}

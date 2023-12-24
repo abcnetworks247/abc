@@ -34,6 +34,7 @@ export default function BlogCard() {
       })
       .catch((err) => {
         console.log(err);
+        setError(true);
         setLoading(false);
       });
   }, []);

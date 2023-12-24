@@ -1,6 +1,8 @@
 import React from "react";
-
-const StaticForm = ({ userData, handleEdit }) => {
+import { UseUserContext } from "../../../../contexts/UserContext";
+const StaticForm = ({  handleEdit }) => {
+  const {UserData} = UseUserContext()
+  console.log('user static', UserData);
   return (
     <div className="mx-auto">
       <div className="flex flex-row-reverse cursor-pointer ">
@@ -23,7 +25,7 @@ const StaticForm = ({ userData, handleEdit }) => {
             ></g>
             <g id="SVGRepo_iconCarrier">
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 clipRule="evenodd"
                 d="m3.99 16.854-1.314 3.504a.75.75 0 0 0 .966.965l3.503-1.314a3 3 0 0 0 1.068-.687L18.36 9.175s-.354-1.061-1.414-2.122c-1.06-1.06-2.122-1.414-2.122-1.414L4.677 15.786a3 3 0 0 0-.687 1.068zm12.249-12.63 1.383-1.383c.248-.248.579-.406.925-.348.487.08 1.232.322 1.934 1.025.703.703.945 1.447 1.025 1.934.058.346-.1.677-.348.925L19.774 7.76s-.353-1.06-1.414-2.12c-1.06-1.062-2.121-1.415-2.121-1.415z"
                 fill="#737373"
@@ -39,7 +41,7 @@ const StaticForm = ({ userData, handleEdit }) => {
             <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               First name
             </div>
-            <p>{userData.fullname}</p>
+            <p>{UserData.fullname}</p>
           </div>
         </div>
         {/* <div className="relative z-0 w-full mb-5 group">
@@ -47,7 +49,7 @@ const StaticForm = ({ userData, handleEdit }) => {
             <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               Last name
             </div>
-            <p>{userData.lastName}</p>
+            <p>{UserData.lastName}</p>
           </div>
         </div> */}
       </div>
@@ -57,7 +59,7 @@ const StaticForm = ({ userData, handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Email address
           </div>
-          <p>{userData.email}</p>
+          <p>{UserData.email}</p>
         </div>
       </div>
       {/* Phone number */}
@@ -66,7 +68,7 @@ const StaticForm = ({ userData, handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Phone Number
           </div>
-          <p>{userData.phonenumber}</p>
+          {/* <p>{UserData.phonenumber}</p> */}
         </div>
       </div>
       {/* shipping Address */}
@@ -75,7 +77,7 @@ const StaticForm = ({ userData, handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Shipping Address
           </div>
-          <p>{userData.shippingaddress}</p>
+          {/* <p>{userData.shippingaddress}</p> */}
         </div>
       </div>
     </div>
