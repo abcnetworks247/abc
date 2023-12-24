@@ -49,7 +49,7 @@ const ProductProvider = ({ children }) => {
   
   const handleProductClick = (product) => {
     setSelectedProduct(product);
-    router.push(`/store/${product.id}}`)
+    router.push('/productDetails')
   };
 
   const addToWishlist = (product) => {

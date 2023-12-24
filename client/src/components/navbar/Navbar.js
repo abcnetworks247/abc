@@ -198,7 +198,7 @@ export default function Navbar() {
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <a className="text-sm dropdown-item -z-50">Profile</a>
+                          <a  href="/userdashboard" className="text-sm dropdown-item -z-50">Profile</a>
                           <a tabIndex="-1" className="text-sm dropdown-item">
                             Account settings
                           </a>
