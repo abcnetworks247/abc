@@ -33,7 +33,7 @@ const page = () => {
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      fullname: UserData?.fullname || "",
+      // fullname: UserData?.fullname || "",
       email: UserData.email || "",
       userdp: UserData.userdp || "",
       // phonenumber: userData.phonenumber || "",
