@@ -1,7 +1,21 @@
+"use client"
 import Navbar from "@/components/navbar/Navbar";
 import FooterComp from "@/components/Footer/FooterComp";
 import Sidebar from "@/components/sidebar/Sidebar";
+import { redirect } from "next/navigation";
+import { useLayoutEffect } from "react";
+import { UseUserContext } from "../../../contexts/UserContext";
 export default function page() {
+
+  const { Authtoken } = UseUserContext();
+  useLayoutEffect(()=>{
+   const session = Authtoken;
+    if(!session){
+      redirect('/login')
+    }
+  },[])
+
+
   return (
     <div>
        <div className="bg-white sticky top-0 z-[10] mb-10">
