@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {Image} from "next/image";
 
 export default function AboutComponent() {
   /**
@@ -37,8 +38,10 @@ export default function AboutComponent() {
                   </div>
                 </div>
                 <div className="mt-12 md:mt-0 w-full" >
-                  <img
+                  <Image
                     // link to a random image from unsplash source: https://source.unsplash.com/random
+                    height={500}
+                    width={500}
                     src="/https://source.unsplash.com/random"
                     alt="About Us Image"
                     className="object-cover w-full rounded-lg shadow-md"

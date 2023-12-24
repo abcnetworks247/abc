@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
+import Logo from "@/resources/assets/image/AbcstudioNo.png";
 
 /**
  * Represents a navigation bar component.
@@ -73,7 +74,7 @@ export default function Navbar() {
         </div>
         {/* abcdstudio logo */}
         <div className="navbar-start">
-          <a className="font-semibold navbar-item">ABC Studio</a>
+        <Image src={Logo} alt="logo" width={140} height={140} />
         </div>
         {/*  Pages  */}
         <div className="hidden navbar-center md:block ">
@@ -303,7 +304,7 @@ export default function Navbar() {
                   tabIndex="1"
                 >
                   {" "}
-                  <Link href="/userdashboard">
+                  <Link href={`${!Authtoken ? "/login" : "/userdashboard"}`}>
                     <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block lg:hidden" />
                   </Link>
                 </label>

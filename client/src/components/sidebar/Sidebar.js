@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FaRegUser } from "react-icons/fa6";
 import { CgLivePhoto } from "react-icons/cg";
 import { BiHomeSmile } from "react-icons/bi";
+import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineContacts } from "react-icons/md";
@@ -29,27 +30,8 @@ export default function Sidebar() {
         <aside className="justify-start h-full bg-white sidebar md:hidden lg:hidden sidebar-fixed-left sidebar-mobile max-sm:fixed max-sm:-translate-x-full">
           <div className="flex items-center justify-between pr-6">
             <section className="items-center p-4 sidebar-title">
-              <svg
-                fill="none"
-                height="42"
-                viewBox="0 0 32 32"
-                width="42"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect height="100%" rx="16" width="100%"></rect>
-                <path
-                  clipRule="evenodd"
-                  d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-                  fill="currentColor"
-                  fillRule="evenodd"
-                ></path>
-              </svg>
-              <div className="flex flex-col">
-                <span>Acme</span>
-                <span className="text-xs font-normal text-content2">
-                  Team Plan
-                </span>
-              </div>
+              
+            <Image src={Logo} alt="logo" width={100} height={100} />
             </section>
             <div>
               <label htmlFor="sidebar-mobile-fixed">
