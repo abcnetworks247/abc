@@ -55,7 +55,7 @@ const Editform = ({
           type="text"
           name="fullname"
           placeholder="Fulll name"
-          // value={formData.fullname}
+          value={formData &&formData.fullname}
           onChange={(e) => handleInputChange(e)}
         />
       </div>

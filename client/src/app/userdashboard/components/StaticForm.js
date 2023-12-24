@@ -41,7 +41,7 @@ const StaticForm = ({  handleEdit }) => {
             <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               First name
             </div>
-            {/* <p>{UserData.fullname}</p> */}
+            <p>{UserData && UserData.fullname}</p>
           </div>
         </div>
         {/* <div className="relative z-0 w-full mb-5 group">

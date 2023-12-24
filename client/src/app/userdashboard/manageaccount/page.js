@@ -33,7 +33,7 @@ const page = () => {
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      // fullname: UserData?.fullname || "",
+       fullname: UserData?.fullname || "",
       email: UserData.email || "",
       userdp: UserData.userdp || "",
       // phonenumber: userData.phonenumber || "",
@@ -48,7 +48,7 @@ const page = () => {
   
   // console.log(`this is selected p ${selectedPhoto}`);
 
-  // console.log("form", formData);
+ console.log("form", formData && formData.fullname);
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
