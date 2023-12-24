@@ -12,9 +12,9 @@ import {
 
 } from "@/utils/regex";
 
+import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
 
-
-export default function Page() {
+ function Page() {
   // router for the navigation to another page after account created successfully
 
   const router = useRouter();
@@ -130,25 +130,16 @@ export default function Page() {
         }, 3000);
 
         setdata(value);
-      } else if (data.status === 500) {
+      } 
         const suberrormsg = toast.update(id, {
-          render: `user does not exist `,
+          render: `${value.error} `,
           type: "error",
           isLoading: false,
         });
         setTimeout(() => {
           toast.dismiss(suberrormsg);
         }, 2000);
-      } else {
-        const suberrormsg = toast.update(id, {
-          render: `error while creating account `,
-          type: "error",
-          isLoading: false,
-        });
-        setTimeout(() => {
-          toast.dismiss(suberrormsg);
-        }, 2000);
-      }
+      
     } catch (error) {
       const suberrormsg = toast.update(id, {
         render: `${error}`,
@@ -294,3 +285,7 @@ export default function Page() {
     </div>
   );
 }
+
+const Login = HocsessionAuthenticated(Page)
+
+export default Login;

@@ -80,9 +80,9 @@ export const UserContextProvider = ({ children }) => {
     console.log("UserData", UserData);
 
 
-  // if(genLoading){
-  //  return <Loading />
-  // }
+  if(genLoading){
+   return <Loading />
+  }
   return (
     <UserContext.Provider
       value={{

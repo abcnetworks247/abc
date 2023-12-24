@@ -3,7 +3,7 @@ import FooterComp from "@/components/Footer/FooterComp";
 FooterComp;
 import Navbar from "@/components/navbar/Navbar";
 
-function page() {
+function About() {
   return (
     <div>
       <div className="bg-white sticky top-0 z-[10]">
@@ -16,4 +16,4 @@ function page() {
   );
 }
 
-export default page;
+export default About;
