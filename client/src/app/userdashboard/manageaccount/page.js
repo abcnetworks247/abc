@@ -33,7 +33,7 @@ const page = () => {
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      fullname: UserData.fullname || "",
+      // fullname: UserData.fullname || "",
       email: UserData.email || "",
       userdp: UserData.userdp || "",
       // phonenumber: userData.phonenumber || "",
@@ -86,7 +86,7 @@ const page = () => {
       const submitForm = new FormData();
 
       // Append form data to the FormData instance
-      submitForm.append("fullname", formData?.fullname);
+      // submitForm.append("fullname", formData?.fullname);
       submitForm.append("email", formData?.email);
 
       // Append userdp if it exists
