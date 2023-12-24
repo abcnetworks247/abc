@@ -9,6 +9,7 @@ import { useMediaQuery } from "react-responsive";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 
 import HocNotAuthenticated from "@/utils/HocNotAuthenticated";
+import Sidebar from "@/components/sidebar/Sidebar";
 
  function Layout({ children }) {
   const pathname = usePathname()
@@ -18,6 +19,7 @@ import HocNotAuthenticated from "@/utils/HocNotAuthenticated";
 
   return (
     <>
+    <Sidebar />
       <div className="bg-white sticky top-0 z-50">
         <Navbar />
       </div>

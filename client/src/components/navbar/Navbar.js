@@ -182,6 +182,8 @@ export default function Navbar() {
                           className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
                           tabIndex="0"
                         >
+                       
+                          
                           <div className="avatar-square avatar avatar-md">
                             <Image
                               src={UserData && UserData.userdp}
@@ -200,13 +202,27 @@ export default function Navbar() {
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <a className="text-sm dropdown-item -z-50">Profile</a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          <Link
+                            href="/userdashboard"
+                            className="text-sm dropdown-item -z-50"
+                          >
+                            Profile
+                          </Link>
+
+                          <Link
+                            href="/userdashboard/manageaccount"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Account settings
-                          </a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          </Link>
+                          <Link
+                            href="/userdashboard/subscription"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Subscriptions
-                          </a>
+                          </Link>
                           <a
                             tabIndex="-1"
                             className="text-sm dropdown-item"
