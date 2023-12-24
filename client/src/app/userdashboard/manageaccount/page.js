@@ -18,7 +18,7 @@ const page = () => {
 
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   
-  console.log('UserData in form',UserData)
+  console.log('UserData in form',formData)
   // useEffect(() => {
   //   // Fetch user data when the component mounts
   //   HandleGetUser();
@@ -86,12 +86,12 @@ const page = () => {
       const submitForm = new FormData();
 
       // Append form data to the FormData instance
-      submitForm.append("fullname", formData.fullname);
-      submitForm.append("email", formData.email);
+      submitForm.append("fullname", formData?.fullname);
+      submitForm.append("email", formData?.email);
 
       // Append userdp if it exists
       if (formData.userdp) {
-        submitForm.append("userdp", formData.userdp);
+        submitForm.append("userdp", formData?.userdp);
       }
 
       // Make a PATCH request

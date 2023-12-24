@@ -69,7 +69,7 @@ const Editform = ({
           type="text"
           name="email"
           placeholder="Email"
-          value={formData.email}
+          value={formData?.email}
           onChange={(e) => handleInputChange(e)}
         />
       </div>
@@ -79,7 +79,7 @@ const Editform = ({
           type="text"
           name="phonenumber"
           placeholder="Phone"
-          value={formData.phonenumber}
+          value={formData?.phonenumber}
           onChange={(e) => handleInputChange(e)}
         />
       </div>
@@ -93,7 +93,7 @@ const Editform = ({
         </label>
         <textarea
           name="shippingaddress"
-          value={formData.shippingaddress}
+          // value={formData?.shippingaddress}
           onChange={(e) => handleInputChange(e)}
           type="text"
           placeholder="3 Market Avenue, Port Harcourt "
