@@ -12,9 +12,9 @@ import {
 
 } from "@/utils/regex";
 
+import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
 
-
-export default function Page() {
+ function Page() {
   // router for the navigation to another page after account created successfully
 
   const router = useRouter();
@@ -110,45 +110,26 @@ export default function Page() {
       });
       const value = data.data;
       // log the response data
-
+     console.log("errorr", value.error);
       // check the staus of the request to see if the request was successful or not
       if (data.status === 200) {
-        console.log(data.data, "success message");
+        console.log(value?.message, "success message");
         // setting the token i got from thr server to cookies with the help of cookie js
         Cookies.set("authToken", value.authToken);
         setTimeout(() => {
           toast.dismiss(id);
         }, 1000);
         toast.update(id, {
-          render: `${value.message}`,
+          render: `${data.data.message}`,
           type: "success",
           isLoading: false,
         });
-
-        setTimeout(() => {
-          router.push("/");
-        }, 3000);
+        router.push("/");
 
         setdata(value);
-      } else if (data.status === 500) {
-        const suberrormsg = toast.update(id, {
-          render: `user does not exist `,
-          type: "error",
-          isLoading: false,
-        });
-        setTimeout(() => {
-          toast.dismiss(suberrormsg);
-        }, 2000);
-      } else {
-        const suberrormsg = toast.update(id, {
-          render: `error while creating account `,
-          type: "error",
-          isLoading: false,
-        });
-        setTimeout(() => {
-          toast.dismiss(suberrormsg);
-        }, 2000);
-      }
+      } 
+       
+      
     } catch (error) {
       const suberrormsg = toast.update(id, {
         render: `${error}`,
@@ -294,3 +275,7 @@ export default function Page() {
     </div>
   );
 }
+
+const Login = HocsessionAuthenticated(Page)
+
+export default Login;

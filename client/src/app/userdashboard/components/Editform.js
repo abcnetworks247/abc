@@ -15,7 +15,7 @@ const Editform = ({
   selectedPhoto,
 }) => {
   // const inputRef = useRef(null)
-
+    console.log('formdata edit', formData);
   return (
     // <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
     <form className="mx-auto" onSubmit={(e) => handleSubmit(e)}>
@@ -34,7 +34,7 @@ const Editform = ({
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g
               id="SVGRepo_tracerCarrier"
-              stroke-linecap="round"
+              strokeLinecap="round"
               strokeLinejoin="round"
             ></g>
             <g id="SVGRepo_iconCarrier">
@@ -55,7 +55,7 @@ const Editform = ({
           type="text"
           name="fullname"
           placeholder="Fulll name"
-          value={formData.fullname}
+          value={formData &&formData.fullname}
           onChange={(e) => handleInputChange(e)}
         />
       </div>
@@ -69,7 +69,7 @@ const Editform = ({
           type="text"
           name="email"
           placeholder="Email"
-          value={formData.email}
+          value={formData?.email}
           onChange={(e) => handleInputChange(e)}
         />
       </div>
@@ -79,21 +79,21 @@ const Editform = ({
           type="text"
           name="phonenumber"
           placeholder="Phone"
-          value={formData.phonenumber}
+          value={formData?.phonenumber}
           onChange={(e) => handleInputChange(e)}
         />
       </div>
 
       <div className="mb-6">
         <label
-          for=""
+          htmlFor=""
           className="block mb-2 text-sm font-medium dark:text-gray-400"
         >
           Shippping Address
         </label>
         <textarea
           name="shippingaddress"
-          value={formData.shippingaddress}
+          value={formData?.shippingaddress}
           onChange={(e) => handleInputChange(e)}
           type="text"
           placeholder="3 Market Avenue, Port Harcourt "
@@ -101,8 +101,8 @@ const Editform = ({
         ></textarea>
       </div>
 
-      <div class="mb-6 ">
-        <label for="" class="block mb-2 text-sm font-medium dark:text-gray-400">
+      <div className="mb-6 ">
+        <label htmlFor="" class="block mb-2 text-sm font-medium dark:text-gray-400">
           Profile picture
         </label>
         <div className="py-2 shrink-0">
@@ -112,7 +112,7 @@ const Editform = ({
             className="object-cover rounded-full w-11 h-11"
           />
         </div>
-        <label for="" className="block pt-2">
+        <label htmlFor="" className="block pt-2">
           <input
             type="file"
             onChange={(e) => handleImageChange(e)}

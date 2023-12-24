@@ -19,8 +19,7 @@ export const UserContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [genLoading, setGenload] = useState(true);
 
-  // log out user
-  console.log("user info", UserData);
+
 
   // get user token from session
   const Authtoken = Cookies.get("authToken");
@@ -77,9 +76,13 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
 
-  // if(genLoading){
-  //  return <Loading />
-  // }
+    // log out user
+    console.log("UserData", UserData);
+
+
+  if(genLoading){
+   return <Loading />
+  }
   return (
     <UserContext.Provider
       value={{
@@ -103,5 +106,9 @@ export const UserContextProvider = ({ children }) => {
  */
 
 export function UseUserContext() {
-  return useContext(UserContext);
+  const usercontext = UserContext;
+     if(!usercontext){
+      throw new Error('useUser must be used within a UserProvider')
+     }
+  return useContext(usercontext);
 }

@@ -9,7 +9,8 @@ import {
   PASSWORD_REGEX,
 
 } from "@/utils/regex";
-export default function Page() {
+import HocUpdatePassword from "@/utils/HocUpdatePassword";
+ function Page() {
   // router for navigating to login page after password update
   const router = useRouter();
   // using usesearcparams to get the search params
@@ -248,3 +249,8 @@ export default function Page() {
     </div>
   );
 }
+
+const updatePassword = HocUpdatePassword(Page)
+
+export default updatePassword;
+

@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
+import Logo from "@/resources/assets/image/AbcstudioNo.png";
 
 /**
  * Represents a navigation bar component.
@@ -24,7 +25,7 @@ export default function Navbar() {
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
 
-  // console.log('tokk',Authtoken);
+  // console.log('tokk',Authtoken)
 
   // cart value variable
   const cartvalue = cartProducts.length;
@@ -72,7 +73,9 @@ export default function Navbar() {
         </div>
         {/* abcdstudio logo */}
         <div className="navbar-start">
-          <a className="font-semibold navbar-item">ABC Studio</a>
+          <Link href="/">
+            <Image src={Logo} alt="logo" width={130} height={130} priority />
+          </Link>
         </div>
         {/*  Pages  */}
         <div className="hidden navbar-center md:block ">
@@ -179,6 +182,8 @@ export default function Navbar() {
                           className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
                           tabIndex="0"
                         >
+                       
+                          
                           <div className="avatar-square avatar avatar-md">
                             <Image
                               src={UserData && UserData.userdp}
@@ -197,13 +202,27 @@ export default function Navbar() {
                         </label>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <a className="text-sm dropdown-item -z-50">Profile</a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          <Link
+                            href="/userdashboard"
+                            className="text-sm dropdown-item -z-50"
+                          >
+                            Profile
+                          </Link>
+
+                          <Link
+                            href="/userdashboard/manageaccount"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Account settings
-                          </a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          </Link>
+                          <Link
+                            href="/userdashboard/subscription"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Subscriptions
-                          </a>
+                          </Link>
                           <a
                             tabIndex="-1"
                             className="text-sm dropdown-item"
@@ -269,13 +288,27 @@ export default function Navbar() {
                         </div>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <a className="text-sm dropdown-item -z-50">Profile</a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          <Link
+                            href="/userdashboard"
+                            className="text-sm dropdown-item -z-50"
+                          >
+                            Profile
+                          </Link>
+
+                          <Link
+                            href="/userdashboard/manageaccount"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Account settings
-                          </a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          </Link>
+                          <Link
+                            href="/userdashboard/subscription"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Subscriptions
-                          </a>
+                          </Link>
                           <a
                             tabIndex="-1"
                             className="text-sm dropdown-item"
@@ -300,7 +333,7 @@ export default function Navbar() {
                   tabIndex="1"
                 >
                   {" "}
-                  <Link href="/userdashboard">
+                  <Link href={`${!Authtoken ? "/login" : "/userdashboard"}`}>
                     <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block lg:hidden" />
                   </Link>
                 </label>
