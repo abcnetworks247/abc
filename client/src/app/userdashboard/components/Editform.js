@@ -15,7 +15,7 @@ const Editform = ({
   selectedPhoto,
 }) => {
   // const inputRef = useRef(null)
-
+    console.log('formdata edit', formData);
   return (
     // <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
     <form className="mx-auto" onSubmit={(e) => handleSubmit(e)}>

@@ -28,12 +28,12 @@ const page = () => {
 
   // console.log("userdashboard", UserData && UserData);
 
-  // console.log("state", userData);
+  // console.log("formData", formData);
 
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      fullname: UserData.fullname || "",
+      fullname: UserData?.fullname || "",
       email: UserData.email || "",
       userdp: UserData.userdp || "",
       // phonenumber: userData.phonenumber || "",
