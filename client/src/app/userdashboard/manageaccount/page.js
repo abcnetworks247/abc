@@ -101,7 +101,7 @@ const page = () => {
         submitForm,
         {
            headers: {
-            Authorization: "Bearer " + Authtoken
+            Authorization: `Bearer ${String(Authtoken)}`
           },
           "Content-Type": "multipart/form-data",
         }
