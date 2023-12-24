@@ -8,8 +8,9 @@ import { usePathname } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 
+import HocNotAuthenticated from "@/utils/HocNotAuthenticated";
 
-export default function layout({ children }) {
+ function Layout({ children }) {
   const pathname = usePathname()
   const {userModal, isTabletOrMobile, isDesktop} = UseProductProvider()
 
@@ -33,3 +34,7 @@ export default function layout({ children }) {
   );
   
 }
+
+const layout = HocNotAuthenticated(Layout)
+
+export default layout;
