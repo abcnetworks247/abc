@@ -110,35 +110,25 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
       });
       const value = data.data;
       // log the response data
-
+     console.log("errorr", value.error);
       // check the staus of the request to see if the request was successful or not
       if (data.status === 200) {
-        console.log(data.data, "success message");
+        console.log(value?.message, "success message");
         // setting the token i got from thr server to cookies with the help of cookie js
         Cookies.set("authToken", value.authToken);
         setTimeout(() => {
           toast.dismiss(id);
         }, 1000);
         toast.update(id, {
-          render: `${value.message}`,
+          render: `${data.data.message}`,
           type: "success",
           isLoading: false,
         });
-
-        setTimeout(() => {
-          router.push("/");
-        }, 3000);
+        router.push("/login");
 
         setdata(value);
       } 
-        const suberrormsg = toast.update(id, {
-          render: `${value.error} `,
-          type: "error",
-          isLoading: false,
-        });
-        setTimeout(() => {
-          toast.dismiss(suberrormsg);
-        }, 2000);
+       
       
     } catch (error) {
       const suberrormsg = toast.update(id, {
