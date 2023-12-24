@@ -8,11 +8,12 @@ import { FaRegUser } from "react-icons/fa6";
 import { CgLivePhoto } from "react-icons/cg";
 import { BiHomeSmile } from "react-icons/bi";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineContacts } from "react-icons/md";
 
 export default function Sidebar() {
   const { loading, UserData, Authtoken } = UseUserContext();
-  
+
   return (
     <div>
       <div className="sm:w-full sm:max-w-[18rem] z-[90] ">
@@ -67,42 +68,48 @@ export default function Sidebar() {
                       <span>Home</span>
                     </li>
                   </Link>
-                  <Link href="/about">
+                  <Link href="/store">
                     <li className="menu-item">
                       <IoStorefrontOutline className="w-5 h-5 opacity-75" />
 
                       <p>Store</p>
                     </li>
                   </Link>
+                  <Link href="/live">
+                    <li className="menu-item">
+                      <CgLivePhoto className="w-5 h-5 text-red-600 opacity-75" />
 
-                  <li className="menu-item">
-                    <CgLivePhoto className="w-5 h-5 text-red-600 opacity-75" />
-
-                    <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">
-                      Live{" "}
-                    </span>
-                  </li>
-
-                  <li className="menu-item">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="opacity-75"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M7 9m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>
-                      <path d="M14 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                      <path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2"></path>
-                    </svg>
-                    Membership
-                  </li>
+                      <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">
+                        Live{" "}
+                      </span>
+                    </li>
+                  </Link>
+                  <Link href="/pricing">
+                    <li className="menu-item">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="opacity-75"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        ></path>
+                        <path d="M7 9m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z"></path>
+                        <path d="M14 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                        <path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2"></path>
+                      </svg>
+                      Membership
+                    </li>
+                  </Link>
                   <Link href="/about">
                     <li className="menu-item">
                       <IoInformationCircleOutline className="w-5 h-5 text-black opacity-75" />
@@ -163,13 +170,14 @@ export default function Sidebar() {
 
                     <div className="menu-item-collapse">
                       <div className="min-h-0">
-                        <label className="ml-6 menu-item menu-item-disabled">
-                          Change Email
-                        </label>
-                        <label className="ml-6 menu-item">Profile</label>
-                        <label className="ml-6 menu-item">
-                          Change Password
-                        </label>
+                        <Link href="/userdashboard/manangeaccount">
+                          <label className="ml-6 menu-item menu-item-disabled">
+                            Account Settings
+                          </label>
+                        </Link>
+                        <Link href="/userdashboard">
+                          <label className="ml-6 menu-item">Profile</label>
+                        </Link>
                       </div>
                     </div>
                   </li>
@@ -204,48 +212,38 @@ export default function Sidebar() {
                     </svg>
                     Payments
                   </li>
-
-                  <li className="menu-item">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="opacity-75"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                      <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                      <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
-                    </svg>
-                    Customers
-                  </li>
-                  <li className="menu-item">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="opacity-75"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M7 10l5 -6l5 6"></path>
-                      <path d="M21 10l-2 8a2 2.5 0 0 1 -2 2h-10a2 2.5 0 0 1 -2 -2l-2 -8z"></path>
-                      <path d="M12 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                    </svg>
-                    Products
-                  </li>
+                  <Link href="/wish">
+                    <li className="menu-item">
+                      <FaRegHeart className="text-2xl" />
+                      Wishlist
+                    </li>
+                  </Link>
+                  <Link href="/cartContent">
+                    <li className="menu-item">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="opacity-75"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        strokeWidth="2"
+                        stroke="currentColor"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path
+                          stroke="none"
+                          d="M0 0h24v24H0z"
+                          fill="none"
+                        ></path>
+                        <path d="M7 10l5 -6l5 6"></path>
+                        <path d="M21 10l-2 8a2 2.5 0 0 1 -2 2h-10a2 2.5 0 0 1 -2 -2l-2 -8z"></path>
+                        <path d="M12 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                      </svg>
+                      Cart
+                    </li>
+                  </Link>
                 </ul>
               </section>
             </nav>

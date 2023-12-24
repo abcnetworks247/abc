@@ -270,13 +270,15 @@ export default function Navbar() {
                         </div>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <a className="text-sm dropdown-item -z-50">Profile</a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          
+                          <Link href="/userdashboard" className="text-sm dropdown-item -z-50">Profile</Link>
+                          
+                          <Link href="/userdashboard/manageaccount" tabIndex="-1" className="text-sm dropdown-item">
                             Account settings
-                          </a>
-                          <a tabIndex="-1" className="text-sm dropdown-item">
+                          </Link>
+                          <Link href="/userdashboard/subscription" tabIndex="-1" className="text-sm dropdown-item">
                             Subscriptions
-                          </a>
+                          </Link>
                           <a
                             tabIndex="-1"
                             className="text-sm dropdown-item"
