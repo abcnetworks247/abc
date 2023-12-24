@@ -13,8 +13,8 @@ export default function AboutComponent() {
       <div>
         {pathname === "/" ? (
           <section className="bg-gray-100">
-            <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-10">
+            <div className="container mx-auto py-16 px-4 sm:px-3 lg:px-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
                 <div className="max-w-lg"> 
                   <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
                     About Us
