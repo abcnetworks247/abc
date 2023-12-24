@@ -74,7 +74,10 @@ export default function Navbar() {
         </div>
         {/* abcdstudio logo */}
         <div className="navbar-start">
+          <Link href="/">
+          
         <Image src={Logo} alt="logo" width={140} height={140} />
+          </Link>
         </div>
         {/*  Pages  */}
         <div className="hidden navbar-center md:block ">

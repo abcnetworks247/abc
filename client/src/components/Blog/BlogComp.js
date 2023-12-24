@@ -63,10 +63,10 @@ export default function BlogComp() {
       {/* // if loading is true, show a skeleton loader. Else, show the blog posts. */}
       {loading ? (
         // skeleton loader
-        <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6 px-10">
+        <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6 px-3">
           {Array.from({ length: 3 }).map((_, index) => (
             <div
-              className="animate-pulse block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7"
+              className="animate-pulse block  mb-4 px-1 rounded lg:mb-0 lg:p-0 w-full md:w-4/7"
               key={index}
             >
               <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">

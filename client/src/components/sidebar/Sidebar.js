@@ -105,6 +105,9 @@ export default function Sidebar() {
                       Contact
                     </li>
                   </Link>
+                    {!Authtoken?
+                    <></>
+                      :
 
                   <li>
                     <input
@@ -152,7 +155,7 @@ export default function Sidebar() {
 
                     <div className="menu-item-collapse">
                       <div className="min-h-0">
-                        <Link href="/userdashboard/manangeaccount">
+                        <Link href="/userdashboard/manageaccount">
                           <label className="ml-6 menu-item menu-item-disabled">
                             Account Settings
                           </label>
@@ -163,12 +166,18 @@ export default function Sidebar() {
                       </div>
                     </div>
                   </li>
+                    }
+
                 </ul>
               </section>
               <div className="my-0 divider"></div>
               <section className="px-4 menu-section">
                 <span className="menu-title">More</span>
                 <ul className="menu-items">
+                  {!Authtoken?
+                <></>  
+                :
+
                 <Link href="/userdashboard">
                   <li className="menu-item">
                     <svg
@@ -196,6 +205,7 @@ export default function Sidebar() {
                     Payments
                   </li>
                   </Link>
+                }
                   <Link href="/wish">
                     <li className="menu-item">
                       <FaRegHeart className="text-2xl" />
