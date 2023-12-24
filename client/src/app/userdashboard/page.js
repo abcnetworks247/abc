@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { EditIcon } from "./components/icons/UserIcon";
-
+import Hocsession from "@/utils/Hocsession";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 const page = () => {
   const { screen, handleUser } = UseProductProvider();
