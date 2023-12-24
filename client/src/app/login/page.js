@@ -124,7 +124,7 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
           type: "success",
           isLoading: false,
         });
-        router.push("/login");
+        router.push("/");
 
         setdata(value);
       } 

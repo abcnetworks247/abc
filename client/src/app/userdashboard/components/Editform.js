@@ -93,7 +93,7 @@ const Editform = ({
         </label>
         <textarea
           name="shippingaddress"
-          // value={formData?.shippingaddress}
+          value={formData?.shippingaddress}
           onChange={(e) => handleInputChange(e)}
           type="text"
           placeholder="3 Market Avenue, Port Harcourt "

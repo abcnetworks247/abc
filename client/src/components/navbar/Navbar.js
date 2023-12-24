@@ -26,7 +26,6 @@ export default function Navbar() {
   const pathname = usePathname();
 
   // console.log('tokk',Authtoken)
-  
 
   // cart value variable
   const cartvalue = cartProducts.length;
@@ -75,8 +74,7 @@ export default function Navbar() {
         {/* abcdstudio logo */}
         <div className="navbar-start">
           <Link href="/">
-          
-        <Image src={Logo} alt="logo" width={140} height={140} />
+            <Image src={Logo} alt="logo" width={130} height={130} priority />
           </Link>
         </div>
         {/*  Pages  */}
@@ -274,13 +272,25 @@ export default function Navbar() {
                         </div>
 
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          
-                          <Link href="/userdashboard" className="text-sm dropdown-item -z-50">Profile</Link>
-                          
-                          <Link href="/userdashboard/manageaccount" tabIndex="-1" className="text-sm dropdown-item">
+                          <Link
+                            href="/userdashboard"
+                            className="text-sm dropdown-item -z-50"
+                          >
+                            Profile
+                          </Link>
+
+                          <Link
+                            href="/userdashboard/manageaccount"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Account settings
                           </Link>
-                          <Link href="/userdashboard/subscription" tabIndex="-1" className="text-sm dropdown-item">
+                          <Link
+                            href="/userdashboard/subscription"
+                            tabIndex="-1"
+                            className="text-sm dropdown-item"
+                          >
                             Subscriptions
                           </Link>
                           <a

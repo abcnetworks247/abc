@@ -68,7 +68,7 @@ const StaticForm = ({  handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Phone Number
           </div>
-          {/* <p>{UserData.phonenumber}</p> */}
+          <p>{UserData.phonenumber}</p>
         </div>
       </div>
       {/* shipping Address */}
@@ -77,7 +77,7 @@ const StaticForm = ({  handleEdit }) => {
           <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Shipping Address
           </div>
-          {/* <p>{userData.shippingaddress}</p> */}
+          <p>{UserData.shippingaddress}</p>
         </div>
       </div>
     </div>
