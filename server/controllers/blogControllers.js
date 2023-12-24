@@ -17,6 +17,9 @@ const {
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const getAllBlog = async (req, res) => {
+
+  console.log('hit ');
+
   try {
     const allblog = await blog
       .find()

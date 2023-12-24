@@ -37,7 +37,7 @@ const AuthSchema = new mongoose.Schema(
       required: true,
     },
     phonenumber: {
-      type: Number,
+      type: String,
     },
     shippingaddress: {
       type: String,
