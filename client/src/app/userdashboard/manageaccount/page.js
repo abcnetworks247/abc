@@ -11,7 +11,7 @@ import Api from "@/utils/Api";
 
 const page = () => {
 
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(null);
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
@@ -28,12 +28,12 @@ const page = () => {
 
   // console.log("userdashboard", UserData && UserData);
 
-  // console.log("state", userData);
+  // console.log("formData", formData);
 
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      fullname: UserData.fullname || "",
+       fullname: UserData?.fullname || "",
       email: UserData.email || "",
       userdp: UserData.userdp || "",
       // phonenumber: userData.phonenumber || "",
@@ -48,7 +48,7 @@ const page = () => {
   
   // console.log(`this is selected p ${selectedPhoto}`);
 
-  // console.log("form", formData);
+ console.log("form", formData && formData.fullname);
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -86,7 +86,7 @@ const page = () => {
       const submitForm = new FormData();
 
       // Append form data to the FormData instance
-      submitForm.append("fullname", formData?.fullname);
+      // submitForm.append("fullname", formData?.fullname);
       submitForm.append("email", formData?.email);
 
       // Append userdp if it exists
