@@ -36,10 +36,10 @@ const AuthSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    phonenumber: {
+    shippingaddress: {
       type: String,
     },
-    shippingaddress: {
+    phone: {
       type: String,
     },
     password: {
