@@ -9,7 +9,7 @@ import {
   PASSWORD_REGEX,
 
 } from "@/utils/regex";
-import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
+import HocUpdatePassword from "@/utils/HocUpdatePassword";
  function Page() {
   // router for navigating to login page after password update
   const router = useRouter();
@@ -250,7 +250,7 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
   );
 }
 
-const updatePassword = HocsessionAuthenticated(Page)
+const updatePassword = HocUpdatePassword(Page)
 
 export default updatePassword;
 
