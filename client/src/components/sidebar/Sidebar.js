@@ -187,6 +187,7 @@ export default function Sidebar() {
               <section className="px-4 menu-section">
                 <span className="menu-title">More</span>
                 <ul className="menu-items">
+                <Link href="/userdashboard">
                   <li className="menu-item">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -212,6 +213,7 @@ export default function Sidebar() {
                     </svg>
                     Payments
                   </li>
+                  </Link>
                   <Link href="/wish">
                     <li className="menu-item">
                       <FaRegHeart className="text-2xl" />
