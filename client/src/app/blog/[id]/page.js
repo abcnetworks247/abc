@@ -218,7 +218,7 @@ export default function page() {
 
             <aside
               aria-label="Related articles"
-              className="py-8 overflow-hidden px-14"
+              className="py-8 overflow-hidden px-5"
             >
               <div className="max-w-screen-xl px-4 mx-auto"></div>
               <div className="">

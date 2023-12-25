@@ -1,5 +1,4 @@
 import React from 'react'
-import { UseUserContext } from '../../contexts/UserContext'
 import { redirect } from 'next/navigation';
 import Cookies from 'js-cookie';
 

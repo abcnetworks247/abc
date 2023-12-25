@@ -51,7 +51,7 @@ const Editform = ({
 
       <div className="relative z-0 w-full mb-5 group">
         <input
-          className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
+          className="w-full px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
           type="text"
           name="fullname"
           placeholder="Fulll name"
@@ -65,7 +65,7 @@ const Editform = ({
 
       <div className="relative z-0 w-full mb-5 group">
         <input
-          className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
+         className="w-full px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
           type="text"
           name="email"
           placeholder="Email"
@@ -75,7 +75,7 @@ const Editform = ({
       </div>
       <div className="relative z-0 w-full mb-5 group">
         <input
-          className="w-full dark:bg-gray-800 dark:border-gray-800 px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
+          className="w-full px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
           type="text"
           name="phonenumber"
           placeholder="Phone"
@@ -97,7 +97,7 @@ const Editform = ({
           onChange={(e) => handleInputChange(e)}
           type="text"
           placeholder="3 Market Avenue, Port Harcourt "
-          className="block w-full px-4 py-6 leading-tight placeholder-gray-400  border rounded dark:placeholder-gray-400 dark:text-gray-400 dark:border-gray-800 dark:bg-gray-800 "
+          className="w-full px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
         ></textarea>
       </div>
 

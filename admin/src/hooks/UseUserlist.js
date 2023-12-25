@@ -12,7 +12,7 @@ export default function UseUserlist() {
    *@returns {boolean} isError - error state
    */
   const {
-    data: user,
+    data: users,
     isLoading,
     isError,
     isSuccess
@@ -27,5 +27,5 @@ export default function UseUserlist() {
     return res.data;
 
   }});
-  return { user, isLoading, isError, isSuccess};
+  return { users, isLoading, isError, isSuccess};
 }

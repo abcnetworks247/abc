@@ -29,7 +29,7 @@ export const AdminProvider = ({ children }) => {
     };
 
     useEffect(()=>{
-       if(!Authtoken){
+       if(Authtoken){
          setGenerror(true)
          setGenload(false)
        }
