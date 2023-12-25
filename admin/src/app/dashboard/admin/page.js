@@ -232,14 +232,30 @@ export default function Page() {
                               {createdAt.split("T")[0]}
                             </Typography>
                           </td>
+                          
+                          {   CurrentUser&&   CurrentUser.data.olduser.role === "superadmin" && role !== "superadmin"?
+
                           <td className={classes}>
-                            <Tooltip content="Edit User">
-                              <IconButton variant="text">
-                                <PencilIcon className="h-4 w-4" />
+                            <Tooltip content={`Edit User ${role}`}>
+                              <IconButton variant="text" onClick={()=>{DeleteUser(role)}} >
+                                     <PencilIcon className="h-4 w-4"  />
                               </IconButton>
                             </Tooltip>
                           </td>
-                          {  CurrentUser.data.olduser.role === "superadmin" && role !== "superadmin"?
+                          :
+                          CurrentUser&&  CurrentUser.data.olduser.role  === "admin" && role !== "superadmin" && role !== "admin"?
+
+                          <td className={classes}>
+                          <Tooltip content={`Delete ${role}`}>
+                            <IconButton variant="text" onClick={()=>{DeleteUser(role)}} >
+                                   <PencilIcon className="h-4 w-4 "  />
+                            </IconButton>
+                          </Tooltip>
+                        </td>
+                        : <></>
+                          
+                          }
+                          {    CurrentUser&&   CurrentUser.data.olduser.role === "superadmin" && role !== "superadmin"?
 
                           <td className={classes}>
                             <Tooltip content={`Delete ${role}`}>
@@ -249,7 +265,7 @@ export default function Page() {
                             </Tooltip>
                           </td>
                           :
-                          CurrentUser.data.olduser.role  === "admin" && role !== "superadmin"?
+                          CurrentUser&&    CurrentUser.data.olduser.role  === "admin" && role !== "superadmin" && role !== "admin"?
 
                           <td className={classes}>
                           <Tooltip content={`Delete ${role}`}>

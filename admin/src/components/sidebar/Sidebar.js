@@ -33,18 +33,23 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { SlFolderAlt } from "react-icons/sl";
+import useCurrentAdmin from "@/hooks/useCurrentAdmin";
+import Image from "next/image";
+
 import Link from "next/link";
 export default function Sidebar() {
   const [open, setOpen] = React.useState(0);
   const [open2, setOpen2] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
-
+  const {CurrentUser,isLoading }= useCurrentAdmin()
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
   const handleOpen2 = (value) => {
     setOpen2(open2 === value ? 0 : value);
   };
+
+  const UserValue = CurrentUser && CurrentUser.data.olduser;
   return (
     <div className="w-auto sticky top-0 z-0 h-[100vh] hidden lg:block">
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
@@ -309,16 +314,32 @@ export default function Sidebar() {
               </Link>
             </li>
           </ul>
+          {
+            isLoading?
+            <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
+            <div className="w-10 h-10 animate-pulse bg-blue-gray-200 rounded-full border-2 border-blue-gray-200 border-l-transparent"></div>
+            <div className="ml-4">
+              <p className="text-sm text-white w-5 h-2 bg-blue-gray-200 rounded-sm animate-pulse"></p>
+              <p className="text-sm text-white w-5 h-2 bg-blue-gray-200 rounded-sm animate-pulse"></p>
+            </div>
+          </div>
+          :
+
           <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
-            <img
-              src="https://readymadeui.com/profile.webp"
+            <Image
+            
+              src={UserValue && UserValue.userdp}
+              
+              height={50}
+              width={50}
               className="border-2 border-white rounded-full w-9 h-9"
             />
             <div className="ml-4">
-              <p className="text-sm text-white">John Doe</p>
-              <p className="text-xs text-gray-300">Active admin account</p>
+              <p className="text-sm text-white">{ UserValue && UserValue.fullname}</p>
+              <p className="text-xs text-gray-300">Active {UserValue && UserValue.role} account</p>
             </div>
           </div>
+          }
         </div>
       </div>
     </div>

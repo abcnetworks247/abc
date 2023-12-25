@@ -35,9 +35,9 @@ export const AdminProvider = ({ children }) => {
        }
     },[])
 
-     if(genLoading){
-       return <Loading />
-     }
+    //  if(genLoading){
+    //    return <Loading />
+    //  }
   return (
     <AdminContext.Provider
       value={{
