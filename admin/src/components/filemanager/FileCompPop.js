@@ -11,7 +11,7 @@ import {
 import { MdOutlineDelete } from "react-icons/md";
 import React from "react";
 
-const FileComp = () => {
+const FileCompPop = () => {
   const data = [
     {
       imageLink:
@@ -53,32 +53,38 @@ const FileComp = () => {
 
   return (
     <div>
-      <div className="">
-        <div className="flex flex-wrap items-center sm:items-end md:items-center justify-between pt-8 border-t-gray-600">
-          <div className=" border-t-gray-500">
-            <Checkbox label="Select All" className="text-gray-900" />
-          </div>
-          <div className="flex flex-col md:flex-row items-center gap-5">
-            <div className="flex flex-row items-center gap-5">
-              <Button
-                variant="gradient"
-                className="flex flex-row items-center normal-case gap-1 px-2 py-1 text-sm text-white bg-gray-900 rounded-md"
-              >
-                <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
-                Delete
-              </Button>
+      <div className="h-[70vh]">
+        <div className="flex flex-wrap items-center justify-between pt-8 border-t-gray-600">
+          <div className="flex flex-row items-center gap-3 ml-4">
+          <button
+              variant=""
+              className="flex flex-row items-center gap-1 px-2 py-1 pr-2 text-sm text-white bg-green-600 rounded-md"
+            >
+              <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
+              Add
+            </button>
 
-              <Select
-                variant="outlined"
-                label="Sort By:"
-                className="text-gray-900"
-              >
-                <Option className="text-gray-900">Sort By Newest</Option>
-                <Option className="text-gray-900">Sort By Oldest</Option>
-                <Option className="text-gray-900">Sort By A-Z</Option>
-                <Option className="text-gray-900">Sort By Z-A</Option>
-              </Select>
-            </div>
+            <button
+              variant=""
+              className="flex flex-row items-center gap-1 px-2 py-1 text-sm text-white bg-gray-900 rounded-md"
+            >
+              <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
+              Delete
+            </button>
+          </div>
+          <div className="flex flex-row items-center gap-5">
+           
+
+            <Select
+              variant="outlined"
+              label="Sort By:"
+              className="text-gray-900"
+            >
+              <Option className="text-gray-900">Sort By Newest</Option>
+              <Option className="text-gray-900">Sort By Oldest</Option>
+              <Option className="text-gray-900">Sort By A-Z</Option>
+              <Option className="text-gray-900">Sort By Z-A</Option>
+            </Select>
             <div class="relative flex w-full gap-2 md:w-max">
               <div class="relative h-10 w-full min-w-[288px]">
                 <input
@@ -137,4 +143,4 @@ const FileComp = () => {
   );
 };
 
-export default FileComp;
+export default FileCompPop;

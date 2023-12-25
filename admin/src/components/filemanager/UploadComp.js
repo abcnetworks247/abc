@@ -1,27 +1,56 @@
 "use client";
 
 import {
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    DialogFooter,
-    Spinner,
-  } from "@material-tailwind/react";
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Spinner,
+} from "@material-tailwind/react";
+import Image from "next/image";
 import { useState } from "react";
+import Api from "@/utils/Api";
+import axios from "axios";
 
 function UploadComp({ handleOpen, size }) {
-  const [selectedphoto, setSelectedPhoto] = useState(null);
-  const [blogimage, setBlogImage] = useState(null);
+  const [uploadfile, setUploadFile] = useState(null);
+  const [fileUrl, setFileUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
-    setBlogImage(selectedFile);
 
     const imageUrl = URL.createObjectURL(selectedFile);
+    setFileUrl(imageUrl);
+    setUploadFile(selectedFile);
+  };
 
-    if (selectedFile) {
-      setSelectedPhoto(selectedFile.name);
+  const HandleUpload = async () => {
+    const formData = new FormData();
+    formData.append("image", uploadfile);
+
+    console.log(formData);
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/admin/file/upload",
+        formData, // Pass the FormData directly as the second parameter
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("successful");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
@@ -45,16 +74,33 @@ function UploadComp({ handleOpen, size }) {
             className="relative w-full p-6 border-2 border-gray-300 border-dashed rounded-lg h-[50vh] flex flex-col items-center justify-center"
             id="dropzone"
           >
-            <input
-              type="file"
-              className="absolute inset-0 z-50 w-full h-full opacity-0"
-            />
-            <div className="text-center">
-              <img
-                className="w-12 h-12 mx-auto"
-                src="https://www.svgrepo.com/show/357902/image-upload.svg"
-                alt=""
+            <form encType="multipart/form-data">
+              <input
+                type="file"
+                className="absolute inset-0 z-50 w-full h-full opacity-0"
+                onChange={(e) => handleImageChange(e)}
+                name="image"
+                accept="image/*"
               />
+            </form>
+            <div className="text-center">
+              {!fileUrl ? (
+                <Image
+                  className="w-12 h-12 mx-auto"
+                  src="https://www.svgrepo.com/show/357902/image-upload.svg"
+                  alt=""
+                  height={200}
+                  width={200}
+                />
+              ) : (
+                <Image
+                  className="w-[200px] h-[200px] object-cover mx-auto rounded-lg shadow-sm"
+                  src={fileUrl}
+                  alt=""
+                  height={200}
+                  width={200}
+                />
+              )}
               <h3 className="mt-2 text-sm font-medium text-gray-900">
                 <label
                   htmlFor="file-upload"
@@ -76,18 +122,18 @@ function UploadComp({ handleOpen, size }) {
               <p className="mt-1 text-xs text-gray-500">
                 PNG, JPG, GIF up to 10MB
               </p>
-
-              {/* <span>{selectedphoto}</span> */}
-              
             </div>
             <img src="" className="hidden mx-auto mt-4 max-h-40" id="preview" />
           </div>
         </DialogBody>
         <DialogFooter className="flex flex-row items-center justify-between">
-          <div className="flex flex-row items-center gap-4">
-            <Spinner />
-            <span className="text-sm">70% Uploaded</span>
-          </div>
+          {!loading && <div className=""></div>}
+          {loading && (
+            <div className="flex flex-row items-center gap-4 ml-5">
+              <Spinner />
+              <span className="text-sm">70% Uploaded</span>
+            </div>
+          )}
           <div className="">
             <Button
               variant="text"
@@ -97,7 +143,14 @@ function UploadComp({ handleOpen, size }) {
             >
               <span>Cancel</span>
             </Button>
-            <Button variant="gradient" onClick={() => handleOpen(null)}>
+            <Button
+              variant="gradient"
+              onClick={() => HandleUpload()}
+              disabled={!fileUrl}
+              className={`${
+                !fileUrl ? "cursor-not-allowed" : "cursor-pointer"
+              }`}
+            >
               <span>Upload</span>
             </Button>
           </div>

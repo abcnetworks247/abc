@@ -36,8 +36,8 @@ const page = () => {
        fullname: UserData?.fullname || "",
       email: UserData.email || "",
       userdp: UserData.userdp || "",
-      // phonenumber: userData.phonenumber || "",
-      // shippingaddress: userData.shippingaddress || "",
+      phonenumber: UserData.phonenumber || "",
+      shippingaddress: UserData.shippingaddress || "",
     });
 
     setSelectedPhoto(UserData.userdp);

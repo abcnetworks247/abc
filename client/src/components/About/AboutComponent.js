@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {Image} from "next/image";
 
 export default function AboutComponent() {
   /**
@@ -13,9 +14,9 @@ export default function AboutComponent() {
       <div>
         {pathname === "/" ? (
           <section className="bg-gray-100">
-            <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-10">
-                <div className="max-w-lg">
+            <div className="container mx-auto py-16 px-4 sm:px-3 lg:px-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+                <div className="max-w-lg"> 
                   <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
                     About Us
                   </h2>
@@ -36,12 +37,14 @@ export default function AboutComponent() {
                     </Link>
                   </div>
                 </div>
-                <div className="mt-12 md:mt-0">
-                  <img
+                <div className="mt-12 md:mt-0 w-full" >
+                  <Image
                     // link to a random image from unsplash source: https://source.unsplash.com/random
+                    height={500}
+                    width={500}
                     src="/https://source.unsplash.com/random"
                     alt="About Us Image"
-                    className="object-cover rounded-lg shadow-md"
+                    className="object-cover w-full rounded-lg shadow-md"
                   />
                 </div>
               </div>

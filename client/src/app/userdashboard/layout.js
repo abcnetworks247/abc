@@ -8,8 +8,10 @@ import { usePathname } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 
+import HocNotAuthenticated from "@/utils/HocNotAuthenticated";
+import Sidebar from "@/components/sidebar/Sidebar";
 
-export default function layout({ children }) {
+ function Layout({ children }) {
   const pathname = usePathname()
   const {userModal, isTabletOrMobile, isDesktop} = UseProductProvider()
 
@@ -17,6 +19,7 @@ export default function layout({ children }) {
 
   return (
     <>
+    <Sidebar />
       <div className="bg-white sticky top-0 z-50">
         <Navbar />
       </div>
@@ -33,3 +36,7 @@ export default function layout({ children }) {
   );
   
 }
+
+const layout = HocNotAuthenticated(Layout)
+
+export default layout;

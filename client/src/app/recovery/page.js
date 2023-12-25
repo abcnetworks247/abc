@@ -6,8 +6,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { EMAIL_REGEX } from "@/utils/regex";
-
-export default function Page() {
+import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
+ function Page() {
   // define initial recoveryformdata state
 
   const [email, setRecoveryFormData] = useState("");
@@ -192,3 +192,7 @@ export default function Page() {
     </div>
   );
 }
+
+const recovery = HocsessionAuthenticated(Page);
+
+export default recovery;

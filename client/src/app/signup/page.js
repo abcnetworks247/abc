@@ -5,6 +5,7 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
 import {
   EMAIL_REGEX,
   PASSWORD_REGEX,
@@ -12,7 +13,7 @@ import {
   DOB_REGEX,
 } from "@/utils/regex";
 
-export default function Page() {
+ function Page() {
   const router = useRouter();
   // Define initial form data state
   const [signUpFormData, setSignUpFormData] = useState({
@@ -294,3 +295,6 @@ export default function Page() {
     </div>
   );
 }
+
+const signup = HocsessionAuthenticated(Page)
+export default signup

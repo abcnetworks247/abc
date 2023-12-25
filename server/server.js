@@ -5,6 +5,7 @@ const blogRouter = require("./routes/blogRoute");
 const clientRouter = require("./routes/clientAuthRoute");
 const adminRouter = require("./routes/adminAuthRoute");
 const productRouter = require("./routes/productRoute");
+const uploadRouter = require("./routes/uploadRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 
@@ -13,10 +14,12 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 
+const { handleNewComment } = require("./controllers/blogControllers");
+
 const {
-  handleNewComment,
-  postReaction,
-} = require("./controllers/blogControllers");
+  HandleUpload,
+  DeleteUpload,
+} = require("./controllers/UploadController");
 
 const cookieParser = require("cookie-parser");
 
@@ -52,7 +55,8 @@ const io = new Server(server, {
 });
 
 handleNewComment(io);
-postReaction(io);
+HandleUpload(io);
+DeleteUpload(io);
 
 app.use(
   bodyParser.urlencoded({
@@ -80,10 +84,9 @@ app.use((err, req, res, next) => {
 
 app.use("/api/v1/client/blog", blogRouter);
 app.use("/api/v1/client/auth", clientRouter);
-app.use("/api/v1/admin/auth", adminRouter); 
+app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/", productRouter);
-
-
+app.use("/api/v1/admin/file", uploadRouter);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
