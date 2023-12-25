@@ -15,9 +15,9 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import { LuFiles } from "react-icons/lu";
-import FileComp from "@/components/filemanager/fileComp";
 import { BsFileEarmarkPlus } from "react-icons/bs";
 import UploadPop from "./UploadPop";
+import FileCompPop from "./FileCompPop";
 
 const PopUpFilemanager = ({ handleOpen, size }) => {
   const [selectedphoto, setSelectedPhoto] = useState(null);
@@ -28,7 +28,7 @@ const PopUpFilemanager = ({ handleOpen, size }) => {
       label: "Select",
       value: "select",
       icon: LuFiles,
-      childComponent: <FileComp />,
+      childComponent: <FileCompPop />,
     },
     {
       label: "Upload",
@@ -39,7 +39,7 @@ const PopUpFilemanager = ({ handleOpen, size }) => {
   ];
 
   return (
-    <div className="md:h-[80vh]">
+    <div className="h-fit">
       <Dialog
         open={
           size === "xs" ||
@@ -58,7 +58,7 @@ const PopUpFilemanager = ({ handleOpen, size }) => {
         handler={handleOpen}
       >
         <DialogBody className="px-6"  >
-          <Tabs value="select" className="h-[85vh]">
+          <Tabs value="select" className="h-fit">
             <TabsHeader className="m-0 w-fit h-fit">
               {data.map(({ label, value, icon }) => (
                 <Tab key={value} value={value} className="px-8 m-0 h-fit">
@@ -69,7 +69,7 @@ const PopUpFilemanager = ({ handleOpen, size }) => {
                 </Tab>
               ))}
             </TabsHeader>
-            <TabsBody className="h-[80%] overflow-y-auto ">
+            <TabsBody className="overflow-y-auto h-fit ">
               {data.map(({ value, childComponent }) => (
                 <TabPanel key={value} value={value} className="mt-0">
                   {childComponent}
