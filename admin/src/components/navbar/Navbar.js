@@ -114,7 +114,7 @@ function ProfileMenu() {
           className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
         >
           {CurrentUserloading ? (
-            <div className="w-8 h-8 animate-pulse bg-blue-gray-200 rounded-full border-2 border-blue-gray-200 border-l-transparent"></div>
+            <div className="w-10 h-10 animate-pulse bg-blue-gray-200 rounded-full border-2 border-blue-gray-200 border-l-transparent"></div>
           ) : (
             <>
               <Avatar

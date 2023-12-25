@@ -6,6 +6,6 @@ const Newscat = new mongoose.Schema({
     }
 })
 
-const NewsCategory = mongoose.model('NewsCategory', Newstypes);
+const NewsCategory = mongoose.model('NewsCategory', Newscat);
 
 module.exports = NewsCategory;

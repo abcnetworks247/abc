@@ -8,7 +8,7 @@ const productRouter = require("./routes/productRoute");
 const uploadRouter = require("./routes/uploadRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-const categoryRouter = require('../routes/categoryRoute');
+const categoryRouter = require('./routes/categoryRoute');
 
 const path = require("path");
 const cors = require("cors");
