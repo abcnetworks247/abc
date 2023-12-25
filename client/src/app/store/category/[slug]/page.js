@@ -28,7 +28,7 @@ const page = () => {
 
             // Update the products state with the fetched data
             setCategory(data);
-            router.push(`/store/category/${category}`);
+           
         } catch (error) {
             console.error("Error fetching products:", error);
         }
