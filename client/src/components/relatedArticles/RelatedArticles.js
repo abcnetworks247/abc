@@ -62,7 +62,7 @@ export default function RelatedArticles({ id }) {
               // centeredSlides={true}
               spaceBetween={20}
               autoplay={true}
-              navigation={false}
+              navigation={true}
               //make it infinite
               loop={true}
               cardsEffect={"coverflow"}

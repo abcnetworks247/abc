@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
+import HocsessionNotAuth from "@/utils/HocsessionNotAuth";
 import { ComplexNavbar } from "@/components/navbar/Navbar";
 import Sidebar from "@/components/sidebar/Sidebar";
-export default function layout({ children }) {
+ function Layout({ children }) {
   return (
     <div>
       <main className="flex flex-row w-[100%]">
@@ -15,3 +16,7 @@ export default function layout({ children }) {
     </div>
   );
 }
+
+const layout = HocsessionNotAuth(Layout);
+
+export default  layout;

@@ -10,7 +10,7 @@ const page = () => {
     <div
       className={` ${
         screen ? "hidden" : ""
-      } h-full w-full absolute sm:static sm:block top-0 z-30  basis-3/4 bg-white min-h-max shadow-md sm:rounded-lg`}
+      } h-[100vh] w-full absolute sm:static sm:block top-0 z-30  basis-3/4 bg-white min-h-max shadow-md sm:rounded-lg`}
     >
       <div
         className="mt-2 flex flex-row-reverse mr-6 cursor-pointer"

@@ -76,6 +76,33 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
 
+
+
+  const [blogData, setBlogData] = useState(null)
+    
+       /**
+   * Retrieves a blog using the API and sets the blog data.
+   *
+   * @return {Promise<void>} - A promise that resolves when the blog data is set.
+   */
+  const getBlog = async()=>{
+      try {
+          const res = await Api.get('client/blog')
+          const data = await res.data
+          console.log("res",data)
+          setBlogData(data.allblog)
+      } catch (error) {
+          console.log(error)
+      }
+  }
+
+
+useEffect(()=>{
+  console.log('blog context',blogData && blogData)
+  getBlog()
+},[])
+
+
     // log out user
     console.log("UserData", UserData);
 

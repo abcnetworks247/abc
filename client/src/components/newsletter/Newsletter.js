@@ -30,7 +30,7 @@ export default function Newsletter() {
                 className="w-full px-4 py-2 border-2 border-gray-300 outline-none rounded-md"
                 placeholder="john@tech.com"
               />
-              <button className="px-4 py-2 text-gray-100 bg-green-800 rounded focus:outline-none">
+              <button className="px-4 py-2 text-white bg-blue-800 rounded focus:outline-none">
                 Subscribe
                 <i className="bx bx-right-arrow-alt"></i>
               </button>

@@ -13,9 +13,16 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  EMAIL_REGEX,
+  PASSWORD_REGEX,
+  USERNAME_REGEX,
+  DOB_REGEX,
+} from "@/utils/regex";
 
 export function AddMember({ open, handleOpen }) {
   // initial state for form data
+  const router = useRouter()
 
   const [formData, setFormData] = useState({
     fullname: "",
@@ -23,6 +30,27 @@ export function AddMember({ open, handleOpen }) {
     password: "",
   });
 
+
+
+  
+  //Define state for universal error
+
+  const [universalError, setUniversalError] = useState("");
+
+  // Define initial validation state
+  const [isValidData, setIsValidData] = useState(true);
+
+  // Define initial form error state
+
+
+  const [errorMessages, setErrorMessages] = useState({
+    email: "",
+    fullname: "",
+    password: "",
+  });
+
+
+  
   /**
    *
    * @param {object}e e event object
@@ -38,6 +66,40 @@ export function AddMember({ open, handleOpen }) {
     });
   };
 
+
+    /**
+   *
+   * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
+   * @param {Object} regex - for checkking if the regex meet up the chaeteria required
+   * @param {Object} value - the value for regex test
+   * @param {Error} errorMessage -to indeciate the error
+   */
+
+    function signUpValidate(fieldName, regex, value, errorMessage) {
+      if (!regex.test(value)) {
+        setUniversalError("");
+        setErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: errorMessage,
+        }));
+        setIsValidData(false);
+      } else {
+        setErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: "",
+        }));
+        setIsValidData(true);
+  
+        setUniversalError("");
+      }
+    }
+  
+    // Define Variable for allfield valid
+  
+    const allFieldsValid = Object.keys(errorMessages).every(
+      (field) => !errorMessages[field]
+    );
+  
   /**
    *
    * @param {object} e - event object
@@ -46,6 +108,12 @@ export function AddMember({ open, handleOpen }) {
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    if(!allFieldsValid){
+      toast.error("please fill in all the fields correctly", {
+        position: toast.POSITION.TOP_LEFT,
+      });
+      return
+    }
     const id = toast.loading("creating..", {
       position: toast.POSITION.TOP_LEFT,
     });
@@ -55,7 +123,7 @@ export function AddMember({ open, handleOpen }) {
 
       // Perform an asynchronous API post request to sign up the user
       console.log("Before API post request");
-      const data = await Api.post("admin/auth/signup", formData);
+      const data = await Api.post("client/auth/signup", formData);
 
       // Log the response data to the console
       console.log("all data", data);
@@ -63,9 +131,11 @@ export function AddMember({ open, handleOpen }) {
       // Check the status of the response and log success or failure messages
       if (data.status === 201) {
         console.log("post successful", data.data.message);
-        setTimeout(() => {
-          toast.dismiss(id);
-        }, 1000);
+         if(typeof window !== "undefined"){
+          window.location.reload()
+         }
+        toast.dismiss(id);
+        
         toast.update(id, {
           render: `${data.data.message}`,
           type: "success",
@@ -147,11 +217,21 @@ export function AddMember({ open, handleOpen }) {
                         type="text"
                         name="fullname"
                         placeholder="eg. Michael Leo"
-                        onChange={HandleInputChange}
-                        className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                        onChange={(e) => {
+                          HandleInputChange(e);
+                          signUpValidate(
+                            "fullname",
+                            USERNAME_REGEX,
+                            e.target.value,
+                            "username start with letter, may include numbers or underscore(_)"
+                          );
+                        }}className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
                   </div>
+                  {errorMessages.fullname && formData.fullname && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.fullname}</span>
+                )}
                   <div className="flex flex-wrap mt-4 -mx-3">
                     <div className="w-full max-w-full px-3 mt-4 flex-0 sm:mt-0 sm:w-6/12">
                       <label
@@ -164,9 +244,21 @@ export function AddMember({ open, handleOpen }) {
                         type="email"
                         name="email"
                         placeholder="eg. abcstudio.com"
-                        onChange={HandleInputChange}
+                        onChange={(e) => {
+                          HandleInputChange(e);
+                          signUpValidate(
+                            "email",
+                            EMAIL_REGEX,
+                            e.target.value,
+                            "Please enter a valid email address."
+                          );
+                        }}
+                        required
                         className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
+                        {errorMessages.email && formData.email && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.email}</span>
+                )}
                     </div>
                     <div className="w-full max-w-full px-3 flex-0 sm:w-6/12">
                       <label
@@ -179,9 +271,21 @@ export function AddMember({ open, handleOpen }) {
                         type="password"
                         name="password"
                         placeholder="******"
-                        onChange={HandleInputChange}
+                        onChange={(e) => {
+                          HandleInputChange(e);
+                          signUpValidate(
+                            "password",
+                            PASSWORD_REGEX,
+                            e.target.value,
+                            "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
+                          );
+                        }}
+                        required
                         className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
+                    {errorMessages.password && formData.password && (
+                  <span className="text-red-500 text-[13px]">{errorMessages.password}</span>
+                )}
                     </div>
                   </div>
                 </div>

@@ -141,7 +141,7 @@ export default function BlogComp() {
                           </p>
                           <Link
                             href={`${pathUrl}/${post._id}`}
-                            className="inline-block px-6 py-3 mt-2 text-gray-100 bg-green-700 rounded-md"
+                            className="inline-block px-6 py-3 mt-2 text-white bg-blue-800 rounded-md"
                           >
                             Read more
                           </Link>
