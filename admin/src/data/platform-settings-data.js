@@ -16,23 +16,7 @@ export const platformSettingsData = [
       },
     ],
   },
-  {
-    title: "application",
-    options: [
-      {
-        checked: false,
-        label: "New launches and projects",
-      },
-      {
-        checked: true,
-        label: "Monthly product updates",
-      },
-      {
-        checked: false,
-        label: "Subscribe to newsletter",
-      },
-    ],
-  },
+
 ];
 
 export default platformSettingsData;
