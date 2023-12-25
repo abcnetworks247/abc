@@ -66,7 +66,7 @@ const Usernav = ({changeView, mobileView}) => {
             </span>
             <p className="text-xs text-gray-600">{userData.email}</p>
             <div className="flex flex-row items-start gap-2">
-              <span className="text-sm text-gray-600">{userData.package}</span>
+              <span className="text-sm text-gray-600">{userData.userpackage}</span>
               <svg
                 className="w-6 h-6"
                 viewBox="-3.5 0 32 32"

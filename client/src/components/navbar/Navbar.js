@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 /**
  * Represents a navigation bar component.
@@ -53,9 +54,6 @@ export default function Navbar() {
           icon: "success",
         });
         router.push("/login");
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("hasReloaded");
-        }
         HandleLogout();
       }
     });
@@ -126,11 +124,23 @@ export default function Navbar() {
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
-            {/* <CgLivePhoto className="text-red-500" /> */}
             <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">
               Live
             </span>
           </Link>
+
+
+     
+
+<a className="dropdown    dropdown-hover" >
+	<label tabIndex="0">News</label>
+	<div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3">
+		<a className="dropdown-item text-sm">Profile</a>
+		<a tabIndex="-1" className="dropdown-item text-sm">Account settings</a>
+		<a tabIndex="-1" className="dropdown-item text-sm">Subscriptions</a>
+	</div>
+</a>
+
         </div>
         <div className="hidden navbar-center md:block "></div>
         <div className="flex flex-row items-center navbar-end ">
@@ -272,6 +282,8 @@ export default function Navbar() {
                     <div className="flex flex-row gap-4 ">
                       <div className="dropdown ">
                         <div className="avatar-square avatar avatar-md">
+                        <Link href="/userdashboard">
+
                           <Image
                             src={UserData && UserData.userdp}
                             height={20}
@@ -285,9 +297,10 @@ export default function Navbar() {
                             //   height: 'auto',
                             // }}
                           />
+                        </Link>
                         </div>
 
-                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                        {/* <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
                           <Link
                             href="/userdashboard"
                             className="text-sm dropdown-item -z-50"
@@ -316,7 +329,7 @@ export default function Navbar() {
                           >
                             logout
                           </a>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

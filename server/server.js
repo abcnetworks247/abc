@@ -8,6 +8,7 @@ const productRouter = require("./routes/productRoute");
 const uploadRouter = require("./routes/uploadRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const categoryRouter = require('../routes/categoryRoute');
 
 const path = require("path");
 const cors = require("cors");
@@ -87,6 +88,10 @@ app.use("/api/v1/client/auth", clientRouter);
 app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/", productRouter);
 app.use("/api/v1/admin/file", uploadRouter);
+
+
+//category Route
+app.use("/api/v1/admin/category", categoryRouter);
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));

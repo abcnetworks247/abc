@@ -373,12 +373,11 @@ const userDelete = async (req, res) => {
 
 const allAdmin = async (req, res) => {
   try {
-    // Retrieve list of clients
-    const clients = await Admin.find();
+    // Retrieve list of admin
+    const admin = await Admin.find();
 
     // Check if user is authenticated
     const user = req.user;
-    console.log("allClient", user);
 
     if (!user) {
       throw new NotFoundError("User not found");
@@ -390,7 +389,7 @@ const allAdmin = async (req, res) => {
     }
 
     // Return success response with client data
-    return res.status(StatusCodes.OK).json({ data: clients });
+    return res.status(StatusCodes.OK).json({ data: admin });
   } catch (error) {
     // Handle errors and return internal server error response
     res

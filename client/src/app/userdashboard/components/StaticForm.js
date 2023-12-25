@@ -37,8 +37,8 @@ const StaticForm = ({  handleEdit }) => {
       {/* First and last name */}
       <div className="grid md:grid-cols-2 md:gap-6">
         <div className="relative z-0 w-full mb-5 group">
-          <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-            <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
+          <div className="block py-2.5 px-0 w-full text-sm text-black  bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
+            <div className="peer-focus:font-medium absolute text-black  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               First name
             </div>
             <p>{UserData && UserData.fullname}</p>
@@ -55,8 +55,8 @@ const StaticForm = ({  handleEdit }) => {
       </div>
       {/* Email address */}
       <div className="relative z-0 w-full mb-5 group">
-        <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-          <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
+        <div className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
+          <div className="peer-focus:font-medium absolute text-sm text-whiteduration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Email address
           </div>
           <p>{UserData.email}</p>
@@ -64,8 +64,8 @@ const StaticForm = ({  handleEdit }) => {
       </div>
       {/* Phone number */}
       <div className="relative z-0 w-full mb-5 group">
-        <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-          <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
+        <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
+          <div className="peer-focus:font-medium absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Phone Number
           </div>
           <p>{UserData.phonenumber}</p>
@@ -73,8 +73,8 @@ const StaticForm = ({  handleEdit }) => {
       </div>
       {/* shipping Address */}
       <div className="relative z-0 w-full mb-5 group">
-        <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-          <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
+        <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
+          <div className="peer-focus:font-medium absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
             Shipping Address
           </div>
           <p>{UserData.shippingaddress}</p>
