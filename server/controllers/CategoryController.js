@@ -1,10 +1,10 @@
 const CategoryJoi = require("../Utils/CategoryJoiSchema");
-const Admin = require("./adminAuthSchema");
+const Admin = require("../models/adminAuthSchema");
 const { StatusCodes } = require("http-status-codes");
 
-const NewsType = require("../models/newsType");
-const NewsCat = require("./newsCatSchema");
-const ProductCat = require("./productCat");
+const NewsType = require("../models/newsTypeSchema");
+const NewsCat = require("../models/newsCatSchema");
+const ProductCat = require("../models/productCatSchema");
 
 const {
   NotFoundError,
