@@ -18,14 +18,16 @@ export default function useallAdmin() {
     isLoading,
     isSuccess,
   } = useQuery({
-    queryKey: ["userAdminlist"],
+    queryKey: ["AllAdmin"],
     queryFn: async () => {
       const res = await Api.get("admin/auth/account/admin", {
         headers: {
             Authorization: `Bearer ${String(AuthToken)}`,
         },
       });
+      console.log('useall adim from hooks', res);
       return res
+
     },
 
   });
