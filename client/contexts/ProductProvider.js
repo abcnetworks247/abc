@@ -40,10 +40,9 @@ const ProductProvider = ({ children }) => {
    
   };
   
-  const MAX_RATING = 5;
-  const MIN_RATING = 1;
+ 
 
-  const [rating] = useState(Math.floor(Math.random() * (5 - 1 + 1)) + 1);
+  
 
   const handleLinkClick = () => setUserNav(!isTabletOrMobile)
   
@@ -251,7 +250,7 @@ useEffect(() => {
         handleCartClick,
         handleAddToWishlist,
         Wishlist,
-        rating,
+      
         searchProducts,
         searchResults,
         setSearchResults,
