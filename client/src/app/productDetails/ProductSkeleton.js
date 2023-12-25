@@ -2,7 +2,7 @@ import React from 'react'
 
 const ProductSkeleton = () => {
   return (
-  <div className="animate-pulse bg-white dark:bg-gray-800 p-4 mb-8">
+  <div className="animate-pulse bg-white dark:bg-gray-800 p-4 mb-8 lg:w-[80%] lg:mx-auto">
   <div className="flex flex-wrap -mx-4">
     <div className="w-full md:w-1/2 mb-4 md:mb-0">
       <div className="loading-image relative mb-6 lg:mb-10" style={{ height: '450px' }}>
