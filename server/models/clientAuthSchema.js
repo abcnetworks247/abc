@@ -31,15 +31,15 @@ const AuthSchema = new mongoose.Schema(
       type: String,
       default: "Tell us about yourself",
     },
+    phone: {
+      type: String,
+    },
     email: {
       type: String,
       unique: true,
       required: true,
     },
     shippingaddress: {
-      type: String,
-    },
-    phone: {
       type: String,
     },
     password: {

@@ -21,10 +21,13 @@ const page = () => {
 
   return (
     <>
-      <div
+      {/* <div
         className={` ${
           screen ? "hidden" : ""
         } h-full w-full absolute sm:static sm:block top-0 z-30 md:basis-3/4 bg-white md:min-h-max sm:shadow-md sm:rounded-md`}
+      > */}
+      <div
+        className={`h-full w-full absolute sm:static sm:block top-0 z-30 md:basis-3/4 bg-white md:min-h-max sm:shadow-md sm:rounded-md`}
       >
         {/* <div className={`${screen && "hidden"}`} onClick={() => handleUser()}>
           cancel

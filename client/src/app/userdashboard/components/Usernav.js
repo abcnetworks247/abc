@@ -16,7 +16,7 @@ import {
 } from "./icons/UserIcon";
 import { usePathname } from "next/navigation";
 
-const Usernav = () => {
+const Usernav = ({changeView, mobileView}) => {
   const pathname = usePathname();
   const router = useRouter();
   const {
@@ -49,7 +49,7 @@ const Usernav = () => {
   return (
     <>
       <div
-        className={`  w-full px-4 py-4 sm:min-h-max sm:min-w-[28%]  md:max-w-[28%] lg:max-w-[30%]  bg-white  sm:rounded-md sm:shadow-md`}
+        className={`w-full px-4 py-4 sm:min-h-max sm:min-w-[28%]  md:max-w-[28%] lg:max-w-[30%]  bg-white  sm:rounded-md sm:shadow-md`}
       >
         <div className="flex items-center gap-4 accountInformation  w-full">
           <div class="py-2 shrink-0">
@@ -64,7 +64,7 @@ const Usernav = () => {
             <span className="text-sm font-semibold  w-full text-gray-600">
               {userData.fullname}
             </span>
-            <p className="text-xs text-gray-600">{userData.email }</p>
+            <p className="text-xs text-gray-600">{userData.email}</p>
             <div className="flex flex-row items-start gap-2">
               <span className="text-sm text-gray-600">{userData.userpackage}</span>
               <svg
@@ -157,18 +157,29 @@ const Usernav = () => {
             <p className="text-sm text-gray-600">My ABC account</p>
           </div> */}
 
-          <Link
-            onClick={() => {
-              handleUser();
-            }}
-            href={clickState ? `/userdashboard` : ``}
-            className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
-              pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
-            }`}
-          >
-            <AccountIcon />
-            <p className="text-sm text-gray-600">My account</p>
-          </Link>
+          {mobileView ? (
+            <Link
+              // href={clickState ? `/userdashboard` : ``}
+              href={`/userdashboard/stats`}
+              className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
+                pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
+              }`}
+            >
+              <AccountIcon />
+              <p className="text-sm text-gray-600">My account</p>
+            </Link>
+          ) : (
+            <Link
+              // href={clickState ? `/userdashboard` : ``}
+              href={`/userdashboard`}
+              className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
+                pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
+              }`}
+            >
+              <AccountIcon />
+              <p className="text-sm text-gray-600">My account</p>
+            </Link>
+          )}
 
           <Link href="/userdashboard/orders">
             <div
@@ -176,7 +187,9 @@ const Usernav = () => {
                 pathname == "/userdashboard/orders" ? "sm:bg-gray-200" : ""
               }`}
               onClick={() => {
-                handleUser();
+                if (mobileView) {
+                  changeView();
+                }
               }}
             >
               <OrderIcon />
@@ -248,11 +261,13 @@ const Usernav = () => {
           <Link href="/userdashboard/closeaccount">
             <div
               className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == "/userdashboard/EditDetails" ? "sm:bg-gray-200" : ""
+                pathname == "/userdashboard/closeaccount"
+                  ? "sm:bg-gray-200"
+                  : ""
               }`}
-              onClick={() => {
-                handleUser();
-              }}
+              // onClick={() => {
+              //   handleUser();
+              // }}
             >
               <svg
                 className="w-5 h-5"
