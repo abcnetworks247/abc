@@ -13,7 +13,8 @@ import {
   Card,
   IconButton,
 } from "@material-tailwind/react";
-// import Swal from "sweetalert2";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 import Link from "next/link";
 
 import {
@@ -31,6 +32,7 @@ import {
 } from "@heroicons/react/24/solid";
 import NotificationsMenu from "../notification/Notification";
 import { UseAdminContext } from "@/context/AdminContext";
+import { useRouter } from "next/navigation";
 
 // profile menu component
 const profileMenuItems = [
@@ -62,17 +64,45 @@ const profileMenuItems = [
 ];
 
 function ProfileMenu() {
+  const router = useRouter()
   const {
     UserInfo,
     CurrentUsererror,
     CurrentUserloading,
     CurrentUserisSuccess,
+    HandleLogout,
   } = UseAdminContext();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
 
   console.log("CurrentUser", UserInfo);
+
+  function Logout() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log me out!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "loggedOut!",
+          text: "You've been logged out succesfully.",
+          icon: "success",
+        });
+        router.push("/auth/signin");
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("hasReloaded");
+        }
+        HandleLogout();
+      }
+    });
+  }
+
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -110,7 +140,7 @@ function ProfileMenu() {
           return (
             <Link href={path} key={label}>
               <MenuItem
-                onClick={closeMenu}
+                onClick={isLastItem?Logout : closeMenu}
                 className={`flex items-center gap-2 rounded ${
                   isLastItem 
                     ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"

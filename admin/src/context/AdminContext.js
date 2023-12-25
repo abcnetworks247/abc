@@ -23,13 +23,15 @@ export const AdminProvider = ({ children }) => {
     const [genLoading, setGenload] = useState(true);
     const [generror, setGenerror] = useState(false);
 
+
+    const HandleLogout = async () => {
+      Cookies.remove("adminToken");
+    };
+
     useEffect(()=>{
-       if(Authtoken){
+       if(!Authtoken){
          setGenerror(true)
          setGenload(false)
-       }else{
-         setGenload(false)
-     redirect('/auth/login')
        }
     },[])
 
@@ -42,6 +44,7 @@ export const AdminProvider = ({ children }) => {
         UserInfo,
         CurrentUsererror,
         CurrentUserloading,
+        HandleLogout,
         CurrentUserisSuccess,
       }}
     >

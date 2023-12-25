@@ -8,7 +8,7 @@ export default function HocUpadate(Component) {
     const Params = useSearchParams();
     const reset = Params.get('reset');
     if(!reset || reset === "true") {
-        AuthToken ?redirect('/dashboard') : redirect("/auth/login")
+        AuthToken ?redirect('/dashboard') : redirect("/auth/signin")
     }
  
     return <Component {...params} />

@@ -6,7 +6,7 @@ export default function HocsessionNotAuth(Component) {
     const AuthToken = Cookies.get("adminToken");
     const session = AuthToken;
     if(!session){
-      redirect('/auth/dashboard')
+      redirect('/auth/signin')
     }
     return <Component {...params} />
     

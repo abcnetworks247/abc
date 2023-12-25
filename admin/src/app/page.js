@@ -12,7 +12,7 @@ const AuthToken = Cookies.get("adminToken");
 
       useEffect(()=>{
         if(pathname == "/"){
-         AuthToken ?redirect("/dashboard") : redirect('/login');
+         AuthToken ?redirect("/dashboard") : redirect('/auth/signin');
         }
       },[])
   return (
