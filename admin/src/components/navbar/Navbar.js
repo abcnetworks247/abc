@@ -13,6 +13,7 @@ import {
   Card,
   IconButton,
 } from "@material-tailwind/react";
+// import Swal from "sweetalert2";
 import Link from "next/link";
 
 import {
@@ -56,7 +57,7 @@ const profileMenuItems = [
   {
     label: "Sign Out",
     icon: PowerIcon,
-    path: "/dashboard/signout",
+    path: "#",
   },
 ];
 
@@ -111,7 +112,7 @@ function ProfileMenu() {
               <MenuItem
                 onClick={closeMenu}
                 className={`flex items-center gap-2 rounded ${
-                  isLastItem
+                  isLastItem 
                     ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
                     : ""
                 }`}
