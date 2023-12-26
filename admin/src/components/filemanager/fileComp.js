@@ -9,60 +9,36 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import io from "socket.io-client";
 
 const FileComp = () => {
-  const data = [
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80",
-    },
-    {
-      imageLink:
-        "https://demos.creative-tim.com/material-kit-pro/assets/img/examples/blog5.jpg",
-    },
-    {
-      imageLink:
-        "https://material-taillwind-pro-ct-tailwind-team.vercel.app/img/content2.jpg",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1620064916958-605375619af8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1493&q=80",
-    },
-  ];
+  const [fileData, setFileData] = useState(null);
+  
+  const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+
+
+  useEffect(() => {
+    socket.on("filemanager", ({ filemanager }) => {
+      console.log("this is filemanager", filemanager);
+      setFileData(filemanager);
+    });
+  
+    return () => socket.disconnect();
+  }, [socket]);
 
   return (
     <div>
       <div className="">
-        <div className="flex flex-wrap items-center sm:items-end md:items-center justify-between pt-8 border-t-gray-600">
+        <div className="flex flex-wrap items-center justify-between pt-8 sm:items-end md:items-center border-t-gray-600">
           <div className=" border-t-gray-500">
             <Checkbox label="Select All" className="text-gray-900" />
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-5">
+          <div className="flex flex-col items-center gap-5 md:flex-row">
             <div className="flex flex-row items-center gap-5">
               <Button
                 variant="gradient"
-                className="flex flex-row items-center normal-case gap-1 px-2 py-1 text-sm text-white bg-gray-900 rounded-md"
+                className="flex flex-row items-center gap-1 px-2 py-1 text-sm text-white normal-case bg-gray-900 rounded-md"
               >
                 <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
                 Delete
@@ -98,10 +74,10 @@ const FileComp = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-4">
-          {data.map(({ imageLink }, index) => (
+          {fileData && fileData.map(({ secure_url, _id }) => (
             <div
               className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
-              key={index}
+              key={_id}
             >
               <div className="">
                 <img

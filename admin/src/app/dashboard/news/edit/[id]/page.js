@@ -34,7 +34,7 @@ function page() {
 
 
     const baseUrl =
-        "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog";
+        "https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog";
     useEffect(() => {
         axios
             .get(`${baseUrl}/${id}`)
@@ -86,7 +86,7 @@ function page() {
                                     Title
                                 </label>
                                 <input
-                                    className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                                    className="p-2 text-base border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-indigo-500"
                                     type="ttext"
                                     placeholder="mail@gmail.com"
                                     defaultValue={title}
@@ -105,7 +105,7 @@ function page() {
                                     cols="10"
                                     rows="10"
                                     placeholder=" News details"
-                                    className="h-20 p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                                    className="h-20 p-2 text-base border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-indigo-500"
                                 ></textarea>
                                 <label className="text-sm font-bold tracking-wide text-gray-500">
                                     Full Details

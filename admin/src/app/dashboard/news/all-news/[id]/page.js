@@ -21,7 +21,7 @@ export default function BlogCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const baseUrl =
-    "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog";
+    "https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog";
   const { id } = useParams();
   useEffect(() => {
     axios
