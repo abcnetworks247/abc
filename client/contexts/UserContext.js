@@ -87,7 +87,7 @@ export const UserContextProvider = ({ children }) => {
    */
   const getBlog = async()=>{
       try {
-          const res = await Api.get('client/blog')
+          const res = await Api.get('admin/blog')
           const data = await res.data
           console.log("res",data)
           setBlogData(data.allblog)

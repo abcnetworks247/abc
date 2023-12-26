@@ -1,4 +1,7 @@
 const Admin = require("../models/adminAuthSchema");
+const FileManager = require("../models/fileManagerSchema");
+const FileJoiSchema = require("../Utils/FileJoiSchema");
+
 const io = require("../server");
 const {
   NotFoundError,
@@ -9,7 +12,7 @@ const cloudinary = require("../Utils/CloudinaryFileUpload");
 const { StatusCodes } = require("http-status-codes");
 
 const UploadFile = async (req, res) => {
-    const { user } = req;
+  const { user } = req;
 
   try {
     if (!user) {
@@ -20,36 +23,41 @@ const UploadFile = async (req, res) => {
       user.role !== "editor"
     ) {
       throw new UnAuthorizedError("You are not authorized to upload");
-    } else if (!file) {
+    } else if (!req.file) {
       throw new NotFoundError("The file does not exist");
     }
 
-    const {
-      originalname,
-      format,
-      width,
-      height,
-      created_at,
-      secure_url,
-      path,
-    } = req.file;
-
-    console.log(path);
+    const { path } = req.file;
 
     const createfile = await cloudinary.uploader.upload(path, {
       use_filename: true,
-      folder: "AllBlogsImage",
+      folder: "Filemanager",
     });
 
-    console.log(createfile);
+    const fileinfo = {
+      originalname: createfile.original_filename,
+      format: createfile.format,
+      width: createfile.width,
+      height: createfile.height,
+      created_at: createfile.created_at.toString(),
+      secure_url: createfile.secure_url,
+    };
 
-    if (!createfile.secure_url) {
-      throw new Error("Failed to upload file to Cloudinary");
+    const { error, value } = FileJoiSchema.validate(fileinfo);
+
+    if (error) {
+      throw new ValidationError("Invalid file");
     }
 
-    console.log(createfile);
+    const newfile = await FileManager.create(value);
+
+    console.log('New file uploaded successfully');
+
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ data: newfile, message: "file uploaded successfully" });
   } catch (error) {
-    res
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });
   }
@@ -57,9 +65,16 @@ const UploadFile = async (req, res) => {
 
 const HandleUpload = (io) => {
   io.on("connection", async (socket) => {
-    socket.emit("fileupload", async (file) => {});
+    try {
+      const fileBatch = await FileManager.find();
+      socket.emit("filemanager", fileBatch);
+      socket.disconnect();
+    } catch (error) {
+      console.error("Error fetching file batch:", error);
+    }
   });
 };
+
 
 const DeleteUpload = (io) => {};
 

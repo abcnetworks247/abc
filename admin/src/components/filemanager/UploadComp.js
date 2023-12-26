@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Api from "@/utils/Api";
 import axios from "axios";
+import cookies from "js-cookie"
 
 function UploadComp({ handleOpen, size }) {
   const [uploadfile, setUploadFile] = useState(null);
@@ -30,15 +31,18 @@ function UploadComp({ handleOpen, size }) {
     const formData = new FormData();
     formData.append("image", uploadfile);
 
-    console.log(formData);
+    const token = cookies.get("adminToken");
 
     try {
       setLoading(true);
+
+      console.log('token', token);
       const response = await axios.post(
         "http://localhost:8000/api/v1/admin/file/upload",
         formData, // Pass the FormData directly as the second parameter
         {
           headers: {
+            Authorization: `Bearer ${String(token)}`,
             "Content-Type": "multipart/form-data",
           },
         }

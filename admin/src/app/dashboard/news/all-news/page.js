@@ -15,7 +15,7 @@ const Page = () => {
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/client/blog`)
+      .get(`${baseUrl}/admin/blog`)
       .then((res) => {
         const data = res.data.allblog;
         setNews(data);
@@ -72,7 +72,7 @@ const Page = () => {
         <article class="rounded-xl border border-gray-100 m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
           <div class="lg:flex md:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
             <div
-              className="rounded  lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
+              className="rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
               aria-hidden="true"
             >
               {/* random image from unsplash*/}
@@ -80,7 +80,7 @@ const Page = () => {
               <img
                 src={item.blogimage}
                 alt="random image from unsplash"
-                className="object-cover w-full h-full mb-2 rounded  lg:mb-0 md:flex md:mb-0"
+                className="object-cover w-full h-full mb-2 rounded lg:mb-0 md:flex md:mb-0"
               />
               </Link>
             </div>
@@ -157,14 +157,14 @@ const Page = () => {
         <article class="rounded-xl m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
           <div class="lg:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
             <div
-              className="rounded  lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
+              className="rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
               aria-hidden="true"
             >
               {/* random image from unsplash*/}
               <img
                 src={item.blogimage}
                 alt="random image from unsplash"
-                className="object-cover w-full h-full mb-2 rounded  lg:mb-0 md:flex md:mb-0"
+                className="object-cover w-full h-full mb-2 rounded lg:mb-0 md:flex md:mb-0"
               />
             </div>
 

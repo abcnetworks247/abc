@@ -83,10 +83,10 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.use("/api/v1/client/blog", blogRouter);
 app.use("/api/v1/client/auth", clientRouter);
 app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/", productRouter);
+app.use("/api/v1/admin/blog", blogRouter);
 app.use("/api/v1/admin/file", uploadRouter);
 
 

@@ -17,7 +17,7 @@ export default function page() {
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const baseUrl =
-    "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog";
+    "https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog";
 
   //fetch blog api
   const fetchBlog = async () => {
@@ -53,8 +53,8 @@ export default function page() {
         // if loading is true, show loading component
         loading ? (
           <main className="mt-[110px] pb-16  lg:pb-24 bg-white w-auto antialiased">
-            <div className="flex justify-between max-w-screen-xl px-4 mx-auto flex-col gap-5">
-              <span className="animate-pulse w-full rounded-lg lg:h-6 h-12 bg-gray-200  max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue"></span>
+            <div className="flex flex-col justify-between max-w-screen-xl gap-5 px-4 mx-auto">
+              <span className="w-full h-12 max-w-2xl mx-auto bg-gray-200 rounded-lg animate-pulse lg:h-6 format format-sm sm:format-base lg:format-lg format-blue"></span>
               <div className="w-full h-[50svh] bg-gray-200 rounded max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue animate-pulse"></div>
             </div>
           </main>
@@ -84,7 +84,7 @@ export default function page() {
                     {parse(`${blog.longdescription}`)}
                   </div>
 
-                  <section className="not-format mt-6">
+                  <section className="mt-6 not-format">
                     <div className="flex items-center justify-between mb-6">
                       <h2 className="text-lg font-bold text-gray-900 lg:text-2xl">
                         Discussion (20)
@@ -98,7 +98,7 @@ export default function page() {
                         <textarea
                           id="comment"
                           rows="6"
-                          className="outline-0 w-full px-0 text-lg text-gray-900 bg-gray-200 border-0 focus:ring-0 dark:placeholder-gray-400"
+                          className="w-full px-0 text-lg text-gray-900 bg-gray-200 border-0 outline-0 focus:ring-0 dark:placeholder-gray-400"
                           placeholder="Write a comment..."
                           required
                         ></textarea>
@@ -218,7 +218,7 @@ export default function page() {
 
             <aside
               aria-label="Related articles"
-              className="py-8 overflow-hidden px-5"
+              className="px-5 py-8 overflow-hidden"
             >
               <div className="max-w-screen-xl px-4 mx-auto"></div>
               <div className="">
