@@ -56,7 +56,7 @@ const getAllBlog = async (req, res) => {
 };
 
 const createBlog = async (req, res) => {
-  const { title, shortdescription, longdescription, category, type } = req.body;
+  const { title, shortdescription, longdescription, category, type, blogimage  } = req.body;
 
   try {
     const currentUser = req.user;
@@ -65,27 +65,12 @@ const createBlog = async (req, res) => {
       throw new UnAuthorizedError("User not found");
     }
 
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    const { originalname, size, mimetype, path } = req.file;
-
-    const blogphoto = await cloudinary.uploader.upload(path, {
-      use_filename: true,
-      folder: "AllBlogsImage",
-    });
-
-    if (!blogphoto.secure_url) {
-      throw new Error("Failed to upload file to Cloudinary");
-    }
-
     const newBlog = {
       title,
       shortdescription,
       longdescription,
       category,
-      blogimage: blogphoto.secure_url,
+      blogimage,
       type,
       author: currentUser._id,
     };
@@ -201,7 +186,7 @@ const updateBlog = async (req, res) => {
 };
 
 const deleteBlog = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.body;
 
   try {
     const blogdata = await blog.findById(id);

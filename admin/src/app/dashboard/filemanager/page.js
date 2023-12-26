@@ -6,28 +6,23 @@ import { MdOutlineDelete } from "react-icons/md";
 import FileComp from "@/components/filemanager/FileComp";
 import UploadComp from "@/components/filemanager/UploadComp";
 import { UseFileManager } from "@/context/FileManagerProvidert";
-import { io } from "socket.io-client";
+import io from "socket.io-client";
 
 const Page = () => {
   // dialog open state thaat is recieved from filemanger context
   const { handleOpen, size } = UseFileManager();
 
-
   const [fileData, setFileData] = useState(null);
-  
+
   const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
 
-
   useEffect(() => {
-    socket.on("filemanager", ({ filemanager }) => {
-      console.log("this is filemanager", filemanager);
-      setFileData(filemanager);
+    socket.on("filemanager", (data) => {
+      console.log("this is filemanager", data);
+      setFileData(data);
     });
-  
-    return () => socket.disconnect();
-  }, [socket]);
+  }, [fileData]);
 
-  
   return (
     <div className="px-10 py-10">
       <div className="flex flex-row items-center justify-between">
@@ -55,7 +50,7 @@ const Page = () => {
         </Button>
       </div>
 
-      <FileComp />
+      <FileComp fileData={fileData} />
       <UploadComp handleOpen={handleOpen} size={size} />
     </div>
   );

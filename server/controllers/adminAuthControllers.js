@@ -113,8 +113,11 @@ const signIn = async (req, res) => {
 
 const singleAdmin = async (req, res) => {
   const id = req.params.id;
+  const userblog = await Blog.find({ author: id });
+  
 
   try {
+    
     const olduser = await Admin.findById(id);
 
     if (!olduser) {
@@ -122,11 +125,11 @@ const singleAdmin = async (req, res) => {
     }
 
     // Check user role for authorization
-    if (user.role !== "superadmin" && user.role !== "admin") {
+    if (olduser.role !== "superadmin" && olduser.role !== "admin" && olduser.role !== "editor") {
       throw new UnAuthorizedError("Access denied");
     }
 
-    res.status(StatusCodes.OK).json({ olduser });
+    res.status(StatusCodes.OK).json({ olduser, userblog });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

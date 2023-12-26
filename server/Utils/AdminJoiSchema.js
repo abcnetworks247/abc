@@ -7,6 +7,7 @@ const Adminjoi = joi.object({
   userbio: joi.string(),
   password: joi.string().required(),
   role: joi.string(),
+  mypost: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),
 });
 
 module.exports = Adminjoi;
