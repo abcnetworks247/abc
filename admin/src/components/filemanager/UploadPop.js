@@ -31,7 +31,7 @@ const UploadPop = () => {
       setUploadState("Uploading, please wait...");
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/admin/file/upload",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/file/upload`,
         formData,
         {
           headers: {
