@@ -18,6 +18,9 @@ import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import Api from "@/utils/Api";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 function page() {
     const [html, setHtml] = useState('');
@@ -31,6 +34,8 @@ function page() {
     const [imageSrc, setImageSrc] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const AuthToken = Cookies.get("adminToken");
+    const router = useRouter();
 
 
     const baseUrl =
@@ -55,6 +60,28 @@ function page() {
                 setLoading(false);
             });
     }, []);
+
+    const handleUpdate = async () => {
+        const data = {
+            blogid: id,
+            title: title,
+            shortdescription: shortDescription,
+            longdescription: html,
+            blogimage: imageSrc,
+        };
+        console.log("update data",data);
+        const res = await Api.patch(`admin/blog/update`, data, {
+            headers: {
+                Authorization: `Bearer ${String(AuthToken)}`,
+            },
+        });
+        console.log("update response",res);
+        if (res.status === 200) {
+            router.push("/dashboard/news/all-news");
+        }
+    };
+
+
     const handleChange = (e) => {
         setHtml(e.target.value);
       }
@@ -80,7 +107,7 @@ function page() {
                                 Lorem ipsum is placeholder text.
                             </p>
                         </div>
-                        <form className="mt-8 space-y-3" action="#" method="POST">
+                        <form className="mt-8 space-y-3" action={handleUpdate} method="POST">
                             <div className="grid grid-cols-1 space-y-2">
                                 <label className="text-sm font-bold tracking-wide text-gray-500">
                                     Title
@@ -90,7 +117,7 @@ function page() {
                                     type="ttext"
                                     placeholder="mail@gmail.com"
                                     defaultValue={title}
-                                    onchange={(e) => setTitle(e.target.value)}
+                                    onChange={(e) => setTitle(e.target.value)}
                                 />
                             </div>
                             <div className="grid grid-cols-1 space-y-2">
@@ -141,8 +168,8 @@ function page() {
                                                 stroke="currentColor"
                                             >
                                                 <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
                                                     strokeWidth="2"
                                                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                                                 />
