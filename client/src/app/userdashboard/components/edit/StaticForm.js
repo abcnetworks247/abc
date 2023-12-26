@@ -1,8 +1,8 @@
 import React from "react";
-import { UseUserContext } from "../../../../contexts/UserContext";
-const StaticForm = ({  handleEdit }) => {
-  const {UserData} = UseUserContext()
-  console.log('user static', UserData);
+import { UseUserContext } from "../../../../../contexts/UserContext";
+const StaticForm = ({ handleEdit }) => {
+  const { UserData } = UseUserContext();
+  console.log("user static", UserData);
   return (
     <div className="mx-auto">
       <div className="flex flex-row-reverse cursor-pointer ">
