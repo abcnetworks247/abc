@@ -128,6 +128,8 @@ const updateBlog = async (req, res) => {
   const { title, shortdescription, longdescription, category, blogid, type } =
     req.body;
 
+    console.log(title, shortdescription, longdescription, category, blogid, type)
+
   try {
     const blogdata = await blog.findById(blogid);
 

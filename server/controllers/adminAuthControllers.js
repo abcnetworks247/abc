@@ -28,7 +28,7 @@ const Client = require("../models/clientAuthSchema");
 const maxAgeInMilliseconds = 7 * 24 * 60 * 60 * 1000;
 
 const signUp = async (req, res) => {
-  const { fullname, email, password } = req.body;
+  const { fullname, email, password, role } = req.body;
 
   try {
     const findUser = await Admin.findOne({ email });
@@ -43,6 +43,7 @@ const signUp = async (req, res) => {
       fullname,
       email,
       password,
+      role
     });
 
     if (error) {

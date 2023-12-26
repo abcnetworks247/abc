@@ -29,6 +29,7 @@ const AdminSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["superadmin", "admin", "editor"],
+      required: true,
       default: "editor",
     },
     mypost: [{
