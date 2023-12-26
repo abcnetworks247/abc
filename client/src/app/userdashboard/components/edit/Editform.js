@@ -23,28 +23,7 @@ const Editform = ({
     // <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
     <form className="mx-auto" onSubmit={(e) => handleSubmit(e)}>
       <div className="flex justify-between items-center lg:flex-row-reverse cursor-pointer mb-2 ">
-        {/* cancel mobile */}
-        <div onClick={()=>router.back()}  className="lg:hidden flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200">
-          <svg
-           className="w-6 h-6"
-            viewBox="0 0 64 64"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke-width="3"
-            stroke="#737373"
-            fill="none"
-          >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g
-              id="SVGRepo_tracerCarrier"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></g>
-            <g id="SVGRepo_iconCarrier">
-              <line x1="8.06" y1="8.06" x2="55.41" y2="55.94"></line>
-              <line x1="55.94" y1="8.06" x2="8.59" y2="55.94"></line>
-            </g>
-          </svg>
-        </div>
+      
 
         {/* edit */}
         <div
