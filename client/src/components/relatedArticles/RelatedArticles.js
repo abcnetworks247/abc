@@ -21,11 +21,11 @@ export default function RelatedArticles({ id }) {
       setLoading(true);
       //fetch all blogs
       const blogRes = await axios.get(
-        "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog"
+        "https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog"
       );
       //fetch blog by the id
       const idRes = await axios.get(
-        `https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog/${id}`
+        `https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog/${id}`
       );
       // if the category of the fetched blog is equal to the category of id then return the data
       const cat = idRes.data.blogdata.category;
@@ -106,7 +106,7 @@ export default function RelatedArticles({ id }) {
                           <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900">
                             <a href="#">{article.title}</a>
                           </h2>
-                          <p className="mb-4 text-gray-700 text-sm ">
+                          <p className="mb-4 text-sm text-gray-700 ">
                             {article.shortdescription}
                           </p>
                           <a

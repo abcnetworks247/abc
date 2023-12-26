@@ -2,30 +2,37 @@
 import React from 'react'
 import { AccountIcon, OrderIcon } from "../icons/UserIcon";
 import SidebarHead from './SidebarHead';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import Upgrade from '../Upgrade';
 
 const MobileSide = () => {
+  const router = useRouter()
+  const pathname = usePathname()
   return (
     <>
       <div
         className={`w-full px-4 py-4 sm:min-h-max sm:min-w-[28%]  md:max-w-[28%] lg:max-w-[30%]  bg-white  sm:rounded-md sm:shadow-md`}
       >
         <SidebarHead />
-       
+
         <div className="h-full mt-8">
           <Link
-            href={`/userdashboard/stats`}
+            href="/Mobile/stats"
+           
             className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
-              pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
+              pathname == "/Mobile/stats" ? "sm:bg-gray-200" : ""
             }`}
           >
             <AccountIcon />
             <p className="text-sm text-gray-600">My account</p>
           </Link>
 
-          <Link href="/userdashboard/orders">
+          <Link href="/Mobile/Orders">
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == "/userdashboard/orders" ? "sm:bg-gray-200" : ""
+                pathname == "/Mobile/Orders" ? "sm:bg-gray-200" : ""
               }`}
             >
               <OrderIcon />
@@ -44,14 +51,11 @@ const MobileSide = () => {
           </div>
 
           {/* edit profile */}
-          <Link href="/userdashboard/EditDetails">
+          <Link href="/Mobile/Edit">
             <div
               className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == "/userdashboard/EditDetails" ? "sm:bg-gray-200" : ""
+                pathname == "/Mobie/Edit" ? "sm:bg-gray-200" : ""
               }`}
-              onClick={() => {
-                handleUser();
-              }}
             >
               <svg
                 className="w-5 h-5"
@@ -96,15 +100,48 @@ const MobileSide = () => {
             </div>
           </Link>
 
-          {/* close account */}
-          <Link href="/userdashboard/closeaccount">
+          {/* change password */}
+          <Link href="/Mobile/password">
             <div
-              className={`flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == "/userdashboard/closeaccount"
-                  ? "sm:bg-gray-200"
-                  : ""
+              className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
+                pathname == "/Mobile/password" ? "sm:bg-gray-200" : ""
               }`}
             >
+              <svg
+                fill="#737373"
+                className="w-5 h-5"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
+                stroke="#737373"
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  strokeLinejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  {" "}
+                  <g id="Change_password">
+                    {" "}
+                    <path d="M464.4326,147.54a9.8985,9.8985,0,0,0-17.56,9.1406,214.2638,214.2638,0,0,1-38.7686,251.42c-83.8564,83.8476-220.3154,83.874-304.207-.0088a9.8957,9.8957,0,0,0-16.8926,7.0049v56.9a9.8965,9.8965,0,0,0,19.793,0v-34.55A234.9509,234.9509,0,0,0,464.4326,147.54Z"></path>{" "}
+                    <path d="M103.8965,103.9022c83.8828-83.874,220.3418-83.8652,304.207-.0088a9.8906,9.8906,0,0,0,16.8926-6.9961v-56.9a9.8965,9.8965,0,0,0-19.793,0v34.55C313.0234-1.3556,176.0547,3.7509,89.9043,89.9012A233.9561,233.9561,0,0,0,47.5674,364.454a9.8985,9.8985,0,0,0,17.56-9.1406A214.2485,214.2485,0,0,1,103.8965,103.9022Z"></path>{" "}
+                    <path d="M126.4009,254.5555v109.44a27.08,27.08,0,0,0,27,27H358.5991a27.077,27.077,0,0,0,27-27v-109.44a27.0777,27.0777,0,0,0-27-27H153.4009A27.0805,27.0805,0,0,0,126.4009,254.5555ZM328,288.13a21.1465,21.1465,0,1,1-21.1465,21.1464A21.1667,21.1667,0,0,1,328,288.13Zm-72,0a21.1465,21.1465,0,1,1-21.1465,21.1464A21.1667,21.1667,0,0,1,256,288.13Zm-72,0a21.1465,21.1465,0,1,1-21.1465,21.1464A21.1667,21.1667,0,0,1,184,288.13Z"></path>{" "}
+                    <path d="M343.6533,207.756V171.7538a87.6533,87.6533,0,0,0-175.3066,0V207.756H188.14V171.7538a67.86,67.86,0,0,1,135.7208,0V207.756Z"></path>{" "}
+                  </g>{" "}
+                </g>
+              </svg>
+
+              <p className="text-sm text-gray-600">Change Password</p>
+            </div>
+          </Link>
+
+          {/* close account */}
+          <Link href="/Mobile/DeleteMobile"
+              className={`flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
+                pathname == "/Mobile/DeleteMobile" ? "sm:bg-gray-200" : ""
+              }`}>
+            
               <svg
                 className="w-5 h-5"
                 viewBox="0 0 20 20"
@@ -128,7 +165,7 @@ const MobileSide = () => {
               </svg>
 
               <p className="text-sm text-gray-600">Close account</p>
-            </div>
+           
           </Link>
 
           <div className="flex items-center hover:bg-gray-100 cursor-pointer gap-3  px-4 py-2 text-blue-500 border-b border-gray-300">

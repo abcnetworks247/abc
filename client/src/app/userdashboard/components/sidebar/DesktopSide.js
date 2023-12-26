@@ -1,6 +1,9 @@
+"use client"
 import React from 'react'
 import Upgrade from '../Upgrade';
 import SidebarHead from './SidebarHead';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   HeartIcon,
   AccountIcon,
@@ -13,6 +16,7 @@ import {
 
 
 const DesktopSide = () => {
+  const pathname = usePathname()
   return (
     <>
       <div

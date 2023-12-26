@@ -15,7 +15,7 @@ const Page = () => {
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/client/blog`)
+      .get(`${baseUrl}/admin/blog`)
       .then((res) => {
         const data = res.data.allblog;
         setNews(data);
@@ -69,10 +69,10 @@ const Page = () => {
       ) : (
         <div className="flex flex-col gap-4">
               {news.map((item) => (
-        <article class="rounded-xl border border-gray-100 m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
-          <div class="lg:flex md:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
+        <article key={item._id} className="rounded-xl border border-gray-100 m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
+          <div className="lg:flex md:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
             <div
-              className="rounded  lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
+              className="rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
               aria-hidden="true"
             >
               {/* random image from unsplash*/}
@@ -80,68 +80,68 @@ const Page = () => {
               <img
                 src={item.blogimage}
                 alt="random image from unsplash"
-                className="object-cover w-full h-full mb-2 rounded  lg:mb-0 md:flex md:mb-0"
+                className="object-cover w-full h-full mb-2 rounded lg:mb-0 md:flex md:mb-0"
               />
               </Link>
             </div>
 
             <div className="flex flex-col gap-2 sm:space-y-1">
                 <span>
-                    <button onClick={() => {router.push(`${editUrl}/${item._id}`)}} class="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
+                    <button onClick={() => {router.push(`${editUrl}/${item._id}`)}} className="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
                 Edit
               </button>
-              <button class="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white">
+              <button className="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white">
                 Delete
               </button>
 
                 </span>
               
-              <h3 class="mt-4 text-lg font-medium sm:text-xl">
+              <h3 className="mt-4 text-lg font-medium sm:text-xl">
                 <Link href={`${pathUrl}/${item._id}`} className="hover:underline">
                   {" "}
                   {item.title}{" "}
                 </Link>
               </h3>
 
-              <p class="mt-1 text-sm text-gray-700">
+              <p className="mt-1 text-sm text-gray-700">
                 {item.shortdescription}
               </p>
 
-              <div class="mt-4 sm:flex sm:items-center sm:gap-2">
-                <div class="flex items-center gap-1 text-gray-500">
+              <div className="mt-4 sm:flex sm:items-center sm:gap-2">
+                <div className="flex items-center gap-1 text-gray-500">
                   <svg
-                    class="h-4 w-4"
+                    className="h-4 w-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg>
 
-                  <p class="text-xs font-medium">48:32 minutes</p>
+                  <p className="text-xs font-medium">48:32 minutes</p>
                 </div>
 
-                <span class="hidden sm:block" aria-hidden="true">
+                <span className="hidden sm:block" aria-hidden="true">
                   &middot;
                 </span>
 
-                <p class="mt-2 text-xs font-medium text-gray-500 sm:mt-0">
+                <p className="mt-2 text-xs font-medium text-gray-500 sm:mt-0">
                   Featuring{" "}
-                  <a href="#" class="underline hover:text-gray-700">
+                  <a href="#" className="underline hover:text-gray-700">
                     Barry
                   </a>
                   ,
-                  <a href="#" class="underline hover:text-gray-700">
+                  <a href="#" className="underline hover:text-gray-700">
                     Sandra
                   </a>{" "}
                   and
-                  <a href="#" class="underline hover:text-gray-700">
+                  <a href="#" className="underline hover:text-gray-700">
                     August
                   </a>
                 </p>
@@ -152,87 +152,6 @@ const Page = () => {
       ))}
         </div>
       )}
-
-      {news.map((item) => (
-        <article class="rounded-xl m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8">
-          <div class="lg:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
-            <div
-              className="rounded  lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
-              aria-hidden="true"
-            >
-              {/* random image from unsplash*/}
-              <img
-                src={item.blogimage}
-                alt="random image from unsplash"
-                className="object-cover w-full h-full mb-2 rounded  lg:mb-0 md:flex md:mb-0"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2 sm:space-y-1">
-                <span>
-                    <strong class="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
-                Episode #101
-              </strong>
-              <strong class="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white">
-                Episode #101
-              </strong>
-
-                </span>
-              
-              <h3 class="mt-4 text-lg font-medium sm:text-xl">
-                <a href="" class="hover:underline">
-                  {" "}
-                  {item.title}{" "}
-                </a>
-              </h3>
-
-              <p class="mt-1 text-sm text-gray-700">
-                {item.shortdescription}
-              </p>
-
-              <div class="mt-4 sm:flex sm:items-center sm:gap-2">
-                <div class="flex items-center gap-1 text-gray-500">
-                  <svg
-                    class="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-
-                  <p class="text-xs font-medium">48:32 minutes</p>
-                </div>
-
-                <span class="hidden sm:block" aria-hidden="true">
-                  &middot;
-                </span>
-
-                <p class="mt-2 text-xs font-medium text-gray-500 sm:mt-0">
-                  Featuring{" "}
-                  <a href="#" class="underline hover:text-gray-700">
-                    Barry
-                  </a>
-                  ,
-                  <a href="#" class="underline hover:text-gray-700">
-                    Sandra
-                  </a>{" "}
-                  and
-                  <a href="#" class="underline hover:text-gray-700">
-                    August
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </article>
-      ))}
     </main>
   );
 };

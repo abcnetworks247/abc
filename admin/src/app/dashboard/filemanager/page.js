@@ -1,21 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Option, Select } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import FileComp from "@/components/filemanager/fileComp";
 import UploadComp from "@/components/filemanager/UploadComp";
 import { UseFileManager } from "@/context/FileManagerProvidert";
+import io from "socket.io-client";
+import FileComp from "@/components/filemanager/fileComp";
 
 const Page = () => {
   // dialog open state thaat is recieved from filemanger context
-const {handleOpen, size } = UseFileManager()
-  
+  const { handleOpen, size } = UseFileManager();
+
+  const [fileData, setFileData] = useState(null);
+
+  const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+
+  useEffect(() => {
+    socket.on("filemanager", (data) => {
+      console.log("this is filemanager", data);
+      setFileData(data);
+    });
+  }, [fileData]);
+
   return (
     <div className="px-10 py-10">
       <div className="flex flex-row items-center justify-between">
         <p>All uploaded files</p>
-        <Button variant="" className="flex items-center gap-3 bg-red-600"  onClick={() => handleOpen("sm")}>
+        <Button
+          variant=""
+          className="flex items-center gap-3 bg-red-600"
+          onClick={() => handleOpen("sm")}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -23,7 +39,6 @@ const {handleOpen, size } = UseFileManager()
             strokeWidth={2}
             stroke="currentColor"
             className="w-5 h-5"
-           
           >
             <path
               strokeLinecap="round"
@@ -35,8 +50,8 @@ const {handleOpen, size } = UseFileManager()
         </Button>
       </div>
 
-      <FileComp  />
-      <UploadComp handleOpen={handleOpen} size={size}  />
+      <FileComp fileData={fileData} />
+      <UploadComp handleOpen={handleOpen} size={size} />
     </div>
   );
 };

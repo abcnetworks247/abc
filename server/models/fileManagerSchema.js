@@ -1,10 +1,14 @@
-const mongoose = require('mongoose');
-const FileManagerJoi = require('../Utils/FileManagerJoi')
+const mongoose = require("mongoose");
 
-const fileManagerSchema = new mongoose.Schema({
-  PhotoInformation: [FileManagerJoi]
+const FileManagerSchema = new mongoose.Schema({
+    originalname: { type: String, required: true },
+    format: { type: String, required: true },
+    width: { type: Number, required: true },
+    height: { type: Number, required: true },
+    created_at: { type: String, required: true },
+    secure_url: { type: String, required: true },
 });
 
-const Photo = mongoose.model('Photo', photoSchema);
+const FileManager = mongoose.model("FileManager", FileManagerSchema);
 
-module.exports = fileManagerSchema;
+module.exports = FileManager;
