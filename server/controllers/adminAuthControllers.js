@@ -43,7 +43,7 @@ const signUp = async (req, res) => {
       fullname,
       email,
       password,
-      role
+      role,
     });
 
     if (error) {
@@ -115,10 +115,8 @@ const signIn = async (req, res) => {
 const singleAdmin = async (req, res) => {
   const id = req.params.id;
   const userblog = await Blog.find({ author: id });
-  
 
   try {
-    
     const olduser = await Admin.findById(id);
 
     if (!olduser) {
@@ -126,7 +124,11 @@ const singleAdmin = async (req, res) => {
     }
 
     // Check user role for authorization
-    if (olduser.role !== "superadmin" && olduser.role !== "admin" && olduser.role !== "editor") {
+    if (
+      olduser.role !== "superadmin" &&
+      olduser.role !== "admin" &&
+      olduser.role !== "editor"
+    ) {
       throw new UnAuthorizedError("Access denied");
     }
 
@@ -454,10 +456,9 @@ const singleClient = async (req, res) => {
 };
 
 const deleteClient = async (req, res) => {
+  const clientid = req.body;
 
-  const clientid = req.body
-
-  const user = req.user
+  const user = req.user;
   try {
     if (!user) {
       throw new NotFoundError("User not found");
@@ -471,10 +472,11 @@ const deleteClient = async (req, res) => {
     const deleteUser = await Client.findByIdAndDelete(clientid);
 
     if (deleteUser) {
-      res.status(StatusCodes.OK).json({ message: "Client deleted successfully" });
+      res
+        .status(StatusCodes.OK)
+        .json({ message: "Client deleted successfully" });
       console.log("User deleted successfully");
     }
-    
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)

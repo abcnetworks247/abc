@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Option, Select } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import FileComp from "@/components/filemanager/FileComp";
 import UploadComp from "@/components/filemanager/UploadComp";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import io from "socket.io-client";
+import FileComp from "@/components/filemanager/fileComp";
 
 const Page = () => {
   // dialog open state thaat is recieved from filemanger context
