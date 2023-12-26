@@ -2,27 +2,30 @@
 import React from 'react'
 import { AccountIcon, OrderIcon } from "../icons/UserIcon";
 import SidebarHead from './SidebarHead';
+import { useRouter } from 'next/navigation';
 
 const MobileSide = () => {
+  const router = useRouter()
   return (
     <>
       <div
         className={`w-full px-4 py-4 sm:min-h-max sm:min-w-[28%]  md:max-w-[28%] lg:max-w-[30%]  bg-white  sm:rounded-md sm:shadow-md`}
       >
         <SidebarHead />
-       
+
         <div className="h-full mt-8">
-          <Link
-            href={`/userdashboard/stats`}
+          <div
+            onClick={() => router.push(`/userdashboard/stats`)}
+           
             className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
               pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
             }`}
           >
             <AccountIcon />
             <p className="text-sm text-gray-600">My account</p>
-          </Link>
+          </div>
 
-          <Link href="/userdashboard/orders">
+          <div onClick={() => router.push("/userdashboard/orders")}>
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
                 pathname == "/userdashboard/orders" ? "sm:bg-gray-200" : ""
@@ -31,7 +34,7 @@ const MobileSide = () => {
               <OrderIcon />
               <p className="text-sm text-gray-600">Orders</p>
             </div>
-          </Link>
+          </div>
 
           {/* beginning of a new section */}
           <div>
@@ -44,7 +47,7 @@ const MobileSide = () => {
           </div>
 
           {/* edit profile */}
-          <Link href="/userdashboard/EditDetails">
+          <Link href="/userdashboard/EditDetails" onClick={()=>router.push('/userdashboard/manageaccount')} >
             <div
               className={`sm:hidden flex items-center  px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
                 pathname == "/userdashboard/EditDetails" ? "sm:bg-gray-200" : ""
