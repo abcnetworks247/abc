@@ -13,24 +13,26 @@ import {
   BtnStyles,
   Separator,
 } from "react-simple-wysiwyg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { useParams } from "next/navigation";
 import axios from "axios";
 
 function page() {
-    const [html, setHtml] = useState("");
+    const [html, setHtml] = useState('');
 
     // dialog open state thaat is recieved from filemanger context
     const { handleOpen, size } = UseFileManager();
     const { id } = useParams();
     const [post, setPost] = useState([]);
     const [title, setTitle] = useState("");
-    const [shortDescription, setShortDescription] = useState("");
-    const [imageSrc, setImageSrc] = useState("");
+    const [shortDescription, setShortDescription] = useState(" ");
+    const [imageSrc, setImageSrc] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+
+
     const baseUrl =
         "https://klipto-inc-abcstudio-server.onrender.com/api/v1/client/blog";
     useEffect(() => {
@@ -53,6 +55,12 @@ function page() {
                 setLoading(false);
             });
     }, []);
+    const handleChange = (e) => {
+        setHtml(e.target.value);
+      }
+
+
+
 
     return (
         loading ? (
@@ -79,9 +87,10 @@ function page() {
                                 </label>
                                 <input
                                     className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-                                    type=""
+                                    type="ttext"
                                     placeholder="mail@gmail.com"
-                                    value={title}
+                                    defaultValue={title}
+                                    onchange={(e) => setTitle(e.target.value)}
                                 />
                             </div>
                             <div className="grid grid-cols-1 space-y-2">
@@ -89,8 +98,9 @@ function page() {
                                     Short Description
                                 </label>
                                 <textarea
-                                    value={shortDescription}
+                                    defaultValue={shortDescription}
                                     name=""
+                                    onchange={(e) => setShortDescription(e.target.value)}
                                     id=""
                                     cols="10"
                                     rows="10"
@@ -101,7 +111,7 @@ function page() {
                                     Full Details
                                 </label>
                                 <EditorProvider>
-                                    <Editor value={html} >
+                                    <Editor value={html} onChange={handleChange} >
                                         <Toolbar>
                                             <BtnBold />
                                             <Separator />
@@ -141,6 +151,7 @@ function page() {
                                                 <img
                                                     className="object-center has-mask h-36"
                                                     src={imageSrc}
+                                                    
                                                     alt="freepik image"
                                                 />
                                             </div>

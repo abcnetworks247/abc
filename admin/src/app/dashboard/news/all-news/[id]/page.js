@@ -14,6 +14,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
+import { useRouter } from "next/navigation";
 
 export default function BlogCard() {
   const [news, setNews] = useState([]);
@@ -38,6 +39,8 @@ export default function BlogCard() {
         setLoading(false);
       });
   }, []);
+  const editUrl = "/dashboard/news/edit";
+  const router = useRouter();
 
   if (error === true) {
     return (
@@ -77,12 +80,24 @@ export default function BlogCard() {
           </svg>
         </div>
       ) : (
+
         <Card className="lg:max-w-[70%] max-w-[90%] overflow-hidden">
+          <div className="flex items-end justify-end m-0">
+          <button
+            onClick={() => {
+              router.push(`${editUrl}/${news._id}`);
+            }}
+            className=" mb-0.5 font-semibold border text-sm border-indigo-500 bg-indigo-500 px-5 py-1 text-[10px] mr-0 text-white"
+          >
+            Edit
+          </button>
+          </div>
+
           <CardHeader
             floated={false}
             shadow={false}
             color="transparent"
-            className="m-0 rounded-none"
+            className="m-0 rounded"
           >
             <img src={news.blogimage} alt="ui/ux review check" />
           </CardHeader>
