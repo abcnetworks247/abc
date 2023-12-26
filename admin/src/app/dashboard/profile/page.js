@@ -20,10 +20,20 @@ import {
     PencilIcon
   } from "@heroicons/react/24/solid";
   import Link from "next/link"
+  import useCurrentAdmin from "@/hooks/useCurrentAdmin";
   import { ProfileInfoCard, MessageCard } from "@/components/widget/cards";
   import { platformSettingsData, conversationsData, projectsData } from "@/data";
+import { useState } from "react";
+import { EditAdminProfile } from "@/components/editAdminProfile/EditAdminProfile";
   
   export default function Page() {
+
+const {CurrentUser} = useCurrentAdmin();
+const handleOpen = () => setOpen(!open);
+const [open, setOpen] = useState(false);
+
+  const UserValue = CurrentUser && CurrentUser.data.olduser;
+  console.log('user value', UserValue);
     return (
       <>
          <main className="flex flex-row w-[100%] *:mt-3">
@@ -32,7 +42,7 @@ import {
             <div className="mb-10 flex items-center justify-between flex-wrap gap-6">
               <div className="flex items-center gap-6">
                 <Avatar
-                  src="/img/bruce-mars.jpeg"
+               src={UserValue && UserValue.userdp}
                   alt="bruce-mars"
                   size="xl"
                   variant="rounded"
@@ -40,27 +50,20 @@ import {
                 />
                 <div>
                   <Typography variant="h5" color="blue-gray" className="mb-1">
-                    Richard Davis
+                  { UserValue && UserValue.fullname}
                   </Typography>
                   <Typography
                     variant="small"
                     className="font-normal text-blue-gray-600"
                   >
-                    CEO / Co-Founder
+                  {UserValue && UserValue.role} 
                   </Typography>
                 </div>
               </div>
               <div className="w-96">
                 <Tabs value="app">
                   <TabsHeader>
-                    <Tab value="app">
-                      <HomeIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
-                      App
-                    </Tab>
-                    <Tab value="message">
-                      <ChatBubbleLeftEllipsisIcon className="-mt-0.5 mr-2 inline-block h-5 w-5" />
-                      Message
-                    </Tab>
+                    
                     <Tab value="settings">
                       <Cog6ToothIcon className="-mt-1 mr-2 inline-block h-5 w-5" />
                       Settings
@@ -99,44 +102,19 @@ import {
               </div>
               <ProfileInfoCard
                 title="Profile Information"
-                description="Hi, I'm Alec Thompson, Decisions: If you can't decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
+                description= {UserValue && UserValue.userbio} 
                 details={{
-                  "first name": "Alec M. Thompson",
+                  "first name":  `${ UserValue && UserValue.fullname}`,
                   mobile: "(44) 123 1234 123",
-                  email: "alecthompson@mail.com",
-                  location: "USA",
-                  social: (
-                    <div className="flex items-center gap-4">
-                      <i className="fa-brands fa-facebook text-blue-700" />
-                      <i className="fa-brands fa-twitter text-blue-400" />
-                      <i className="fa-brands fa-instagram text-purple-500" />
-                    </div>
-                  ),
+                  email: `${ UserValue && UserValue.email}`,
                 }}
                 action={
                   <Tooltip content="Edit Profile">
-                    <PencilIcon className="h-4 w-4 cursor-pointer text-blue-gray-500" />
+                    <PencilIcon className="h-4 w-4 cursor-pointer text-blue-gray-500"  onClick={handleOpen}/>
                   </Tooltip>
                 }
               />
-              <div>
-                <Typography variant="h6" color="blue-gray" className="mb-3">
-                  Platform Settings
-                </Typography>
-                <ul className="flex flex-col gap-6">
-                  {conversationsData.map((props) => (
-                    <MessageCard
-                      key={props.name}
-                      {...props}
-                      action={
-                        <Button variant="text" size="sm">
-                          reply
-                        </Button>
-                      }
-                    />
-                  ))}
-                </ul>
-              </div>
+             
             </div>
             <div className="px-4 pb-4">
               <Typography variant="h6" color="blue-gray" className="mb-2">
@@ -211,7 +189,9 @@ import {
                 )}
               </div>
             </div>
+
           </CardBody>
+          <EditAdminProfile  open={open} UserValue={UserValue} handleOpen={handleOpen}/>
         </Card>
         
       </main>

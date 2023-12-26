@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 
 const ProductProvider = ({ children }) => {
   const router = useRouter()
+   const [currentPage, setCurrentPage] = useState(1);
+   const [loading, setLoading] = useState(false);
+   const productsPerPage = 20;
   const [products, setProducts] = useState([]);
   const [hasFetchedData, setHasFetchedData] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

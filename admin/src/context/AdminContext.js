@@ -53,7 +53,7 @@ export const AdminProvider = ({ children }) => {
   );
 };
 
-export const UseAdminContext = () => {
+export const  UseAdminContext = () => {
   const admin = AdminContext;
   if (!admin) {
     throw new Error("user can not use admin provider");
