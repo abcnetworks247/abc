@@ -35,7 +35,7 @@ import {
 import { SlFolderAlt } from "react-icons/sl";
 import useCurrentAdmin from "@/hooks/useCurrentAdmin";
 import Image from "next/image";
-
+import Logo from "@/resources/assets/images/AbcstudioNo.png"
 import Link from "next/link";
 export default function Sidebar() {
   const [open, setOpen] = React.useState(0);
@@ -55,13 +55,10 @@ export default function Sidebar() {
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
           <a href="javascript:void(0)">
-            <img
-              src="https://readymadeui.com/readymadeui-white.svg"
-              alt="logo"
-              className="w-[150px]"
-            />
+          <Image src={Logo} alt="logo"   width={100} height={100} />
+             
           </a>
-          <ul className="flex-1 my-10 space-y-1">
+          <ul className="flex-1 my-3 space-y-1">
             <li>
               <Link
                 href="/dashboard"
