@@ -1,3 +1,8 @@
+/**
+ * Represents the page component for creating news.
+ * @component
+ * @returns {JSX.Element} The JSX element for the page component.
+ */
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,15 +21,25 @@ import {
 import { useState } from "react";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
+import Api from "@/utils/Api";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+
 
 function page() {
-
+  /**
+   * Represents the state of the HTML content.
+   * @type {string}
+   */
   const [html, setHtml] = useState("");
+  const [title, setTitle] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
 
-      // dialog open state thaat is recieved from filemanger context
-      const {handleOpen, size } = UseFileManager()
+  // dialog open state that is recieved from filemanger context
+  const { handleOpen, size } = UseFileManager();
+
+  // function to handle the change of the html content
   function onChange(e) {
-
     setHtml(e.target.value);
   }
   const [imageSrc, setImageSrc] = useState(
@@ -32,9 +47,11 @@ function page() {
   );
   const [full, setFull] = useState(false);
 
+  // function to handle the change of the image
   const handleFileChange = (event) => {
     const file = event.target.files[0];
 
+    // check if the file is an image
     if (file) {
       const reader = new FileReader();
 
@@ -46,6 +63,27 @@ function page() {
       reader.readAsDataURL(file);
     }
   };
+
+  //store Auth token
+  const AuthToken = Cookies.get("adminToken");
+  // function to handle the click of the upload button
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    const data = {
+      title: title,
+      shortdescription: shortDescription,
+      longdescription: html,
+      image: imageSrc,
+    };
+    const response = await Api.post("/blog/create", data, {
+      headers: { Authorization: `Bearer ${String(AuthToken)}` },
+    });
+    console.log(response);
+    if (response.status === 200) {
+      router.push("/dashboard/news");
+    }
+  };
+
   return (
     <div>
       <div className="relative flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 ">
@@ -67,6 +105,8 @@ function page() {
                 className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                 type=""
                 placeholder="mail@gmail.com"
+                onChange={(e) => setTitle(e.target.value)}
+                defaultValue={title}
               />
             </div>
             <div className="grid grid-cols-1 space-y-2">
@@ -74,6 +114,8 @@ function page() {
                 Short Description
               </label>
               <textarea
+                defaultChecked={shortDescription}
+                onChange={(e) => setShortDescription(e.target.value)}
                 name=""
                 id=""
                 cols="10"
@@ -156,7 +198,10 @@ function page() {
                   {full ? (
                     <span className="text-green-500">Image Uploaded</span>
                   ) : (
-                    <span className="text-blue-500 cursor-pointer"  onClick={() => handleOpen("lg")}>
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={() => handleOpen("lg")}
+                    >
                       Click here to select image
                     </span>
                   )}
@@ -177,8 +222,8 @@ function page() {
           </form>
         </div>
       </div>
-      
-      <PopUpFilemanager handleOpen={handleOpen} size={size}  />
+
+      <PopUpFilemanager handleOpen={handleOpen} size={size} />
     </div>
   );
 }
