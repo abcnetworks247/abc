@@ -18,24 +18,32 @@ import {
   BtnStyles,
   Separator,
 } from "react-simple-wysiwyg";
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-
 function page() {
   /**
    * Represents the state of the HTML content.
    * @type {string}
    */
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
   const [shortDescription, setShortDescription] = useState("");
-  const [type, setType] = useState("");
-  const [category, setCategory] = useState("");
+  const [type, setType] = useState([]);
+  const [newCategory, setNewCategory] = useState("");
+  const [newType, setNewType] = useState("");
+  const [category, setCategory] = useState([]);
+  const [imageSrc, setImageSrc] = useState(
+    "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
+  );
+  const [full, setFull] = useState(false);
+  const router = useRouter();
 
   // dialog open state that is recieved from filemanger context
   const { handleOpen, size } = UseFileManager();
@@ -44,10 +52,6 @@ function page() {
   function onChange(e) {
     setHtml(e.target.value);
   }
-  const [imageSrc, setImageSrc] = useState(
-    "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
-  );
-  const [full, setFull] = useState(false);
 
   // function to handle the change of the image
   const handleFileChange = (event) => {
@@ -72,22 +76,85 @@ function page() {
   const handleUpload = async () => {
     const data = {
       title: title,
-      type: type,
-      category: category,
+      type: newType,
+      category: newCategory,
       shortdescription: shortDescription,
       longdescription: html,
-      image: imageSrc,
+      blogimage: imageSrc,
     };
-    const response = await Api.post("/blog/create", data, {
+    console.log(data);
+    const response = await Api.post("admin/blog/create", data, {
       headers: { Authorization: `Bearer ${String(AuthToken)}` },
     });
     console.log(response);
-    if (response.status === 200) {
-      router.push("/dashboard/news");
+    if (response.status === 201) {
+      router.push("/dashboard/news/all-news");
     }
   };
 
-  return (
+  //fetch data from api
+  const fetchData = async () => {
+    try {
+      const typeRes = await Api.get("admin/category/news/type");
+      const catRes = await Api.get("admin/category/news/category");
+
+      if (catRes.status === 200) {
+        console.log("------------->>", catRes.data);
+        setCategory(catRes.data.data);
+        setLoading(false);
+      }
+      if (typeRes.status === 200) {
+        console.log(typeRes.data.data);
+        setType(typeRes.data.data);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setError(true);
+      alert("Something went wrong");
+
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  //if error is true show error message
+  if (error === true) { 
+    return (
+      <div className="flex items-center justify-center h-full">
+        <h1 className="text-2xl font-bold text-red-500">Something went wrong</h1>
+      </div>
+    );
+  }
+
+
+  return loading ? (
+    <div className="flex items-center justify-center h-[70svh] lg:h-full">
+          <svg
+            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            />
+          </svg>
+        </div>
+  ) : (
     <div>
       <div className="relative flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 ">
         <div className="z-10 p-10 bg-white  lg:w-[70%] md:w-[80%] w-[90%] shadow-md rounded-xl">
@@ -97,7 +164,15 @@ function page() {
             </h2>
             <p className="mt-2 text-sm text-gray-400">
               Lorem ipsum is placeholder text.
-              {type} {category}
+              {newCategory && (
+                <span className="text-green-500">{newCategory}</span>
+              )}
+              {"    "}
+              {
+                <span className="text-green-500">
+                  {newType && <span>{newType}</span>}
+                </span>
+              }
             </p>
           </div>
           <form className="mt-8 space-y-3" action={handleUpload} method="POST">
@@ -115,38 +190,46 @@ function page() {
               />
             </div>
             <div className="grid grid-cols-1 space-y-2">
-              
               {/* a div with two option select for categories and type */}
               <div className="grid grid-cols-2 gap-2">
-              <select
-                className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-                name="type"
-                id="type"
-                required
-                onChange={(e) => setType(e.target.value)}
-              >
-                <option hidden>Select Type</option>
-                <option value="trending">Trending</option>
-                <option value="popular">Popular</option>
-                <option value="top">Top</option>
-              </select>
-              <select
-                className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-                name="category"
-                id="category"
-                required
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option hidden>Select Category</option>
-                <option value="Technology">Technology</option>
-                <option value="Sport">Sport</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Fashion">Fashion</option>
-                <option value="Lifestyle">Lifestyle</option>
-              </select>
-            </div>
-            <br />
-            <label className="text-sm font-bold tracking-wide text-gray-500">
+                <select
+                  className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                  name="type"
+                  id="type"
+                  required
+                  onChange={(e) => setNewType(e.target.value)}
+                >
+                  <option hidden>Select Type</option>
+                  {type &&
+                    type.map((item) => {
+                      return (
+                        <option key={item._id} value={item.name}>
+                          {item.name}
+                        </option>
+                      );
+                    })}
+                </select>
+
+                <select
+                  className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                  name="type"
+                  id="type"
+                  required
+                  onChange={(e) => setNewCategory(e.target.value)}
+                >
+                  <option hidden>Select Category</option>
+                  {category &&
+                    category.map((item) => {
+                      return (
+                        <option key={item._id} value={item.name}>
+                          {item.name}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+              <br />
+              <label className="text-sm font-bold tracking-wide text-gray-500">
                 Short Description
               </label>
               <textarea
@@ -183,66 +266,46 @@ function page() {
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Attach Document
               </label>
-              <div className="flex items-center justify-center w-full">
-                <label className="flex flex-col w-full p-10 text-center border-4 border-dashed rounded-lg h-60 group">
-                  <div className="flex flex-col items-center justify-center w-full h-full text-center ">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                      />
-                    </svg>
-                    <div className="flex flex-auto w-2/5 mx-auto -mt-10 max-h-48">
-                      <img
-                        className="object-center has-mask h-36"
-                        src="https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
-                        alt="freepik image"
-                      />
-                    </div>
-                    <p className="text-gray-500 pointer-none ">
-                      <span className="text-sm">Drag and drop</span> files here{" "}
-                      <br /> or{" "}
-                      <a
-                        href=""
-                        id=""
-                        className="text-blue-600 hover:underline"
-                      >
-                        select a file
-                      </a>{" "}
-                      from your computer
-                    </p>
-                  </div>
-                </label>
-              </div>
+              
             </div>
             <div className="flex items-center justify-center w-full border rounded shadow-lg h-80">
-              <div>
-                <Image
-                  src="/upload.jpg"
-                  height={280}
-                  width={280}
-                  alt="upload"
-                />
-                <p className="text-base text-center border ">
+              <div className="w-full h-full">
+                <div className="flex items-center h-full justify-center w-full">
                   {full ? (
-                    <span className="text-green-500">Image Uploaded</span>
-                  ) : (
-                    <span
-                      className="text-blue-500 cursor-pointer"
-                      onClick={() => handleOpen("lg")}
-                    >
-                      Click here to select image
-                    </span>
-                  )}
-                </p>
+
+                    <div className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
+                      <div className="flex flex-col w-ful h-full items-center justify-center pt-5 pb-6">
+                        <svg
+                          className="w-10 h-10 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                          />
+                        </svg>
+                        <p className="py-1 text-sm text-gray-600">
+                          Upload a file or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          PNG, JPG, GIF up to 10MB
+                        </p>
+                      </div>
+                    </div>) : (
+                        <Image 
+                        src={imageSrc}
+                        alt="image"
+                        width={300}
+                        height={300}
+                        />
+                    )}
+                  </div>
+                
               </div>
             </div>
             <p className="text-sm text-gray-300">
