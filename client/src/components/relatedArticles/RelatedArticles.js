@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 //import axios
-import axios from "axios";
+import Api from "@/utils/Api";
 export default function RelatedArticles({ id }) {
   //state for articles
   const [articles, setArticles] = useState([]);
@@ -20,12 +20,12 @@ export default function RelatedArticles({ id }) {
     try {
       setLoading(true);
       //fetch all blogs
-      const blogRes = await axios.get(
-        "https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog"
+      const blogRes = await Api.get(
+        "admin/blog"
       );
       //fetch blog by the id
-      const idRes = await axios.get(
-        `https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog/${id}`
+      const idRes = await Api.get(
+        `/admin/blog/${id}`
       );
       // if the category of the fetched blog is equal to the category of id then return the data
       const cat = idRes.data.blogdata.category;
