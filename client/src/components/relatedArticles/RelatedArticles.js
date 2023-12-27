@@ -21,7 +21,7 @@ export default function RelatedArticles({ id }) {
       setLoading(true);
       //fetch all blogs
       const blogRes = await Api.get(
-        "/admin/blog"
+        "admin/blog"
       );
       //fetch blog by the id
       const idRes = await Api.get(

@@ -39,7 +39,7 @@ export default function BlogComp() {
   useEffect(() => {
     // use the base url and the endpoint to fetch the blog posts
     Api
-      .get("/admin/blog")
+      .get("admin/blog")
       .then((res) => {
         const data = res.data;
         setPosts(data);
