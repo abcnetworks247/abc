@@ -10,7 +10,8 @@ export default function useUpdateProf() {
       console.log('formdata', formData);
       const response = await Api.patch('admin/auth/account', formData, {
         headers: {
-          Authorization: `Bearer ${String(Token)}`
+          Authorization: `Bearer ${String(Token)}`,
+          "Content-Type": "multipart/form-data",
         }
       });
 
