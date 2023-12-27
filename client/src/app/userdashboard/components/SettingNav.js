@@ -67,8 +67,9 @@ const SettingNav = () => {
           accountInformation
           sidebarInfo"
         >
-      
-          <p className="text-sm text-gray-600 ">Security details</p>
+          <p className="text-sm text-gray-600  whitespace-nowrap">
+            Security details
+          </p>
           {isDown ? (
             <svg
               className="w-5 h-5"
@@ -149,7 +150,9 @@ const SettingNav = () => {
                   </g>{" "}
                 </g>
               </svg>
-              <p className="text-sm text-gray-600 ">Change Password</p>
+              <p className="text-sm text-gray-600  whitespace-nowrap ">
+                Change Password
+              </p>
             </Link>
             <Link
               href="/userdashboard/manageaccount/deleteaccount"
@@ -176,7 +179,9 @@ const SettingNav = () => {
                   ></path>{" "}
                 </g>
               </svg>
-              <p className="text-sm text-gray-600 ">Close account</p>
+              <p className="text-sm text-gray-600  whitespace-nowrap ">
+                Close account
+              </p>
             </Link>
           </div>
         )}
