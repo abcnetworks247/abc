@@ -247,7 +247,7 @@ const userUpdatePassword = async (req, res) => {
 };
 
 const userUpdate = async (req, res) => {
-  const { fullname, email, userbio } = req.body;
+  const { fullname, email, phone, userbio } = req.body;
 
   try {
     if (!req.user) {
@@ -261,7 +261,7 @@ const userUpdate = async (req, res) => {
       (userRole === "superadmin" || userRole === "admin") &&
       user.role === "editor"
     ) {
-      const updateFields = { fullname, email, userbio };
+      const updateFields = { fullname, email, phone, userbio };
 
       if (req.file) {
         const { path } = req.file;

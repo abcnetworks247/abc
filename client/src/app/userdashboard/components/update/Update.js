@@ -9,12 +9,15 @@ import StaticForm from "../edit/StaticForm";
 import Editform from "../edit/Editform";
 
 const Update = () => {
+  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+
+  
   const [formData, setFormData] = useState(null);
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [selecteddp, setSelectedDp] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
 
-  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
   console.log("UserData in form", formData);
   
@@ -22,15 +25,16 @@ const Update = () => {
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
-      fullname: UserData?.fullname || "",
-      email: UserData.email || "",
-      userdp: UserData.userdp || "",
-      phonenumber: UserData.phonenumber || "",
-      shippingaddress: UserData.shippingaddress || "",
+      fullname: UserData?.fullname,
+      email: UserData.email,
+      phonenumber: UserData.phonenumber,
+      shippingaddress: UserData.shippingaddress,
+      userdp: selecteddp,
     });
 
     setSelectedPhoto(UserData.userdp);
   }, [UserData]);
+  
 
   // console.log("this is user data", userData.userdp);
 
@@ -50,16 +54,14 @@ const Update = () => {
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      userdp: selectedFile,
-    }));
+    // setFormData((prevData) => ({
+    //   ...prevData,
+    //   userdp: selectedFile,
+    // }));
     const imageUrl = URL.createObjectURL(selectedFile);
-    console.log("selected file", selectedFile);
+   
     setSelectedPhoto(imageUrl);
-    console.log("imageurl", imageUrl);
-    console.log("selectedphoto", selectedPhoto);
-    console.log("image", formData);
+    setSelectedDp(selectedFile)
     // If you want to update the userdp in the form, you can set it in the formData state
     // setSelectedPhoto(imageUrl); // Commented out as it's not necessary for form submission
   };
@@ -74,16 +76,16 @@ const Update = () => {
 
       // Append form data to the FormData instance
       // submitForm.append("fullname", formData?.fullname);
+      submitForm.append("fullname", formData?.fullname);
       submitForm.append("email", formData?.email);
-
-      // Append userdp if it exists
-      if (formData.userdp) {
-        submitForm.append("userdp", formData?.userdp);
-      }
+      submitForm.append("userdp", formData?.userdp);
+      submitForm.append("phonenumber", formData?.phone);
+      submitForm.append("shippingaddress", formData?.shippingaddress);
+      submitForm.append("userdp", formData?.selecteddp);
 
       // Make a PATCH request
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_BASEURL}client/auth/account`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/client/auth/account`,
         submitForm,
         {
           headers: {

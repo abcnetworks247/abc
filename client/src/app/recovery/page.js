@@ -7,7 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { EMAIL_REGEX } from "@/utils/regex";
 import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
- function Page() {
+import axios from "axios";
+function Page() {
   // define initial recoveryformdata state
 
   const [email, setRecoveryFormData] = useState("");
@@ -72,7 +73,7 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
     });
     console.log(email);
     try {
-      const data = await Api.post("client/auth/recovery", { email });
+      const data = await Api.post("client/auth/recovery", { email })
       if (data.status === 200) {
         console.log("post successful", data.data.message);
         setTimeout(() => {
