@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://klipto-inc-abcstudio-server.onrender.com/api/v1/",
+  baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
