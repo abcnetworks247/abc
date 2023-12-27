@@ -168,6 +168,8 @@ const userRecovery = async (req, res) => {
       html: renderHtml,
     });
 
+    console.log("email recovery sent");
+
     return res
       .status(StatusCodes.OK)
       .send({ message: `verification email has been sent to ${email}` });
