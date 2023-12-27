@@ -6,15 +6,11 @@ import Link from "next/link";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
-import {
-  EMAIL_REGEX,
-  PASSWORD_REGEX,
-
-} from "@/utils/regex";
+import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
 
 import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
 
- function Page() {
+function Page() {
   // router for the navigation to another page after account created successfully
 
   const router = useRouter();
@@ -24,8 +20,6 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
     email: "",
     password: "",
   });
-
-
 
   const [universalError, setUniversalError] = useState("");
 
@@ -37,8 +31,6 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
     fullname: "",
     password: "",
   });
-
-
 
   function signUpValidate(fieldName, regex, value, errorMessage) {
     if (!regex.test(value)) {
@@ -59,13 +51,12 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
     }
   }
 
-        // Define Variable for allfield valid
+  // Define Variable for allfield valid
 
-        const allFieldsValid = Object.keys(errorMessages).every(
-          (field) => !errorMessages[field]
-        );
-        
-  
+  const allFieldsValid = Object.keys(errorMessages).every(
+    (field) => !errorMessages[field]
+  );
+
   /**
    * Handle change in form input
    * @param {object} e - the event object
@@ -85,12 +76,14 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
    * @param {Function} e.preventDefault - prevent default forms submission behaviour
    */
 
-
-  
   const [data, setdata] = useState([]);
   console.log("data", data);
+
+  
   const HandleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log(logInFormData);
     setIsValidData(allFieldsValid);
 
     if (!allFieldsValid) {
@@ -108,9 +101,10 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
       const data = await Api.post("client/auth/signin", logInFormData, {
         withCredentials: true,
       });
+      
       const value = data.data;
       // log the response data
-     console.log("errorr", value.error);
+      console.log("errorr", value.error);
       // check the staus of the request to see if the request was successful or not
       if (data.status === 200) {
         console.log(value?.message, "success message");
@@ -127,9 +121,7 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
         router.push("/");
 
         setdata(value);
-      } 
-       
-      
+      }
     } catch (error) {
       const suberrormsg = toast.update(id, {
         render: `${error}`,
@@ -143,6 +135,7 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
       console.error(error);
     }
   };
+  
 
   return (
     <div>
@@ -276,6 +269,6 @@ import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
   );
 }
 
-const Login = HocsessionAuthenticated(Page)
+const Login = HocsessionAuthenticated(Page);
 
 export default Login;
