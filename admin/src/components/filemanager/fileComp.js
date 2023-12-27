@@ -6,9 +6,11 @@ import {
   Checkbox,
   Option,
   Select,
-  Drawer,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
   Typography,
-  IconButton,
 } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
 import React, { useEffect, useState } from "react";
@@ -24,27 +26,29 @@ const FileComp = ({ fileData }) => {
   const [createdAt, setCreatedAt] = useState(null);
   const [openRight, setOpenRight] = useState(false);
 
-  const OpenFileInfo = ({
-    secure_url,
-    _id,
-    originalname,
-    format,
-    width,
-    height,
-    created_at,
-  }) => {
-    openDrawerRight();
+  const [size, setSize] = React.useState(null);
 
-    // setUrl(newData.secure_url);
-    // setId(newData._id);
-    // setName(newData.originalname);
-    // setFileFormat(newData.format);
-    // setImageWidth(newData.width);
-    // setImageHeight(newData.height);
-    // setCreatedAt(newData.created_at);
-  };
+  const handleOpen = (value) => setSize(value);
 
-  const closeDrawerRight = () => setOpenRight(false);
+  // const OpenFileInfo = ({
+  //   secure_url,
+  //   _id,
+  //   originalname,
+  //   format,
+  //   width,
+  //   height,
+  //   created_at,
+  // }) => {
+
+    
+  //   // setUrl(newData.secure_url);
+  //   // setId(newData._id);
+  //   // setName(newData.originalname);
+  //   // setFileFormat(newData.format);
+  //   // setImageWidth(newData.width);
+  //   // setImageHeight(newData.height);
+  //   // setCreatedAt(newData.created_at);
+  // };
 
   return (
     <div>
@@ -112,7 +116,8 @@ const FileComp = ({ fileData }) => {
                     className="cursor-pointer"
                     onClick={() => {
                       // let id = item._id;
-                      OpenFileInfo(id);
+                      // OpenFileInfo(id);
+                      handleOpen("md")
                     }}
                   >
                     <img
@@ -122,13 +127,15 @@ const FileComp = ({ fileData }) => {
                     />
                   </div>
 
-                 
-
-                  <span className="w-[80%] overflow-hidden text-sm whitespace-nowrap text-ellipsis" >{originalname}</span>
+                  <span className="w-[80%] overflow-hidden text-sm whitespace-nowrap text-ellipsis">
+                    {originalname}
+                  </span>
                   <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
                     <Checkbox className="cursor-pointer" />
                     <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" />
                   </div>
+
+                  
                 </div>
               )
             )}

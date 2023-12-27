@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Option, Select } from "@material-tailwind/react";
+import {
+  Button,
+  Checkbox,
+  Option,
+  Select,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
 import UploadComp from "@/components/filemanager/UploadComp";
 import { UseFileManager } from "@/context/FileManagerProvidert";
@@ -14,14 +23,24 @@ const Page = () => {
 
   const [fileData, setFileData] = useState(null);
 
-  const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+  // const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
 
   useEffect(() => {
-    socket.on("filemanager", (data) => {
+    const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+
+    const handleFileManagerUpdate = (data) => {
       console.log("this is filemanager", data);
       setFileData(data);
-    });
-  }, [fileData]);
+    };
+
+    // Attach the event listener when the component mounts
+    socket.on("filemanager", handleFileManagerUpdate);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      socket.off("filemanager", handleFileManagerUpdate);
+    };
+  }, []); // Empty dependency array to run the effect only once
 
   return (
     <div className="px-10 py-10">
@@ -49,6 +68,14 @@ const Page = () => {
           Upload Files
         </Button>
       </div>
+      <Dialog open={size === "md"} size={size || "md"} handler={handleOpen}>
+        <DialogBody>
+          The key to more success is to have a lot of pillows. Put it this way,
+          it took me twenty five years to get these plants, twenty five years of
+          blood sweat and tears, and I&apos;m never giving up, I&apos;m just
+          getting started. I&apos;m up to something. Fan luv.
+        </DialogBody>
+      </Dialog>
 
       <FileComp fileData={fileData} />
       <UploadComp handleOpen={handleOpen} size={size} />
