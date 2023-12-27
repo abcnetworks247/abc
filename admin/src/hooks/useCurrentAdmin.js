@@ -32,7 +32,7 @@ export default function useCurrentAdmin() {
   return {
     CurrentUser,
     CurrentUsererror: isError,
-    CurrentUserloading: isLoading,
+  isLoading,
     CurrentUserisSuccess: isSuccess,
   };
 }

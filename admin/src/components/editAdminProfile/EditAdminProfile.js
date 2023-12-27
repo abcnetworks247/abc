@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -14,6 +14,16 @@ import Image from "next/image";
 import { TiCameraOutline } from "react-icons/ti";
 
 export function EditAdminProfile({ open, handleOpen, UserValue }) {
+
+
+
+  const[formData, setFormData] = useState({
+     fullname: "", 
+     email: "",
+     userbio: "",
+  })
+
+ 
   return (
     <>
       <Dialog open={open} handler={handleOpen}>
