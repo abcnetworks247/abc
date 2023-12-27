@@ -3,6 +3,7 @@ import Image from "next/image";
 import FooterComp from "../Footer/FooterComp";
 import Newsletter from "../newsletter/Newsletter";
 import React, { useRef, useState, useEffect } from "react";
+import Api from "@/utils/Api";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -10,8 +11,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 // import required modules
 import { Autoplay, Navigation, HashNavigation } from "swiper/modules";
-// import axios
-import axios from "axios";
 // import link
 import Link from "next/link";
 
@@ -24,8 +23,6 @@ export default function BlogComp() {
     progressCircle.current.style.setProperty("--progress", 1 - progress);
     progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
   };
-  // store the base url in a constant
-  const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
   // store path url in a constant
   const pathUrl = "/blog";
   // fetch blog posts from the server
@@ -40,9 +37,9 @@ export default function BlogComp() {
   const [popular, setPopular] = useState([]);
 
   useEffect(() => {
-    axios
-      // use the base url and the endpoint to fetch the blog posts
-      .get(`${baseUrl}/admin/blog`)
+    // use the base url and the endpoint to fetch the blog posts
+    Api
+      .get("/admin/blog")
       .then((res) => {
         const data = res.data;
         setPosts(data);
