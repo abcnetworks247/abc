@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import {
   Button,
@@ -24,17 +25,18 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
 export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
-
-
   const [formData, setFormData] = useState({
-    role: "",
-    fullname: "",
-    email: "",
-    password: "",
-   // Add a field for the selected role
+    fullname: null,
+    email: null,
+    password: null,
+    // role: null, // Add a field for the selected role
   });
 
-  const roles = ["editor", "admin", "superadmin"];
+  const [Allrole, setallrole] = useState('')
+  const roles = ['Editor', 'Admin', 'Super Admin'];
+
+
+  console.log(Allrole,"all role");
   /**
    *
    * @param {object}e e event object
@@ -49,17 +51,24 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
       [name]: value,
     });
 
-    // if (name === 'role') {
-    //   signUpValidate(name, null, value, ''); // Validate the role based on the existing logic
-    // } else {
-    //   signUpValidate(name, null, value, ''); // Validate other fields based on the existing logic
-    // }
+
+    if (name === 'role') {
+      // Validate the role based on the available roles
+      signUpValidate(name, roles, value, 'Please select a role.');
+    } else {
+      // Validate other fields based on the existing logic
+      signUpValidate(name, null, value, '');
+    }
   };
 
 
-  // }
-
-
+  const rolechange = (e)=>{
+    console.log('Event:', e);
+  if (e.target && e.target.value) {
+    console.log('Selected Value:', e.target.value);
+    setallrole(e.target.value);
+  }
+  } 
   //Define state for universal error
 
   const [universalError, setUniversalError] = useState("");
@@ -72,9 +81,8 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     fullname: "",
-
     password: "",
-    role: "",
+    role: ""
   });
 
   /**
@@ -110,15 +118,9 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
     (field) => !errorMessages[field]
   );
 
-  const Handleclick = ()=>{
-    console.log(formData);
-    console.log(Allrole, "all role");
-  }
-
   const HandleSubmit = async (e) => {
-
     e.preventDefault();
-    console.log(formData);
+    handleOpen()
     if (!allFieldsValid) {
       toast.error("please fill in all the fields correctly", {
         position: toast.POSITION.TOP_LEFT,
@@ -129,12 +131,10 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
     if (!formData.role) {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
-        role: "Please select a role.",
+        role: 'Please select a role.',
       }));
       return;
     }
-
-    handleOpen();
     const id = toast.loading("creating..", {
       position: toast.POSITION.TOP_LEFT,
     });
@@ -160,9 +160,9 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
           type: "success",
           isLoading: false,
         });
-        if(typeof window !== "undefined"){
-          window.location.reload();
-        }
+        setTimeout(() => {
+          router.push("/auth/sign-in");
+        }, 3000);
       } else if (data.status === 500) {
         const suberrormsg = toast.update(id, {
           render: `user email or name already exist `,
@@ -198,6 +198,7 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
     }
   };
 
+  
   return (
     <>
       <ToastContainer
@@ -281,7 +282,11 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
                         required
                         className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
-      
+                      {errorMessages.email && formData.email && (
+                        <span className="text-red-500 text-[13px]">
+                          {errorMessages.email}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="flex flex-wrap mt-4 -mx-3">
@@ -289,35 +294,35 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
                       <label
                         className="mb-2 ml-1 text-xs font-bold text-slate-700 dark:text-white/80"
                         htmlFor="role"
-                      ></label>
-                      {CurrentUser &&
-                      CurrentUser.data.olduser.role === "superadmin" ? (
-                         <Select variant="outlined" label="Select Role" name="role" value={formData && formData.role}   onChange={(e) => { setFormData({ ...formData, role: e }); }} >
+                         ></label>
+                        {  CurrentUser&&  CurrentUser.data.olduser.role  === "superadmin"? 
+
+
+
+                      <Select variant="outlined" label="Select Role" name="role" onChange={(e)=>{rolechange(e)}} >
                         {roles.map((role)=>(
 
                         <Option  key={role} value={role}>{role}</Option>
                         ))}
-{/*                    
-                        <option value="admin">Admin</option>
-                        <option value="superadmin">Super Admin</option>
-                        <option value="editor">Editor</option> */}
+                   
+                        {/* <Option>Admin</Option>
+                        <Option>Super Admin</Option> */}
                       </Select>
-                      ) : CurrentUser &&
-                        CurrentUser.data.olduser.role === "admin" ? (
-                        <Select variant="outlined" label="Select Role">
-                          <Option>Editor</Option>
-                        </Select>
-                      ) : (
-                        <Select
-                          variant="outlined"
-                          label="Select Role"
-                          disabled
-                        ></Select>
-                      )}
+                      : CurrentUser&&  CurrentUser.data.olduser.role  === "admin"? 
+                      <Select variant="outlined" label="Select Role">
 
-                      {errorMessages.role && formData.role && (
+                   
+                      <Option>Editor</Option>
+                    </Select>
+
+                           :         <Select variant="outlined" label="Select Role" disabled>
+
+                   
+                         </Select> }
+
+                         {errorMessages.role && formData.role && (
                         <span className="text-red-500 text-[13px]">
-                          {errorMessages.role}
+                          {errorMessages.password}
                         </span>
                       )}
                     </div>
@@ -362,12 +367,7 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
           <Button variant="text" color="blue-gray" onClick={handleOpen}>
             cancel
           </Button>
-          <Button
-            variant="gradient"
-            disabled={Object.values(formData).some((value) => value === "")}
-            color="green"
-            onClick={HandleSubmit}
-          >
+          <Button variant="gradient" disabled={Object.values(formData).some((value) => value === null)} color="green" onClick={HandleSubmit} >
             confirm
           </Button>
         </DialogFooter>

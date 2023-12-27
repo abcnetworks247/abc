@@ -12,20 +12,8 @@ import { MdOutlineDelete } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const FileComp = () => {
-  const [fileData, setFileData] = useState(null);
+const FileComp = ({fileData}) => {
   
-  const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
-
-
-  useEffect(() => {
-    socket.on("filemanager", ({ filemanager }) => {
-      console.log("this is filemanager", filemanager);
-      setFileData(filemanager);
-    });
-  
-    return () => socket.disconnect();
-  }, [socket]);
 
   return (
     <div>
@@ -82,7 +70,7 @@ const FileComp = () => {
               <div className="">
                 <img
                   className="object-cover object-center w-full h-40 max-w-full rounded-lg"
-                  src={imageLink}
+                  src={secure_url}
                   alt="gallery-photo"
                 />
               </div>

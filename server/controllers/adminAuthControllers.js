@@ -28,7 +28,7 @@ const Client = require("../models/clientAuthSchema");
 const maxAgeInMilliseconds = 7 * 24 * 60 * 60 * 1000;
 
 const signUp = async (req, res) => {
-  const { fullname, email, password } = req.body;
+  const { fullname, email, password, role } = req.body;
 
   try {
     const findUser = await Admin.findOne({ email });
@@ -43,6 +43,7 @@ const signUp = async (req, res) => {
       fullname,
       email,
       password,
+      role,
     });
 
     if (error) {
@@ -113,6 +114,7 @@ const signIn = async (req, res) => {
 
 const singleAdmin = async (req, res) => {
   const id = req.params.id;
+  const userblog = await Blog.find({ author: id });
 
   try {
     const olduser = await Admin.findById(id);
@@ -122,11 +124,15 @@ const singleAdmin = async (req, res) => {
     }
 
     // Check user role for authorization
-    if (user.role !== "superadmin" && user.role !== "admin") {
+    if (
+      olduser.role !== "superadmin" &&
+      olduser.role !== "admin" &&
+      olduser.role !== "editor"
+    ) {
       throw new UnAuthorizedError("Access denied");
     }
 
-    res.status(StatusCodes.OK).json({ olduser });
+    res.status(StatusCodes.OK).json({ olduser, userblog });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -450,10 +456,9 @@ const singleClient = async (req, res) => {
 };
 
 const deleteClient = async (req, res) => {
+  const clientid = req.body;
 
-  const clientid = req.body
-
-  const user = req.user
+  const user = req.user;
   try {
     if (!user) {
       throw new NotFoundError("User not found");
@@ -467,10 +472,11 @@ const deleteClient = async (req, res) => {
     const deleteUser = await Client.findByIdAndDelete(clientid);
 
     if (deleteUser) {
-      res.status(StatusCodes.OK).json({ message: "Client deleted successfully" });
+      res
+        .status(StatusCodes.OK)
+        .json({ message: "Client deleted successfully" });
       console.log("User deleted successfully");
     }
-    
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
