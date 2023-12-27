@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 
+
 const Page = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
   const pathUrl = "/dashboard/news/all-news";
   const editUrl = "/dashboard/news/edit";
   const router = useRouter();
@@ -19,8 +19,8 @@ const Page = () => {
 
 
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/admin/blog`)
+    Api
+      .get("admin/blog")
       .then((res) => {
         const data = res.data.allblog;
         setNews(data);
@@ -58,7 +58,7 @@ const Page = () => {
   if (error === true) {
     return (
       // create a professinal error page
-      <div className="flex flex-col items-center justify-center gap-3 h-96">
+      <div className="flex flex-col items-center justify-center gap-3 h-full">
         <h1 className="text-3xl font-bold">Something went wrong</h1>
         <p className="text-xl font-semibold text-gray-500 ">
           Please check your internet connection and try again
@@ -72,7 +72,7 @@ const Page = () => {
       <h1 className="text-3xl font-bold">All News</h1>
       <br />
       {loading ? (
-        <div className="flex items-center justify-center h-96">
+        <div className="flex items-center justify-center h-[70svh] lg:h-full">
           <svg
             className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
             xmlns="http://www.w3.org/2000/svg"

@@ -21,20 +21,16 @@ import axios from "axios";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { Button } from "@material-tailwind/react";
 
-const page = () => {
+function page() {
   const [html, setHtml] = useState("");
 
-  // dialog open state that is recieved from filemanger context
-
+  // dialog open state thaat is recieved from filemanger context
   const { handleOpen, size } = UseFileManager();
   const { id } = useParams();
   const [post, setPost] = useState([]);
   const [title, setTitle] = useState("");
   const [shortDescription, setShortDescription] = useState(" ");
-  const [category, setCategory] = useState(null);
-  const [type, setType] = useState(null);
   const [imageSrc, setImageSrc] = useState(
     "https://chatgen.ai/wp-content/uploads/2023/04/AI-chat-5-1200x675.png"
   );
@@ -42,12 +38,10 @@ const page = () => {
   const [error, setError] = useState(false);
   const AuthToken = Cookies.get("adminToken");
   const router = useRouter();
-
-  const baseUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/blog`;
-
+    
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/${id}`)
+    Api
+      .get(`admin/blog/${id}`)
       .then((res) => {
         const data = res.data.blogdata;
         console.log(data);
@@ -55,8 +49,6 @@ const page = () => {
         setPost(data);
         setTitle(data.title);
         setShortDescription(data.shortdescription);
-        setCategory(data.category)
-        setType(data.type);
         setHtml(data.longdescription);
         setImageSrc(data.blogimage);
         setLoading(false);
@@ -68,143 +60,206 @@ const page = () => {
       });
   }, []);
 
-  
+  const handleUpdate = async () => {
+    const data = {
+      blogid: id,
+      title: title,
+      shortdescription: shortDescription,
+      longdescription: html,
+      blogimage: imageSrc,
+    };
+
+    console.log("update data", data);
+    // const res = await Api.patch(`admin/blog/update`, data, {
+    //   headers: {
+    //     Authorization: `Bearer ${String(AuthToken)}`,
+    //   },
+    // });
+    const res = await axios.patch(
+      "http://localhost:8000//api/v1/admin/blog",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${String(AuthToken)}`,
+        },
+      }
+    );
+    console.log("update response", res);
+    if (res.status === 200) {
+      router.push("/dashboard/news/all-news");
+    }
+  };
+
   const handleChange = (e) => {
     setHtml(e.target.value);
   };
 
-  return (
+  return loading ? (
+    //    spinner
+    <div className="flex items-center justify-center h-[70svh] lg:h-full">
+          <svg
+            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            />
+          </svg>
+        </div>
+  ) : (
     <div>
-      <div className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-semibold text-center text-black sm:text-3xl">
-          Edit your post
-        </h1>
-
-        <p className="mt-5 text-sm font-medium text-center text-gray-700">
-          Tweak, your blog, your audience are waiting...
-        </p>
-
-        {loading === true ? (
-          <>loading...</>
-        ) : (
-          <>
-            <form
-              className="px-2 py-6 mt-6"
-              encType="multipart/form-data"
-            >
-              <div>
-                <label htmlFor="title" className="sr-only">
-                  Title
+      <div className="relative flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 ">
+        <div className="z-10 p-10 bg-white  lg:w-[70%] md:w-[80%] w-[90%] shadow-md rounded-xl">
+          <div className="text-center">
+            <h2 className="mt-5 text-3xl font-bold text-gray-900">
+              Edit post!
+            </h2>
+            <p className="mt-2 text-sm text-gray-400">
+              Lorem ipsum is placeholder text.
+            </p>
+          </div>
+          <form className="mt-8 space-y-3" action={handleUpdate} method="POST">
+            <div className="grid grid-cols-1 space-y-2">
+              <label className="text-sm font-bold tracking-wide text-gray-500">
+                Title
+              </label>
+              <input
+                className="p-2 text-base border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-indigo-500"
+                type="ttext"
+                placeholder="mail@gmail.com"
+                defaultValue={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-1 space-y-2">
+              <label className="text-sm font-bold tracking-wide text-gray-500">
+                Short Description
+              </label>
+              <textarea
+                defaultValue={shortDescription}
+                name=""
+                onchange={(e) => setShortDescription(e.target.value)}
+                id=""
+                cols="10"
+                rows="10"
+                placeholder=" News details"
+                className="h-20 p-2 text-base border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-indigo-500"
+              ></textarea>
+              <label className="text-sm font-bold tracking-wide text-gray-500">
+                Full Details
+              </label>
+              <EditorProvider>
+                <Editor value={html} onChange={handleChange}>
+                  <Toolbar>
+                    <BtnBold />
+                    <Separator />
+                    <BtnItalic />
+                    <Separator />
+                    <BtnLink />
+                    <Separator />
+                    <BtnStrikeThrough />
+                    <Separator />
+                    <BtnStyles />
+                  </Toolbar>
+                </Editor>
+              </EditorProvider>
+            </div>
+            <div className="hidden grid-cols-1 space-y-2 ">
+              <label className="text-sm font-bold tracking-wide text-gray-500">
+                Attach Document
+              </label>
+              <div className="flex items-center justify-center w-full">
+                <label className="flex flex-col w-full p-10 text-center border-4 border-dashed rounded-lg h-60 group">
+                  <div className="flex flex-col items-center justify-center w-full h-full text-center ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                      />
+                    </svg>
+                    <div className="flex flex-auto w-2/5 mx-auto -mt-10 max-h-48">
+                      <img
+                        className="object-center has-mask h-36"
+                        src={imageSrc}
+                        alt="freepik image"
+                      />
+                    </div>
+                    <p className="text-gray-500 pointer-none ">
+                      <span className="text-sm">Drag and drop</span> files here{" "}
+                      <br /> or{" "}
+                      <a
+                        href=""
+                        id=""
+                        className="text-blue-600 hover:underline"
+                      >
+                        select a file
+                      </a>{" "}
+                      from your computer
+                    </p>
+                  </div>
                 </label>
-                <input
-                  type="text"
-                  value={title}
-                  className="w-full p-4 text-sm border border-gray-300 rounded-lg shadow-sm"
-                  placeholder="Blog Title"
-                  onChange={(e) => setTitle(e.target.value)}
-                  min={74}
+              </div>
+            </div>
+            <div className="flex items-center justify-center w-full border rounded shadow-lg h-80">
+              <div>
+                <Image
+                  src="/upload.jpg"
+                  height={280}
+                  width={280}
+                  alt="upload"
                 />
+                <p className="text-base text-center border ">
+                  {imageSrc ? (
+                    <span className="text-green-500">Image Uploaded</span>
+                  ) : (
+                    <span
+                      className="text-blue-500 cursor-pointer"
+                      onClick={() => handleOpen("lg")}
+                    >
+                      Click here to select image
+                    </span>
+                  )}
+                </p>
               </div>
-              <div>
-                <label htmlFor="shortDescription" className="sr-only">
-                  Short Description
-                </label>
-                <input
-                  type="text"
-                  value={shortDescription}
-                  className="w-full p-4 text-sm border border-gray-300 rounded-lg shadow-sm"
-                  min={92}
-                  placeholder="Short Description"
-                  onChange={(e) => setShortDescription(e.target.value)}
-                />
-              </div>
-              <div className="w-full">
-                <fieldset className="w-full border border-gray-300 rounded-lg">
-                  <select
-                    name="blog-category"
-                    value={category}
-                    className="block w-full px-3 py-4 text-sm text-gray-700 border-gray-300 rounded-md shadow-sm"
-                    onChange={(e) => setCategory(e.target.value)}
-                  >
-                    <option value="uncategorized">Uncategorized</option>
-                    <option value="technology">Technology</option>
-                    <option value="travel">Travel</option>
-                    <option value="lifestyle">Lifestyle</option>
-                    <option value="food-cuisine">Food & Cuisine</option>
-                    <option value="health-wellness">Health & Wellness</option>
-                    <option value="fashion">Fashion</option>
-                    <option value="entertainment">Entertainment</option>
-                    <option value="personal-development">
-                      Personal Development
-                    </option>
-                    <option value="finance">Finance</option>
-                    <option value="education">Education</option>
-                    <option value="sports">Sports</option>
-                    <option value="business">Business</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="arts-culture">Arts & Culture</option>
-                    <option value="environment">Environment</option>
-                    <option value="agriculture">Agriculture</option>
-                    <option value="politics">Politics</option>
-                    <option value="science">Science</option>
-                    <option value="food-drink">Food & Drink</option>
-                    <option value="music">Music</option>
-                    <option value="technology-gadgets">
-                      Technology Gadgets
-                    </option>
-                    <option value="history">History</option>
-                    <option value="travel-guides">Travel Guides</option>
-                    <option value="family-parenting">Family & Parenting</option>
-                    <option value="career">Career</option>
-                    <option value="philosophy">Philosophy</option>
-                    <option value="religion-spirituality">
-                      Religion & Spirituality
-                    </option>
-                  </select>
-                </fieldset>
-              </div>
-
-
-              
-
-              <div className="my-10 h-[50vh] pb-16 pt-6">
-                <label
-                  htmlFor="longDescription"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  News Post Content
-                </label>
-                <EditorProvider>
-                  <Editor value={html} onChange={handleChange}>
-                    <Toolbar>
-                      <BtnBold />
-                      <Separator />
-                      <BtnItalic />
-                      <Separator />
-                      <BtnLink />
-                      <Separator />
-                      <BtnStrikeThrough />
-                      <Separator />
-                      <BtnStyles />
-                    </Toolbar>
-                  </Editor>
-                </EditorProvider>
-              </div>
-              <div>
-                <Button
-                  variant="gradient"
-                  type="submit"
-                  className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
-                >
-                  Save
-                </Button>
-              </div>
-            </form>
-          </>
-        )}
+            </div>
+            <p className="text-sm text-gray-300">
+              <span>File type: doc,pdf,types of images</span>
+            </p>
+            <div>
+              <button
+                type="submit"
+                className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
+              >
+                Upload
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
+
+      <PopUpFilemanager handleOpen={handleOpen} size={size} />
     </div>
   );
-};
+}
 
 export default page;
