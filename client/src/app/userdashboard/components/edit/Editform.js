@@ -21,13 +21,13 @@ const Editform = ({
     console.log('formdata edit', formData);
   return (
     // <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
-    <form className="mx-auto" onSubmit={(e) => handleSubmit(e)}>
-      <div className="flex justify-between items-center lg:flex-row-reverse cursor-pointer mb-2 ">
+    <form className="mx-auto" onSubmit={(e) => handleSubmit(e)} encType="multipart/form-data">
+      <div className="flex items-center justify-between mb-2 cursor-pointer lg:flex-row-reverse ">
       
 
         {/* edit */}
         <div
-          className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200"
+          className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full hover:bg-gray-200"
           onClick={() => handleEdit()}
         >
           <svg
@@ -126,6 +126,7 @@ const Editform = ({
             type="file"
             onChange={(e) => handleImageChange(e)}
             id="userphoto"
+            name="userphoto"
             accept="image/*"
             className="block w-full text-sm text-slate-500 "
           />

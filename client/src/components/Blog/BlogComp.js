@@ -25,7 +25,7 @@ export default function BlogComp() {
     progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
   };
   // store the base url in a constant
-  const baseUrl = "https://klipto-inc-abcstudio-server.onrender.com/api/v1";
+  const baseUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1`;
   // store path url in a constant
   const pathUrl = "/blog";
   // fetch blog posts from the server
