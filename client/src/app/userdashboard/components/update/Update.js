@@ -24,7 +24,7 @@ const Update = () => {
     setFormData({
       fullname: UserData?.fullname,
       email: UserData.email,
-      phonenumber: UserData.phonenumber,
+      phone: UserData.phone,
       shippingaddress: UserData.shippingaddress,
       userdp: selecteddp,
     });
