@@ -1,8 +1,11 @@
 "use client";
+import Api from "@/utils/Api";
 import axios from "axios";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 
 const Page = () => {
   const [news, setNews] = useState([]);
@@ -12,6 +15,8 @@ const Page = () => {
   const pathUrl = "/dashboard/news/all-news";
   const editUrl = "/dashboard/news/edit";
   const router = useRouter();
+  const AuthToken = Cookies.get("adminToken");
+
 
   useEffect(() => {
     axios
@@ -27,6 +32,29 @@ const Page = () => {
         setError(true);
       });
   }, []);
+  
+
+  const deleteBlog = (id) => {
+    axios
+      .delete(`${baseUrl}/admin/blog/delete`, {
+        data: {
+          id: id,
+        },
+        
+          headers: {
+            Authorization: `Bearer ${String(AuthToken)}`,
+          },
+          
+      })
+      .then((res) => {
+        console.log(res);
+        router.reload();
+      })
+      .catch((err) => {
+        console.log("cant delete", err);
+      });
+  };
+
   if (error === true) {
     return (
       // create a professinal error page
@@ -90,7 +118,7 @@ const Page = () => {
                     <button onClick={() => {router.push(`${editUrl}/${item._id}`)}} className="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-[10px] mr-1 font-medium sm:mt-2 text-white">
                 Edit
               </button>
-              <button className="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white">
+              <button onClick={()=> {deleteBlog(item._id)}} className="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white">
                 Delete
               </button>
 

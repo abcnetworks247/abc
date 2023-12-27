@@ -34,6 +34,8 @@ function page() {
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
   const [shortDescription, setShortDescription] = useState("");
+  const [type, setType] = useState("");
+  const [category, setCategory] = useState("");
 
   // dialog open state that is recieved from filemanger context
   const { handleOpen, size } = UseFileManager();
@@ -67,10 +69,11 @@ function page() {
   //store Auth token
   const AuthToken = Cookies.get("adminToken");
   // function to handle the click of the upload button
-  const handleUpload = async (e) => {
-    e.preventDefault();
+  const handleUpload = async () => {
     const data = {
       title: title,
+      type: type,
+      category: category,
       shortdescription: shortDescription,
       longdescription: html,
       image: imageSrc,
@@ -94,9 +97,10 @@ function page() {
             </h2>
             <p className="mt-2 text-sm text-gray-400">
               Lorem ipsum is placeholder text.
+              {type} {category}
             </p>
           </div>
-          <form className="mt-8 space-y-3" action="#" method="POST">
+          <form className="mt-8 space-y-3" action={handleUpload} method="POST">
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Title
@@ -104,22 +108,55 @@ function page() {
               <input
                 className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                 type=""
-                placeholder="mail@gmail.com"
+                placeholder="Example: 10 Best Laptops"
                 onChange={(e) => setTitle(e.target.value)}
                 defaultValue={title}
+                required
               />
             </div>
             <div className="grid grid-cols-1 space-y-2">
-              <label className="text-sm font-bold tracking-wide text-gray-500">
+              
+              {/* a div with two option select for categories and type */}
+              <div className="grid grid-cols-2 gap-2">
+              <select
+                className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                name="type"
+                id="type"
+                required
+                onChange={(e) => setType(e.target.value)}
+              >
+                <option hidden>Select Type</option>
+                <option value="trending">Trending</option>
+                <option value="popular">Popular</option>
+                <option value="top">Top</option>
+              </select>
+              <select
+                className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                name="category"
+                id="category"
+                required
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option hidden>Select Category</option>
+                <option value="Technology">Technology</option>
+                <option value="Sport">Sport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Lifestyle">Lifestyle</option>
+              </select>
+            </div>
+            <br />
+            <label className="text-sm font-bold tracking-wide text-gray-500">
                 Short Description
               </label>
               <textarea
-                defaultChecked={shortDescription}
+                defaultValue={shortDescription}
                 onChange={(e) => setShortDescription(e.target.value)}
                 name=""
                 id=""
                 cols="10"
                 rows="10"
+                required
                 placeholder=" News details"
                 className="h-20 p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
               ></textarea>
