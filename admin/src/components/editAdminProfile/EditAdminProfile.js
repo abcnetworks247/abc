@@ -12,17 +12,40 @@ import {
 } from "@material-tailwind/react";
 import Image from "next/image";
 import { TiCameraOutline } from "react-icons/ti";
+import UseUpdateprof from "@/hooks/UseUpdateprof";
 
 export function EditAdminProfile({ open, handleOpen, UserValue }) {
 
-
+  const { updateProf, isSuccess } = UseUpdateprof();
 
   const[formData, setFormData] = useState({
      fullname: "", 
      email: "",
      userbio: "",
   })
+ 
+   const HandleInputChange =(e)=>{
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
 
+   }
+
+
+
+   const HandleSubmit = async ( )=> { 
+    try {
+      await updateProf(formData);
+      console.log('Profile updated successfully', isSuccess);
+      // Handle success or redirect, etc.
+    } catch (error) {
+      console.error('Error updating profile', error);
+      // Handle error, show a message, etc.
+    }
+  
+   }
  
   return (
     <>
@@ -66,9 +89,11 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
                       </label>
                       <input
                         type="text"
-                        name="First Name"
+                        name="fullname"
                         placeholder="eg. Michael"
-                        value={ UserValue && UserValue.fullname}
+                        defaultValue={ UserValue && UserValue.fullname}
+                        required
+                        onChange={HandleInputChange}
                         className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
@@ -82,9 +107,11 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
                       </label>
                       <input
                         type="email"
-                        name="Email Address"
+                        name="email"
                         placeholder="eg. soft@dashboard.com"
-                        value={ UserValue && UserValue.email}
+                        onChange={HandleInputChange}
+                        defaultValue={ UserValue && UserValue.email}
+                        required
                         className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
@@ -100,9 +127,11 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
                       </label>
                       <input
                         type="tel"
-                        name="Phone Number"
+                        name="phone"
                         placeholder="+123 xxx xxx xxx"
-                        value={ UserValue && UserValue.phone}
+                        defaultValue={ UserValue && UserValue.phone}
+                        onChange={HandleInputChange}
+                        required
                         className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
@@ -127,39 +156,10 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
                       >
                         Bio
                       </label>
-                      <textarea name="" id="" value={UserValue && UserValue.userbio} cols="5" rows="5"  className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></textarea>
+                      <textarea name="userbio" id="" defaultValue={UserValue && UserValue.userbio} cols="5" rows="5"  onChange={HandleInputChange}  className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></textarea>
                    
                     </div>
-                  <div className="flex flex-wrap mt-4 -mx-3">
-                    <div className="w-full max-w-full px-3 flex-0 sm:w-6/12">
-                      <label
-                        className="mb-2 ml-1 text-xs font-bold text-slate-700 dark:text-white/80"
-                        htmlFor="Password"
-                      >
-                       Current Password
-                      </label>
-                      <input
-                        type="password"
-                        name="Password"
-                        placeholder="******"
-                        className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                      />
-                    </div>
-                    <div className="w-full max-w-full px-3 mt-4 flex-0 sm:mt-0 sm:w-6/12">
-                      <label
-                        className="mb-2 ml-1 text-xs font-bold text-slate-700 dark:text-white/80"
-                        htmlFor="Repeat Password"
-                      >
-                        New Password
-                      </label>
-                      <input
-                        type="password"
-                        name="Repeat Password"
-                        placeholder="******"
-                        className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                      />
-                    </div>
-                  </div>
+             
                 </div>
               </div>
             </form>
@@ -169,7 +169,7 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
           <Button variant="text" color="blue-gray" onClick={handleOpen}>
             cancel
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
+          <Button variant="gradient" color="green" onClick={HandleSubmit} disabled={Object.values(formData).every((value)=> value === "")}>
             confirm
           </Button>
         </DialogFooter>

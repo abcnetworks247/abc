@@ -161,7 +161,7 @@ export function AddAdminMeMber({ open, handleOpen, CurrentUser }) {
           isLoading: false,
         });
         if(typeof window !== "undefined"){
-          window.location.reload();
+          window.location.reload()
         }
       } else if (data.status === 500) {
         const suberrormsg = toast.update(id, {
