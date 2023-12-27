@@ -36,8 +36,6 @@ const signUp = async (req, res) => {
       throw new UnAuthorizedError("Email already exists");
     }
 
-    console.log("not found");
-
     const { error, value } = Clientjoi.validate({
       fullname,
       email,
@@ -45,15 +43,10 @@ const signUp = async (req, res) => {
     });
 
     if (error) {
-      console.log("error");
       throw new ValidationError("error");
     }
 
-    console.log(value);
-
     const newUser = await Client.create(value);
-
-    console.log(newUser);
 
     res.status(StatusCodes.CREATED).json({
       data: newUser,
@@ -67,7 +60,6 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-  console.log("hit sign");
   const { email, password } = req.body;
 
   try {
@@ -76,8 +68,6 @@ const signIn = async (req, res) => {
     if (!olduser) {
       throw new NotFoundError("User not found");
     }
-
-    console.log(olduser);
 
     const authenticatedUser = await olduser.checkPassword(password);
 
@@ -88,8 +78,6 @@ const signIn = async (req, res) => {
     const MaxAge = 3 * 24 * 60 * 60;
 
     const token = CreateToken(olduser._id, MaxAge);
-
-    console.log(token);
 
     res.setHeader("Authorization", "Bearer " + token);
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -140,11 +128,8 @@ const userRecovery = async (req, res) => {
     const userexist = await Client.findOne({ email });
 
     if (!userexist) {
-      console.log("Couldn't find client");
       throw new NotFoundError("User not found");
     }
-
-    console.log("Found client");
 
     const MaxAge = 5 * 60;
     const token = CreateToken(userexist._id, MaxAge);
@@ -168,8 +153,6 @@ const userRecovery = async (req, res) => {
       html: renderHtml,
     });
 
-    console.log("email recovery sent");
-
     return res
       .status(StatusCodes.OK)
       .send({ message: `verification email has been sent to ${email}` });
@@ -183,19 +166,14 @@ const userRecovery = async (req, res) => {
 const userVerifyPasswordReset = async (req, res) => {
   const { token } = req.params;
 
-  console.log("verify password reset", token);
   try {
     const decodedId = VerifyToken(token);
 
-    console.log("hit");
-
     if (!decodedId) {
-      console.log("Invalid token");
       res.redirect(`${clientUrl}/recovery`);
       throw new UnAuthorizedError("Invalid token");
     }
 
-    console.log("Valid token");
     res.redirect(`${clientUrl}/updatepassword?verified=true&reset=${token}`);
   } catch (error) {
     res
@@ -239,7 +217,7 @@ const userUpdatePassword = async (req, res) => {
 };
 
 const userUpdate = async (req, res) => {
-  const { fullname, email, userbio, phonenumber, shippingaddress } = req.body;
+  const { fullname, email, userbio, phone, shippingaddress } = req.body;
 
   try {
     if (!req.user) {
@@ -251,7 +229,7 @@ const userUpdate = async (req, res) => {
         fullname,
         email,
         userbio,
-        phonenumber,
+        phone,
         shippingaddress,
       };
 
@@ -269,6 +247,8 @@ const userUpdate = async (req, res) => {
     } else {
       const { path } = req.file;
 
+      console.log(path);
+
       try {
         const userphoto = await cloudinary.uploader.upload(path, {
           use_filename: true,
@@ -281,7 +261,7 @@ const userUpdate = async (req, res) => {
           fullname,
           email,
           userbio,
-          phonenumber,
+          phone,
           shippingaddress,
           userdp: userphoto.secure_url,
         };
@@ -299,14 +279,12 @@ const userUpdate = async (req, res) => {
           user: updatedUser,
         });
       } catch (uploadError) {
-        console.error("Error uploading file to Cloudinary:", uploadError);
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ error: "Error uploading file to Cloudinary" });
       }
     }
   } catch (error) {
-    console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -348,16 +326,30 @@ const userSignOut = async (req, res) => {
 };
 
 const userDelete = async (req, res) => {
+
+  const {email, password}  = req.body
+
   try {
     if (!req.user) {
       throw new NotFoundError("User not found");
+    }
+
+    if (email !== req.user.email) {
+      throw new UnAuthorizedError("you are not authorized to delete this user")
+    }
+
+    const olduser = await Client.findById(req.user.id);
+
+    const authenticatedUser = await olduser.checkPassword(password);
+
+    if(!authenticatedUser) {
+      throw new UnAuthorizedError("you are not authorized to delete this user")
     }
 
     const deleteUser = await Client.findByIdAndDelete(req.user);
 
     if (deleteUser) {
       res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
-      console.log("User deleted successfully");
     }
   } catch (error) {
     res
