@@ -11,6 +11,7 @@ import {
 import { MdOutlineDelete } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { IoAdd } from "react-icons/io5";
 
 const FileCompPop = () => {
   const [fileData, setFileData] = useState(null);
@@ -34,17 +35,11 @@ const FileCompPop = () => {
               variant=""
               className="flex flex-row items-center gap-1 px-2 py-1 pr-2 text-sm text-white bg-green-600 rounded-md"
             >
-              <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
+              <IoAdd className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
               Add
             </button>
 
-            <button
-              variant=""
-              className="flex flex-row items-center gap-1 px-2 py-1 text-sm text-white bg-gray-900 rounded-md"
-            >
-              <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
-              Delete
-            </button>
+           
           </div>
           <div className="flex flex-row items-center gap-5">
            

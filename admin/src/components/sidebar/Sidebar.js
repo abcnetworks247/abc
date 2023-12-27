@@ -35,13 +35,13 @@ import {
 import { SlFolderAlt } from "react-icons/sl";
 import useCurrentAdmin from "@/hooks/useCurrentAdmin";
 import Image from "next/image";
-import Logo from "@/resources/assets/images/AbcstudioNo.png"
+import Logo from "@/resources/assets/images/AbcstudioNo.png";
 import Link from "next/link";
 export default function Sidebar() {
   const [open, setOpen] = React.useState(0);
   const [open2, setOpen2] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
-  const {CurrentUser,isLoading }= useCurrentAdmin()
+  const { CurrentUser, isLoading } = useCurrentAdmin();
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -55,8 +55,7 @@ export default function Sidebar() {
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
           <a href="javascript:void(0)">
-          <Image src={Logo} alt="logo"   width={100} height={100} />
-             
+            <Image src={Logo} alt="logo" width={100} height={100} />
           </a>
           <ul className="flex-1 my-3 space-y-1">
             <li>
@@ -134,6 +133,14 @@ export default function Sidebar() {
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
                       </ListItemPrefix>
                       New Product
+                    </ListItem>
+                  </Link>
+                  <Link href="/dashboard/eccomerce/category">
+                    <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                      </ListItemPrefix>
+                      Category
                     </ListItem>
                   </Link>
                 </List>
@@ -265,6 +272,22 @@ export default function Sidebar() {
                       Create News
                     </ListItem>
                   </Link>
+                  <Link href="/dashboard/news/category">
+                    <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                      </ListItemPrefix>
+                      News Category
+                    </ListItem>
+                  </Link>
+                  <Link href="/dashboard/news/type">
+                    <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
+                      <ListItemPrefix>
+                        <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
+                      </ListItemPrefix>
+                      News Type
+                    </ListItem>
+                  </Link>
                 </List>
               </AccordionBody>
             </Accordion>
@@ -311,32 +334,32 @@ export default function Sidebar() {
               </Link>
             </li>
           </ul>
-          {
-            isLoading?
+          {isLoading ? (
             <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
-            <div className="w-10 h-10 animate-pulse bg-blue-gray-200 rounded-full border-2 border-blue-gray-200 border-l-transparent"></div>
-            <div className="ml-4">
-              <p className="text-sm text-white w-5 h-2 bg-blue-gray-200 rounded-sm animate-pulse"></p>
-              <p className="text-sm text-white w-5 h-2 bg-blue-gray-200 rounded-sm animate-pulse"></p>
+              <div className="w-10 h-10 border-2 rounded-full animate-pulse bg-blue-gray-200 border-blue-gray-200 border-l-transparent"></div>
+              <div className="ml-4">
+                <p className="w-5 h-2 text-sm text-white rounded-sm bg-blue-gray-200 animate-pulse"></p>
+                <p className="w-5 h-2 text-sm text-white rounded-sm bg-blue-gray-200 animate-pulse"></p>
+              </div>
             </div>
-          </div>
-          :
-
-          <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
-            <Image
-            
-              src={UserValue && UserValue.userdp}
-              
-              height={50}
-              width={50}
-              className="border-2 border-white rounded-full w-9 h-9"
-            />
-            <div className="ml-4">
-              <p className="text-sm text-white">{ UserValue && UserValue.fullname}</p>
-              <p className="text-xs text-gray-300">Active {UserValue && UserValue.role} account</p>
+          ) : (
+            <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
+              <Image
+                src={UserValue && UserValue.userdp}
+                height={50}
+                width={50}
+                className="border-2 border-white rounded-full w-9 h-9"
+              />
+              <div className="ml-4">
+                <p className="text-sm text-white">
+                  {UserValue && UserValue.fullname}
+                </p>
+                <p className="text-xs text-gray-300">
+                  Active {UserValue && UserValue.role} account
+                </p>
+              </div>
             </div>
-          </div>
-          }
+          )}
         </div>
       </div>
     </div>

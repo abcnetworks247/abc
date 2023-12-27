@@ -12,46 +12,52 @@ const {
   ValidationError,
 } = require("../errors/index");
 
-const CreateNewsType = (req, res) => {
+const CreateNewsType = async (req, res) => {
   const { name } = req.body;
   const { user } = req;
 
   try {
+    // Check if user exists
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (
-      user.role !== "superadmin" &&
-      user.role !== "admin" &&
-      user.role !== "editor"
-    ) {
+    // Check user authorization roles
+    if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized");
     }
 
-    const checkNewsType = NewsType.find({ name });
+    // Check if the category type already exists
+    const existingCategory = await NewsType.findOne({ name });
 
-    if (checkNewsType) {
-      throw new UnAuthorizedError("News type already exists");
+    if (existingCategory) {
+      throw new UnAuthorizedError("Category type already exists");
     }
 
+    // Validate the category name using Joi schema
     const { error, value } = CategoryJoi.validate({ name });
 
     if (error) {
       throw new ValidationError("Invalid category name");
     }
 
-    // Assuming NewsType is a model with a create method
-    const data = NewsType.create({
-      name: value.name /* pass necessary fields here */,
+    // Create a new category using the ProductCat model
+    const createdCategory = await NewsType.create({
+      name: value.name,
+      // Add other necessary fields here
     });
 
-    return res
-      .status(StatusCodes.CREATED)
-      .json({ data, message: "News Type created successfully" });
+    return res.status(StatusCodes.CREATED).json({
+      data: createdCategory,
+      message: "Category created successfully",
+    });
   } catch (error) {
     return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .status(
+        error instanceof CustomError
+          ? error.statusCode
+          : StatusCodes.INTERNAL_SERVER_ERROR
+      )
       .json({ error: error.message });
   }
 };
@@ -80,32 +86,33 @@ const UpdateNewsType = async (req, res) => {
     const { name, id } = req.body;
     const { user } = req;
 
+    console.log(id, name);
+
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (
-      user.role !== "superadmin" &&
-      user.role !== "admin" &&
-      user.role !== "editor"
-    ) {
+    if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized to update News Type");
     }
 
-    // Assuming NewsType is a model with a findByIdAndUpdate method
+    // Assuming ProductCat is a model with a findByIdAndUpdate method
     const updatedNewsType = await NewsType.findByIdAndUpdate(
       id,
-      { name /* pass necessary fields to update */ },
-      { new: true } // to get the updated document
+      { name }, // Pass necessary fields to update
+      { new: true, runValidators: true } // To get the updated document and run validators
     );
 
+    await NewsType.save();
+
     if (!updatedNewsType) {
-      throw new NotFoundError("News Type not found");
+      throw new NotFoundError("Product Category not found");
     }
 
-    return res.status(StatusCodes.OK).json({
+    console.log("updatedNewsType");
+    return res.status(StatusCodes.CREATED).json({
       data: updatedNewsType,
-      message: "News Type updated successfully",
+      message: "Product Category updated successfully",
     });
   } catch (error) {
     return res
@@ -115,8 +122,9 @@ const UpdateNewsType = async (req, res) => {
 };
 
 const DeleteNewsType = async (req, res) => {
+  const { id } = req.body;
+
   try {
-    const { id } = req.body;
     const { user } = req;
 
     if (!user) {
@@ -131,16 +139,16 @@ const DeleteNewsType = async (req, res) => {
       throw new UnAuthorizedError("You are not authorized to delete News Type");
     }
 
-    // Assuming NewsType is a model with a findByIdAndDelete method
+    // Assuming ProductCat is a model with a findByIdAndDelete method
     const deletedNewsType = await NewsType.findByIdAndDelete(id);
 
     if (!deletedNewsType) {
-      throw new NotFoundError("News Type not found");
+      throw new NotFoundError("Product Category not found");
     }
 
     return res.status(StatusCodes.OK).json({
       data: deletedNewsType,
-      message: "News Type deleted successfully",
+      message: "Category deleted successfully",
     });
   } catch (error) {
     return res
@@ -149,46 +157,52 @@ const DeleteNewsType = async (req, res) => {
   }
 };
 
-const CreateNewsCat = (req, res) => {
+const CreateNewsCat = async (req, res) => {
   const { name } = req.body;
   const { user } = req;
 
   try {
+    // Check if user exists
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (
-      user.role !== "superadmin" &&
-      user.role !== "admin" &&
-      user.role !== "editor"
-    ) {
+    // Check user authorization roles
+    if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized");
     }
 
-    const checkNewsType = NewsCat.find({ name });
+    // Check if the category type already exists
+    const existingCategory = await NewsCat.findOne({ name });
 
-    if (checkNewsType) {
-      throw new UnAuthorizedError("News type already exists");
+    if (existingCategory) {
+      throw new UnAuthorizedError("Category type already exists");
     }
 
+    // Validate the category name using Joi schema
     const { error, value } = CategoryJoi.validate({ name });
 
     if (error) {
       throw new ValidationError("Invalid category name");
     }
 
-    // Assuming NewsType is a model with a create method
-    const data = NewsCat.create({
-      name: value.name /* pass necessary fields here */,
+    // Create a new category using the ProductCat model
+    const createdCategory = await NewsCat.create({
+      name: value.name,
+      // Add other necessary fields here
     });
 
-    return res
-      .status(StatusCodes.CREATED)
-      .json({ data, message: "News Type created successfully" });
+    return res.status(StatusCodes.CREATED).json({
+      data: createdCategory,
+      message: "Category created successfully",
+    });
   } catch (error) {
     return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .status(
+        error instanceof CustomError
+          ? error.statusCode
+          : StatusCodes.INTERNAL_SERVER_ERROR
+      )
       .json({ error: error.message });
   }
 };
@@ -217,32 +231,33 @@ const UpdateNewsCat = async (req, res) => {
     const { name, id } = req.body;
     const { user } = req;
 
+    console.log(id, name);
+
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (
-      user.role !== "superadmin" &&
-      user.role !== "admin" &&
-      user.role !== "editor"
-    ) {
+    if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized to update News Type");
     }
 
-    // Assuming NewsType is a model with a findByIdAndUpdate method
+    // Assuming ProductCat is a model with a findByIdAndUpdate method
     const updatedNewsType = await NewsCat.findByIdAndUpdate(
       id,
-      { name /* pass necessary fields to update */ },
-      { new: true } // to get the updated document
+      { name }, // Pass necessary fields to update
+      { new: true, runValidators: true } // To get the updated document and run validators
     );
 
+    await NewsCat.save();
+
     if (!updatedNewsType) {
-      throw new NotFoundError("News Type not found");
+      throw new NotFoundError("Product Category not found");
     }
 
-    return res.status(StatusCodes.OK).json({
+    console.log("updatedNewsType");
+    return res.status(StatusCodes.CREATED).json({
       data: updatedNewsType,
-      message: "News Type updated successfully",
+      message: "Product Category updated successfully",
     });
   } catch (error) {
     return res
@@ -252,8 +267,9 @@ const UpdateNewsCat = async (req, res) => {
 };
 
 const DeleteNewsCat = async (req, res) => {
+  const { id } = req.body;
+
   try {
-    const { id } = req.body;
     const { user } = req;
 
     if (!user) {
@@ -268,16 +284,16 @@ const DeleteNewsCat = async (req, res) => {
       throw new UnAuthorizedError("You are not authorized to delete News Type");
     }
 
-    // Assuming NewsType is a model with a findByIdAndDelete method
+    // Assuming ProductCat is a model with a findByIdAndDelete method
     const deletedNewsType = await NewsCat.findByIdAndDelete(id);
 
     if (!deletedNewsType) {
-      throw new NotFoundError("News Type not found");
+      throw new NotFoundError("Product Category not found");
     }
 
     return res.status(StatusCodes.OK).json({
       data: deletedNewsType,
-      message: "News Type deleted successfully",
+      message: "Category deleted successfully",
     });
   } catch (error) {
     return res
@@ -286,46 +302,52 @@ const DeleteNewsCat = async (req, res) => {
   }
 };
 
-const CreateProductCat = (req, res) => {
+const CreateProductCat = async (req, res) => {
   const { name } = req.body;
   const { user } = req;
 
   try {
+    // Check if user exists
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (
-      user.role !== "superadmin" &&
-      user.role !== "admin" &&
-      user.role !== "editor"
-    ) {
+    // Check user authorization roles
+    if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized");
     }
 
-    const checkNewsType = ProductCat.find({ name });
+    // Check if the category type already exists
+    const existingCategory = await ProductCat.findOne({ name });
 
-    if (checkNewsType) {
-      throw new UnAuthorizedError("News type already exists");
+    if (existingCategory) {
+      throw new UnAuthorizedError("Category type already exists");
     }
 
+    // Validate the category name using Joi schema
     const { error, value } = CategoryJoi.validate({ name });
 
     if (error) {
       throw new ValidationError("Invalid category name");
     }
 
-    // Assuming NewsType is a model with a create method
-    const data = ProductCat.create({
-      name: value.name /* pass necessary fields here */,
+    // Create a new category using the ProductCat model
+    const createdCategory = await ProductCat.create({
+      name: value.name,
+      // Add other necessary fields here
     });
 
-    return res
-      .status(StatusCodes.CREATED)
-      .json({ data, message: "News Type created successfully" });
+    return res.status(StatusCodes.CREATED).json({
+      data: createdCategory,
+      message: "Category created successfully",
+    });
   } catch (error) {
     return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .status(
+        error instanceof CustomError
+          ? error.statusCode
+          : StatusCodes.INTERNAL_SERVER_ERROR
+      )
       .json({ error: error.message });
   }
 };
@@ -354,32 +376,33 @@ const UpdateProductCat = async (req, res) => {
     const { name, id } = req.body;
     const { user } = req;
 
+    console.log(id, name);
+
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (
-      user.role !== "superadmin" &&
-      user.role !== "admin" &&
-      user.role !== "editor"
-    ) {
+    if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized to update News Type");
     }
 
-    // Assuming NewsType is a model with a findByIdAndUpdate method
+    // Assuming ProductCat is a model with a findByIdAndUpdate method
     const updatedNewsType = await ProductCat.findByIdAndUpdate(
       id,
-      { name /* pass necessary fields to update */ },
-      { new: true } // to get the updated document
+      { name }, // Pass necessary fields to update
+      { new: true, runValidators: true } // To get the updated document and run validators
     );
 
+    await ProductCat.save();
+
     if (!updatedNewsType) {
-      throw new NotFoundError("News Type not found");
+      throw new NotFoundError("Product Category not found");
     }
 
-    return res.status(StatusCodes.OK).json({
+    console.log("updatedNewsType");
+    return res.status(StatusCodes.CREATED).json({
       data: updatedNewsType,
-      message: "News Type updated successfully",
+      message: "Product Category updated successfully",
     });
   } catch (error) {
     return res
@@ -389,8 +412,9 @@ const UpdateProductCat = async (req, res) => {
 };
 
 const DeleteProductCat = async (req, res) => {
+  const { id } = req.body;
+
   try {
-    const { id } = req.body;
     const { user } = req;
 
     if (!user) {
@@ -405,16 +429,16 @@ const DeleteProductCat = async (req, res) => {
       throw new UnAuthorizedError("You are not authorized to delete News Type");
     }
 
-    // Assuming NewsType is a model with a findByIdAndDelete method
-    const deletedNewsType = await NewsCat.ProductCat(id);
+    // Assuming ProductCat is a model with a findByIdAndDelete method
+    const deletedNewsType = await ProductCat.findByIdAndDelete(id);
 
     if (!deletedNewsType) {
-      throw new NotFoundError("News Type not found");
+      throw new NotFoundError("Product Category not found");
     }
 
     return res.status(StatusCodes.OK).json({
       data: deletedNewsType,
-      message: "News Type deleted successfully",
+      message: "Category deleted successfully",
     });
   } catch (error) {
     return res
