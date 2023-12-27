@@ -17,8 +17,7 @@ const {
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const getAllBlog = async (req, res) => {
-
-  console.log('hit ');
+  console.log("hit ");
 
   try {
     const allblog = await blog
@@ -47,7 +46,9 @@ const getAllBlog = async (req, res) => {
         .json({ message: "No blogs found" });
     }
 
-    return res.status(StatusCodes.OK).json({ allblog, highlight, popular, top, trending });
+    return res
+      .status(StatusCodes.OK)
+      .json({ allblog, highlight, popular, top, trending });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -56,13 +57,28 @@ const getAllBlog = async (req, res) => {
 };
 
 const createBlog = async (req, res) => {
-  const { title, shortdescription, longdescription, category, type, blogimage  } = req.body;
+  const {
+    title,
+    shortdescription,
+    longdescription,
+    category,
+    type,
+    blogimage,
+  } = req.body;
 
   try {
     const currentUser = req.user;
 
     if (!currentUser) {
       throw new UnAuthorizedError("User not found");
+    }
+
+    if (
+      user.role !== "superadmin" &&
+      user.role !== "admin" &&
+      user.role !== "editor"
+    ) {
+      throw new UnAuthorizedError("You are not authorized to create new blog");
     }
 
     const newBlog = {
@@ -128,7 +144,7 @@ const updateBlog = async (req, res) => {
   const { title, shortdescription, longdescription, category, blogid, type } =
     req.body;
 
-    console.log(title, shortdescription, longdescription, category, blogid, type)
+  console.log(title, shortdescription, longdescription, category, blogid, type);
 
   try {
     const blogdata = await blog.findById(blogid);
@@ -137,41 +153,21 @@ const updateBlog = async (req, res) => {
 
     if (!blogdata) {
       throw new NotFoundError("Blog not found");
-    } else if (!olduser && blogdata.author.toString() !== olduser.toString()) {
-      throw new UnAuthorizedError("User not authorized");
     }
-
-    if (req.file === undefined) {
-      const oldpost = {
-        title,
-        shortdescription,
-        longdescription,
-        category,
-        type,
-      };
-
-      const updatedBlog = await blog.findByIdAndUpdate(blogid, oldpost, {
-        new: true,
-      });
-
-      return res
-        .status(StatusCodes.OK)
-        .json({ data: updatedBlog, message: "Blog updated successfully" });
+    if (
+      olduser.role !== "superadmin" &&
+      olduser.role !== "admin" &&
+      olduser.role !== "editor"
+    ) {
+      throw new UnAuthorizedError("You are not authorized to create new blog");
     }
-
-    const { path } = req.file;
-
-    const blogphoto = await cloudinary.uploader.upload(path, {
-      use_filename: true,
-      folder: "AllBlogsImage",
-    });
 
     const oldpost = {
       title,
       shortdescription,
       longdescription,
       category,
-      blogimage: blogphoto.secure_url,
+      blogimage,
       type,
     };
 
@@ -197,8 +193,14 @@ const deleteBlog = async (req, res) => {
 
     if (!blogdata) {
       throw new NotFoundError("Blog not found");
-    } else if (blogdata.author.toString() !== olduser.toString()) {
-      throw new UnAuthorizedError("User not authorized");
+    }
+
+    if (
+      olduser.role !== "superadmin" &&
+      olduser.role !== "admin" &&
+      olduser.role !== "editor"
+    ) {
+      throw new UnAuthorizedError("You are not authorized to delete this blog");
     }
 
     // const userid = olduser.toString();
