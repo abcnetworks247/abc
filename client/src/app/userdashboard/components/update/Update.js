@@ -11,16 +11,13 @@ import Editform from "../edit/Editform";
 const Update = () => {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
-  
   const [formData, setFormData] = useState(null);
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [selecteddp, setSelectedDp] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
 
-
   console.log("UserData in form", formData);
-  
 
   useEffect(() => {
     // Update formData when userData changes
@@ -34,7 +31,6 @@ const Update = () => {
 
     setSelectedPhoto(UserData.userdp);
   }, [UserData]);
-  
 
   // console.log("this is user data", userData.userdp);
 
@@ -59,9 +55,9 @@ const Update = () => {
     //   userdp: selectedFile,
     // }));
     const imageUrl = URL.createObjectURL(selectedFile);
-   
+
     setSelectedPhoto(imageUrl);
-    setSelectedDp(selectedFile)
+    setSelectedDp(selectedFile);
     // If you want to update the userdp in the form, you can set it in the formData state
     // setSelectedPhoto(imageUrl); // Commented out as it's not necessary for form submission
   };
@@ -78,14 +74,14 @@ const Update = () => {
       // submitForm.append("fullname", formData?.fullname);
       submitForm.append("fullname", formData?.fullname);
       submitForm.append("email", formData?.email);
-      submitForm.append("userdp", formData?.userdp);
-      submitForm.append("phonenumber", formData?.phone);
+      submitForm.append("userphoto", formData?.userdp);
+      submitForm.append("phone", formData?.phone);
       submitForm.append("shippingaddress", formData?.shippingaddress);
       submitForm.append("userdp", formData?.selecteddp);
 
       // Make a PATCH request
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/client/auth/account`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
         submitForm,
         {
           headers: {
