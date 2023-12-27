@@ -51,7 +51,7 @@ const UploadFile = async (req, res) => {
 
     const newfile = await FileManager.create(value);
 
-    console.log('New file uploaded successfully');
+    console.log("New file uploaded successfully");
 
     return res
       .status(StatusCodes.CREATED)
@@ -68,13 +68,15 @@ const HandleUpload = (io) => {
     try {
       const fileBatch = await FileManager.find();
       socket.emit("filemanager", fileBatch);
-      socket.disconnect();
+      console.log(fileBatch);
+      // socket.disconnect();
     } catch (error) {
       console.error("Error fetching file batch:", error);
+      socket.emit("filemanager_error", { error: "Failed to fetch file batch" });
+      socket.disconnect();
     }
   });
 };
-
 
 const DeleteUpload = (io) => {};
 

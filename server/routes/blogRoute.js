@@ -28,13 +28,14 @@ router.route("/").get(getAllBlog);
 router.route("/:id").get(getSingleBlog);
 router
   .route("/create")
-  .post(authChecker, upload.single("blogimage"), createBlog);
+  .post(authChecker, createBlog);
 router.route("/edit/:id").get(authChecker, getUserBlog);
+
 router.route("/like").post(authChecker, postReaction);
 
 router
   .route("/update")
-  .patch(authChecker, upload.single("blogimage"), updateBlog);
-router.route("/delete/:id").delete(authChecker, deleteBlog);
+  .patch(authChecker, updateBlog);
+router.route("/delete").delete(authChecker, deleteBlog);
 
 module.exports = router;

@@ -298,7 +298,7 @@ export default function Page() {
             Next
           </Button>
         </div>
-        <AddAdminMeMber open={open} handleOpen={handleOpen} />
+        <AddAdminMeMber open={open} handleOpen={handleOpen} CurrentUser={CurrentUser}/>
       </CardFooter>
     </Card>
   );

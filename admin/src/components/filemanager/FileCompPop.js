@@ -9,72 +9,47 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import { IoAdd } from "react-icons/io5";
 
 const FileCompPop = () => {
-  const data = [
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1432462770865-65b70566d673?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80",
-    },
-    {
-      imageLink:
-        "https://demos.creative-tim.com/material-kit-pro/assets/img/examples/blog5.jpg",
-    },
-    {
-      imageLink:
-        "https://material-taillwind-pro-ct-tailwind-team.vercel.app/img/content2.jpg",
-    },
-    {
-      imageLink:
-        "https://images.unsplash.com/photo-1620064916958-605375619af8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1493&q=80",
-    },
-  ];
+  const [fileData, setFileData] = useState(null);
+  // const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+
+  useEffect(() => {
+    const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+
+    const handleFileManagerUpdate = (data) => {
+      console.log("this is filemanager", data);
+      setFileData(data);
+    };
+
+    // Attach the event listener when the component mounts
+    socket.on("filemanager", handleFileManagerUpdate);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      socket.off("filemanager", handleFileManagerUpdate);
+    };
+  }, []); // Empty dependency array to run the effect only once
+
+  
 
   return (
     <div>
       <div className="h-[70vh]">
         <div className="flex flex-wrap items-center justify-between pt-8 border-t-gray-600">
           <div className="flex flex-row items-center gap-3 ml-4">
-          <button
+            <button
               variant=""
               className="flex flex-row items-center gap-1 px-2 py-1 pr-2 text-sm text-white bg-green-600 rounded-md"
             >
-              <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
+              <IoAdd className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
               Add
-            </button>
-
-            <button
-              variant=""
-              className="flex flex-row items-center gap-1 px-2 py-1 text-sm text-white bg-gray-900 rounded-md"
-            >
-              <MdOutlineDelete className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
-              Delete
             </button>
           </div>
           <div className="flex flex-row items-center gap-5">
-           
-
             <Select
               variant="outlined"
               label="Sort By:"
@@ -104,26 +79,27 @@ const FileCompPop = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-4">
-          {data.map(({ imageLink }, index) => (
-            <div
-              className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
-              key={index}
-            >
-              <div className="">
-                <img
-                  className="object-cover object-center w-full h-40 max-w-full rounded-lg"
-                  src={imageLink}
-                  alt="gallery-photo"
-                />
-              </div>
+          {fileData &&
+            fileData.map(({ secure_url, _id }) => (
+              <div
+                className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
+                key={_id}
+              >
+                <div className="">
+                  <img
+                    className="object-cover object-center w-full h-40 max-w-full rounded-lg"
+                    src={secure_url}
+                    alt="gallery-photo"
+                  />
+                </div>
 
-              <span className="text-sm">image description.png</span>
-              <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
-                <Checkbox className="cursor-pointer" />
-                <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" />
+                <span className="text-sm">image description.png</span>
+                <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
+                  <Checkbox className="cursor-pointer" />
+                  <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
         <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
           <Typography variant="small" color="blue-gray" className="font-normal">

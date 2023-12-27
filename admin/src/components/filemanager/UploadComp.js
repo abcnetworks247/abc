@@ -12,12 +12,15 @@ import Image from "next/image";
 import { useState } from "react";
 import Api from "@/utils/Api";
 import axios from "axios";
-import cookies from "js-cookie"
+import cookies from "js-cookie";
+import Confetti from "react-confetti";
 
 function UploadComp({ handleOpen, size }) {
   const [uploadfile, setUploadFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
+  const [successful, setSuccessfull] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [uploadstate, setUploadState] = useState(null);
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -35,10 +38,10 @@ function UploadComp({ handleOpen, size }) {
 
     try {
       setLoading(true);
-
-      console.log('token', token);
+      setUploadState("Uploading, please wait...");
+      console.log("token", token);
       const response = await axios.post(
-        "http://localhost:8000/api/v1/admin/file/upload",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/file/upload`,
         formData, // Pass the FormData directly as the second parameter
         {
           headers: {
@@ -48,9 +51,26 @@ function UploadComp({ handleOpen, size }) {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log("successful");
+        setUploadState("File Uploaded Successfully 🎉🎉");
+        setSuccessfull(true);
+        setLoading(null)
+        setTimeout(() => {
+          setLoading(false);
+          setSuccessfull(null);
+          handleOpen(null);
+          // if(typeof window !== "undefined"){
+          //   window.location.reload();
+          // }
+        }, [5000]);
       } else {
+        setTimeout(() => {
+          setLoading(false);
+          setUploadState("Error: Try again later");
+          setSuccessfull(null);
+          handleOpen(null);
+        }, [2000]);
         console.log("error");
       }
     } catch (error) {
@@ -128,16 +148,21 @@ function UploadComp({ handleOpen, size }) {
               </p>
             </div>
             <img src="" className="hidden mx-auto mt-4 max-h-40" id="preview" />
+            {successful && (
+              <div className="absolute w-[50%] top-0 h-fit flex items-center justify-between bg-red-500">
+                <Confetti className="w-[30vw]" />
+              </div>
+            )}
           </div>
         </DialogBody>
         <DialogFooter className="flex flex-row items-center justify-between">
           {!loading && <div className=""></div>}
-          {loading && (
-            <div className="flex flex-row items-center gap-4 ml-5">
-              <Spinner />
-              <span className="text-sm">70% Uploaded</span>
-            </div>
-          )}
+
+          <div className="flex flex-row items-center gap-4 ml-5">
+            {loading && <Spinner />}
+            <span className="text-sm"> {uploadstate}</span>
+          </div>
+
           <div className="">
             <Button
               variant="text"

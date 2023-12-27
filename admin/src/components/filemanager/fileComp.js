@@ -6,26 +6,49 @@ import {
   Checkbox,
   Option,
   Select,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
   Typography,
 } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const FileComp = () => {
-  const [fileData, setFileData] = useState(null);
-  
-  const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+const FileComp = ({ fileData }) => {
+  const [url, setUrl] = useState(null);
+  const [id, setId] = useState(null);
+  const [name, setName] = useState(null);
+  const [fileFormat, setFileFormat] = useState(null);
+  const [imageWidth, setImageWidth] = useState(null);
+  const [imageHeight, setImageHeight] = useState(null);
+  const [createdAt, setCreatedAt] = useState(null);
+  const [openRight, setOpenRight] = useState(false);
 
+  const [size, setSize] = React.useState(null);
 
-  useEffect(() => {
-    socket.on("filemanager", ({ filemanager }) => {
-      console.log("this is filemanager", filemanager);
-      setFileData(filemanager);
-    });
-  
-    return () => socket.disconnect();
-  }, [socket]);
+  const handleOpen = (value) => setSize(value);
+
+  // const OpenFileInfo = ({
+  //   secure_url,
+  //   _id,
+  //   originalname,
+  //   format,
+  //   width,
+  //   height,
+  //   created_at,
+  // }) => {
+
+    
+  //   // setUrl(newData.secure_url);
+  //   // setId(newData._id);
+  //   // setName(newData.originalname);
+  //   // setFileFormat(newData.format);
+  //   // setImageWidth(newData.width);
+  //   // setImageHeight(newData.height);
+  //   // setCreatedAt(newData.created_at);
+  // };
 
   return (
     <div>
@@ -74,26 +97,48 @@ const FileComp = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-4">
-          {fileData && fileData.map(({ secure_url, _id }) => (
-            <div
-              className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
-              key={_id}
-            >
-              <div className="">
-                <img
-                  className="object-cover object-center w-full h-40 max-w-full rounded-lg"
-                  src={imageLink}
-                  alt="gallery-photo"
-                />
-              </div>
+          {fileData &&
+            fileData.map(
+              ({
+                secure_url,
+                _id,
+                originalname,
+                format,
+                width,
+                height,
+                created_at,
+              }) => (
+                <div
+                  className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
+                  key={_id}
+                >
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      // let id = item._id;
+                      // OpenFileInfo(id);
+                      handleOpen("md")
+                    }}
+                  >
+                    <img
+                      className="object-cover object-center w-full h-40 max-w-full rounded-lg"
+                      src={secure_url}
+                      alt="gallery-photo"
+                    />
+                  </div>
 
-              <span className="text-sm">image description.png</span>
-              <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
-                <Checkbox className="cursor-pointer" />
-                <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" />
-              </div>
-            </div>
-          ))}
+                  <span className="w-[80%] overflow-hidden text-sm whitespace-nowrap text-ellipsis">
+                    {originalname}
+                  </span>
+                  <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
+                    <Checkbox className="cursor-pointer" />
+                    <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" />
+                  </div>
+
+                  
+                </div>
+              )
+            )}
         </div>
         <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
           <Typography variant="small" color="blue-gray" className="font-normal">
