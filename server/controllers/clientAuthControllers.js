@@ -168,7 +168,7 @@ const userRecovery = async (req, res) => {
       html: renderHtml,
     });
 
-    console.log('email recovery sent');
+    console.log("email recovery sent");
 
     return res
       .status(StatusCodes.OK)
