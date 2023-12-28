@@ -36,7 +36,7 @@ export default function Page() {
   return (
     <>
       {isLoading && isLoading ? (
-        <div className="flex items-center justify-center h-96">
+        <div className="flex items-center justify-center h-full">
           <svg
             className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
             xmlns="http://www.w3.org/2000/svg"

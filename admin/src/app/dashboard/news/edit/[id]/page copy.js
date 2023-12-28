@@ -38,13 +38,10 @@ function page() {
   const [error, setError] = useState(false);
   const AuthToken = Cookies.get("adminToken");
   const router = useRouter();
-
-  const baseUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/blog`;
-
     
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/${id}`)
+    Api
+      .get(`admin/blog/${id}`)
       .then((res) => {
         const data = res.data.blogdata;
         console.log(data);

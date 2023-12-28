@@ -9,23 +9,22 @@ import {
   Tooltip,
 } from "@material-tailwind/react";
 import axios from "axios";
-
 // import useParams fron next/navigation
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
+import Api from "@/utils/Api";
 
 export default function BlogCard() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const baseUrl =
-    "https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog";
+  
   const { id } = useParams();
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/${id}`)
+    Api
+      .get(`admin/blog/${id}`)
       .then((res) => {
         const data = res.data.blogdata;
         console.log(data);
@@ -45,7 +44,7 @@ export default function BlogCard() {
   if (error === true) {
     return (
       // create a professinal error page
-      <div className="flex flex-col items-center justify-center gap-3 h-96">
+      <div className="flex flex-col items-center justify-center gap-3 h-full">
         <h1 className="text-3xl font-bold">Something went wrong</h1>
         <p className="text-xl font-semibold text-gray-500 ">
           Please check your internet connection and try again
@@ -57,7 +56,7 @@ export default function BlogCard() {
   return (
     <main className="flex items-center justify-center my-10">
       {loading ? (
-        <div className="flex items-center justify-center h-96">
+        <div className="flex items-center justify-center h-[70svh] lg:h-full">
           <svg
             className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
             xmlns="http://www.w3.org/2000/svg"

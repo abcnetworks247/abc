@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React from "react";
 import { useState, useEffect } from "react";
 import { UseProductProvider } from "../../../../../contexts/ProductProvider";
@@ -7,40 +7,37 @@ import axios from "axios";
 import Api from "@/utils/Api";
 import StaticForm from "../edit/StaticForm";
 import Editform from "../edit/Editform";
+import Swal from "sweetalert2";
+import { RotatingLines } from "react-loader-spinner";
+
+
 
 const Update = () => {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
-  
   const [formData, setFormData] = useState(null);
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [selecteddp, setSelectedDp] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
-
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
-  
 
   useEffect(() => {
     // Update formData when userData changes
     setFormData({
       fullname: UserData?.fullname,
       email: UserData.email,
-      phonenumber: UserData.phonenumber,
+      phone: UserData.phone,
       shippingaddress: UserData.shippingaddress,
       userdp: selecteddp,
     });
 
     setSelectedPhoto(UserData.userdp);
   }, [UserData]);
-  
 
-  // console.log("this is user data", userData.userdp);
-
-  // console.log(`this is selected p ${selectedPhoto}`);
-
-  console.log("form", formData && formData.fullname);
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -54,22 +51,19 @@ const Update = () => {
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
-    // setFormData((prevData) => ({
-    //   ...prevData,
-    //   userdp: selectedFile,
-    // }));
+  
     const imageUrl = URL.createObjectURL(selectedFile);
-   
+
     setSelectedPhoto(imageUrl);
-    setSelectedDp(selectedFile)
-    // If you want to update the userdp in the form, you can set it in the formData state
-    // setSelectedPhoto(imageUrl); // Commented out as it's not necessary for form submission
+    setSelectedDp(selectedFile);
+    console.log("selecteddp", selecteddp)
+    
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-
+   
     try {
       // Create a new FormData instance
       const submitForm = new FormData();
@@ -78,14 +72,14 @@ const Update = () => {
       // submitForm.append("fullname", formData?.fullname);
       submitForm.append("fullname", formData?.fullname);
       submitForm.append("email", formData?.email);
-      submitForm.append("userdp", formData?.userdp);
-      submitForm.append("phonenumber", formData?.phone);
+      submitForm.append("userphoto", formData?.userdp);
+      submitForm.append("phone", formData?.phone);
       submitForm.append("shippingaddress", formData?.shippingaddress);
       submitForm.append("userdp", formData?.selecteddp);
 
       // Make a PATCH request
       const response = await axios.patch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/client/auth/account`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
         submitForm,
         {
           headers: {
@@ -97,17 +91,23 @@ const Update = () => {
 
       // Check the response status
       if (response.status === 200) {
-        console.log("User profile updated successfully!");
-        // Optionally, you can update the local user data context using HandleGetUser()
-        HandleGetUser();
-        // Set isEditable back to false after successful submission
+        
+        await HandleGetUser();
+         console.log("Updated UserData:", UserData);
         setIsEditable(false);
+        
+        console.log("use profle updated successfully")
       } else {
         console.error("Failed to update user profile.");
       }
     } catch (error) {
       console.error("Error updating user profile:", error);
     }
+   
+  };
+
+  const handleClosePopup = () => {
+    setSuccessMessage("");
   };
 
   const handleEdit = () => {
@@ -117,6 +117,7 @@ const Update = () => {
   return (
     <div className={` p-8 px-4 basis-2/3`}>
       <p></p>
+  
       {isEditable ? (
         <Editform
           formData={formData}
@@ -126,6 +127,7 @@ const Update = () => {
           handleSubmit={handleSubmit}
           handleImageChange={handleImageChange}
           selectedPhoto={selectedPhoto}
+        
         />
       ) : (
         <StaticForm userData={UserData} handleEdit={handleEdit} />

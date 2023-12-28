@@ -7,7 +7,7 @@ export default function useUpdateProf() {
   const updateProf = async (formData) => {
     try {
       const Token = await Cookies.get('adminToken');
-      console.log('formdata', formData);
+      console.log(' all formdata', formData);
       const response = await Api.patch('admin/auth/account', formData, {
         headers: {
           Authorization: `Bearer ${String(Token)}`,
