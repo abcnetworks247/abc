@@ -199,7 +199,7 @@ function Page() {
                   </span>
                 )}
                 <div
-                  className={`flex items-center justify-between py-3 px-5 h-10 bg-gray-100 border border-gray-200 rounded-lg  ${
+                  className={`flex items-center justify-between py-2 px-5 h-10 bg-gray-100 border border-gray-200 rounded-lg  ${
                     errorMessages.password &&
                     logInFormData.password &&
                     "border-red-500"

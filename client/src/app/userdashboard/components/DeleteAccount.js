@@ -2,8 +2,12 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import { UseUserContext } from "../../../../contexts/UserContext";
+import Cookies from "js-cookie";
+
 
 const DeleteAccount = () => {
+   const { Authtoken } = UseUserContext();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -34,18 +38,29 @@ const DeleteAccount = () => {
   
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
-        
-          {
+
+        {
+          data: {
             email: email,
             password: currentPassword,
-          
-         }
+          },
+          headers: {
+            Authorization: `Bearer ${String(Authtoken)}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
       );
+      
 
       console.log("response is here ", response)
        setShowModal(false);
        setCurrentPassword("");
-       setEmail("");
+      setEmail("");
+      
+      Cookies.remove("authToken");
+      
+       window.location.reload();
   
     } catch (error) {
       
