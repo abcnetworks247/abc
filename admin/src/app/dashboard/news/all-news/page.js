@@ -50,7 +50,7 @@ const Page = () => {
   };
 
   async function Delete(id) {
-  console.log("blog=id", id);
+    
     Swal.fire({
       title: `Are you sure you want to delete this `,
       text: "You won't be able to revert this!",
@@ -61,14 +61,15 @@ const Page = () => {
       confirmButtonText: "Yes, Delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("blog=id2", id);
         Api.delete(
-          `admin/blog/delete`,
-          { id },
+          'admin/blog/delete',
           {
+            data: { id }, // Assuming you need to send the 'id' as the request payload
             headers: {
               Authorization: `Bearer ${String(AuthToken)}`,
+              'Content-Type': 'application/json',
             },
+            // withCredentials: true, // Add this line if you need to include credentials
           }
         )
           .then((res) => {
@@ -100,7 +101,7 @@ const Page = () => {
   if (error === true) {
     return (
       // create a professinal error page
-      <div className="flex flex-col items-center justify-center gap-3 h-full">
+      <div className="flex flex-col items-center justify-center h-full gap-3">
         <h1 className="text-3xl font-bold">Something went wrong</h1>
         <p className="text-xl font-semibold text-gray-500 ">
           Please check your internet connection and try again
@@ -141,9 +142,9 @@ const Page = () => {
           {news.map((item) => (
             <article
               key={item._id}
-              className="rounded-xl border border-gray-100 m-3 bg-white p-4 shadow-lg md:p-7 sm:p-6 lg:p-8"
+              className="p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-8"
             >
-              <div className="lg:flex md:flex lg:space-y-0 md:space-y-0 space-y-3 grid grid-cols-1 items-start sm:gap-8 lg:flex-row md:flex-row">
+              <div className="grid items-start grid-cols-1 space-y-3 lg:flex md:flex lg:space-y-0 md:space-y-0 sm:gap-8 lg:flex-row md:flex-row">
                 <div
                   className="rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
                   aria-hidden="true"
@@ -170,7 +171,8 @@ const Page = () => {
                     </button>
                     <button
                       onClick={() => {
-                        Delete(item._id);
+                        let id = item._id
+                        Delete(id);
                       }}
                       className="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white"
                     >
@@ -195,7 +197,7 @@ const Page = () => {
                   <div className="mt-4 sm:flex sm:items-center sm:gap-2">
                     <div className="flex items-center gap-1 text-gray-500">
                       <svg
-                        className="h-4 w-4"
+                        className="w-4 h-4"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

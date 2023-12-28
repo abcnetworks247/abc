@@ -186,10 +186,11 @@ const updateBlog = async (req, res) => {
 const deleteBlog = async (req, res) => {
   const { id } = req.body;
 
+
   try {
     const blogdata = await blog.findById(id);
 
-    const olduser = req.user._id;
+    const olduser = req.user;
 
     if (!blogdata) {
       throw new NotFoundError("Blog not found");
@@ -203,11 +204,11 @@ const deleteBlog = async (req, res) => {
       throw new UnAuthorizedError("You are not authorized to delete this blog");
     }
 
-    // const userid = olduser.toString();
+    console.log(olduser);
 
     try {
-      const getUserinfo = await user.findById(olduser);
-      const userpost = getUserinfo.mypost;
+      console.log('this is user info', getUserinfo);
+      const userpost = olduser.mypost;
       const index = userpost.indexOf(id);
 
       if (index !== -1) {
