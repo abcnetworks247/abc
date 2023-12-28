@@ -126,18 +126,18 @@ export default function Page(){
         pauseOnHover
         theme="light"
       />
-    <section className="m-8 flex">
+    <section className="flex m-8">
 
 
-            <div className="w-2/5 h-full hidden lg:block">
+            <div className="hidden w-2/5 h-full lg:block">
         {/* <img
           src="/img/pattern.png"
-          className="h-full w-full object-cover rounded-3xl"
+          className="object-cover w-full h-full rounded-3xl"
         /> */}
       </div>
-      <div className="w-full lg:w-3/5 flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center w-full lg:w-3/5">
         <div className="text-center">
-          <Typography variant="h2" className="font-bold mb-4">Abcstudo Admin </Typography>
+          <Typography variant="h2" className="mb-4 font-bold">Abcstudo Admin </Typography>
           <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to register.</Typography>
         </div>
         <div className="relative flex flex-col text-gray-700 bg-transparent shadow-none rounded-xl bg-clip-border">
