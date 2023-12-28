@@ -70,20 +70,20 @@ function page() {
     };
 
     console.log("update data", data);
-    // const res = await Api.patch(`admin/blog/update`, data, {
-    //   headers: {
-    //     Authorization: `Bearer ${String(AuthToken)}`,
-    //   },
-    // });
-    const res = await axios.patch(
-      "http://localhost:8000//api/v1/admin/blog",
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${String(AuthToken)}`,
-        },
-      }
-    );
+    const res = await Api.patch(`admin/blog/update`, data, {
+      headers: {
+        Authorization: `Bearer ${String(AuthToken)}`,
+      },
+    });
+    // const res = await axios.patch(
+    //   "http://localhost:8000//api/v1/admin/blog",
+    //   data,
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${String(AuthToken)}`,
+    //     },
+    //   }
+    // );
     console.log("update response", res);
     if (res.status === 200) {
       router.push("/dashboard/news/all-news");
