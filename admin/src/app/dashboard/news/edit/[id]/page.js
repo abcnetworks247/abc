@@ -60,7 +60,8 @@ function page() {
       });
   }, []);
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     const data = {
       blogid: id,
       title: title,
@@ -130,7 +131,7 @@ function page() {
               Lorem ipsum is placeholder text.
             </p>
           </div>
-          <form className="mt-8 space-y-3" action={handleUpdate} method="POST">
+          <form className="mt-8 space-y-3" onSubmit={(e)=> {handleUpdate(e)}} method="POST">
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Title

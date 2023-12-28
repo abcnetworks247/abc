@@ -58,28 +58,36 @@ function page() {
   const AuthToken = Cookies.get("adminToken");
   // function to handle the click of the upload button
   const handleUpload = async (e) => {
-    if (e) {
+    try {
       e.preventDefault();
-    }
-    const data = {
-      title: title,
-      type: newType,
-      category: newCategory,
-      shortdescription: shortDescription,
-      longdescription: html,
-      blogimage: imageSrc,
-    };
-    console.log(data);
-    const response = await Api.post("admin/blog/create", data, {
-      headers: { Authorization: `Bearer ${String(AuthToken)}` },
-    });
-    console.log(response);
-    if (response.status === 201) {
-      router.push("/dashboard/news/all-news");
-    } else {
-      console.log("error");
+  
+      const data = {
+        title: title,
+        type: newType,
+        category: newCategory,
+        shortdescription: shortDescription,
+        longdescription: html,
+        blogimage: imageSrc,
+      };
+  
+      console.log('Request Data:', data);
+  
+      const response = await Api.post('admin/blog/create', data, {
+        headers: { Authorization: `Bearer ${String(AuthToken)}` },
+      });
+  
+      console.log('Response:', response);
+  
+      if (response.status === 201) {
+        router.push('/dashboard/news/all-news');
+      } else {
+        console.log('Error: Unexpected status code');
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
+  
 
   //fetch data from api
   const fetchData = async () => {
@@ -164,7 +172,7 @@ function page() {
               }
             </p>
           </div>
-          <form className="mt-8 space-y-3" action={handleUpload} method="POST">
+          <form className="mt-8 space-y-3" onSubmit={(e) => {handleUpload(e)}} method="POST">
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Title
