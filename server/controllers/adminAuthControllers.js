@@ -37,8 +37,6 @@ const signUp = async (req, res) => {
       throw new UnAuthorizedError("Email already exists");
     }
 
-    console.log("not found");
-
     const { error, value } = Adminjoi.validate({
       fullname,
       email,
@@ -51,7 +49,7 @@ const signUp = async (req, res) => {
       throw new ValidationError("error");
     }
 
-    console.log(value);
+    console.log("this is a valid user ", value);
 
     const newUser = await Admin.create(value);
 

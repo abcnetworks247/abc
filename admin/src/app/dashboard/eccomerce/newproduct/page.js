@@ -20,7 +20,7 @@ import {
 export default function page() {
     // dialog open state thaat is recieved from filemanger context
     const {handleOpen, size } = UseFileManager()
-  const [html, setHtml] = useState("my <b>HTML</b>");
+  const [html, setHtml] = useState("");
   const inputStyles = {
     textDecoration: "line-through",
     color: "gray", // Adjust the color as needed

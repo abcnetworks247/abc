@@ -6,7 +6,7 @@ const authChecker = require('../middlewares/adminAuthChecker'); // Import your a
 router.route('/products').get(getAllProducts); // Fetch all products
 router.route('/products/:id').get(getSingleProduct); // Fetch a single product
 router.route('/products').post(authChecker, createProduct); // Create a new product
-router.route('/products/:id').put(authChecker, updateProduct); // Update a product
-router.route('/products/:id').delete(authChecker, deleteProduct); // Delete a product
+router.route('/products').patch(authChecker, updateProduct); // Update a product
+router.route('/products').delete(authChecker, deleteProduct); // Delete a product
 
 module.exports = router;
