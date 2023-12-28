@@ -24,6 +24,7 @@ import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+// import a date & time library
 
 function page() {
   /**
@@ -42,7 +43,7 @@ function page() {
   const [imageSrc, setImageSrc] = useState(
     "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
   );
-  const [full, setFull] = useState(false);
+  const [full, setFull] = useState(true);
   const router = useRouter();
 
   // dialog open state that is recieved from filemanger context
@@ -53,28 +54,13 @@ function page() {
     setHtml(e.target.value);
   }
 
-  // function to handle the change of the image
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-
-    // check if the file is an image
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        setImageSrc(e.target.result); // this.setState({imageSrc: e.target.result})
-        setFull(true);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   //store Auth token
   const AuthToken = Cookies.get("adminToken");
   // function to handle the click of the upload button
   const handleUpload = async (e) => {
-    
+    if (e) {
+      e.preventDefault();
+    }
     const data = {
       title: title,
       type: newType,
@@ -90,6 +76,8 @@ function page() {
     console.log(response);
     if (response.status === 201) {
       router.push("/dashboard/news/all-news");
+    } else {
+      console.log("error");
     }
   };
 
