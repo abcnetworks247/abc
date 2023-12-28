@@ -26,6 +26,8 @@ export default function Home() {
     }
   }, [pathname]); // Include pathname in the dependency array
 
+ 
+
   return (
     <main>
       <div className="flex flex-row items-center border border-gray-100 shadow-md">

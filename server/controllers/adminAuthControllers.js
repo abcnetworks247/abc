@@ -248,6 +248,7 @@ const userUpdatePassword = async (req, res) => {
 
 const userUpdate = async (req, res) => {
   const { fullname, email, phone, userbio } = req.body;
+  console.log("loading user");
 
   try {
     if (!req.user) {

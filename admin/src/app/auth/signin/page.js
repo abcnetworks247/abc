@@ -166,10 +166,10 @@ function Page() {
         pauseOnHover
         theme="light"
       />
-      <section className="m-8 flex gap-4">
-        <div className="w-full lg:w-3/5 mt-24">
+      <section className="flex gap-4 m-8">
+        <div className="w-full mt-24 lg:w-3/5">
           <div className="text-center">
-            <Typography variant="h2" className="font-bold mb-4">
+            <Typography variant="h2" className="mb-4 font-bold">
               Sign In
             </Typography>
             <Typography
@@ -180,8 +180,8 @@ function Page() {
               Enter your email and password to Sign In.
             </Typography>
           </div>
-          <div className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2">
-            <div className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+          <div className="max-w-screen-lg mx-auto mt-8 mb-2 w-80 lg:w-1/2">
+            <div className="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96">
               <form className="max-w-screen-lg mt-8 mb-2 w-80 sm:w-96">
                 <div className="flex flex-col gap-6 mb-1">
                   <h6 className="block -mb-3 font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
@@ -255,10 +255,10 @@ function Page() {
             </div>
           </div>
         </div>
-        <div className="w-2/5 h-full hidden lg:block">
+        <div className="hidden w-2/5 h-full lg:block">
           <img
             src="/img/pattern.png"
-            className="h-full w-full object-cover rounded-3xl"
+            className="object-cover w-full h-full rounded-3xl"
           />
         </div>
       </section>
@@ -266,6 +266,6 @@ function Page() {
   );
 }
 
-const Signin = HocsessionAuthenticated(Page);
+// const Signin = HocsessionAuthenticated(Page);
 
-export default Signin;
+export default Page;

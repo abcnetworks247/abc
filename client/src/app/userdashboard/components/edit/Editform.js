@@ -5,6 +5,7 @@ import React from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 
 const Editform = ({
@@ -15,16 +16,20 @@ const Editform = ({
   handleSubmit,
   handleImageChange,
   selectedPhoto,
+
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   // const inputRef = useRef(null)
-    console.log('formdata edit', formData);
+  console.log("formdata edit", formData);
   return (
     // <form className="max-w-md mx-auto" onSubmit={handleSubmit}>
-    <form className="mx-auto" onSubmit={(e) => handleSubmit(e)} encType="multipart/form-data">
-      <div className="flex items-center justify-between mb-2 cursor-pointer lg:flex-row-reverse ">
-      
 
+    <form
+      className="mx-auto"
+      onSubmit={(e) => handleSubmit(e)}
+      encType="multipart/form-data"
+    >
+      <div className="flex items-center justify-between mb-2 cursor-pointer lg:flex-row-reverse ">
         {/* edit */}
         <div
           className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full hover:bg-gray-200"
@@ -71,7 +76,7 @@ const Editform = ({
 
       <div className="relative z-0 w-full mb-5 group">
         <input
-         className="w-full px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
+          className="w-full px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
           type="text"
           name="email"
           placeholder="Email"
@@ -138,6 +143,7 @@ const Editform = ({
       >
         Save
       </button>
+     
     </form>
   );
 };

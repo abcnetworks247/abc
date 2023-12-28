@@ -4,9 +4,9 @@ import OrderComp from '../components/order/OrderComp'
 
 const page = () => {
   return (
-    <div>
+    <>
       <OrderComp/>
-    </div>
+    </>
   )
 }
 
