@@ -73,7 +73,8 @@ function page() {
   //store Auth token
   const AuthToken = Cookies.get("adminToken");
   // function to handle the click of the upload button
-  const handleUpload = async () => {
+  const handleUpload = async (e) => {
+    
     const data = {
       title: title,
       type: newType,
@@ -113,7 +114,6 @@ function page() {
       setLoading(false);
       setError(true);
       alert("Something went wrong");
-
     }
   };
 
@@ -122,38 +122,39 @@ function page() {
   }, []);
 
   //if error is true show error message
-  if (error === true) { 
+  if (error === true) {
     return (
       <div className="flex items-center justify-center h-full">
-        <h1 className="text-2xl font-bold text-red-500">Something went wrong</h1>
+        <h1 className="text-2xl font-bold text-red-500">
+          Something went wrong
+        </h1>
       </div>
     );
   }
 
-
   return loading ? (
     <div className="flex items-center justify-center h-[70svh] lg:h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-        </div>
+      <svg
+        className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        />
+      </svg>
+    </div>
   ) : (
     <div>
       <div className="relative flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 ">
@@ -266,14 +267,15 @@ function page() {
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Attach Document
               </label>
-              
             </div>
             <div className="flex items-center justify-center w-full border rounded shadow-lg h-80">
               <div className="w-full h-full">
                 <div className="flex items-center h-full justify-center w-full">
                   {full ? (
-
-                    <div className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
+                    <div
+                      className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleOpen("lg")}
+                    >
                       <div className="flex flex-col w-ful h-full items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -296,16 +298,16 @@ function page() {
                           PNG, JPG, GIF up to 10MB
                         </p>
                       </div>
-                    </div>) : (
-                        <Image 
-                        src={imageSrc}
-                        alt="image"
-                        width={300}
-                        height={300}
-                        />
-                    )}
-                  </div>
-                
+                    </div>
+                  ) : (
+                    <Image
+                      src={imageSrc}
+                      alt="image"
+                      width={300}
+                      height={300}
+                    />
+                  )}
+                </div>
               </div>
             </div>
             <p className="text-sm text-gray-300">
