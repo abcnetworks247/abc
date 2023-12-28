@@ -24,8 +24,7 @@ import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-
-
+// import a date & time library
 
 function page() {
   /**
@@ -55,23 +54,6 @@ function page() {
     setHtml(e.target.value);
   }
 
-  // function to handle the change of the image
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-
-    // check if the file is an image
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        setImageSrc(e.target.result); // this.setState({imageSrc: e.target.result})
-        setFull(true);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   //store Auth token
   const AuthToken = Cookies.get("adminToken");
   // function to handle the click of the upload button
@@ -94,9 +76,8 @@ function page() {
     console.log(response);
     if (response.status === 201) {
       router.push("/dashboard/news/all-news");
-    }
-    else {
-      console.log("error",);
+    } else {
+      console.log("error");
     }
   };
 
@@ -276,35 +257,46 @@ function page() {
               </label>
             </div>
             <div className="flex items-center justify-center w-full border rounded shadow-lg h-80">
-              
-                <div
-                  className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
-                  onClick={() => handleOpen("lg")}
-                >
-                  <div className="flex flex-col w-ful h-full items-center justify-center pt-5 pb-6">
-                    <svg
-                      className="w-10 h-10 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
+              <div className="w-full h-full">
+                <div className="flex items-center h-full justify-center w-full">
+                  {full ? (
+                    <div
+                      className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleOpen("lg")}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    <p className="py-1 text-sm text-gray-600">
-                      Upload a file or drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
-                  </div>
+                      <div className="flex flex-col w-ful h-full items-center justify-center pt-5 pb-6">
+                        <svg
+                          className="w-10 h-10 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                          />
+                        </svg>
+                        <p className="py-1 text-sm text-gray-600">
+                          Upload a file or drag and drop
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          PNG, JPG, GIF up to 10MB
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <Image
+                      src={imageSrc}
+                      alt="image"
+                      width={300}
+                      height={300}
+                    />
+                  )}
                 </div>
-              
+              </div>
             </div>
             <p className="text-sm text-gray-300">
               <span>File type: doc,pdf,types of images</span>
