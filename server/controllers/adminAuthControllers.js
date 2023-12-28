@@ -30,16 +30,12 @@ const maxAgeInMilliseconds = 7 * 24 * 60 * 60 * 1000;
 const signUp = async (req, res) => {
   const { fullname, email, password, role } = req.body;
 
-  console.log(fullname, email, password);
-
   try {
-    const findUser = await Admin.find({ email });
+    const findUser = await Admin.findOne({ email });
 
     if (findUser) {
       throw new UnAuthorizedError("Email already exists");
     }
-
-    console.log("not found now");
 
     const { error, value } = Adminjoi.validate({
       fullname,
@@ -53,7 +49,7 @@ const signUp = async (req, res) => {
       throw new ValidationError("error");
     }
 
-    console.log(value);
+    console.log("this is a valid user ", value);
 
     const newUser = await Admin.create(value);
 
