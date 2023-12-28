@@ -87,7 +87,7 @@ const DeleteAccount = () => {
 
   return (
     <div className="flex flex-col items-center justify-center px-6 w-full">
-      <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+      <div className="w-full p-6 bg-white rounded-lg shadow  md:mt-0 sm:max-w-md  sm:p-8">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -97,18 +97,18 @@ const DeleteAccount = () => {
           <div>
             <label
               htmlFor="current-email"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium d"
             >
               Email
             </label>
-            <div className=" p-2.5 bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg">
+            <div className=" h-10 px-2 bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg">
               <input
                 type="email"
                 name="email"
                 id="email"
                 value={email}
                 onChange={handleEmail}
-                className="h-full w-full focus:outline-none  bg-transparent"
+                className="h-full w-full focus:outline-none bg-transparent"
                 placeholder="xyz@user.com"
                 required
               />
