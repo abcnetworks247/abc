@@ -46,7 +46,7 @@ const OrderComp = () => {
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-between accountInformation px-4 py-2 text-bold ">
+            <div className="flex items-center justify-between accountInformation px-4 py-2 text-bold w-full ">
               <p className="px-4 py-2 text-bold ">Orders</p>
             </div>
 
