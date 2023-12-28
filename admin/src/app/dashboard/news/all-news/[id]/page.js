@@ -20,11 +20,10 @@ export default function BlogCard() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  
+
   const { id } = useParams();
   useEffect(() => {
-    Api
-      .get(`admin/blog/${id}`)
+    Api.get(`admin/blog/${id}`)
       .then((res) => {
         const data = res.data.blogdata;
         console.log(data);
@@ -79,17 +78,16 @@ export default function BlogCard() {
           </svg>
         </div>
       ) : (
-
         <Card className="lg:max-w-[70%] max-w-[90%] overflow-hidden">
           <div className="flex items-end justify-end m-0">
-          <button
-            onClick={() => {
-              router.push(`${editUrl}/${news._id}`);
-            }}
-            className=" mb-0.5 font-semibold border text-sm border-indigo-500 bg-indigo-500 px-5 py-1 text-[10px] mr-0 text-white"
-          >
-            Edit
-          </button>
+            <button
+              onClick={() => {
+                router.push(`${editUrl}/${news._id}`);
+              }}
+              className=" mb-0.5 font-semibold border text-sm border-indigo-500 bg-indigo-500 px-5 py-1 text-[10px] mr-0 text-white"
+            >
+              Edit
+            </button>
           </div>
 
           <CardHeader
