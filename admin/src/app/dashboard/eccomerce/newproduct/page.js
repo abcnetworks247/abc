@@ -2,8 +2,10 @@
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import { Button } from "@material-tailwind/react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   BtnBold,
   BtnItalic,
@@ -18,9 +20,28 @@ import {
 } from "react-simple-wysiwyg";
 
 export default function page() {
+
+ 
+
+  const [uploadedCat, setUploadedCat] = useState(null)
+  console.log("newProduct", uploadedCat)
     // dialog open state thaat is recieved from filemanger context
     const {handleOpen, size } = UseFileManager()
   const [html, setHtml] = useState("");
+  
+
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    price: "",
+    discountPercentage: "",
+    description: "",
+  
+  });
+
+  const [selectedPhoto, setSelectedPhoto] = useState(null)
+
+
   const inputStyles = {
     textDecoration: "line-through",
     color: "gray", // Adjust the color as needed
@@ -28,11 +49,72 @@ export default function page() {
   function onChange(e) {
     setHtml(e.target.value);
   }
+
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: inputValue,
+    }));
+  }
+
+  console.log(formData)
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+   
+    const updatedFormData = {
+      ...formData,
+      
+    };
+
+    const adminToken = Cookies.get("adminToken")
+
+  
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+      updatedFormData,
+      {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+          
+        },
+      }
+    );
+
+   
+    console.log("Response:", response);
+  } catch (error) {
+   
+    console.error("Error:", error);
+  }
+};
+
+
+  useEffect(() => {
+  console.log("useEfft is runnning in new product")
+    const HandleFetch = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
+        );
+
+        
+
+        if (response.status === 200) {
+          setUploadedCat(response.data.data);
+        }
+      } catch (error) {}
+    };
+
+    HandleFetch();
+    
+  },[]);
   return (
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
-
-
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
           <div className="relative bg-white rounded-lg shadow-md shadow-gray-300">
             <div className="flex items-start justify-between p-5 border-b rounded-t">
@@ -44,7 +126,7 @@ export default function page() {
               ></button>
             </div>
             <div className="p-6 space-y-6">
-              <form action="#">
+              <form onSubmit={(e)=> handleSubmit(e)}>
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-3">
                     <label
@@ -55,11 +137,12 @@ export default function page() {
                     </label>
                     <input
                       type="text"
-                      name="product-name"
-                      id="product-name"
+                      name="title"
+                      id="title"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Apple Imac 27”"
                       required=""
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </div>
                   <div className="col-span-6 sm:col-span-3">
@@ -69,14 +152,19 @@ export default function page() {
                     >
                       Category
                     </label>
-                    <input
-                      type="text"
+                    <select
+                      className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                       name="category"
                       id="category"
-                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
-                      placeholder="Electronics"
-                      required=""
-                    />
+                      required
+                      onChange={(e) => handleInputChange(e)}
+                    >
+                      <option>Select Category</option>
+                      {uploadedCat &&
+                        uploadedCat.map((item) => {
+                          return <option value={item.name}>{item.name}</option>;
+                        })}
+                    </select>
                   </div>
 
                   <div className="col-span-6 sm:col-span-3">
@@ -94,6 +182,7 @@ export default function page() {
                       placeholder="$2300"
                       style={inputStyles}
                       required=""
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </div>
 
@@ -106,11 +195,12 @@ export default function page() {
                     </label>
                     <input
                       type="number"
-                      name="discount"
-                      id="discount"
+                      name="discountPercentage"
+                      id="discountPercentage"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="$2300"
                       required=""
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </div>
                   <div className="col-span-full">
@@ -121,7 +211,10 @@ export default function page() {
                       Product Details
                     </label>
                     <EditorProvider>
-                      <Editor value={html} onChange={onChange}>
+                      <Editor
+                        value={html}
+                        onChange={(e) => handleInputChange(e)}
+                      >
                         <Toolbar>
                           <BtnBold />
                           <Separator />
@@ -144,29 +237,35 @@ export default function page() {
 
                   <div className="flex my-4 space-x-5">
                     <div>
+                      
                       <img
-                        src="https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-3.png"
+                        src="https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png"
                         className="h-24"
                         alt="imac image"
                       />
-                      <a href="#" className="cursor-pointer">
-                        <svg
-                          className="w-6 h-6 -mt-5 text-red-600"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </a>
+                    
+                        <a href="#" className="cursor-pointer">
+                          <svg
+                            className="w-6 h-6 -mt-5 text-red-600"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </a>
+                    
                     </div>
                   </div>
                   <div className="flex items-center justify-center w-full">
-                    <div className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
+                    <div
+                      className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleOpen("lg")}
+                    >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -189,7 +288,11 @@ export default function page() {
                           PNG, JPG, GIF up to 10MB
                         </p>
                       </div>
-                      <input type="file" className="hidden" />
+                      {/* <input
+                        type="file"
+                        name="thumbnail"
+                        onClick ={(e)=>handleThumbNail(e)}
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -264,7 +367,10 @@ export default function page() {
                     </div>
                   </div>
                   <div className="flex items-center justify-center w-full">
-                    <div className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
+                    <div
+                      className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleOpen("lg")}
+                    >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -287,7 +393,12 @@ export default function page() {
                           PNG, JPG, GIF up to 10MB
                         </p>
                       </div>
-                      <input type="file" className="hidden" />
+                      {/* <input
+                        type="file"
+                        name="images"
+                        onChange={(e) => handleInputChange(e)}
+                        multiple
+                      /> */}
                     </div>
                   </div>
                 </div>
