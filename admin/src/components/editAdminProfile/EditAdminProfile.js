@@ -17,6 +17,16 @@ import UseUpdateprof from "@/hooks/UseUpdateprof";
 export function EditAdminProfile({ open, handleOpen, UserValue }) {
   const { updateProf, isSuccess } = UseUpdateprof();
   const [names, setvalue] = useState("hello");
+  const [userimage, setUserImage] = useState(UserValue && UserValue.userdp);
+  const [selectedImage, setSelectedImage] = useState();
+
+  function HandleImageChange(e) {
+    const selectedPhoto = e.target.files[0];
+
+    const ImageUrl = URL.createObjectURL(selectedPhoto);
+    setUserImage(ImageUrl);
+    setSelectedImage(selectedPhoto);
+  }
 
   const [form, setForm] = useState({
     fullname: UserValue && UserValue.fullname,
@@ -44,6 +54,9 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
     formData.append("email", email);
     formData.append("userbio", userbio);
     formData.append("phone", phone);
+    formData.append("userdp", selectedImage);
+
+    console.log("this is a test", selectedImage);
 
     console.log(" all formdata on submit ", formData);
     try {
@@ -62,7 +75,7 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
         <DialogHeader>Edit Your Profile</DialogHeader>
         <DialogBody className="h-[70vh]  overflow-scroll">
           <Typography className="font-normal">
-            <form className="relative">
+            <form className="relative" enctype="multipart/form-data">
               <div
                 form="user"
                 className="absolute top-0 left-0 flex flex-col visible w-full h-auto min-w-0 p-4 break-words bg-white opacity-100 dark:bg-slate-850 bg-clip-border"
@@ -72,21 +85,24 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
                   <input
                     type="file"
                     hidden
-                    id="imagechange"
+                    id="userdp"
                     className="hidden"
+                    accept="image/*"
+                    name="userdp"
+                    onChange={HandleImageChange}
                   />
                   <div className="relative flex flex-col items-center justify-center m-auto">
                     <Image
-                      src={UserValue && UserValue.userdp}
+                      src={userimage}
                       alt="bruce-mars"
                       variant="rounded"
                       height={100}
                       width={100}
-                      className="rounded-lg shadow-lg shadow-blue-gray-500/40"
+                      className="rounded-lg shadow-lg h-24 w-24 object-cover shadow-blue-gray-500/40"
                     />
 
                     <label
-                      htmlFor="imagechange"
+                      htmlFor="userdp"
                       className="bg-black/25  absolute w-24 flex items-center bottom-[-2px] rounded-b-xl cursor-pointer  justify-center h-12 border-b-2"
                     >
                       <TiCameraOutline className="text-2xl text-black" />

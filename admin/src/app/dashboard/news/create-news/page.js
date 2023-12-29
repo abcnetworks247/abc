@@ -24,6 +24,7 @@ import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 function page() {
   /**
@@ -31,7 +32,8 @@ function page() {
    * @type {string}
    */
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [error, setError] = useState("");
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
   const [shortDescription, setShortDescription] = useState("");
@@ -42,7 +44,7 @@ function page() {
   const [imageSrc, setImageSrc] = useState(
     "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
   );
-  const [full, setFull] = useState(false);
+  const [full, setFull] = useState(true);
   const router = useRouter();
 
   // dialog open state that is recieved from filemanger context
@@ -53,44 +55,59 @@ function page() {
     setHtml(e.target.value);
   }
 
-  // function to handle the change of the image
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-
-    // check if the file is an image
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        setImageSrc(e.target.result); // this.setState({imageSrc: e.target.result})
-        setFull(true);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   //store Auth token
   const AuthToken = Cookies.get("adminToken");
+
+  // custom toast
+  
+
   // function to handle the click of the upload button
-  const handleUpload = async () => {
-    const data = {
-      title: title,
-      type: newType,
-      category: newCategory,
-      shortdescription: shortDescription,
-      longdescription: html,
-      blogimage: imageSrc,
-    };
-    console.log(data);
-    const response = await Api.post("admin/blog/create", data, {
-      headers: { Authorization: `Bearer ${String(AuthToken)}` },
-    });
-    console.log(response);
-    if (response.status === 201) {
-      router.push("/dashboard/news/all-news");
+  const handleUpload = async (e) => {
+    try {
+      e.preventDefault();
+  
+      const data = {
+        title: title,
+        type: newType,
+        category: newCategory,
+        shortdescription: shortDescription,
+        longdescription: html,
+        blogimage: imageSrc,
+      };
+  
+      console.log('Request Data:', data);
+      setLoad(true);
+  
+      const response = await Api.post('admin/blog/create', data, {
+        headers: { Authorization: `Bearer ${String(AuthToken)}` },
+      });
+  
+      console.log('Response:', response);
+      setLoad(false);
+      if (response.status === 201) {
+        Swal.fire({
+          heightAuto: false,
+          position: 'center',
+          icon: 'success',
+          title: 'News Created Successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        router.push('/dashboard/news/all-news');
+      } 
+    } catch (error) {
+      setLoad(false);
+      console.error('Error:', error);
+      const errorMessage = error.response.data.message;
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Oops...',
+        text: `${errorMessage}` || `Something went wrong!`,
+      });
     }
   };
+  
 
   //fetch data from api
   const fetchData = async () => {
@@ -111,9 +128,7 @@ function page() {
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setError(true);
       alert("Something went wrong");
-
     }
   };
 
@@ -122,38 +137,39 @@ function page() {
   }, []);
 
   //if error is true show error message
-  if (error === true) { 
+  if (error === true) {
     return (
       <div className="flex items-center justify-center h-full">
-        <h1 className="text-2xl font-bold text-red-500">Something went wrong</h1>
+        <h1 className="text-2xl font-bold text-red-500">
+          Something went wrong
+        </h1>
       </div>
     );
   }
 
-
   return loading ? (
     <div className="flex items-center justify-center h-[70svh] lg:h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-        </div>
+      <svg
+        className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        />
+      </svg>
+    </div>
   ) : (
     <div>
       <div className="relative flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 ">
@@ -175,7 +191,7 @@ function page() {
               }
             </p>
           </div>
-          <form className="mt-8 space-y-3" action={handleUpload} method="POST">
+          <form className="mt-8 space-y-3" onSubmit={(e) => {handleUpload(e)}} method="POST">
             <div className="grid grid-cols-1 space-y-2">
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Title
@@ -266,14 +282,15 @@ function page() {
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Attach Document
               </label>
-              
             </div>
             <div className="flex items-center justify-center w-full border rounded shadow-lg h-80">
               <div className="w-full h-full">
                 <div className="flex items-center h-full justify-center w-full">
                   {full ? (
-
-                    <div className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
+                    <div
+                      className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleOpen("lg")}
+                    >
                       <div className="flex flex-col w-ful h-full items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -296,16 +313,16 @@ function page() {
                           PNG, JPG, GIF up to 10MB
                         </p>
                       </div>
-                    </div>) : (
-                        <Image 
-                        src={imageSrc}
-                        alt="image"
-                        width={300}
-                        height={300}
-                        />
-                    )}
-                  </div>
-                
+                    </div>
+                  ) : (
+                    <Image
+                      src={imageSrc}
+                      alt="image"
+                      width={300}
+                      height={300}
+                    />
+                  )}
+                </div>
               </div>
             </div>
             <p className="text-sm text-gray-300">
@@ -316,7 +333,32 @@ function page() {
                 type="submit"
                 className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
               >
-                Upload
+                {
+                  load ? (
+                    <svg
+                      className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                  ) : (
+                    <p>Upload</p>
+                  )
+                }
               </button>
             </div>
           </form>
