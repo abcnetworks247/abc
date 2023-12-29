@@ -4,6 +4,7 @@ const Newstypes = new mongoose.Schema({
     name: {
     type: 'string',
     unique: true,
+    default: "Uncategorized"
     }
 })
 

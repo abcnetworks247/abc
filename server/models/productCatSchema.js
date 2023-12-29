@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Productcat = new mongoose.Schema({
     name: {
     type: 'string',
+    unique: true,
+    default: "Uncategorized"
     }
 })
 
