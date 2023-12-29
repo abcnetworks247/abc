@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import {
   Card,
   CardBody,
@@ -6,137 +6,120 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
-import Chart from "react-apexcharts";
-// If you're using Next.js please use the dynamic import for react-apexcharts and remove the import from the top for the react-apexcharts
-// import dynamic from "next/dynamic";
-// const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import dynamic from "next/dynamic";
+import React from "@heroicons/react";
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const chartConfig = {
-  type: "line",
-  height: 240,
-  series: [
-    {
-      name: "Sales",
-      data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
-    },
-  ],
-  options: {
-    chart: {
-      toolbar: {
-        show: false,
+
+export default function FlowChart(){
+
+  const chartConfig = {
+    type: "line",
+    height: 240,
+    series: [
+      {
+        name: "Sales",
+        data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
       },
-    },
-    title: {
-      show: "",
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    colors: ["#020617"],
-    stroke: {
-      lineCap: "round",
-      curve: "smooth",
-    },
-    markers: {
-      size: 0,
-    },
-    xaxis: {
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-      labels: {
-        style: {
-          colors: "#616161",
-          fontSize: "12px",
-          fontFamily: "inherit",
-          fontWeight: 400,
+    ],
+    options: {
+      chart: {
+        toolbar: {
+          show: false,
         },
       },
-      categories: [
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-    },
-    yaxis: {
-      labels: {
-        style: {
-          colors: "#616161",
-          fontSize: "12px",
-          fontFamily: "inherit",
-          fontWeight: 400,
-        },
+      title: {
+        show: "",
       },
-    },
-    grid: {
-      show: true,
-      borderColor: "#dddddd",
-      strokeDashArray: 5,
+      dataLabels: {
+        enabled: false,
+      },
+      colors: ["#020617"],
+      stroke: {
+        lineCap: "round",
+        curve: "smooth",
+      },
+      markers: {
+        size: 0,
+      },
       xaxis: {
-        lines: {
-          show: true,
+        axisTicks: {
+          show: false,
+        },
+        axisBorder: {
+          show: false,
+        },
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
+        },
+        categories: [
+          "Apr",
+          "May",
+          "Jun",
+          "Jul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ],
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: "#616161",
+            fontSize: "12px",
+            fontFamily: "inherit",
+            fontWeight: 400,
+          },
         },
       },
-      padding: {
-        top: 5,
-        right: 20,
+      grid: {
+        show: true,
+        borderColor: "#dddddd",
+        strokeDashArray: 5,
+        xaxis: {
+          lines: {
+            show: true,
+          },
+        },
+        padding: {
+          top: 5,
+          right: 20,
+        },
+      },
+      fill: {
+        opacity: 0.8,
+      },
+      tooltip: {
+        theme: "dark",
       },
     },
-    fill: {
-      opacity: 0.8,
-    },
-    tooltip: {
-      theme: "dark",
-    },
-  },
-};
+  };
+    const option = {
+        chart: {
+          id: 'apexchart-example'
+        },
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+        }
+      }
 
-export default function FlowChart() {
+    const series = [{
+        name: 'series-1',
+        data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+      }]
 
-  if (typeof window !== "undefined") {
+    return(
+        <>
+            <Chart type="line" {...chartConfig} height={200} width={500} />
+        </>
+    )
 
-    return (
-      <Card>
-        <CardHeader
-          floated={false}
-          shadow={false}
-          color="transparent"
-          className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
-        >
-          <div className="w-max rounded-lg bg-gray-900 p-5 text-white">
-            <Square3Stack3DIcon className="h-6 w-6" />
-          </div>
-          <div>
-            <Typography variant="h6" color="blue-gray">
-              Line Chart
-            </Typography>
-            <Typography
-              variant="small"
-              color="gray"
-              className="max-w-sm font-normal"
-            >
-              Visualize your data in a simple way using the
-              @material-tailwind/react chart plugin.
-            </Typography>
-          </div>
-        </CardHeader>
-        <CardBody className="px-2 pb-0">
-          <Chart {...chartConfig} />
-        </CardBody>
-      </Card>
-    );
-  }else {
-    // Render some alternative content or return null if not in a browser environment
-    return null;
-  }
-
+    
 }
