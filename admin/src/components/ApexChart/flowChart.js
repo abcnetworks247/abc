@@ -101,23 +101,44 @@ export default function FlowChart(){
       },
     },
   };
-    const option = {
-        chart: {
-          id: 'apexchart-example'
-        },
-        xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-        }
-      }
-
-    const series = [{
-        name: 'series-1',
-        data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-      }]
 
     return(
         <>
-            <Chart type="line" {...chartConfig} height={200} width={500} />
+        <div className="relative flex flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+  <div className="relative mx-4 mt-4 flex flex-col gap-4 overflow-hidden rounded-none bg-transparent bg-clip-border text-gray-700 shadow-none md:flex-row md:items-center">
+    <div className="w-max rounded-lg bg-gray-900 p-5 text-white">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+        aria-hidden="true"
+        className="h-6 w-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"
+        />
+      </svg>
+    </div>
+    <div>
+      <h6 className="block font-sans text-base font-semibold leading-relaxed tracking-normal text-blue-gray-900 antialiased">
+        Line Chart
+      </h6>
+      <p className="block max-w-sm font-sans text-sm font-normal leading-normal text-gray-700 antialiased">
+        Visualize your data in a simple way using the @material-tailwind/html
+        chart plugin.
+      </p>
+    </div>
+  </div>
+  <div className="pt-6 px-2 pb-0">
+    <div id="line-chart" />
+            <Chart type="line" {...chartConfig} height={250} width={460 }   />
+  </div>
+</div>
+
         </>
     )
 

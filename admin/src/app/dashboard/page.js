@@ -78,7 +78,7 @@ export default function Page() {
        { typeof window !== "undefined" ? 
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
         <div className="">
-         {/* <BarChart /> */}
+         <BarChart />
         </div>
         <div className="">
           <FlowChart />

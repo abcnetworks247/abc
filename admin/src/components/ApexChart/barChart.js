@@ -130,7 +130,7 @@ export default function BarChart() {
           </div>
         </CardHeader>
         <CardBody className="px-2 pb-0">
-          <Chart {...chartConfig} />
+          <Chart {...chartConfig} height={250} width={460 } />
         </CardBody>
       </Card>
     );
