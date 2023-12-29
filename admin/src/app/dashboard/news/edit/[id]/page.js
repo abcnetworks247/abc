@@ -38,10 +38,9 @@ function page() {
   const [error, setError] = useState(false);
   const AuthToken = Cookies.get("adminToken");
   const router = useRouter();
-    
+
   useEffect(() => {
-    Api
-      .get(`admin/blog/${id}`)
+    Api.get(`admin/blog/${id}`)
       .then((res) => {
         const data = res.data.blogdata;
         console.log(data);
@@ -70,20 +69,12 @@ function page() {
     };
 
     console.log("update data", data);
-    // const res = await Api.patch(`admin/blog/update`, data, {
-    //   headers: {
-    //     Authorization: `Bearer ${String(AuthToken)}`,
-    //   },
-    // });
-    const res = await axios.patch(
-      "http://localhost:8000//api/v1/admin/blog",
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${String(AuthToken)}`,
-        },
-      }
-    );
+    const res = await Api.patch(`admin/blog/update`, data, {
+      headers: {
+        Authorization: `Bearer ${String(AuthToken)}`,
+      },
+    });
+
     console.log("update response", res);
     if (res.status === 200) {
       router.push("/dashboard/news/all-news");
@@ -97,27 +88,27 @@ function page() {
   return loading ? (
     //    spinner
     <div className="flex items-center justify-center h-[70svh] lg:h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-        </div>
+      <svg
+        className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+        />
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+        />
+      </svg>
+    </div>
   ) : (
     <div>
       <div className="relative flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 ">
@@ -221,35 +212,33 @@ function page() {
               </div>
             </div>
             <div className="flex items-center justify-center w-full border rounded shadow-lg h-80">
-              
-                <div
-                  className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
-                  onClick={() => handleOpen("lg")}
-                >
-                  <div className="flex flex-col w-ful h-full items-center justify-center pt-5 pb-6">
-                    <svg
-                      className="w-10 h-10 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                      />
-                    </svg>
-                    <p className="py-1 text-sm text-gray-600">
-                      Upload a file or drag and drop
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
-                  </div>
+              <div
+                className="flex flex-col w-full h-full  border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                onClick={() => handleOpen("lg")}
+              >
+                <div className="flex flex-col w-ful h-full items-center justify-center pt-5 pb-6">
+                  <svg
+                    className="w-10 h-10 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                    />
+                  </svg>
+                  <p className="py-1 text-sm text-gray-600">
+                    Upload a file or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 10MB
+                  </p>
                 </div>
-              
+              </div>
             </div>
             <p className="text-sm text-gray-300">
               <span>File type: doc,pdf,types of images</span>

@@ -157,9 +157,25 @@ const getSingleBlog = async (req, res) => {
 };
 
 const updateBlog = async (req, res) => {
+  const {
+    title,
+    shortdescription,
+    longdescription,
+    category,
+    blogid,
+    blogimage,
+    type,
+  } = req.body;
 
-  const { title, shortdescription, longdescription, category, blogid, blogimage, type } =
-    req.body;
+  console.log(
+    title,
+    shortdescription,
+    longdescription,
+    category,
+    blogid,
+    blogimage,
+    type
+  );
 
   try {
     const currentUser = req.user;
@@ -229,7 +245,7 @@ const deleteBlog = async (req, res) => {
     try {
       // Get user information
       const authorinfo = await Admin.findById(blogData.author);
-      
+
       // Get user's mypost array
       const authorPosts = authorinfo.mypost;
       console.log("author post", authorPosts);

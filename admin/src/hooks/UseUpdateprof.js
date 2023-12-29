@@ -6,11 +6,11 @@ import Cookies from "js-cookie";
 export default function useUpdateProf() {
   const updateProf = async (formData) => {
     try {
-      const Token = await Cookies.get('adminToken');
+      const token =  Cookies.get('adminToken');
       console.log(' all formdata', formData);
       const response = await Api.patch('admin/auth/account', formData, {
         headers: {
-          Authorization: `Bearer ${String(Token)}`,
+          Authorization: `Bearer ${String(token)}`,
           "Content-Type": "multipart/form-data",
         }
       });

@@ -245,56 +245,76 @@ const userUpdatePassword = async (req, res) => {
 };
 
 const userUpdate = async (req, res) => {
-  const { fullname, email, phone, userbio } = req.body;
-  console.log("loading user");
-
   try {
+    const { fullname, email, phone, userbio } = req.body;
+
+    // Check if the user is authenticated
     if (!req.user) {
       throw new NotFoundError("User not found");
     }
 
-    const { user, userRole } = req;
+    const { user } = req;
 
     // Check if the user has the required role to update
-    if (
-      (userRole === "superadmin" || userRole === "admin") &&
-      user.role === "editor"
-    ) {
+    if (["superadmin", "admin", "editor"].includes(user.role)) {
       const updateFields = { fullname, email, phone, userbio };
 
-      if (req.file) {
+      if (!req.file) {
+        // Update user without a profile picture
+        console.log("there is no profile picture");
+        const updatedUser = await Admin.findByIdAndUpdate(
+          user._id,
+          updateFields,
+          { new: true }
+        );
+
+        return res.status(StatusCodes.OK).json({
+          data: updatedUser,
+          message: "Account updated successfully",
+        });
+      } else {
+        // Update user with a new profile picture
+        console.log("there is profile picture");
+
+        console.log("true");
+
         const { path } = req.file;
+
+        console.log("user path" + path);
+
         try {
-          const userphoto = await cloudinary.uploader.upload(path, {
+          // Upload the profile picture to Cloudinary
+          const userPhoto = await cloudinary.uploader.upload(path, {
             use_filename: true,
-            folder: "UserDP",
+            folder: "AdminDP",
           });
 
-          console.log(userphoto.secure_url);
-          updateFields.userdp = userphoto.secure_url;
+          const updateFieldsWithPhoto = {
+            ...updateFields,
+            userdp: userPhoto.secure_url,
+          };
+
+          // Update user with the new profile picture URL
+          const updatedUser = await Admin.findByIdAndUpdate(
+            user._id,
+            updateFieldsWithPhoto,
+            { new: true }
+          );
+
+          return res.status(StatusCodes.OK).json({
+            message: "Account updated successfully",
+            user: updatedUser,
+          });
         } catch (uploadError) {
           console.error("Error uploading file to Cloudinary:", uploadError);
-          return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ error: "Error uploading file to Cloudinary" });
+          throw new InternalServerError("Error uploading file to Cloudinary");
         }
       }
-
-      const updatedUser = await Admin.findByIdAndUpdate(
-        user._id,
-        updateFields,
-        { new: true }
-      );
-
-      res.status(StatusCodes.OK).json({
-        message: "Account updated successfully",
-        user: updatedUser,
-      });
     } else {
       throw new UnAuthorizedError("Unauthorized to update user information");
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error updating user account:", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });

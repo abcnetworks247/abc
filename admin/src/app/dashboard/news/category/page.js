@@ -199,30 +199,35 @@ const page = () => {
                           Status: <span className="text-green-600">Active</span>
                         </p>
 
-                        <div className="flex flex-row items-start gap-4">
-                          <Tooltip content="Edit">
-                            <IconButton
-                              variant="text"
-                              onClick={() => {
-                                setEditName(item.name);
-                                handleOpen();
-                              }}
-                            >
-                              <FiEdit className="text-xl text-indigo-500 cursor-pointer indigo-600" />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip content="Delete">
-                            <IconButton
-                              variant="text"
-                              onClick={() => {
-                                let id = item._id;
-                                handleDelete(id);
-                              }}
-                            >
-                              <MdOutlineDeleteForever className="text-xl text-red-600 cursor-pointer indigo-600" />
-                            </IconButton>
-                          </Tooltip>
-                        </div>
+                        {item.name === "Uncategorized" ? (
+                          <></>
+                        ) : (
+                          <div className="flex flex-row items-start gap-4">
+                            <Tooltip content="Edit">
+                              <IconButton
+                                variant="text"
+                                onClick={() => {
+                                  setEditName(item.name);
+                                  handleOpen();
+                                }}
+                              >
+                                <FiEdit className="text-xl text-indigo-500 cursor-pointer indigo-600" />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip content="Delete">
+                              <IconButton
+                                variant="text"
+                                onClick={() => {
+                                  let id = item._id;
+                                  handleDelete(id);
+                                }}
+                              >
+                                <MdOutlineDeleteForever className="text-xl text-red-600 cursor-pointer indigo-600" />
+                              </IconButton>
+                            </Tooltip>
+                          </div>
+                        )}
+                        
                       </div>
                     </div>
                     <Dialog open={open} handler={handleOpen}>
