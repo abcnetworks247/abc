@@ -24,7 +24,7 @@ import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-// import a date & time library
+import Swal from "sweetalert2";
 
 function page() {
   /**
@@ -32,7 +32,8 @@ function page() {
    * @type {string}
    */
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [load, setLoad] = useState(false);
+  const [error, setError] = useState("");
   const [html, setHtml] = useState("");
   const [title, setTitle] = useState("");
   const [shortDescription, setShortDescription] = useState("");
@@ -56,6 +57,10 @@ function page() {
 
   //store Auth token
   const AuthToken = Cookies.get("adminToken");
+
+  // custom toast
+  
+
   // function to handle the click of the upload button
   const handleUpload = async (e) => {
     try {
@@ -71,20 +76,35 @@ function page() {
       };
   
       console.log('Request Data:', data);
+      setLoad(true);
   
       const response = await Api.post('admin/blog/create', data, {
         headers: { Authorization: `Bearer ${String(AuthToken)}` },
       });
   
       console.log('Response:', response);
-  
+      setLoad(false);
       if (response.status === 201) {
+        Swal.fire({
+          heightAuto: false,
+          position: 'center',
+          icon: 'success',
+          title: 'News Created Successfully',
+          showConfirmButton: false,
+          timer: 1500,
+        });
         router.push('/dashboard/news/all-news');
-      } else {
-        console.log('Error: Unexpected status code');
-      }
+      } 
     } catch (error) {
+      setLoad(false);
       console.error('Error:', error);
+      const errorMessage = error.response.data.message;
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Oops...',
+        text: `${errorMessage}` || `Something went wrong!`,
+      });
     }
   };
   
@@ -108,7 +128,6 @@ function page() {
     } catch (error) {
       console.log(error);
       setLoading(false);
-      setError(true);
       alert("Something went wrong");
     }
   };
@@ -314,7 +333,32 @@ function page() {
                 type="submit"
                 className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
               >
-                Upload
+                {
+                  load ? (
+                    <svg
+                      className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                  ) : (
+                    <p>Upload</p>
+                  )
+                }
               </button>
             </div>
           </form>
