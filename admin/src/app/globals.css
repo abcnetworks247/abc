@@ -30,6 +30,11 @@ border-radius: 4px;
   width: 4px;
  }
 
+ .desk {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+ }
+
  ::-webkit-scrollbar-corner {
   background-color: #817c7c9a;
  }

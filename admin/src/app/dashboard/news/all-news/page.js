@@ -24,7 +24,7 @@ const Page = () => {
       })
       .catch((err) => {
         console.log("error==", err);
-        const error = err.response.data.message;
+        const error = "Something went wrong, Try again later";
         setError(error);
         setLoading(false);
         
@@ -168,15 +168,15 @@ const Page = () => {
           </svg>
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div >
           {news.map((item) => (
             <article
               key={item._id}
               className="p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-8"
             >
-              <div className="grid items-start grid-cols-1 space-y-3 lg:flex md:flex lg:space-y-0 md:space-y-0 sm:gap-8 lg:flex-row md:flex-row">
+              <div className="grid items-start grid-cols-1 space-y-3 lg:flex md:flex lg:space-y-0 md:space-y-0 sm:gap-8 lg:flex-row md:flex-row ">
                 <div
-                  className="rounded lg:w-2/6 lg:h-52 md:h-48 h-60 sm:w-full"
+                  className="rounded  lg:h-52 md:h-48 h-60 sm:w-full"
                   aria-hidden="true"
                 >
                   {/* random image from unsplash*/}
@@ -184,12 +184,12 @@ const Page = () => {
                     <img
                       src={item.blogimage}
                       alt="random image from unsplash"
-                      className="object-cover w-full h-full mb-2 rounded lg:mb-0 md:flex md:mb-0"
+                      className="object-cover object-center w-full h-full mb-2 rounded lg:mb-0 md:flex md:mb-0"
                     />
                   </Link>
                 </div>
 
-                <div className="flex flex-col gap-2 sm:space-y-1">
+                <div className="flex  flex-col gap-2 sm:space-y-1 break-words">
                   <span>
                     <button
                       onClick={() => {
@@ -220,7 +220,7 @@ const Page = () => {
                     </Link>
                   </h3>
 
-                  <p className="mt-1 text-sm text-gray-700">
+                  <p className="mt-1 text-sm text-gray-700 w-96 text-wrap ">
                     {item.shortdescription}
                   </p>
 
@@ -242,8 +242,16 @@ const Page = () => {
                       </svg>
 
                       <p className="text-xs font-medium">{
-                       item.createdAt
-                      }</p>
+                        //
+                       item.createdAt.split("T")[0]   
+                      }
+                      {" "} {" "}
+                      
+                      {
+                        // remove every other characters after the second ":" eg 12:30:00.000Z => 12:30
+                        item.createdAt.split("T")[1].split(".")[0].replace(/(.{2}:.{2}).*/, '$1')// 12:30:00.000Z => 12:30                        
+                      }
+                      </p>
                     </div>
 
                     <span className="hidden sm:block" aria-hidden="true">

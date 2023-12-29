@@ -8,7 +8,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
     <div>
       <main className="flex flex-row w-[100%]">
         <Sidebar />
-        <div className="w-[100%] flex flex-col gap-3">
+        <div className="w-[100%] flex flex-col">
           <ComplexNavbar />
           {children}
         </div>

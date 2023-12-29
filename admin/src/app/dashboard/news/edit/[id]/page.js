@@ -93,48 +93,68 @@ function page() {
   const handleUpdate = async (e) => {
     try {
       e.preventDefault();
-    const data = {
-      blogid: id,
-      title: title,
-      shortdescription: shortDescription,
-      longdescription: html,
-      category: newCategory,
-      type: newType,
-      blogimage: imageSrc,
-    };
-    setLoad(true);
-    console.log("update data", data);
-    const res = await Api.patch(`admin/blog/update`, data, {
-      headers: {
-        Authorization: `Bearer ${String(AuthToken)}`,
-      },
-    });
-    console.log("update response", res);
-    if (res.status === 200) {
-      const message = res.response.data.message;
-      setLoad(false);
-      Swal.fire({
-        icon: "success",
-        position: "center",
-        title: "Post Updated Successfully",
-        showConfirmButton: false,
-        timer: 1500,
+  
+      const data = {
+        blogid: id,
+        title: title,
+        shortdescription: shortDescription,
+        longdescription: html,
+        category: newCategory,
+        type: newType,
+        blogimage: imageSrc,
+      };
+  
+      setLoad(true);
+      console.log("update data", data);
+  
+      const res = await Api.patch(`admin/blog/update`, data, {
+        headers: {
+          Authorization: `Bearer ${String(AuthToken)}`,
+        },
       });
-      router.push("/dashboard/news/all-news");
-    }
+  
+      console.log("update response", res);
+  
+      if (res && res.status === 200 && res.data) {
+        const message = res.data.message;
+        setLoad(false);
+  
+        Swal.fire({
+          icon: "success",
+          position: "center",
+          title: "Post Updated Successfully",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+  
+        router.push("/dashboard/news/all-news");
+      } else {
+        console.log("Unexpected response structure:", res);
+  
+        setLoad(false);
+        Swal.fire({
+          icon: "error",
+          position: "center",
+          title: "Oops...",
+          text: "Something went wrong!",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
     } catch (error) {
-      const message = error.response.data.message;
+      console.log(error);
+  
       setLoad(false);
       Swal.fire({
         icon: "error",
         position: "center",
         title: "Oops...",
-        text: message,
         showConfirmButton: false,
         timer: 2000,
       });
     }
   };
+  
 
   const handleChange = (e) => {
     setHtml(e.target.value);
@@ -165,8 +185,8 @@ function page() {
           </svg>
         </div>
   ) : (
-    <div>
-      <div className="relative flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 ">
+    <div className="">
+      <div className=" h-full flex items-center justify-center px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 m-0">
         <div className="z-10 p-10 bg-white  lg:w-[70%] md:w-[80%] w-[90%] shadow-md rounded-xl">
           <div className="text-center">
             <h2 className="mt-5 text-3xl font-bold text-gray-900">
