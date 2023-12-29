@@ -1,0 +1,18 @@
+{
+    "extends": [
+      "next",
+      "next/core-web-vitals"
+    ],
+    "rules": {
+      // Other rules...
+  
+      // Allow dynamic imports
+      "import/no-dynamic-require": "off",
+      "import/no-webpack-loader-syntax": "off",
+      "import/prefer-default-export": "off",
+  
+      // Allow jsx in files with .js extension
+      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    }
+  }
+  
