@@ -130,7 +130,7 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
       }, 2000);
     } catch (error) {
       const suberrormsg = toast.update(id, {
-        render: `${error}`,
+        render: `${error.response.data.error}`,
         type: "error",
         isLoading: false,
       });
