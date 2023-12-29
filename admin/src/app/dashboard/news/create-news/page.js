@@ -41,9 +41,13 @@ function page() {
   const [newCategory, setNewCategory] = useState("");
   const [newType, setNewType] = useState("");
   const [category, setCategory] = useState([]);
-  const [imageSrc, setImageSrc] = useState(
-    "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
-  );
+  //unsplash random images
+  const imageUrls = [
+    'https://source.unsplash.com/800x600/?nature',
+    'https://source.unsplash.com/800x600/?travel',
+    'https://source.unsplash.com/800x600/?food'
+  ];
+  const [imageSrc, setImageSrc] = useState(imageUrls[Math.floor(Math.random() * imageUrls.length)]); // random image from imageUrls[
   const [full, setFull] = useState(true);
   const router = useRouter();
 
