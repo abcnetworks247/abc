@@ -1,7 +1,5 @@
 "use client";
 
-import BarChart from "@/components/ApexChart/barChart";
-import FlowChart from "@/components/ApexChart/flowChart";
 // Fix the casing here
 import { MembersTable } from "@/components/Dashboard/MembersTable";
 import dynamic from "next/dynamic";
@@ -79,10 +77,10 @@ export default function Page() {
        { typeof window !== "undefined" ? 
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
         <div className="">
-         <BarChart />
+          <h1>hello</h1>
         </div>
         <div className="">
-          <FlowChart />
+          <h2>hello</h2>
         </div>
       </div>
       : 
