@@ -32,11 +32,11 @@ export default function page() {
 
   const [formData, setFormData] = useState({
     title: "",
-    category: "",
     price: "",
     discountPercentage: "",
-    description: "",
-  
+    rating: 4.4,
+    category: "",
+   
   });
 
   const [selectedPhoto, setSelectedPhoto] = useState(null)
@@ -54,41 +54,53 @@ export default function page() {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: inputValue,
+      [name]: value,
     }));
   }
 
   console.log(formData)
+  
+   
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+const postProduct = async () => {
+   console.log("posting started")
 
   try {
    
     const updatedFormData = {
       ...formData,
-      
-    };
+      description:html,
 
+      thumbnail:
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+
+      images: [
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+      ],
+    };
+console.log("updated form data", updatedFormData)
     const adminToken = Cookies.get("adminToken")
 
   
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
       updatedFormData,
+
       {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${adminToken}`,
-          
         },
       }
     );
 
    
-    console.log("Response:", response);
+    console.log("Response from backend", response);
   } catch (error) {
    
-    console.error("Error:", error);
+    console.error("An error in posting product", error);
   }
 };
 
@@ -106,7 +118,9 @@ const handleSubmit = async (e) => {
         if (response.status === 200) {
           setUploadedCat(response.data.data);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log("damn error", error)
+      }
     };
 
     HandleFetch();
@@ -126,7 +140,7 @@ const handleSubmit = async (e) => {
               ></button>
             </div>
             <div className="p-6 space-y-6">
-              <form onSubmit={(e)=> handleSubmit(e)}>
+              <form>
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-3">
                     <label
@@ -211,10 +225,7 @@ const handleSubmit = async (e) => {
                       Product Details
                     </label>
                     <EditorProvider>
-                      <Editor
-                        value={html}
-                        onChange={(e) => handleInputChange(e)}
-                      >
+                      <Editor value={html} v onChange={onChange}>
                         <Toolbar>
                           <BtnBold />
                           <Separator />
@@ -237,28 +248,26 @@ const handleSubmit = async (e) => {
 
                   <div className="flex my-4 space-x-5">
                     <div>
-                      
                       <img
                         src="https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png"
                         className="h-24"
                         alt="imac image"
                       />
-                    
-                        <a href="#" className="cursor-pointer">
-                          <svg
-                            className="w-6 h-6 -mt-5 text-red-600"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </a>
-                    
+
+                      <a href="#" className="cursor-pointer">
+                        <svg
+                          className="w-6 h-6 -mt-5 text-red-600"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </a>
                     </div>
                   </div>
                   <div className="flex items-center justify-center w-full">
@@ -405,13 +414,17 @@ const handleSubmit = async (e) => {
               </form>
             </div>
             <div className="p-6 border-t border-gray-200 rounded-b">
-              <Button variant="black" color="black" type="submit">
+              <Button
+                variant="black"
+                color="black"
+                onClick={() => postProduct()}
+              >
                 Save all
               </Button>
             </div>
           </div>
         </div>
-        <PopUpFilemanager handleOpen={handleOpen} size={size}  />
+        <PopUpFilemanager handleOpen={handleOpen} size={size} />
       </div>
     </div>
   );
