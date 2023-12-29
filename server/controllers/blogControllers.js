@@ -68,7 +68,6 @@ const createBlog = async (req, res) => {
       type,
       blogimage,
     } = req.body;
-
     // Retrieve the current user from the request
     const { user: currentUser } = req;
 

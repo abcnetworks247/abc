@@ -351,8 +351,8 @@ export default function Sidebar() {
                 className="border-2 border-white rounded-full w-9 h-9"
               />
               <div className="ml-4">
-                <p className="text-sm text-white">
-                  {UserValue && UserValue.fullname}
+                <p className="text-sm text-white flex flex-row items-center gap-2">
+                  {UserValue && UserValue.fullname} <span class="flex w-2 h-2 me-2 bg-green-400 border-white border  rounded-full"></span>
                 </p>
                 <p className="text-xs text-gray-300">
                   Active {UserValue && UserValue.role} account

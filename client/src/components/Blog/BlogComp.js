@@ -181,7 +181,7 @@ export default function BlogComp() {
 
               {/* <!-- recent posts --> */}
               <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-                <h2 className="text-3xl font-bold">Latest news</h2>
+                <h2 className="text-3xl font-bold">Popular news</h2>
                 <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
                 </a>
