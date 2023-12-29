@@ -33,7 +33,7 @@ const page = () => {
     const HandleFetch = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/news/category`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/category`
         );
 
         if (response.status === 200) {
@@ -50,7 +50,7 @@ const page = () => {
       console.log("Name:", name);
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/news/category`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/category`,
         {
           name,
         },
@@ -95,7 +95,7 @@ const page = () => {
           console.log("ID:", newid);
 
           const response = axios.delete(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/news/category`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/category`,
             {
               data: { id: newid }, // Send id in the request body
               headers: {
@@ -143,7 +143,7 @@ const page = () => {
       };
 
       const response = axios.patch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/news/category`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/category`,
         fildata,
         {
           // Send id in the request body
