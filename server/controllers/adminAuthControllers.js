@@ -82,7 +82,7 @@ const signIn = async (req, res) => {
     const authenticatedUser = await olduser.checkPassword(password);
 
     if (!authenticatedUser) {
-      throw new UnAuthorizedError("Invalid credentials");
+      throw new UnAuthorizedError("Invalid login credentials");
     }
 
     const MaxAge = 3 * 24 * 60 * 60;
@@ -261,7 +261,7 @@ const userUpdate = async (req, res) => {
 
       if (!req.file) {
         // Update user without a profile picture
-        console.log("there is no profile picture");
+        console.log("No profile picture provided");
         const updatedUser = await Admin.findByIdAndUpdate(
           user._id,
           updateFields,
@@ -274,13 +274,11 @@ const userUpdate = async (req, res) => {
         });
       } else {
         // Update user with a new profile picture
-        console.log("there is profile picture");
-
-        console.log("true");
+        console.log("Profile picture provided");
 
         const { path } = req.file;
 
-        console.log("user path" + path);
+        console.log("User path: " + path);
 
         try {
           // Upload the profile picture to Cloudinary
@@ -311,7 +309,7 @@ const userUpdate = async (req, res) => {
         }
       }
     } else {
-      throw new UnAuthorizedError("Unauthorized to update user information");
+      throw new UnauthorizedError("Unauthorized to update user information");
     }
   } catch (error) {
     console.error("Error updating user account:", error);
@@ -320,6 +318,7 @@ const userUpdate = async (req, res) => {
       .json({ error: error.message });
   }
 };
+
 
 const currentUser = async (req, res) => {
   try {
