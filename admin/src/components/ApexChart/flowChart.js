@@ -1,5 +1,4 @@
-'use client'
-
+"use client"
 import {
   Card,
   CardBody,
@@ -7,10 +6,10 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
-// import Chart from "react-apexcharts";
+import Chart from "react-apexcharts";
 // If you're using Next.js please use the dynamic import for react-apexcharts and remove the import from the top for the react-apexcharts
-import dynamic from "next/dynamic";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+// import dynamic from "next/dynamic";
+// const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const chartConfig = {
   type: "line",
@@ -103,24 +102,41 @@ const chartConfig = {
 
 export default function FlowChart() {
 
-  
-  return (
-    <Card>
-      <CardHeader
-        floated={false}
-        shadow={false}
-        color="transparent"
-        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
-      >
-        {/* total revenue with an svg*/}
-        <div className="flex flex-col gap-2">
-          <Typography color="gray">Total Revenue</Typography>
-          <Typography size="xl"> $ 1,345,000</Typography>
-        </div>
-      </CardHeader>
-      <CardBody className="px-2 pb-0">
-        <Chart {...chartConfig} />
-      </CardBody>
-    </Card>
-  );
+  if (typeof window !== "undefined") {
+
+    return (
+      <Card>
+        <CardHeader
+          floated={false}
+          shadow={false}
+          color="transparent"
+          className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
+        >
+          <div className="w-max rounded-lg bg-gray-900 p-5 text-white">
+            <Square3Stack3DIcon className="h-6 w-6" />
+          </div>
+          <div>
+            <Typography variant="h6" color="blue-gray">
+              Line Chart
+            </Typography>
+            <Typography
+              variant="small"
+              color="gray"
+              className="max-w-sm font-normal"
+            >
+              Visualize your data in a simple way using the
+              @material-tailwind/react chart plugin.
+            </Typography>
+          </div>
+        </CardHeader>
+        <CardBody className="px-2 pb-0">
+          <Chart {...chartConfig} />
+        </CardBody>
+      </Card>
+    );
+  }else {
+    // Render some alternative content or return null if not in a browser environment
+    return null;
+  }
+
 }

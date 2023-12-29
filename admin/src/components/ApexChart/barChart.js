@@ -1,18 +1,109 @@
-'use client'
-
+"use client"
 import {
-    Card,
-    CardBody,
-    CardHeader,
-    Typography,
-  } from "@material-tailwind/react";
-  
-   
+  Card,
+  CardBody,
+  CardHeader,
+  Typography,
+} from "@material-tailwind/react";
+import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
+import Chart from "react-apexcharts";
+// If you're using Next.js please use the dynamic import for react-apexcharts and remove the import from the top for the react-apexcharts
+// import dynamic from "next/dynamic";
+// const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+ 
+const chartConfig = {
+  type: "bar",
+  height: 240,
+  series: [
+    {
+      name: "Sales",
+      data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+    },
+  ],
+  options: {
+    chart: {
+      toolbar: {
+        show: false,
+      },
+    },
+    title: {
+      show: "",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    colors: ["#020617"],
+    plotOptions: {
+      bar: {
+        columnWidth: "40%",
+        borderRadius: 2,
+      },
+    },
+    xaxis: {
+      axisTicks: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+      labels: {
+        style: {
+          colors: "#616161",
+          fontSize: "12px",
+          fontFamily: "inherit",
+          fontWeight: 400,
+        },
+      },
+      categories: [
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: "#616161",
+          fontSize: "12px",
+          fontFamily: "inherit",
+          fontWeight: 400,
+        },
+      },
+    },
+    grid: {
+      show: true,
+      borderColor: "#dddddd",
+      strokeDashArray: 5,
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      padding: {
+        top: 5,
+        right: 20,
+      },
+    },
+    fill: {
+      opacity: 0.8,
+    },
+    tooltip: {
+      theme: "dark",
+    },
+  },
+};
+ 
+export default function BarChart() {
 
-   
-  export default function BarChart() {
+  if (typeof window !== "undefined") {
 
-    
+
     return (
       <Card>
         <CardHeader
@@ -21,22 +112,30 @@ import {
           color="transparent"
           className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
         >
-          {/* profit this week */}
-          <div className="flex flex-col gap-2">
-            <Typography color="gray">Profit this week</Typography>
-            <Typography color="green">+55.5%</Typography>
+          <div className="w-max rounded-lg bg-gray-900 p-5 text-white">
+            <Square3Stack3DIcon className="h-6 w-6" />
           </div>
-
+          <div>
+            <Typography variant="h6" color="blue-gray">
+              Bar Chart
+            </Typography>
+            <Typography
+              variant="small"
+              color="gray"
+              className="max-w-sm font-normal"
+            >
+              Visualize your data in a simple way using the
+              @material-tailwind/react chart plugin.
+            </Typography>
+          </div>
         </CardHeader>
         <CardBody className="px-2 pb-0">
-          {/* random image url in unsplash */}
-          <img
-            src="https://images.unsplash.com/photo-1593642532452-2b7f5b6d9b4d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmFyJTIwY2hhcnQlMjBwcm9maXQlMjBjaGFydHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
-            alt="..."
-            className="w-full rounded-lg"
-          />
-
+          <Chart {...chartConfig} />
         </CardBody>
       </Card>
     );
+  }else {
+    // Render some alternative content or return null if not in a browser environment
+    return null;
   }
+}
