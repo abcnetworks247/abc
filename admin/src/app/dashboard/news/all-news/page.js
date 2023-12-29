@@ -1,6 +1,5 @@
 "use client";
 import Api from "@/utils/Api";
-import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,7 +9,7 @@ import Swal from "sweetalert2";
 const Page = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const pathUrl = "/dashboard/news/all-news";
   const editUrl = "/dashboard/news/edit";
   const router = useRouter();
@@ -24,9 +23,11 @@ const Page = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("error==", err);
+        const error = err.response.data.message;
+        setError(error);
         setLoading(false);
-        setError(true);
+        
       });
   }, []);
 
@@ -61,55 +62,84 @@ const Page = () => {
       confirmButtonText: "Yes, Delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        Api.delete(
-          'admin/blog/delete',
-          {
-            data: { id }, // Assuming you need to send the 'id' as the request payload
-            headers: {
-              Authorization: `Bearer ${String(AuthToken)}`,
-              'Content-Type': 'application/json',
-            },
-            // withCredentials: true, // Add this line if you need to include credentials
-          }
-        )
+        // make a delete request to the server and if it is successful then show the alert and reload the page else show the error alert
+        Api.delete(`admin/blog/delete`, {
+          data: { id },
+          headers: {
+            Authorization: `Bearer ${String(AuthToken)}`,
+            'Content-Type': 'application/json',
+          },
+        })
           .then((res) => {
-            if (res.status === 200) {
-              console.log(id);
+            if (res.status >= 200 && res.status <= 300) {
+              console.log("=====", id);
               Swal.fire({
                 title: "Post Deleted!",
-                text: "Post Deleted Succefully.",
+                text: `${res.data.message}`,
                 icon: "success",
+                timer: 2000,
               });
-              console.log(res, data);
-              router.reload();
+              console.log(res.statusText, res.status, res.data);
+              // reload the page
+              window.location.reload();
+              
             }
           })
           .catch((err) => {
             console.log("cant delete", err);
             console.log(id);
-
+        
             Swal.fire({
               title: "Post Not Deleted!",
-              text: "Post Not Deleted.",
+              text: "Post Not Deleted. Error occurred during the request.",
               icon: "error",
             });
           });
+
+        //   {
+        //     data: { id }, // Assuming you need to send the 'id' as the request payload
+        //     headers: {
+        //       Authorization: `Bearer ${String(AuthToken)}`,
+        //       'Content-Type': 'application/json',
+        //     },
+        //     // withCredentials: true, // Add this line if you need to include credentials
+        //   }
+        // )
+        //   .then((res) => {
+        //     if (res.ok) {
+        //       console.log(id);
+        //       Swal.fire({
+        //         title: "Post Deleted!",
+        //         text: "Post Deleted Succefully.",
+        //         icon: "success",
+        //       });
+        //       console.log(res, data);
+        //       router.reload();
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     console.log("cant delete", err);
+        //     console.log(id);
+
+        //     Swal.fire({
+        //       title: "Post Not Deleted!",
+        //       text: "Post Not Deleted.",
+        //       icon: "error",
+        //     });
+        //   });
       }
     });
   }
 
-  if (error === true) {
+  if (error) {
     return (
       // create a professinal error page
-      <div className="flex flex-col items-center justify-center h-full gap-3">
-        <h1 className="text-3xl font-bold">Something went wrong</h1>
-        <p className="text-xl font-semibold text-gray-500 ">
-          Please check your internet connection and try again
-        </p>
-        {/* internet error svg */}
+      <div className=" flex flex-col items-center justify-center gap-3 h-[80svh]">
+        <h1 className="text-3xl font-bold">{error}</h1>
       </div>
     );
   }
+
   return (
     <main className="px-5 mt-10">
       <h1 className="text-3xl font-bold">All News</h1>
@@ -211,7 +241,9 @@ const Page = () => {
                         ></path>
                       </svg>
 
-                      <p className="text-xs font-medium">48:32 minutes</p>
+                      <p className="text-xs font-medium">{
+                       item.createdAt
+                      }</p>
                     </div>
 
                     <span className="hidden sm:block" aria-hidden="true">
