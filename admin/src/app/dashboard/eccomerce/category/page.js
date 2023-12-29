@@ -67,9 +67,9 @@ const page = () => {
       if (response.status === 201) {
         setName("");
 
-        // if (typeof window !== "undefined") {
-        //   window.location.reload();
-        // }
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
       } else {
         console.error("Unexpected response status:", response.status);
         // Handle the unexpected status code appropriately
@@ -159,12 +159,10 @@ const page = () => {
       if (response.status !== 200) {
         setUploadState("File Uploaded Successfully 🎉🎉");
         setSuccessful(true);
-        handleOpen(null);
         setLoading(false);
-
-        // if (typeof window !== "undefined") {
-        //   window.location.reload();
-        // }
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
       } else {
         setLoading(false);
         setUploadState("Error: Try again later");

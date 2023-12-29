@@ -87,7 +87,7 @@ function Page() {
       }
     } catch (error) {
       const suberrormsg = toast.update(id, {
-        render: `${error}`,
+        render: `${error.response.data.error}`,
         type: "error",
         isLoading: false,
       });

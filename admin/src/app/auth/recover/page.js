@@ -91,7 +91,7 @@ import HocsessionAuthenticated from "@/utils/HocSessionAuthenticated";
       }
     } catch (error) {
       const suberrormsg = toast.update(id, {
-        render: `${error}`,
+        render: `${error.response.data.error}`,
         type: "error",
         isLoading: false,
       });
