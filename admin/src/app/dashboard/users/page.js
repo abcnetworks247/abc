@@ -60,7 +60,7 @@ export default function Page() {
   //cookies
   const authToken = Cookies.get("adminToken");
 
-  console.log("authToken", authToken);
+
 
   return (
     <>
