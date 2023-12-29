@@ -34,8 +34,6 @@ const FileCompPop = () => {
     };
   }, []); // Empty dependency array to run the effect only once
 
-  
-
   return (
     <div>
       <div className="h-[70vh]">

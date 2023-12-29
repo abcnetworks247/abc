@@ -33,7 +33,7 @@ const page = () => {
     const HandleFetch = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/product/category`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
         );
 
         if (response.status === 200) {
@@ -50,7 +50,7 @@ const page = () => {
       console.log("Name:", name);
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/product/category`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`,
         {
           name,
         },
@@ -67,9 +67,9 @@ const page = () => {
       if (response.status === 201) {
         setName("");
 
-        // if (typeof window !== "undefined") {
-        //   window.location.reload();
-        // }
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
       } else {
         console.error("Unexpected response status:", response.status);
         // Handle the unexpected status code appropriately
@@ -95,7 +95,7 @@ const page = () => {
           console.log("ID:", newid);
 
           const response = axios.delete(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/product/category`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`,
             {
               data: { id: newid }, // Send id in the request body
               headers: {
@@ -143,7 +143,7 @@ const page = () => {
       };
 
       const response = axios.patch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/category/product/category`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`,
         fildata,
         {
           // Send id in the request body
@@ -159,12 +159,10 @@ const page = () => {
       if (response.status !== 200) {
         setUploadState("File Uploaded Successfully 🎉🎉");
         setSuccessful(true);
-        handleOpen(null)
         setLoading(false);
-
-        // if (typeof window !== "undefined") {
-        //   window.location.reload();
-        // }
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
       } else {
         setLoading(false);
         setUploadState("Error: Try again later");
@@ -199,30 +197,34 @@ const page = () => {
                           Status: <span className="text-green-600">Active</span>
                         </p>
 
-                        <div className="flex flex-row items-start gap-4">
-                          <Tooltip content="Edit">
-                            <IconButton
-                              variant="text"
-                              onClick={() => {
-                                setEditName(item.name);
-                                handleOpen();
-                              }}
-                            >
-                              <FiEdit className="text-xl text-indigo-500 cursor-pointer indigo-600" />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip content="Delete">
-                            <IconButton
-                              variant="text"
-                              onClick={() => {
-                                let id = item._id;
-                                handleDelete(id);
-                              }}
-                            >
-                              <MdOutlineDeleteForever className="text-xl text-red-600 cursor-pointer indigo-600" />
-                            </IconButton>
-                          </Tooltip>
-                        </div>
+                        {item.name === "Uncategorized" ? (
+                          <></>
+                        ) : (
+                          <div className="flex flex-row items-start gap-4">
+                            <Tooltip content="Edit">
+                              <IconButton
+                                variant="text"
+                                onClick={() => {
+                                  setEditName(item.name);
+                                  handleOpen();
+                                }}
+                              >
+                                <FiEdit className="text-xl text-indigo-500 cursor-pointer indigo-600" />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip content="Delete">
+                              <IconButton
+                                variant="text"
+                                onClick={() => {
+                                  let id = item._id;
+                                  handleDelete(id);
+                                }}
+                              >
+                                <MdOutlineDeleteForever className="text-xl text-red-600 cursor-pointer indigo-600" />
+                              </IconButton>
+                            </Tooltip>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <Dialog open={open} handler={handleOpen}>

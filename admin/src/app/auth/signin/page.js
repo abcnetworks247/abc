@@ -140,7 +140,7 @@ function Page() {
       // Log any errors that occur during the API request
 
       const suberrormsg = toast.update(id, {
-        render: `${error}`,
+        render: `${error.response.data.error}`,
         type: "error",
         isLoading: false,
       });
