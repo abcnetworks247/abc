@@ -7,19 +7,24 @@ import {
   DialogFooter,
   Typography,
   Select,
+  Spinner,
   Option,
   Avatar,
 } from "@material-tailwind/react";
 import Image from "next/image";
 import { TiCameraOutline } from "react-icons/ti";
 import UseUpdateprof from "@/hooks/UseUpdateprof";
+import { useRouter } from "next/navigation";
 
 export function EditAdminProfile({ open, handleOpen, UserValue }) {
-  const { updateProf, isSuccess } = UseUpdateprof();
+  const { updateProf, isSuccess,isLoading,isError } = UseUpdateprof();
+  const router = useRouter()
   const [names, setvalue] = useState("hello");
   const [userimage, setUserImage] = useState(UserValue && UserValue.userdp);
-  const [selectedImage, setSelectedImage] = useState();
-
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [successful, setSuccessfull] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [uploadstate, setUploadState] = useState(null);
   function HandleImageChange(e) {
     const selectedPhoto = e.target.files[0];
 
@@ -60,7 +65,33 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
 
     console.log(" all formdata on submit ", formData);
     try {
+      if(!isLoading){
+        setLoading(true);
+        setUploadState("Uploading, please wait...");
+
+      }
       await updateProf(formData);
+
+
+      if(isSuccess){
+        setUploadState("File Uploaded Successfully 🎉🎉");
+        setSuccessfull(true);
+        setLoading(null)
+        setTimeout(() => {
+          setLoading(false);
+          setSuccessfull(null);
+          handleOpen(null);
+     
+          
+          if(typeof window !== "undefined"){
+            window.location.reload();
+          }
+        }, 1000);
+      }
+
+      if(isError){
+        setUploadState("an error occurred while updating your profile");
+      }
       console.log("Profile updated successfully", isSuccess);
       // Handle success or redirect, etc.
     } catch (error) {
@@ -68,6 +99,9 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
       // Handle error, show a message, etc.
     }
   };
+
+  console.log('is loading..', isLoading);
+  console.log('is sucess..', isSuccess);
 
   return (
     <>
@@ -105,7 +139,7 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
                       htmlFor="userdp"
                       className="bg-black/25  absolute w-24 flex items-center bottom-[-2px] rounded-b-xl cursor-pointer  justify-center h-12 border-b-2"
                     >
-                      <TiCameraOutline className="text-2xl text-black" />
+                      <TiCameraOutline className="text-2xl text-gray-200" />
                     </label>
                   </div>
 
@@ -203,13 +237,27 @@ export function EditAdminProfile({ open, handleOpen, UserValue }) {
             </form>
           </Typography>
         </DialogBody>
-        <DialogFooter className="space-x-2">
+        <DialogFooter className="space-x-2 flex flex-row items-center justify-between">
+          <div>
+          {!loading && <div className=""></div>}
+
+<div className="flex flex-row items-center gap-4 ml-5">
+  {loading && <Spinner />
+  
+  }
+  <span className="text-sm"> {uploadstate}</span>
+</div>
+          </div>
+
+           <div>
+           
           <Button variant="text" color="blue-gray" onClick={handleOpen}>
             cancel
           </Button>
           <Button variant="gradient" color="green" onClick={HandleSubmit}>
             confirm
           </Button>
+           </div>
         </DialogFooter>
       </Dialog>
     </>

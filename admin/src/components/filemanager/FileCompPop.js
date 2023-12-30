@@ -34,6 +34,59 @@ const FileCompPop = () => {
     };
   }, []); // Empty dependency array to run the effect only once
 
+  const itemsPerPage = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [checkurl, setCheckUrl] = useState([]);
+
+  const handleFileCheck = function (imageurl) {
+    let imgurl = String(imageurl);
+
+    if (!checkurl.includes(imgurl)) {
+      checkurl.unshift(imgurl);
+      console.log("This is the check array", checkurl);
+    } else {
+      const index = checkurl.indexOf(imgurl);
+      if (index !== -1) {
+        checkurl.splice(index, 1);
+        console.log("Removed from check array", checkurl);
+      }
+    }
+  };
+
+  if (!fileData) {
+    // If fileData is not available yet, you can return a loading state or null
+    return (
+      <div className="flex items-center justify-center h-full">
+        <svg
+          className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
+        </svg>
+      </div>
+    ); // or return null;
+  }
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = fileData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div>
       <div className="h-[70vh]">
@@ -76,14 +129,14 @@ const FileCompPop = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 mt-2 sm:grid-cols-2 md:grid-cols-4">
-          {fileData &&
-            fileData.map(({ secure_url, _id }) => (
+        <div className="grid grid-cols-2 gap-4 mt-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
+          {currentItems &&
+            currentItems.map(({ secure_url, _id, originalname }) => (
               <div
                 className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
                 key={_id}
               >
-                <div className="">
+                <div>
                   <img
                     className="object-cover object-center w-full h-40 max-w-full rounded-lg"
                     src={secure_url}
@@ -91,23 +144,41 @@ const FileCompPop = () => {
                   />
                 </div>
 
-                <span className="text-sm">image description.png</span>
+                <span className="w-[80%] overflow-hidden text-sm whitespace-nowrap text-ellipsis">
+                  {originalname}
+                </span>
                 <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
-                  <Checkbox className="cursor-pointer" />
-                  <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" />
+                  <Checkbox
+                    className="cursor-pointer"
+                    onChange={() => {
+                      let imageurl = secure_url;
+                      handleFileCheck(imageurl);
+                    }}
+                  />
+                  <></>
                 </div>
               </div>
             ))}
         </div>
         <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Page 1 of 10
+            Page {currentPage} of {Math.ceil(fileData.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
-            <Button variant="outlined" size="sm">
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
               Previous
             </Button>
-            <Button variant="outlined" size="sm">
+            <Button
+              variant="outlined"
+              size="sm"
+              onClick={() => paginate(currentPage + 1)}
+              disabled={indexOfLastItem >= fileData.length}
+            >
               Next
             </Button>
           </div>

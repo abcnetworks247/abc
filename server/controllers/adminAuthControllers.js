@@ -320,13 +320,15 @@ const userUpdate = async (req, res) => {
 };
 
 const currentUser = async (req, res) => {
+  
   try {
     if (req.user) {
       const olduser = await Admin.findById(req.user._id);
+      const userblog = await Blog.find({ author: req.user._id });
 
       return res
         .status(200)
-        .json({ olduser, message: "data recieved successfully" });
+        .json({ olduser, userblog, message: "data recieved successfully" });
     }
 
     throw new NotFoundError("User not found");

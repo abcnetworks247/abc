@@ -155,11 +155,13 @@ function UploadComp({ handleOpen, size }) {
             )}
           </div>
         </DialogBody>
-        <DialogFooter className="flex flex-row items-center justify-between">
+        <DialogFooter className="">
           {!loading && <div className=""></div>}
 
           <div className="flex flex-row items-center gap-4 ml-5">
-            {loading && <Spinner />}
+            {loading && <Spinner />
+            
+            }
             <span className="text-sm"> {uploadstate}</span>
           </div>
 

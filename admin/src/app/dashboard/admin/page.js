@@ -53,6 +53,16 @@ export default function Page() {
 
   const handleOpen = () => setOpen(!open);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const ITEMS_PER_PAGE = 10; 
+  const totalItems = Admins ? Admins.data.length : 0;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = Admins ? Admins.data.slice(startIndex, endIndex) : [];
+
   function DeleteUser(role) {
     Swal.fire({
       title: `Are you sure you want to delete this ${role}`,
@@ -176,7 +186,7 @@ export default function Page() {
               <tbody className="w-full">
                 <>
                   {Admins &&
-                    Admins.data.map(
+                    currentItems.map(
                       ({ userdp, fullname, email, role, createdAt }, index) => {
                         const isLast = index === Admins.data.length - 1;
                         const classes = isLast
@@ -325,13 +335,15 @@ export default function Page() {
               color="blue-gray"
               className="font-normal"
             >
-              Page 1 of 10
+             Page {currentPage} of {totalPages}
             </Typography>
             <div className="flex gap-2">
-              <Button variant="outlined" size="sm">
+              <Button variant="outlined" size="sm"   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}>
                 Previous
               </Button>
-              <Button variant="outlined" size="sm">
+              <Button variant="outlined" size="sm"  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}>
                 Next
               </Button>
             </div>

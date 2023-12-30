@@ -42,6 +42,9 @@ export default function page() {
   const [selectedPhoto, setSelectedPhoto] = useState(null)
 
 
+  const [thumbn, setHtmThumbl] = useState("thumbn");
+  const [gallery, setGallery] = useState("gallery");
+
   const inputStyles = {
     textDecoration: "line-through",
     color: "gray", // Adjust the color as needed
