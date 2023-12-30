@@ -52,9 +52,14 @@ export default function page() {
 
   function handleInputChange(e) {
     const { name, value } = e.target;
+
+   const processedValue =
+       name === "price" || name === "discountPercentage"
+         ? parseFloat(value)
+         : value;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: processedValue,
     }));
   }
 
@@ -67,20 +72,30 @@ const postProduct = async () => {
 
   try {
    
-    const updatedFormData = {
-      ...formData,
-      description:html,
-
+   const updatedFormData = {
+      title: formData.title,
+      price: formData.price,
+      discountPercentage: formData.discountPercentage,
+      rating: formData.rating,
+      category: formData.category,
+      description: html,
       thumbnail:
         "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-
       images: [
         "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
         "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
         "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
       ],
     };
-console.log("updated form data", updatedFormData)
+
+
+    
+ console.log("Before validation:", typeof updatedFormData.images);
+    
+    console.log("updated form data", updatedFormData)
+  Object.entries(updatedFormData).forEach(([key, value]) => {
+    console.log(`${key}: ${typeof value}`);
+  });
     const adminToken = Cookies.get("adminToken")
 
   

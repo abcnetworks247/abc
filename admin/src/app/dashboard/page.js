@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import BarChart from "@/components/ApexChart/barChart";
 import FlowChart from "@/components/ApexChart/flowChart";
 // Fix the casing here

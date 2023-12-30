@@ -44,6 +44,7 @@ function page() {
   const [imageSrc, setImageSrc] = useState(
     "https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg"
   );
+  
   const [full, setFull] = useState(true);
   const router = useRouter();
 

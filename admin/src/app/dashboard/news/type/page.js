@@ -66,9 +66,9 @@ const page = () => {
 
       setName("");
       if (response.status === 201) {
-        // if (typeof window !== "undefined") {
-        //   window.location.reload();
-        // }
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
       } else {
         console.error("Unexpected response status:", response.status);
         // Handle the unexpected status code appropriately
@@ -198,7 +198,13 @@ const page = () => {
                           Status: <span className="text-green-600">Active</span>
                         </p>
 
-                        {item.name === "Uncategorized" ? (
+                        {[
+                          "highlight",
+                          "Uncategorized",
+                          "popular",
+                          "trending",
+                          "top",
+                        ].includes(item.name) ? (
                           <></>
                         ) : (
                           <div className="flex flex-row items-start gap-4">
@@ -226,7 +232,6 @@ const page = () => {
                             </Tooltip>
                           </div>
                         )}
-                        
                       </div>
                     </div>
                     <Dialog open={open} handler={handleOpen}>

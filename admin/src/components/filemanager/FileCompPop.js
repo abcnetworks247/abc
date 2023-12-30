@@ -18,7 +18,7 @@ const FileCompPop = () => {
   // const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
 
   useEffect(() => {
-    const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+    const socket = io.connect(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
 
     const handleFileManagerUpdate = (data) => {
       console.log("this is filemanager", data);

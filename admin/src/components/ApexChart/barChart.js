@@ -6,10 +6,10 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
-import Chart from "react-apexcharts";
+// import Chart from "react-apexcharts";
 // If you're using Next.js please use the dynamic import for react-apexcharts and remove the import from the top for the react-apexcharts
-// import dynamic from "next/dynamic";
-// const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import dynamic from "next/dynamic";
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
  
 const chartConfig = {
   type: "bar",
@@ -130,12 +130,9 @@ export default function BarChart() {
           </div>
         </CardHeader>
         <CardBody className="px-2 pb-0">
-          <Chart {...chartConfig} />
+          <Chart {...chartConfig} height={250} width={460 } />
         </CardBody>
       </Card>
     );
-  }else {
-    // Render some alternative content or return null if not in a browser environment
-    return null;
   }
 }
