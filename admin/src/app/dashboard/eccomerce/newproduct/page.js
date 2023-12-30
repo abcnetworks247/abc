@@ -63,58 +63,52 @@ export default function page() {
   console.log(formData);
 
   const postProduct = async (e) => {
-    e.preventDefault()
-   console.log("posting started")
+    e.preventDefault();
+    console.log("posting started");
 
-  try {
-   
-   const updatedFormData = {
-      title: formData.title,
-      price: formData.price,
-      discountPercentage: formData.discountPercentage,
-      rating: formData.rating,
-      category: formData.category,
-      description: html,
-      thumbnail:
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-      images: [
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-      ],
-    };
+    try {
+      const updatedFormData = {
+        title: formData.title,
+        price: formData.price,
+        discountPercentage: formData.discountPercentage,
+        rating: formData.rating,
+        category: formData.category,
+        description: html,
+        stock: 10,
+        thumbnail:
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        images: [
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        ],
+      };
 
+      console.log("Before validation:", typeof updatedFormData.images);
 
-    
- console.log("Before validation:", typeof updatedFormData.images);
-    
-    console.log("updated form data", updatedFormData)
-  Object.entries(updatedFormData).forEach(([key, value]) => {
-    console.log(`${key}: ${typeof value}`);
-  });
-    const adminToken = Cookies.get("adminToken")
+      console.log("updated form data", updatedFormData);
+      Object.entries(updatedFormData).forEach(([key, value]) => {
+        console.log(`${key}: ${typeof value}`);
+      });
+      const adminToken = Cookies.get("adminToken");
 
-  
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
-      updatedFormData,
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+        updatedFormData,
 
-      {
-        headers: {
-          Authorization: `Bearer ${String(adminToken)}`,
-        },
-        "Content-Type": "application/json",
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${String(adminToken)}`,
+          },
+          "Content-Type": "application/json",
+        }
+      );
 
-   
-    console.log("Response from backend", response);
-  } catch (error) {
-   
-    console.error("An error in posting product", error);
-  }
-};
-
+      console.log("Response from backend", response);
+    } catch (error) {
+      console.error("An error in posting product", error);
+    }
+  };
 
   useEffect(() => {
     console.log("useEfft is runnning in new product");
@@ -138,7 +132,10 @@ export default function page() {
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
-          <form onSubmit={(e)=>postProduct(e)} className="relative bg-white rounded-lg shadow-md shadow-gray-300">
+          <form
+            onSubmit={(e) => postProduct(e)}
+            className="relative bg-white rounded-lg shadow-md shadow-gray-300"
+          >
             <div className="flex items-start justify-between p-5 border-b rounded-t">
               <h3 className="text-xl font-semibold">Add Product</h3>
               <button
@@ -233,7 +230,7 @@ export default function page() {
                       Product Details
                     </label>
                     <EditorProvider>
-                      <Editor value={html}  onChange={onChange}>
+                      <Editor value={html} onChange={onChange}>
                         <Toolbar>
                           <BtnBold />
                           <Separator />
@@ -422,18 +419,18 @@ export default function page() {
               </div>
             </div>
             <div className="p-6 border-t border-gray-200 rounded-b">
-              <Button
-                variant="black"
-                color="black"
-                type="submit"
-            
-              >
+              <Button variant="black" color="black" type="submit">
                 Save all
               </Button>
             </div>
           </form>
         </div>
-        <PopUpFilemanager handleOpen={handleOpen} size={size} setThumbnail={setThumbnail} setGallery={setGallery} />
+        <PopUpFilemanager
+          handleOpen={handleOpen}
+          size={size}
+          setThumbnail={setThumbnail}
+          setGallery={setGallery}
+        />
       </div>
     </div>
   );
