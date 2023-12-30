@@ -9,15 +9,18 @@ const {
 
 // Controller for creating a product (accessible only to admin)
 const createProduct = async (req, res) => {
+  console.log("hit product create");
   try {
     // Assuming you have middleware to authenticate and authorize users
 
-    if(!req.user){
+    if (!req.user) {
       throw new UnAuthorizedError("You must be logged in to access this page");
     }
 
     if (!["superadmin", "admin"].includes(req.user.role)) {
-      throw new UnAuthorizedError("Only super admins or admins can access this page");
+      throw new UnAuthorizedError(
+        "Only super admins or admins can access this page"
+      );
     }
 
     // Extract product data from the request body
@@ -37,9 +40,24 @@ const createProduct = async (req, res) => {
       weight,
     } = req.body;
 
+    console.log(`
+  Title: ${title},
+  Description: ${description},
+  Price: ${price},
+  Discount Percentage: ${discountPercentage},
+  Rating: ${rating},
+  Stock: ${stock},
+  Brand: ${brand},
+  Category: ${category},
+  Thumbnail: ${thumbnail},
+  Images: ${images},
+  Color: ${color},
+  Warranty: ${warranty},
+  Weight: ${weight}
+`);
+
     // Construct an object with the extracted data
     const productData = {
-      id,
       title,
       description,
       price,
@@ -59,13 +77,15 @@ const createProduct = async (req, res) => {
     const { error, value } = ProductJoi.validate(productData);
 
     if (error) {
-      throw new ValidationError("Invalid data received")
+      throw new ValidationError("Invalid data received");
     }
 
     // Save the product to the database
     const savedProduct = await Product.create(value);
 
-    res.status(StatusCodes.CREATED).json({message: "Product created successfully"} );
+    res
+      .status(StatusCodes.CREATED)
+      .json({ message: "Product created successfully" });
   } catch (error) {
     console.error(error);
     res

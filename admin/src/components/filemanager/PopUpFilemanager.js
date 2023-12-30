@@ -19,7 +19,7 @@ import { BsFileEarmarkPlus } from "react-icons/bs";
 import UploadPop from "./UploadPop";
 import FileCompPop from "./FileCompPop";
 
-const PopUpFilemanager = ({ handleOpen, size}) => {
+const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery}) => {
   const [selectedphoto, setSelectedPhoto] = useState(null);
   const [blogimage, setBlogImage] = useState(null);
 

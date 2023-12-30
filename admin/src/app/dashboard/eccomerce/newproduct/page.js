@@ -20,15 +20,11 @@ import {
 } from "react-simple-wysiwyg";
 
 export default function page() {
-
- 
-
-  const [uploadedCat, setUploadedCat] = useState(null)
-  console.log("newProduct", uploadedCat)
-    // dialog open state thaat is recieved from filemanger context
-    const {handleOpen, size } = UseFileManager()
+  const [uploadedCat, setUploadedCat] = useState(null);
+  console.log("newProduct", uploadedCat);
+  // dialog open state thaat is recieved from filemanger context
+  const { handleOpen, size } = UseFileManager();
   const [html, setHtml] = useState("");
-  
 
   const [formData, setFormData] = useState({
     title: "",
@@ -36,13 +32,11 @@ export default function page() {
     discountPercentage: "",
     rating: 4.4,
     category: "",
-   
   });
 
-  const [selectedPhoto, setSelectedPhoto] = useState(null)
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-
-  const [thumbn, setHtmThumbl] = useState("thumbn");
+  const [thumbnail, setThumbnail] = useState("thumbn");
   const [gallery, setGallery] = useState("gallery");
 
   const inputStyles = {
@@ -56,103 +50,92 @@ export default function page() {
   function handleInputChange(e) {
     const { name, value } = e.target;
 
-   const processedValue =
-       name === "price" || name === "discountPercentage"
-         ? parseFloat(value)
-         : value;
+    const processedValue =
+      name === "price" || name === "discountPercentage"
+        ? parseFloat(value)
+        : value;
     setFormData((prevData) => ({
       ...prevData,
       [name]: processedValue,
     }));
   }
 
-  console.log(formData)
-  
-   
+  console.log(formData);
 
   const postProduct = async (e) => {
-    e.preventDefault()
-   console.log("posting started")
+    e.preventDefault();
+    console.log("posting started");
 
-  try {
-   
-   const updatedFormData = {
-      title: formData.title,
-      price: formData.price,
-      discountPercentage: formData.discountPercentage,
-      rating: formData.rating,
-      category: formData.category,
-      description: html,
-      stock:25,
-      thumbnail:
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-      images: [
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-      ],
-    };
+    try {
+      const updatedFormData = {
+        title: formData.title,
+        price: formData.price,
+        discountPercentage: formData.discountPercentage,
+        rating: formData.rating,
+        category: formData.category,
+        description: html,
+        stock: 10,
+        thumbnail:
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        images: [
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        ],
+      };
 
+      console.log("Before validation:", typeof updatedFormData.images);
 
-    
- console.log("Before validation:", typeof updatedFormData.images);
-    
-    console.log("updated form data", updatedFormData)
-  Object.entries(updatedFormData).forEach(([key, value]) => {
-    console.log(`${key}: ${typeof value}`);
-  });
-    const adminToken = Cookies.get("adminToken")
- 
-  
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
-      updatedFormData,
+      console.log("updated form data", updatedFormData);
+      Object.entries(updatedFormData).forEach(([key, value]) => {
+        console.log(`${key}: ${typeof value}`);
+      });
+      const adminToken = Cookies.get("adminToken");
 
-      {
-        headers: {
-          Authorization: `Bearer ${String(adminToken)}`,
-        },
-        "Content-Type": "application/json",
-      }
-    );
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+        updatedFormData,
 
-   
-    
-console.log("Response from backend", response.data);
-console.log("Response headers", response.headers);
-  } catch (error) {
-   
-    console.error("An error in posting product", error);
-  }
-};
+        {
+          headers: {
+            Authorization: `Bearer ${String(adminToken)}`,
+          },
+          "Content-Type": "application/json",
+        }
+      );
 
+      console.log("Response from backend", response);
+    } catch (error) {
+      console.error("An error in posting product", error);
+    }
+  };
 
   useEffect(() => {
-  console.log("useEfft is runnning in new product")
+    console.log("useEfft is runnning in new product");
     const HandleFetch = async () => {
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
         );
 
-        
-
         if (response.status === 200) {
           setUploadedCat(response.data.data);
         }
       } catch (error) {
-        console.log("damn error", error)
+        console.log("damn error", error);
       }
     };
 
     HandleFetch();
-    
-  },[]);
+  }, []);
   return (
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
-          <form onSubmit={(e)=>postProduct(e)} className="relative bg-white rounded-lg shadow-md shadow-gray-300">
+          <form
+            onSubmit={(e) => postProduct(e)}
+            className="relative bg-white rounded-lg shadow-md shadow-gray-300"
+          >
             <div className="flex items-start justify-between p-5 border-b rounded-t">
               <h3 className="text-xl font-semibold">Add Product</h3>
               <button
@@ -247,7 +230,7 @@ console.log("Response headers", response.headers);
                       Product Details
                     </label>
                     <EditorProvider>
-                      <Editor value={html}  onChange={onChange}>
+                      <Editor value={html} onChange={onChange}>
                         <Toolbar>
                           <BtnBold />
                           <Separator />
@@ -295,7 +278,7 @@ console.log("Response headers", response.headers);
                   <div className="flex items-center justify-center w-full">
                     <div
                       className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
-                      onClick={() => handleOpen("lg")}
+                      onClick={() => handleOpen("lg", thumbnail)}
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
@@ -400,7 +383,7 @@ console.log("Response headers", response.headers);
                   <div className="flex items-center justify-center w-full">
                     <div
                       className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
-                      onClick={() => handleOpen("lg")}
+                      onClick={() => handleOpen("lg", gallery)}
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
@@ -436,18 +419,18 @@ console.log("Response headers", response.headers);
               </div>
             </div>
             <div className="p-6 border-t border-gray-200 rounded-b">
-              <Button
-                variant="black"
-                color="black"
-                type="submit"
-            
-              >
+              <Button variant="black" color="black" type="submit">
                 Save all
               </Button>
             </div>
           </form>
         </div>
-        <PopUpFilemanager handleOpen={handleOpen} size={size} />
+        <PopUpFilemanager
+          handleOpen={handleOpen}
+          size={size}
+          setThumbnail={setThumbnail}
+          setGallery={setGallery}
+        />
       </div>
     </div>
   );
