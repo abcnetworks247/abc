@@ -18,9 +18,12 @@ import {
 } from "react-simple-wysiwyg";
 
 export default function page() {
-    // dialog open state thaat is recieved from filemanger context
-    const {handleOpen, size } = UseFileManager()
+  // dialog open state thaat is recieved from filemanger context
+  const { handleOpen, size } = UseFileManager();
   const [html, setHtml] = useState("");
+  const [thumbn, setHtmThumbl] = useState("thumbn");
+  const [gallery, setGallery] = useState("gallery");
+
   const inputStyles = {
     textDecoration: "line-through",
     color: "gray", // Adjust the color as needed
@@ -31,8 +34,6 @@ export default function page() {
   return (
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
-
-
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
           <div className="relative bg-white rounded-lg shadow-md shadow-gray-300">
             <div className="flex items-start justify-between p-5 border-b rounded-t">
@@ -166,7 +167,10 @@ export default function page() {
                     </div>
                   </div>
                   <div className="flex items-center justify-center w-full">
-                    <div className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
+                    <div
+                      className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleOpen("lg")}
+                    >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -264,7 +268,10 @@ export default function page() {
                     </div>
                   </div>
                   <div className="flex items-center justify-center w-full">
-                    <div className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"  onClick={() => handleOpen("lg")}>
+                    <div
+                      className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleOpen("lg")}
+                    >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
                           className="w-10 h-10 text-gray-400"
@@ -300,7 +307,7 @@ export default function page() {
             </div>
           </div>
         </div>
-        <PopUpFilemanager handleOpen={handleOpen} size={size}  />
+        <PopUpFilemanager handleOpen={handleOpen} size={size} />
       </div>
     </div>
   );
