@@ -33,12 +33,16 @@ const TABS = [
     value: "all",
   },
   {
-    label: "Monitored",
-    value: "monitored",
+    label: "SuperAdmin",
+    value: "superadmin",
   },
   {
-    label: "Unmonitored",
-    value: "unmonitored",
+    label: "Admin",
+    value: "admin",
+  },
+  {
+    label: "Editor",
+    value: "editor",
   },
 ];
 
@@ -140,8 +144,8 @@ export default function Page() {
               </div>
             </div>
             <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-              <Tabs value="all" className="w-full md:w-max">
-                <TabsHeader>
+              <Tabs value="all" className="w-full md:w-[60%]">
+                <TabsHeader className="w-full">
                   {TABS.map(({ label, value }) => (
                     <Tab key={value} value={value}>
                       &nbsp;&nbsp;{label}&nbsp;&nbsp;
