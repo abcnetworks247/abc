@@ -68,7 +68,6 @@ const HandleUpload = (io) => {
     try {
       const fileBatch = await FileManager.find();
       socket.emit("filemanager", fileBatch);
-      console.log(fileBatch);
       // socket.disconnect();
     } catch (error) {
       console.error("Error fetching file batch:", error);

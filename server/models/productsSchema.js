@@ -15,9 +15,11 @@ const productSchema = new mongoose.Schema({
   },
   discountPercentage: {
     type: Number,
+    default: 0,
   },
   rating: {
     type: Number,
+    default: 0,
   },
   stock: { type: Number, required: true },
   brand: {
@@ -37,12 +39,15 @@ const productSchema = new mongoose.Schema({
   },
   color: {
     type: String,
+    default: "none"
   },
   warranty: {
-    type: String,
+    type: Number,
+    default: 0
   },
   weight: {
     type: Number,
+    default: 0,
   },
 });
 
