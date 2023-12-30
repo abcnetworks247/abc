@@ -2,8 +2,10 @@
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import { Button } from "@material-tailwind/react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   BtnBold,
   BtnItalic,
@@ -18,9 +20,28 @@ import {
 } from "react-simple-wysiwyg";
 
 export default function page() {
-  // dialog open state thaat is recieved from filemanger context
-  const { handleOpen, size } = UseFileManager();
+
+ 
+
+  const [uploadedCat, setUploadedCat] = useState(null)
+  console.log("newProduct", uploadedCat)
+    // dialog open state thaat is recieved from filemanger context
+    const {handleOpen, size } = UseFileManager()
   const [html, setHtml] = useState("");
+  
+
+  const [formData, setFormData] = useState({
+    title: "",
+    price: "",
+    discountPercentage: "",
+    rating: 4.4,
+    category: "",
+   
+  });
+
+  const [selectedPhoto, setSelectedPhoto] = useState(null)
+
+
   const [thumbn, setHtmThumbl] = useState("thumbn");
   const [gallery, setGallery] = useState("gallery");
 
@@ -31,6 +52,98 @@ export default function page() {
   function onChange(e) {
     setHtml(e.target.value);
   }
+
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+
+   const processedValue =
+       name === "price" || name === "discountPercentage"
+         ? parseFloat(value)
+         : value;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: processedValue,
+    }));
+  }
+
+  console.log(formData)
+  
+   
+
+const postProduct = async () => {
+   console.log("posting started")
+
+  try {
+   
+   const updatedFormData = {
+      title: formData.title,
+      price: formData.price,
+      discountPercentage: formData.discountPercentage,
+      rating: formData.rating,
+      category: formData.category,
+      description: html,
+      thumbnail:
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+      images: [
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+      ],
+    };
+
+
+    
+ console.log("Before validation:", typeof updatedFormData.images);
+    
+    console.log("updated form data", updatedFormData)
+  Object.entries(updatedFormData).forEach(([key, value]) => {
+    console.log(`${key}: ${typeof value}`);
+  });
+    const adminToken = Cookies.get("adminToken")
+
+  
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+      updatedFormData,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${adminToken}`,
+        },
+      }
+    );
+
+   
+    console.log("Response from backend", response);
+  } catch (error) {
+   
+    console.error("An error in posting product", error);
+  }
+};
+
+
+  useEffect(() => {
+  console.log("useEfft is runnning in new product")
+    const HandleFetch = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
+        );
+
+        
+
+        if (response.status === 200) {
+          setUploadedCat(response.data.data);
+        }
+      } catch (error) {
+        console.log("damn error", error)
+      }
+    };
+
+    HandleFetch();
+    
+  },[]);
   return (
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
@@ -45,7 +158,7 @@ export default function page() {
               ></button>
             </div>
             <div className="p-6 space-y-6">
-              <form action="#">
+              <form>
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-3">
                     <label
@@ -56,11 +169,12 @@ export default function page() {
                     </label>
                     <input
                       type="text"
-                      name="product-name"
-                      id="product-name"
+                      name="title"
+                      id="title"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Apple Imac 27”"
                       required=""
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </div>
                   <div className="col-span-6 sm:col-span-3">
@@ -70,14 +184,19 @@ export default function page() {
                     >
                       Category
                     </label>
-                    <input
-                      type="text"
+                    <select
+                      className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                       name="category"
                       id="category"
-                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
-                      placeholder="Electronics"
-                      required=""
-                    />
+                      required
+                      onChange={(e) => handleInputChange(e)}
+                    >
+                      <option>Select Category</option>
+                      {uploadedCat &&
+                        uploadedCat.map((item) => {
+                          return <option value={item.name}>{item.name}</option>;
+                        })}
+                    </select>
                   </div>
 
                   <div className="col-span-6 sm:col-span-3">
@@ -95,6 +214,7 @@ export default function page() {
                       placeholder="$2300"
                       style={inputStyles}
                       required=""
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </div>
 
@@ -107,11 +227,12 @@ export default function page() {
                     </label>
                     <input
                       type="number"
-                      name="discount"
-                      id="discount"
+                      name="discountPercentage"
+                      id="discountPercentage"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="$2300"
                       required=""
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </div>
                   <div className="col-span-full">
@@ -122,7 +243,7 @@ export default function page() {
                       Product Details
                     </label>
                     <EditorProvider>
-                      <Editor value={html} onChange={onChange}>
+                      <Editor value={html} v onChange={onChange}>
                         <Toolbar>
                           <BtnBold />
                           <Separator />
@@ -146,10 +267,11 @@ export default function page() {
                   <div className="flex my-4 space-x-5">
                     <div>
                       <img
-                        src="https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-3.png"
+                        src="https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png"
                         className="h-24"
                         alt="imac image"
                       />
+
                       <a href="#" className="cursor-pointer">
                         <svg
                           className="w-6 h-6 -mt-5 text-red-600"
@@ -193,7 +315,11 @@ export default function page() {
                           PNG, JPG, GIF up to 10MB
                         </p>
                       </div>
-                      <input type="file" className="hidden" />
+                      {/* <input
+                        type="file"
+                        name="thumbnail"
+                        onClick ={(e)=>handleThumbNail(e)}
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -294,14 +420,23 @@ export default function page() {
                           PNG, JPG, GIF up to 10MB
                         </p>
                       </div>
-                      <input type="file" className="hidden" />
+                      {/* <input
+                        type="file"
+                        name="images"
+                        onChange={(e) => handleInputChange(e)}
+                        multiple
+                      /> */}
                     </div>
                   </div>
                 </div>
               </form>
             </div>
             <div className="p-6 border-t border-gray-200 rounded-b">
-              <Button variant="black" color="black" type="submit">
+              <Button
+                variant="black"
+                color="black"
+                onClick={() => postProduct()}
+              >
                 Save all
               </Button>
             </div>
