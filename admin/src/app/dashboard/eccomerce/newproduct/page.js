@@ -243,7 +243,7 @@ const postProduct = async () => {
                       Product Details
                     </label>
                     <EditorProvider>
-                      <Editor value={html} v onChange={onChange}>
+                      <Editor value={html}  onChange={onChange}>
                         <Toolbar>
                           <BtnBold />
                           <Separator />
