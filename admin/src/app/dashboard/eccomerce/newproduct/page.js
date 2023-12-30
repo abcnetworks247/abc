@@ -111,7 +111,7 @@ export default function page() {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${adminToken}`,
+          Authorization: `Bearer ${String(adminToken)}`,
         },
       }
     );
