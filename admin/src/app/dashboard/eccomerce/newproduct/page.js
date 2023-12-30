@@ -71,7 +71,7 @@ export default function page() {
    
 
   const postProduct = async (e) => {
-  e.preventDefault()
+    e.preventDefault()
    console.log("posting started")
 
   try {
@@ -110,9 +110,9 @@ export default function page() {
 
       {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${String(adminToken)}`,
         },
+        "Content-Type": "application/json",
       }
     );
 
