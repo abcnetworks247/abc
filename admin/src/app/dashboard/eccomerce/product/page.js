@@ -1,4 +1,30 @@
+"use client"
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 export default function page() {
+  const [allProducts, setAllProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`); // Replace with your actual API endpoint
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        const products = await response.json();
+        setAllProducts(products);
+      } catch (error) {
+        console.error(error);
+        // Handle error, e.g., show an error message to the user
+      }
+    };
+
+    fetchData();
+  }, []); // The empty dependency array ensures the effect runs only once on mount
+  console.log("all Products", allProducts)
+
   return (
     <div>
       <div className="">

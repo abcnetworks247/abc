@@ -86,10 +86,7 @@ export default function page() {
 
       console.log("Before validation:", typeof updatedFormData.images);
 
-      console.log("updated form data", updatedFormData);
-      Object.entries(updatedFormData).forEach(([key, value]) => {
-        console.log(`${key}: ${typeof value}`);
-      });
+    
       const adminToken = Cookies.get("adminToken");
 
       const response = await axios.post(
