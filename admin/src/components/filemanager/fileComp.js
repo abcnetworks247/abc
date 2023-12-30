@@ -16,7 +16,7 @@ import { MdOutlineDelete } from "react-icons/md";
 import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const FileComp = ({ fileData }) => {
+const FileComp = ({fileData}) => {
   const [url, setUrl] = useState(null);
   const [id, setId] = useState(null);
   const [name, setName] = useState(null);
@@ -28,27 +28,8 @@ const FileComp = ({ fileData }) => {
 
   const [size, setSize] = React.useState(null);
 
-  const handleOpen = (value) => setSize(value);
+  const handleCheck = (value) => setSize(value);
 
-  // const OpenFileInfo = ({
-  //   secure_url,
-  //   _id,
-  //   originalname,
-  //   format,
-  //   width,
-  //   height,
-  //   created_at,
-  // }) => {
-
-    
-  //   // setUrl(newData.secure_url);
-  //   // setId(newData._id);
-  //   // setName(newData.originalname);
-  //   // setFileFormat(newData.format);
-  //   // setImageWidth(newData.width);
-  //   // setImageHeight(newData.height);
-  //   // setCreatedAt(newData.created_at);
-  // };
 
   return (
     <div>
@@ -103,22 +84,13 @@ const FileComp = ({ fileData }) => {
                 secure_url,
                 _id,
                 originalname,
-                format,
-                width,
-                height,
-                created_at,
               }) => (
                 <div
                   className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
                   key={_id}
                 >
                   <div
-                    className="cursor-pointer"
-                    onClick={() => {
-                      // let id = item._id;
-                      // OpenFileInfo(id);
-                      handleOpen("md")
-                    }}
+                    
                   >
                     <img
                       className="object-cover object-center w-full h-40 max-w-full rounded-lg"
@@ -131,8 +103,14 @@ const FileComp = ({ fileData }) => {
                     {originalname}
                   </span>
                   <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
-                    <Checkbox className="cursor-pointer" />
-                    <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" />
+                    <Checkbox className="cursor-pointer" onClick={() => {
+                      let id = item._id;
+                      OpenFileInfo(id);
+                    }}/>
+                    <MdOutlineDelete className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer" onClick={() => {
+                      let id = item._id;
+                      handleSingleDelete(id);
+                    }} />
                   </div>
 
                   

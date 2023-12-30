@@ -41,7 +41,7 @@ function UploadComp({ handleOpen, size }) {
       setUploadState("Uploading, please wait...");
       console.log("token", token);
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/file/upload`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/file/upload`,
         formData, // Pass the FormData directly as the second parameter
         {
           headers: {

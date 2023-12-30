@@ -319,7 +319,6 @@ const userUpdate = async (req, res) => {
   }
 };
 
-
 const currentUser = async (req, res) => {
   try {
     if (req.user) {
