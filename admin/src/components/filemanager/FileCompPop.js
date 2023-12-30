@@ -1,5 +1,7 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import {
   Button,
   CardFooter,
@@ -9,52 +11,78 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { IoAdd } from "react-icons/io5";
 
 const FileCompPop = () => {
   const [fileData, setFileData] = useState(null);
-  // const socket = io.connect(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [checkurl, setCheckUrl] = useState([]);
+  const [sortOption, setSortOption] = useState("newest");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const socket = io.connect(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
 
     const handleFileManagerUpdate = (data) => {
-      console.log("this is filemanager", data);
+      console.log("This is filemanager", data);
       setFileData(data);
     };
 
-    // Attach the event listener when the component mounts
     socket.on("filemanager", handleFileManagerUpdate);
 
-    // Cleanup the event listener when the component unmounts
     return () => {
       socket.off("filemanager", handleFileManagerUpdate);
     };
-  }, []); // Empty dependency array to run the effect only once
+  }, []);
 
   const itemsPerPage = 12;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [checkurl, setCheckUrl] = useState([]);
 
-  const handleFileCheck = function (imageurl) {
+  const handleFileCheck = (imageurl) => {
     let imgurl = String(imageurl);
 
-    if (!checkurl.includes(imgurl)) {
-      checkurl.unshift(imgurl);
-      console.log("This is the check array", checkurl);
-    } else {
-      const index = checkurl.indexOf(imgurl);
-      if (index !== -1) {
-        checkurl.splice(index, 1);
-        console.log("Removed from check array", checkurl);
+    setCheckUrl((prevCheckUrl) => {
+      if (!prevCheckUrl.includes(imgurl)) {
+        console.log("This is the check array", [imgurl, ...prevCheckUrl]);
+        return [imgurl, ...prevCheckUrl];
+      } else {
+        const filteredCheckUrl = prevCheckUrl.filter((url) => url !== imgurl);
+        console.log("Removed from check array", filteredCheckUrl);
+        return filteredCheckUrl;
       }
-    }
+    });
   };
 
+  const handleSortChange = (newSortOption) => {
+    setSortOption(newSortOption);
+    setSortOrder((prevSortOrder) => (prevSortOrder === "asc" ? "desc" : "asc"));
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const sortedItems = Array.isArray(fileData)
+    ? [...fileData].sort((a, b) => {
+        const aValue = a[sortOption] ?? "";
+        const bValue = b[sortOption] ?? "";
+
+        return sortOrder === "asc"
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      })
+    : [];
+
+    const filteredItems = (fileData || []).filter((item) => {
+      const originalname = item?.originalname || ""; // Ensure originalname is defined
+    
+      return originalname.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   if (!fileData) {
-    // If fileData is not available yet, you can return a loading state or null
     return (
       <div className="flex items-center justify-center h-full">
         <svg
@@ -78,14 +106,8 @@ const FileCompPop = () => {
           />
         </svg>
       </div>
-    ); // or return null;
+    );
   }
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = fileData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div>
@@ -105,11 +127,11 @@ const FileCompPop = () => {
               variant="outlined"
               label="Sort By:"
               className="text-gray-900"
+              value={sortOption}
+              onChange={(value) => handleSortChange(value)}
             >
               <Option className="text-gray-900">Sort By Newest</Option>
               <Option className="text-gray-900">Sort By Oldest</Option>
-              <Option className="text-gray-900">Sort By A-Z</Option>
-              <Option className="text-gray-900">Sort By Z-A</Option>
             </Select>
             <div className="relative flex w-full gap-2 md:w-max">
               <div className="relative h-10 w-full min-w-[288px]">
@@ -117,6 +139,8 @@ const FileCompPop = () => {
                   type="search"
                   className="peer h-full w-full rounded-[7px] border border-white border-t-transparent bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal  text-black outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-white focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                   placeholder="Search here..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <button
