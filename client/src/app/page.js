@@ -6,6 +6,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Marquee from "react-fast-marquee";
+import Cookies from "js-cookie";
 
 export default function Home() {
   const pathname = usePathname();
@@ -26,7 +27,12 @@ export default function Home() {
     }
   }, [pathname]); // Include pathname in the dependency array
 
- 
+  useEffect(() => {
+    const token = Cookies.get("authToken")
+    if (!token && typeof window !== undefined) {
+      window.location.reload()
+    }
+ },[])
 
   return (
     <main>
