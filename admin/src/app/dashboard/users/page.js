@@ -48,7 +48,7 @@ const TABLE_HEAD = ["Member", "Package", "Creation Date", ""];
 
 export default function Page() {
   const [open, setOpen] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
   const { users, isLoading, isError, isSuccess } = UseUserlist();
 
   console.log("tanstack users ", users);
@@ -59,8 +59,15 @@ export default function Page() {
   console.log(time.split("T")[0]);
   //cookies
   const authToken = Cookies.get("adminToken");
+const ITEMS_PER_PAGE = 10;
+
+const totalItems = users ? users.data.length : 0;
+const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
 
+const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+const endIndex = startIndex + ITEMS_PER_PAGE;
+const currentItems = users ? users.data.slice(startIndex, endIndex) : [];
 
   return (
     <>
@@ -156,7 +163,7 @@ export default function Page() {
               <tbody className="w-full">
                 <>
                   {users &&
-                    users.data.map(
+                    currentItems.map(
                       (
                         { userdp, fullname, email, userpackage, createdAt },
                         index
@@ -249,18 +256,20 @@ export default function Page() {
             </table>
           </CardBody>
           <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Typography
+          <Typography
               variant="small"
               color="blue-gray"
               className="font-normal"
             >
-              Page 1 of 10
+             Page {currentPage} of {totalPages}
             </Typography>
             <div className="flex gap-2">
-              <Button variant="outlined" size="sm">
+              <Button variant="outlined" size="sm"   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}>
                 Previous
               </Button>
-              <Button variant="outlined" size="sm">
+              <Button variant="outlined" size="sm"  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}>
                 Next
               </Button>
             </div>

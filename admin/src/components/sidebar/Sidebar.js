@@ -55,12 +55,13 @@ export default function Sidebar() {
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
           <a href="javascript:void(0)">
-            <Image src={Logo} alt="logo" width={100} height={100} />
+            <Image src={Logo} alt="logo" className="object-cover" width={100} height={100} />
           </a>
           <ul className="flex-1 my-3 space-y-1">
             <li>
               <Link
                 href="/dashboard"
+
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
               >
                 <svg
@@ -348,7 +349,7 @@ export default function Sidebar() {
                 src={UserValue && UserValue.userdp}
                 height={50}
                 width={50}
-                className="border-2 border-white rounded-full w-9 h-9"
+                className="border-2 object-cover border-white rounded-full w-9 h-9"
               />
               <div className="ml-4">
                 <p className="text-sm text-white">
