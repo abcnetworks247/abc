@@ -104,7 +104,7 @@ export default function FlowChart(){
 
     return(
         <>
-        <div className="relative flex flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+        <div className="relative flex w-fit flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
   <div className="relative mx-4 mt-4 flex flex-col gap-4 overflow-hidden rounded-none bg-transparent bg-clip-border text-gray-700 shadow-none md:flex-row md:items-center">
     <div className="w-max rounded-lg bg-gray-900 p-5 text-white">
       <svg

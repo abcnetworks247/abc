@@ -6,6 +6,7 @@ import {
   MenuItem,
   IconButton,
   Avatar,
+  Badge,
   Typography,
 } from "@material-tailwind/react";
 
@@ -30,7 +31,9 @@ function ClockIcon() {
 
 export default function NotificationsMenu() {
   return (
+ 
     <Menu>
+      <Badge content="5" className="top-2 right-2">
       <MenuHandler>
         <IconButton variant="text">
           <svg
@@ -47,6 +50,7 @@ export default function NotificationsMenu() {
           </svg>
         </IconButton>
       </MenuHandler>
+</Badge>
       <MenuList className="flex flex-col gap-2">
         <MenuItem className="flex items-center gap-4 py-2 pl-2 pr-8">
           <Avatar
