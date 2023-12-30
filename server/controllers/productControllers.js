@@ -40,22 +40,6 @@ const createProduct = async (req, res) => {
       weight,
     } = req.body;
 
-    console.log(`
-  Title: ${title},
-  Description: ${description},
-  Price: ${price},
-  Discount Percentage: ${discountPercentage},
-  Rating: ${rating},
-  Stock: ${stock},
-  Brand: ${brand},
-  Category: ${category},
-  Thumbnail: ${thumbnail},
-  Images: ${images},
-  Color: ${color},
-  Warranty: ${warranty},
-  Weight: ${weight}
-`);
-
     // Construct an object with the extracted data
     const productData = {
       title,
@@ -197,20 +181,21 @@ const updateProduct = async (req, res) => {
 //delete product from the database
 const deleteProduct = async (req, res) => {
   try {
-    // Assuming you have middleware to authenticate and authorize users
-    if (
-      !req.user ||
-      (req.user.role !== "superadmin" && req.user.role !== "admin")
-    ) {
-      return res
-        .status(403)
-        .json({ error: "Unauthorized: Only admins can delete products" });
+    // Authenticate and authorize the user
+    const user = req.user;
+
+    if (!user) {
+      throw new UnAuthorizedError("You must be logged in to access this page.");
     }
 
-    const productId = req.params.id;
+    if (!["superadmin", "admin"].includes(user.role)) {
+      throw new UnAuthorizedError("You are not authorized to access this page.");
+    }
 
-    // Find the existing product by ID
-    const existingProduct = await Product.findById(productId);
+    const { id } = req.body;
+
+    // Find the product by ID
+    const existingProduct = await Product.findById(id);
 
     if (!existingProduct) {
       return res
@@ -218,7 +203,7 @@ const deleteProduct = async (req, res) => {
         .json({ error: "Product not found" });
     }
 
-    // Delete the product from the database
+    // Remove the product from the database
     await existingProduct.remove();
 
     res
@@ -231,6 +216,7 @@ const deleteProduct = async (req, res) => {
       .json({ error: "Internal Server Error" });
   }
 };
+
 
 //getting sinlge products based on the user parameters
 const getSingleProduct = async (req, res) => {
