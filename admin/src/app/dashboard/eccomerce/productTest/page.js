@@ -193,7 +193,7 @@ export default function page() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    <tr className="hover:bg-gray-100">
+                    {/* <tr className="hover:bg-gray-100">
                       <td className="p-4 w-4">
                         <div className="flex items-center">
                           <input
@@ -278,7 +278,7 @@ export default function page() {
                           Delete item
                         </button>
                       </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </div>
