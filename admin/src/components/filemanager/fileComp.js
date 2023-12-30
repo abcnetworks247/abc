@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import {
   Button,
   CardFooter,
@@ -9,14 +10,16 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
-import React, { useEffect, useState } from "react";
-import io from "socket.io-client";
 import Swal from "sweetalert2";
+import axios from "axios"; // Make sure to import axios
 
-const FileComp = ({ fileData }) => {
+const FileComp = ({ fileData, token }) => {
   const itemsPerPage = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const [checkurl, setCheckUrl] = useState([]);
+  const [sortOption, setSortOption] = useState("newest"); // Default sorting option
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleFileCheck = function (imageurl) {
     let imgurl = String(imageurl);
@@ -33,100 +36,87 @@ const FileComp = ({ fileData }) => {
     });
   };
 
-  const handleSingleDelete = function (id) {
+  const handleSingleDelete = async function (id) {
     console.log("this is the image id", id);
-    Swal.fire({
-      title: "Are you sure?",
-      text: "your file will be deleted after this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#000000",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          const response = axios.delete(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/account`,
-            {
-              headers: {
-                Authorization: `Bearer ${String(token)}`,
-              },
-            }
-          );
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/auth/account`,
+        {
+          headers: {
+            Authorization: `Bearer ${String(token)}`,
+          },
+        }
+      );
 
-          if (response.status !== 200) {
-            console.log("opps something went wrong, try again");
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Something went wrong!",
-              footer: '<a href="#">Why do I have this issue?</a>',
-            });
-          }
-
-          Cookies.remove("authtoken");
-          if (typeof window !== "undefined") {
-            window.location.reload();
-          }
-
-          Swal.fire({
-            title: "We hate to see you go!",
-            text: "Your account has been deleted",
-            icon: "success",
-          });
-        } catch (error) {}
+      if (response.status !== 200) {
+        console.log("Oops, something went wrong. Please try again.");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+          footer: '<a href="#">Why do I have this issue?</a>',
+        });
       }
-    });
+
+      Cookies.remove("authtoken");
+      if (typeof window !== "undefined") {
+        window.location.reload();
+      }
+
+      Swal.fire({
+        title: "We hate to see you go!",
+        text: "Your account has been deleted",
+        icon: "success",
+      });
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
   };
 
   const handleSelectAll = () => {
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = fileData.slice(indexOfFirstItem, indexOfLastItem);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = fileData.slice(indexOfFirstItem, indexOfLastItem);
 
-  const allImageUrls = currentItems.map((item) => String(item.secure_url));
+    const allImageUrls = currentItems.map((item) => String(item.secure_url));
 
-  if (checkurl.length === allImageUrls.length) {
-    // If all items on the current page are already selected, clear the array
-    setCheckUrl([]);
-  } else {
-    // If not all items on the current page are selected, add them to the array
-    setCheckUrl(allImageUrls);
-  }
-};
+    // Update the state by merging existing checkurl with new URLs
+    setCheckUrl((prevCheckurl) => {
+      const updatedCheckUrl =
+        prevCheckurl.length === allImageUrls.length ? [] : [...allImageUrls];
+      console.log("Updated checkurl:", updatedCheckUrl);
+      return updatedCheckUrl;
+    });
+  };
 
-  if (!fileData) {
-    // If fileData is not available yet, you can return a loading state or null
-    return (
-      <div className="flex items-center justify-center h-full">
-        <svg
-          className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-          />
-        </svg>
-      </div>
-    ); // or return null;
-  }
+  const handleSortChange = (newSortOption) => {
+    setSortOption(newSortOption);
+    // Set the default order to ascending when a new option is selected
+    setSortOrder("asc");
+  };
+
+  // Sorting logic
+  const sortedItems = Array.isArray(fileData)
+    ? [...fileData].sort((a, b) => {
+        const aValue = a[sortOption] ?? "";
+        const bValue = b[sortOption] ?? "";
+
+        if (sortOrder === "asc") {
+          return aValue.localeCompare(bValue);
+        } else {
+          return bValue.localeCompare(aValue);
+        }
+      })
+    : [];
+
+  // Filtering logic
+  const filteredItems = sortedItems.filter((item) =>
+    item.originalname.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = fileData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -138,7 +128,7 @@ const FileComp = ({ fileData }) => {
             <Checkbox
               label="Select All"
               className="text-gray-900"
-              checked={checkurl.length === fileData.length}
+              checked={checkurl.length === currentItems.length}
               onChange={handleSelectAll}
             />
           </div>
@@ -156,11 +146,15 @@ const FileComp = ({ fileData }) => {
                 variant="outlined"
                 label="Sort By:"
                 className="text-gray-900"
+                value={sortOption}
+                onChange={(value) => handleSortChange(value)}
               >
-                <Option className="text-gray-900">Sort By Newest</Option>
-                <Option className="text-gray-900">Sort By Oldest</Option>
-                <Option className="text-gray-900">Sort By A-Z</Option>
-                <Option className="text-gray-900">Sort By Z-A</Option>
+                <Option value="newest" className="text-gray-900">
+                  Sort By Newest
+                </Option>
+                <Option value="oldest" className="text-gray-900">
+                  Sort By Oldest
+                </Option>
               </Select>
             </div>
             <div className="relative flex w-full gap-2 md:w-max">
@@ -169,10 +163,12 @@ const FileComp = ({ fileData }) => {
                   type="search"
                   className="peer h-full w-full rounded-[7px] border border-white border-t-transparent bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal  text-black outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-white focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                   placeholder="Search here..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <button
-                className="!absolute right-1 top-1 select-none rounded bg-blue-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-gray-500/10 transition-all hover:shadow-lg hover:shadow-blue-gray-500/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                className="!absolute right-1 top-1 select-none rounded bg-blue-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-gray-500/10 transition-all hover:shadow-lg hover:shadow-blue-gray-500/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer :opacity-50 disabled:shadow-none"
                 type="button"
               >
                 Search
@@ -202,6 +198,7 @@ const FileComp = ({ fileData }) => {
                 <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
                   <Checkbox
                     className="cursor-pointer"
+                    checked={checkurl.includes(secure_url)}
                     onChange={() => {
                       let imageurl = secure_url;
                       handleFileCheck(imageurl);
@@ -224,7 +221,8 @@ const FileComp = ({ fileData }) => {
 
         <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
           <Typography variant="small" color="blue-gray" className="font-normal">
-            Page {currentPage} of {Math.ceil(fileData.length / itemsPerPage)}
+            Page {currentPage} of{" "}
+            {Math.ceil(filteredItems.length / itemsPerPage)}
           </Typography>
           <div className="flex gap-2">
             <Button
@@ -239,7 +237,7 @@ const FileComp = ({ fileData }) => {
               variant="outlined"
               size="sm"
               onClick={() => paginate(currentPage + 1)}
-              disabled={indexOfLastItem >= fileData.length}
+              disabled={indexOfLastItem >= filteredItems.length}
             >
               Next
             </Button>
