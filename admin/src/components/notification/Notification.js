@@ -51,7 +51,7 @@ export default function NotificationsMenu() {
         </IconButton>
       </MenuHandler>
 </Badge>
-      <MenuList className="flex flex-col gap-2">
+      <MenuList className="flex flex-col gap-2 h-[fit] max-h-64 overflow-x-auto">
         <MenuItem className="flex items-center gap-4 py-2 pl-2 pr-8">
           <Avatar
             variant="circular"

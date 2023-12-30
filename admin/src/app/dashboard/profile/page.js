@@ -157,7 +157,14 @@ export default function Page() {
                 <Typography variant="h6" color="blue-gray" className="mb-2">
                   My Posts
                 </Typography>
+                {currentItems.length === 0?
+                  <div>
+                    <h1>You don't have any Post Yet</h1>
+                  </div>
+                  : 
+                  <></>
 
+                }
                 <div className="mt-6 grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-4">
                   {CurrentUser &&
                     currentItems.map(

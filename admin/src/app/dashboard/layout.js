@@ -3,6 +3,7 @@ import React from "react";
 import HocsessionNotAuth from "@/utils/HocsessionNotAuth";
 import { ComplexNavbar } from "@/components/navbar/Navbar";
 import Sidebar from "@/components/sidebar/Sidebar";
+
  function Layout({ children }) {
   return (
     <div>
@@ -10,7 +11,9 @@ import Sidebar from "@/components/sidebar/Sidebar";
         <Sidebar />
         <div className="w-[100%] flex flex-col">
           <ComplexNavbar />
-          {children}
+          
+            {children}
+          
         </div>
       </main>
     </div>
