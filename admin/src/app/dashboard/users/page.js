@@ -39,9 +39,25 @@ const TABS = [
     value: "Subscriptions",
   },
   {
-    label: "Subscribe",
-    value: "unmonitored",
+    label: "Coper",
+    value: "coper",
   },
+  {
+    label: "Silver",
+    value: "silver",
+  },
+  {
+    label: "Gold",
+    value: "gold",
+  },
+  {
+    label: "Diamond",
+    value: "diamond",
+  },
+  {
+    label: "Titanium",
+    value: "titanium",
+  }
 ];
 
 const TABLE_HEAD = ["Member", "Package", "Creation Date", ""];
@@ -59,15 +75,14 @@ export default function Page() {
   console.log(time.split("T")[0]);
   //cookies
   const authToken = Cookies.get("adminToken");
-const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 10;
 
-const totalItems = users ? users.data.length : 0;
-const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const totalItems = users ? users.data.length : 0;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-
-const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-const endIndex = startIndex + ITEMS_PER_PAGE;
-const currentItems = users ? users.data.slice(startIndex, endIndex) : [];
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = users ? users.data.slice(startIndex, endIndex) : [];
 
   return (
     <>
@@ -116,7 +131,15 @@ const currentItems = users ? users.data.slice(startIndex, endIndex) : [];
                 </Button>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+            <div className=" w-full flex justify-end mb-4">
+              <div className="w-72 flex justify-end">
+                <Input
+                  label="Search"
+                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col flex-c items-center justify-between gap-4 md:flex-row">
               <Tabs value="all" className="w-full md:w-max">
                 <TabsHeader>
                   {TABS.map(({ label, value }) => (
@@ -126,12 +149,6 @@ const currentItems = users ? users.data.slice(startIndex, endIndex) : [];
                   ))}
                 </TabsHeader>
               </Tabs>
-              <div className="w-full md:w-72">
-                <Input
-                  label="Search"
-                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                />
-              </div>
             </div>
           </CardHeader>
           <CardBody className="overflow-x-scroll px-0">
@@ -256,20 +273,30 @@ const currentItems = users ? users.data.slice(startIndex, endIndex) : [];
             </table>
           </CardBody>
           <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-          <Typography
+            <Typography
               variant="small"
               color="blue-gray"
               className="font-normal"
             >
-             Page {currentPage} of {totalPages}
+              Page {currentPage} of {totalPages}
             </Typography>
             <div className="flex gap-2">
-              <Button variant="outlined" size="sm"   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
                 Previous
               </Button>
-              <Button variant="outlined" size="sm"  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
                 Next
               </Button>
             </div>

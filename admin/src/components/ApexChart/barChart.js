@@ -105,7 +105,7 @@ export default function BarChart() {
 
 
     return (
-      <Card>
+      <Card className="w-fit">
         <CardHeader
           floated={false}
           shadow={false}
