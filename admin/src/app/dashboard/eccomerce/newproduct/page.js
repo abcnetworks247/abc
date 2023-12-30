@@ -20,15 +20,11 @@ import {
 } from "react-simple-wysiwyg";
 
 export default function page() {
-
- 
-
-  const [uploadedCat, setUploadedCat] = useState(null)
-  console.log("newProduct", uploadedCat)
-    // dialog open state thaat is recieved from filemanger context
-    const {handleOpen, size } = UseFileManager()
+  const [uploadedCat, setUploadedCat] = useState(null);
+  console.log("newProduct", uploadedCat);
+  // dialog open state thaat is recieved from filemanger context
+  const { handleOpen, size } = UseFileManager();
   const [html, setHtml] = useState("");
-  
 
   const [formData, setFormData] = useState({
     title: "",
@@ -36,13 +32,11 @@ export default function page() {
     discountPercentage: "",
     rating: 4.4,
     category: "",
-   
   });
 
-  const [selectedPhoto, setSelectedPhoto] = useState(null)
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-
-  const [thumbn, setHtmThumbl] = useState("thumbn");
+  const [thumbnail, setThumbnail] = useState("thumbn");
   const [gallery, setGallery] = useState("gallery");
 
   const inputStyles = {
@@ -56,94 +50,82 @@ export default function page() {
   function handleInputChange(e) {
     const { name, value } = e.target;
 
-   const processedValue =
-       name === "price" || name === "discountPercentage"
-         ? parseFloat(value)
-         : value;
+    const processedValue =
+      name === "price" || name === "discountPercentage"
+        ? parseFloat(value)
+        : value;
     setFormData((prevData) => ({
       ...prevData,
       [name]: processedValue,
     }));
   }
 
-  console.log(formData)
-  
-   
+  console.log(formData);
 
-const postProduct = async () => {
-   console.log("posting started")
+  const postProduct = async () => {
+    console.log("posting started");
 
-  try {
-   
-   const updatedFormData = {
-      title: formData.title,
-      price: formData.price,
-      discountPercentage: formData.discountPercentage,
-      rating: formData.rating,
-      category: formData.category,
-      description: html,
-      thumbnail:
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-      images: [
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-        "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
-      ],
-    };
+    try {
+      const updatedFormData = {
+        title: formData.title,
+        price: formData.price,
+        discountPercentage: formData.discountPercentage,
+        rating: formData.rating,
+        category: formData.category,
+        description: html,
+        thumbnail:
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        images: [
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+          "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
+        ],
+      };
 
+      console.log("Before validation:", typeof updatedFormData.images);
 
-    
- console.log("Before validation:", typeof updatedFormData.images);
-    
-    console.log("updated form data", updatedFormData)
-  Object.entries(updatedFormData).forEach(([key, value]) => {
-    console.log(`${key}: ${typeof value}`);
-  });
-    const adminToken = Cookies.get("adminToken")
+      console.log("updated form data", updatedFormData);
+      Object.entries(updatedFormData).forEach(([key, value]) => {
+        console.log(`${key}: ${typeof value}`);
+      });
+      const adminToken = Cookies.get("adminToken");
 
-  
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
-      updatedFormData,
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+        updatedFormData,
 
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${adminToken}`,
-        },
-      }
-    );
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
+      );
 
-   
-    console.log("Response from backend", response);
-  } catch (error) {
-   
-    console.error("An error in posting product", error);
-  }
-};
-
+      console.log("Response from backend", response);
+    } catch (error) {
+      console.error("An error in posting product", error);
+    }
+  };
 
   useEffect(() => {
-  console.log("useEfft is runnning in new product")
+    console.log("useEfft is runnning in new product");
     const HandleFetch = async () => {
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
         );
 
-        
-
         if (response.status === 200) {
           setUploadedCat(response.data.data);
         }
       } catch (error) {
-        console.log("damn error", error)
+        console.log("damn error", error);
       }
     };
 
     HandleFetch();
-    
-  },[]);
+  }, []);
   return (
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
@@ -291,7 +273,7 @@ const postProduct = async () => {
                   <div className="flex items-center justify-center w-full">
                     <div
                       className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
-                      onClick={() => handleOpen("lg")}
+                      onClick={() => handleOpen("lg", thumbnail)}
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
@@ -396,7 +378,7 @@ const postProduct = async () => {
                   <div className="flex items-center justify-center w-full">
                     <div
                       className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
-                      onClick={() => handleOpen("lg")}
+                      onClick={() => handleOpen("lg", gallery)}
                     >
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <svg
@@ -442,7 +424,7 @@ const postProduct = async () => {
             </div>
           </div>
         </div>
-        <PopUpFilemanager handleOpen={handleOpen} size={size} />
+        <PopUpFilemanager handleOpen={handleOpen} size={size} setThumbnail={setThumbnail} setGallery={setGallery} />
       </div>
     </div>
   );
