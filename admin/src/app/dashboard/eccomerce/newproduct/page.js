@@ -63,7 +63,7 @@ export default function page() {
   console.log(formData);
 
   const postProduct = async (e) => {
-  e.preventDefault()
+    e.preventDefault()
    console.log("posting started")
 
   try {
@@ -101,9 +101,9 @@ export default function page() {
 
       {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${adminToken}`,
+          Authorization: `Bearer ${String(adminToken)}`,
         },
+        "Content-Type": "application/json",
       }
     );
 
