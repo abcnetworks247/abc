@@ -102,7 +102,7 @@ export default function page() {
     console.log(`${key}: ${typeof value}`);
   });
     const adminToken = Cookies.get("adminToken")
-
+ 
   
     const response = await axios.post(
       `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
