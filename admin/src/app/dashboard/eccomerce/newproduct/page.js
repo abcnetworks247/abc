@@ -70,7 +70,8 @@ export default function page() {
   
    
 
-const postProduct = async () => {
+  const postProduct = async (e) => {
+  e.preventDefault()
    console.log("posting started")
 
   try {
@@ -82,6 +83,7 @@ const postProduct = async () => {
       rating: formData.rating,
       category: formData.category,
       description: html,
+      stock:25,
       thumbnail:
         "https://demos.creative-tim.com/soft-ui-flowbite-pro/images/products/apple-imac-1.png",
       images: [
@@ -115,7 +117,9 @@ const postProduct = async () => {
     );
 
    
-    console.log("Response from backend", response);
+    
+console.log("Response from backend", response.data);
+console.log("Response headers", response.headers);
   } catch (error) {
    
     console.error("An error in posting product", error);
@@ -148,7 +152,7 @@ const postProduct = async () => {
     <div>
       <div className="grid max-w-2xl mx-auto mt-8">
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
-          <div className="relative bg-white rounded-lg shadow-md shadow-gray-300">
+          <form onSubmit={(e)=>postProduct(e)} className="relative bg-white rounded-lg shadow-md shadow-gray-300">
             <div className="flex items-start justify-between p-5 border-b rounded-t">
               <h3 className="text-xl font-semibold">Add Product</h3>
               <button
@@ -158,7 +162,7 @@ const postProduct = async () => {
               ></button>
             </div>
             <div className="p-6 space-y-6">
-              <form>
+              <div>
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-3">
                     <label
@@ -429,18 +433,19 @@ const postProduct = async () => {
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
             <div className="p-6 border-t border-gray-200 rounded-b">
               <Button
                 variant="black"
                 color="black"
-                onClick={() => postProduct()}
+                type="submit"
+            
               >
                 Save all
               </Button>
             </div>
-          </div>
+          </form>
         </div>
         <PopUpFilemanager handleOpen={handleOpen} size={size} />
       </div>
