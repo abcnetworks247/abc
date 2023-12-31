@@ -8,27 +8,32 @@ export default function page() {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 5;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
-        );
+const fetchData = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
+    );
 
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch products");
-        }
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch products");
+    }
 
-        const products = response.data; // Access data property of the response
-        setAllProducts(products);
-      } catch (error) {
-        console.error(error.message);
-      
-      }
-    };
+    const products = response.data;
+    setAllProducts(products);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
-    fetchData();
-  }, []); // The empty dependency array ensures the effect runs only once on mount
+useEffect(() => {
+  fetchData();
+}, []);
+
+const handleRefresh = () => {
+  fetchData();
+  };
+  
+  
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -225,6 +230,7 @@ export default function page() {
                         category={product.category}
                         id={product._id}
                         price={product.price}
+                        handleRefresh={handleRefresh}
                       />
                     ))}
                   </tbody>

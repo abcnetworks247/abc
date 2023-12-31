@@ -4,31 +4,37 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 
-const ProductInfo = ({ title, category, id, price }) => {
+const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
 
-    
-    const handleDelete = async () => {
+
+    const handleDelete = async (productId) => {
         try {
-          const adminToken = Cookies.get("adminToken")
+            const adminToken = Cookies.get("adminToken")
+            console.log("Admin Token:", adminToken);
         const response = await axios.delete(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${id}`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+
           {
             headers: {
               Authorization: `Bearer ${String(adminToken)}`,
+              "Content-Type": "application/json",
             },
+
+            data: { id: productId },
           }
         );
 
         if (response.status === 204) {
           // Product deleted successfully
           // You may want to update the UI or take any other necessary actions
-          console.log("Product deleted successfully");
+            console.log("Product deleted successfully");
+            handleRefresh()
         } else {
           console.error("Failed to delete product");
           // Handle error, e.g., show an error message to the user
         }
       } catch (error) {
-        console.error(error);
+        console.error("Damn it", error);
         // Handle error, e.g., show an error message to the user
       }
     };
@@ -49,12 +55,8 @@ const ProductInfo = ({ title, category, id, price }) => {
           </div>
         </td>
         <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-          <div className="text-base font-semibold text-gray-900">
-           {title}
-          </div>
-          <div className="text-sm font-normal text-gray-500">
-          {category}
-          </div>
+          <div className="text-base font-semibold text-gray-900">{title}</div>
+          <div className="text-sm font-normal text-gray-500">{category}</div>
         </td>
         <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">
           {"{"}
@@ -62,10 +64,10 @@ const ProductInfo = ({ title, category, id, price }) => {
           {"}"}
         </td>
         <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">
-         {id}
+          {id}
         </td>
         <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">
-        {price}
+          {price}
         </td>
         <td className="p-4 whitespace-nowrap space-x-2">
           <button
@@ -88,8 +90,8 @@ const ProductInfo = ({ title, category, id, price }) => {
             </svg>
             Edit item
           </button>
-           <button
-             onClick={handleDelete}        
+          <button
+            onClick={() => handleDelete(id)}
             type="button"
             data-modal-toggle="delete-product-modal"
             className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
