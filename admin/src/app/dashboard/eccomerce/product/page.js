@@ -5,28 +5,54 @@ import ProductInfo from "@/components/Products/ProductInfo";
 
 export default function page() {
   const [allProducts, setAllProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 5;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
-        );
+const fetchData = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
+    );
 
-        if (response.status !== 200) {
-          throw new Error("Failed to fetch products");
-        }
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch products");
+    }
 
-        const products = response.data; // Access data property of the response
-        setAllProducts(products);
-      } catch (error) {
-        console.error(error.message);
-      
-      }
-    };
+    const products = response.data;
+    setAllProducts(products);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
-    fetchData();
-  }, []); // The empty dependency array ensures the effect runs only once on mount
+useEffect(() => {
+  fetchData();
+}, []);
+
+const handleRefresh = () => {
+  fetchData();
+  };
+  
+  
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = allProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+
+   const handleNextPage = () => {
+     if (indexOfLastProduct < allProducts.length) {
+       setCurrentPage((prevPage) => prevPage + 1);
+     }
+   };
+
+   const handlePrevPage = () => {
+     if (currentPage > 1) {
+       setCurrentPage((prevPage) => prevPage - 1);
+     }
+   };
 
   console.log("all Products", allProducts);
 
@@ -197,15 +223,16 @@ export default function page() {
                   </thead>
 
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {allProducts.map(product =>
+                    {currentProducts.map((product) => (
                       <ProductInfo
                         key={product._id}
                         title={product.title}
                         category={product.category}
                         id={product._id}
                         price={product.price}
+                        handleRefresh={handleRefresh}
                       />
-                    )}
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -251,13 +278,20 @@ export default function page() {
             </svg>
           </a>
           <span className="text-sm font-normal text-gray-500">
-            Showing <span className="text-gray-900 font-semibold">1-20</span> of{" "}
-            <span className="text-gray-900 font-semibold">2290</span>
+            Showing{" "}
+            <span className="text-gray-900 font-semibold">
+              {indexOfFirstProduct + 1}-
+              {Math.min(indexOfLastProduct, allProducts.length)}
+            </span>{" "}
+            of{" "}
+            <span className="text-gray-900 font-semibold">
+              {allProducts.length}
+            </span>
           </span>
         </div>
         <div className="flex items-center space-x-3">
           <a
-            href="#"
+            onClick={handlePrevPage}
             className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center"
           >
             <svg
@@ -275,7 +309,7 @@ export default function page() {
             Previous
           </a>
           <a
-            href="#"
+            onClick={handleNextPage}
             className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center"
           >
             Next
