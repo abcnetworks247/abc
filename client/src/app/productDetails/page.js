@@ -97,7 +97,7 @@ const page = () => {
                     style={{ height: "450px" }}
                   >
                     <img
-                      src={localSelectedProduct && localSelectedProduct.image}
+                      src={localSelectedProduct && localSelectedProduct.thumbnail}
                       alt=""
                       className="object-contain w-full h-full "
                     />
@@ -110,7 +110,7 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.image
+                            localSelectedProduct && localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -124,7 +124,7 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.image
+                            localSelectedProduct && localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -138,7 +138,7 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.image
+                            localSelectedProduct && localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -152,7 +152,7 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.image
+                            localSelectedProduct && localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -176,7 +176,7 @@ const page = () => {
                         {Array(5)
                           .fill()
                           .map((_, i) => {
-                            const rating = localSelectedProduct.rating.rate;
+                            const rating = localSelectedProduct.rating;
                             const filledStars = Math.floor(rating);
                             const hasHalfStar = rating - filledStars >= 0.5;
 
@@ -225,7 +225,7 @@ const page = () => {
                         visitors right now!{" "}
                       </h2>
                       <div className="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">
-                        Hurry up! left 23 in Stock
+                        Hurry up! left {localSelectedProduct.stock} in Stock
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2.5  dark:bg-gray-600">
                         <div
