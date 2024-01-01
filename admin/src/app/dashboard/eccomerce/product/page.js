@@ -1,39 +1,40 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ProductInfo from "@/components/Products/ProductInfo";
+import { Button } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
 
 export default function page() {
   const [allProducts, setAllProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 5;
+  const router = useRouter()
 
-const fetchData = async () => {
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
-    );
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
+      );
 
-    if (response.status !== 200) {
-      throw new Error("Failed to fetch products");
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch products");
+      }
+
+      const products = response.data;
+      setAllProducts(products);
+    } catch (error) {
+      console.error(error.message);
     }
-
-    const products = response.data;
-    setAllProducts(products);
-  } catch (error) {
-    console.error(error.message);
-  }
-};
-
-useEffect(() => {
-  fetchData();
-}, []);
-
-const handleRefresh = () => {
-  fetchData();
   };
-  
-  
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleRefresh = () => {
+    fetchData();
+  };
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -42,17 +43,21 @@ const handleRefresh = () => {
     indexOfLastProduct
   );
 
-   const handleNextPage = () => {
-     if (indexOfLastProduct < allProducts.length) {
-       setCurrentPage((prevPage) => prevPage + 1);
-     }
-   };
+  const handleNextPage = () => {
+    if (indexOfLastProduct < allProducts.length) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
 
-   const handlePrevPage = () => {
-     if (currentPage > 1) {
-       setCurrentPage((prevPage) => prevPage - 1);
-     }
-   };
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
+  const handleNewProduct = () => {
+    router.push("/dashboard/eccomerce/newproduct")
+  }
 
   console.log("all Products", allProducts);
 
@@ -148,13 +153,13 @@ const handleRefresh = () => {
                     </svg>
                   </a>
                 </div>
-                <button
-                  type="button"
-                  data-modal-toggle="add-product-modal"
-                  className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center rounded-lg text-sm px-3 py-2 text-center sm:ml-auto"
+                <Button
+                  variant="gradient"
+                  className="flex flex-row items-center gap-1"
+                  onClick={handleNewProduct}
                 >
                   <svg
-                    className="-ml-1 mr-2 h-6 w-6"
+                    className="h-6 w-6"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +171,7 @@ const handleRefresh = () => {
                     />
                   </svg>
                   Add product
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -290,9 +295,10 @@ const handleRefresh = () => {
           </span>
         </div>
         <div className="flex items-center space-x-3">
-          <a
+          <Button
             onClick={handlePrevPage}
-            className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center"
+            variant="gradient"
+            className="flex flex-row items-center gap-1"
           >
             <svg
               className="-ml-1 mr-1 h-5 w-5"
@@ -307,10 +313,11 @@ const handleRefresh = () => {
               />
             </svg>
             Previous
-          </a>
-          <a
+          </Button>
+          <Button
             onClick={handleNextPage}
-            className="flex-1 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium inline-flex items-center justify-center rounded-lg text-sm px-3 py-2 text-center"
+            variant="gradient"
+            className="flex flex-row items-center gap-1"
           >
             Next
             <svg
@@ -325,7 +332,7 @@ const handleRefresh = () => {
                 clipRule="evenodd"
               />
             </svg>
-          </a>
+          </Button>
         </div>
       </div>
     </div>
