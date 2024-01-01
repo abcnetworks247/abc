@@ -25,7 +25,7 @@ const getAllBlog = async (req, res) => {
       .populate("author", "fullname username userdp");
 
     const highlight = await blog
-      .find({ type: "top" })
+      .find({ type: "highlight" })
       .populate("author", "fullname username userdp");
 
     const popular = await blog
@@ -37,7 +37,7 @@ const getAllBlog = async (req, res) => {
       .populate("author", "fullname username userdp");
 
     const trending = await blog
-      .find({ type: "top" })
+      .find({ type: "trending" })
       .populate("author", "fullname username userdp");
 
     if (allblog.length === 0) {
