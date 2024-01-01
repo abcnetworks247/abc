@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const ProductJoiSchema = Joi.object({
   title: Joi.string().required(),
@@ -7,13 +7,14 @@ const ProductJoiSchema = Joi.object({
   discountPercentage: Joi.number().default(0),
   rating: Joi.number().default(0),
   stock: Joi.number().required(),
-  brand: Joi.string(),
+  brand: Joi.string().default("none"),
   category: Joi.string().required(),
   thumbnail: Joi.string().required(),
   images: Joi.array().items(Joi.string()).required(),
-  color: Joi.string().default('none'),
+  color: Joi.string().default("none"),
   warranty: Joi.number().default(0),
   weight: Joi.number().default(0),
 });
 
 module.exports = ProductJoiSchema;
+

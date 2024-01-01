@@ -57,6 +57,20 @@ const createProduct = async (req, res) => {
       weight,
     };
 
+    console.log("Title:", title);
+    console.log("Description:", description);
+    console.log("Price:", price);
+    console.log("Discount Percentage:", discountPercentage);
+    console.log("Rating:", rating);
+    console.log("Stock:", stock);
+    console.log("Brand:", brand);
+    console.log("Category:", category);
+    console.log("Thumbnail:", thumbnail);
+    console.log("Images:", images);
+    console.log("Color:", color);
+    console.log("Warranty:", warranty);
+    console.log("Weight:", weight);
+
     // Validate the request body against the Joi schema
     const { error, value } = ProductJoi.validate(productData);
 
@@ -65,7 +79,7 @@ const createProduct = async (req, res) => {
     }
 
     // Save the product to the database
-    const savedProduct = await Product.create(value);
+    await Product.create(value);
 
     res
       .status(StatusCodes.CREATED)
