@@ -6,43 +6,44 @@ import FooterComp from "@/components/Footer/FooterComp";
 import { ProductContext } from "../../../contexts/productContext";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
+import parse from "html-react-parser";
 import ProductSkeleton from "./ProductSkeleton";
+
 const page = () => {
-    const router = useRouter();
+  const router = useRouter();
   const { selectedProduct, products } = useContext(ProductContext);
-    const params = useParams();
-     const [localSelectedProduct, setLocalSelectedProduct] = useState(selectedProduct || {});
-   console.log("local", localSelectedProduct)
+  const params = useParams();
+  const [localSelectedProduct, setLocalSelectedProduct] = useState(
+    selectedProduct || {}
+  );
+  console.log("local", localSelectedProduct);
   const [loading, setLoading] = useState(true);
-  
-    useEffect(() => {
-     console.log("Saving to localStorage:", selectedProduct);
-      if (!selectedProduct) return
-       localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
-   }, [selectedProduct]);
 
-     // Load selectedProduct from localStorage when the component mounts
-     useEffect(() => {
-       const storedProduct = localStorage.getItem("selectedProduct");
-       
+  useEffect(() => {
+    console.log("Saving to localStorage:", selectedProduct);
+    if (!selectedProduct) return;
+    localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
+  }, [selectedProduct]);
 
-       const isReloading = sessionStorage.getItem("isReloading");
-         
-        if (storedProduct && isReloading) {
-          const parsedProduct = JSON.parse(storedProduct);
-          setLocalSelectedProduct(parsedProduct);
-          setLoading(false); // Set loading to false once data is loaded
-        } else {
-          // Set the reloading flag for the next reload
-          sessionStorage.setItem("isReloading", "true");
-        }
-     }, []);
-   
-   
+  // Load selectedProduct from localStorage when the component mounts
+  useEffect(() => {
+    const storedProduct = localStorage.getItem("selectedProduct");
+
+    const isReloading = sessionStorage.getItem("isReloading");
+
+    if (storedProduct && isReloading) {
+      const parsedProduct = JSON.parse(storedProduct);
+      setLocalSelectedProduct(parsedProduct);
+      setLoading(false); // Set loading to false once data is loaded
+    } else {
+      // Set the reloading flag for the next reload
+      sessionStorage.setItem("isReloading", "true");
+    }
+  }, []);
 
   return (
     <div className="bg-gray-200">
-      <div className="bg-white sticky top-0 z-50">
+      <div className="sticky top-0 z-50 bg-white">
         <Navbar />
       </div>
       <div className="px-2 py-4 mb-2 mt-2 bg-white lg:w-[80%] lg:mx-auto">
@@ -52,7 +53,7 @@ const page = () => {
               <div className="flex items-center">
                 <div
                   onClick={() => router.back()}
-                  className="ms-1  whitespace-nowrap  text-xs font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white cursor-pointer"
+                  className="text-xs font-medium text-gray-700 cursor-pointer ms-1 whitespace-nowrap hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
                 >
                   All products
                 </div>
@@ -61,7 +62,7 @@ const page = () => {
             <li aria-current="page">
               <div className="flex items-center">
                 <svg
-                  className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                  className="w-3 h-3 mx-1 text-gray-400 rtl:rotate-180"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -75,7 +76,7 @@ const page = () => {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <span className="ms-1 text-xs font-medium text-gray-500 md:ms-2 dark:text-gray-400 line-clamp-1">
+                <span className="text-xs font-medium text-gray-500 ms-1 md:ms-2 dark:text-gray-400 line-clamp-1">
                   {localSelectedProduct.title}
                 </span>
               </div>
@@ -88,7 +89,7 @@ const page = () => {
         <ProductSkeleton />
       ) : (
         <div className=" relative py-12 overflow-hidden bg-white font-poppins dark:bg-gray-800 overflow-y-auto lg:w-[80%] lg:h-[70%] lg:mx-auto mb-12 lg:rounded-sm">
-          <div className="max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6 bg-white">
+          <div className="max-w-6xl px-4 py-4 mx-auto bg-white lg:py-8 md:px-6">
             <div className="flex flex-wrap -mx-4">
               <div className="w-full px-4 md:w-1/2 ">
                 <div className="sticky top-0 overflow-hidden ">
@@ -97,7 +98,9 @@ const page = () => {
                     style={{ height: "450px" }}
                   >
                     <img
-                      src={localSelectedProduct && localSelectedProduct.thumbnail}
+                      src={
+                        localSelectedProduct && localSelectedProduct.thumbnail
+                      }
                       alt=""
                       className="object-contain w-full h-full "
                     />
@@ -110,7 +113,8 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
+                            localSelectedProduct &&
+                            localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -124,7 +128,8 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
+                            localSelectedProduct &&
+                            localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -138,7 +143,8 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
+                            localSelectedProduct &&
+                            localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -152,7 +158,8 @@ const page = () => {
                       >
                         <img
                           src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
+                            localSelectedProduct &&
+                            localSelectedProduct.thumbnail
                           }
                           alt=""
                           className="object-cover w-full lg:h-32"
@@ -203,7 +210,7 @@ const page = () => {
                                   ></path>{" "}
                                 </g>
                               </svg>
-                            )
+                            );
                           })}
                       </ul>
                       <a
@@ -214,12 +221,17 @@ const page = () => {
                       </a>
                     </div>
                     <p className="max-w-md mb-8 text-gray-700 dark:text-gray-400">
-                      {localSelectedProduct && localSelectedProduct.description}
+                      {}
                     </p>
+                    {parse(
+                      `${
+                        localSelectedProduct && localSelectedProduct.description
+                      }`
+                    )}
                     <div className="p-4 mb-8 border border-gray-300 dark:border-gray-700">
                       <h2 className="mb-4 text-xl font-semibold dark:text-gray-400">
                         Real time{" "}
-                        <span className="px-2 bg-blue-500 text-gray-50 rounded-full">
+                        <span className="px-2 bg-blue-500 rounded-full text-gray-50">
                           26
                         </span>{" "}
                         visitors right now!{" "}
@@ -292,10 +304,10 @@ const page = () => {
                             -{" "}
                           </span>
 
-                          <span className="h-8 w-8 border flex items-center justify-center bg-white text-center text-xs outline-none">
+                          <span className="flex items-center justify-center w-8 h-8 text-xs text-center bg-white border outline-none">
                             {1}
                           </span>
-                          <span className="cursor-pointer rounded-r bg-gray-300 py-1 px-3 duration-100 hover:bg-gray-500 hover:text-blue-50">
+                          <span className="px-3 py-1 duration-100 bg-gray-300 rounded-r cursor-pointer hover:bg-gray-500 hover:text-blue-50">
                             {" "}
                             +{" "}
                           </span>
@@ -303,11 +315,11 @@ const page = () => {
                       </div>
                     </div>
                     <div className="mb-4 mr-4 lg:mb-0">
-                      <button className="w-full h-10 p-2 mr-4 rounded-md bg-blue-900 dark:text-gray-200 text-gray-50 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500">
+                      <button className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md dark:text-gray-200 text-gray-50 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500">
                         Buy Now
                       </button>
                     </div>
-                    <div className="mb-4 mr-4 lg:mb-0 rounded-sm">
+                    <div className="mb-4 mr-4 rounded-sm lg:mb-0">
                       <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50 dark:text-gray-200 dark:border-blue-600 hover:bg-blue-600 hover:border-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 dark:hover:border-blue-500 dark:hover:text-gray-300">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -321,7 +333,7 @@ const page = () => {
                         </svg>
                       </button>
                     </div>
-                    <div className="mb-4 lg:mb-0 rounded-sm">
+                    <div className="mb-4 rounded-sm lg:mb-0">
                       <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50 dark:text-gray-200 dark:border-blue-600 hover:bg-blue-600 hover:border-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 dark:hover:border-blue-500 dark:hover:text-gray-300">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

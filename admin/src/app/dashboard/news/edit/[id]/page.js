@@ -75,8 +75,8 @@ function page() {
         setTitle(data.title);
         setShortDescription(data.shortdescription);
         setHtml(data.longdescription);
-        // setType(data.type);
-        // setNewCategory(data.category);
+        setNewType(data.type);
+        setNewCategory(data.category);
         setImageSrc(data.blogimage);
         setLoading(false);
       })
@@ -236,7 +236,7 @@ function page() {
                   id="type"
                   required
                   onChange={(e) => setType(e.target.value)}
-                  value={type}
+                  value={newType}
                 >
                   <option hidden>Select Type</option>
                   {type &&
@@ -399,7 +399,7 @@ function page() {
         </div>
       </div>
 
-      <PopUpFilemanager handleOpen={handleOpen} size={size} />
+      <PopUpFilemanager handleOpen={handleOpen} size={size} setImageSrc={setImageSrc} />
     </div>
   );
 }
