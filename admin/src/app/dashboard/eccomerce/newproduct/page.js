@@ -22,89 +22,21 @@ import {
 
 export default function page() {
   const [uploadedCat, setUploadedCat] = useState(null);
-  console.log("newProduct", uploadedCat);
-  // dialog open state thaat is recieved from filemanger context
-  const { handleOpen, size } = UseFileManager();
+  const [title, setTitle] = useState("");
   const [html, setHtml] = useState("");
+  const [price, setPrice] = useState(0);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
+  const [rating, setRating] = useState(0.0);
+  const [stock, setStock] = useState(0);
+  const [brand, setBrand] = useState("none");
+  const [category, setCategory] = useState("");
+  const [color, setColor] = useState("none");
+  const [warranty, setWarranty] = useState(0);
+  const [weight, setWeight] = useState(0);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    price: "",
-    discountPercentage: "",
-    rating:"",
-    category: "",
-    stock: "",
-    brand: "",
-    warranty: "",
-    color: "",
-    weight:""
-    
-  });
-
+  const { handleOpen, size } = UseFileManager();
   const [thumbnail, setThumbnail] = useState(null);
   const [gallery, setGallery] = useState(null);
-
-  const inputStyles = {
-    // textDecoration: "line-through",
-    color: "gray", // Adjust the color as needed
-  };
-  function onChange(e) {
-    setHtml(e.target.value);
-  }
-
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-
-    const processedValue =
-      name === "price" || name === "discountPercentage" || name === "stock" || name==="warranty" ||name ==="weight" ||name==="rating"
-        ? parseFloat(value)
-        : value;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: processedValue,
-    }));
-  }
-
-  console.log(formData);
-
-  const postProduct = async (e) => {
-    e.preventDefault();
-    console.log("posting started");
-
-    try {
-      const updatedFormData = {
-        title: formData.title,
-        price: formData.price,
-        discountPercentage: formData.discountPercentage,
-        rating: formData.rating,
-        category: formData.category,
-        description: html,
-        stock: formData.stock,
-        thumbnail: thumbnail,
-        images: gallery,
-      };
-
-      console.log("Form data before submission", updatedFormData)
-
-      const adminToken = Cookies.get("adminToken");
-      console.log("My token", adminToken)
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
-        updatedFormData,
-
-        {
-          headers: {
-            Authorization: `Bearer ${String(adminToken)}`,
-          },
-          "Content-Type": "application/json",
-        }
-      );
-
-      console.log("Response from backend", response);
-    } catch (error) {
-      console.error("An error in posting product", error);
-    }
-  };
 
   useEffect(() => {
     console.log("useEfft is runnning in new product");
@@ -136,14 +68,65 @@ export default function page() {
       setGallery(newArray);
     } else {
       // Handle the case when gallery is empty (if needed)
-      console.log('Gallery is empty');
+      console.log("Gallery is empty");
       setGallery(null);
+    }
+  };
+
+  function onChange(e) {
+    setHtml(e.target.value);
+  }
+
+  const postProduct = async (e) => {
+    e.preventDefault();
+    console.log("posting started");
+
+    const secureUrls = gallery.map((image) => image.secure_url);
+
+    console.log("this is a new product gallery", secureUrls);
+
+    try {
+      const updatedFormData = {
+        title: title,
+        description: html,
+        price: price,
+        discountPercentage: discountPercentage,
+        rating: rating,
+        stock: stock,
+        brand: brand,
+        category: category,
+        thumbnail: thumbnail,
+        images: secureUrls,
+        color: color,
+        warranty: warranty,
+        weight: weight,
+      };
+
+      console.log("Form data before submission", updatedFormData);
+
+      const adminToken = Cookies.get("adminToken");
+      console.log("My token", adminToken);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+        updatedFormData,
+
+        {
+          headers: {
+            Authorization: `Bearer ${String(adminToken)}`,
+          },
+          "Content-Type": "application/json",
+        }
+      );
+
+      console.log("Response from backend", response);
+    } catch (error) {
+      console.error("An error in posting product", error);
     }
   };
 
   return (
     <div>
-      <div className="grid max-w-2xl mx-auto  mt-8 mb-32">
+      <div className="grid max-w-2xl mx-auto mt-8 mb-32">
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
           <form
             onSubmit={(e) => postProduct(e)}
@@ -175,7 +158,7 @@ export default function page() {
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Apple Imac 27”"
                       required=""
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   </div>
 
@@ -188,11 +171,11 @@ export default function page() {
                       Category
                     </label>
                     <select
-                      className="p-2 text-base border bg-gray-50 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                      className="p-2 text-base border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-indigo-500"
                       name="category"
                       id="category"
                       required
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setCategory(e.target.value)}
                     >
                       <option>Select Category</option>
                       {uploadedCat &&
@@ -201,7 +184,7 @@ export default function page() {
                         })}
                     </select>
                   </div>
-                
+
                   {/* price */}
                   <div className="col-span-6 sm:col-span-3">
                     <label
@@ -216,9 +199,8 @@ export default function page() {
                       id="price"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="$2300"
-                      style={inputStyles}
                       required=""
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setPrice(e.target.value)}
                     />
                   </div>
                   {/* rating */}
@@ -235,9 +217,7 @@ export default function page() {
                       id="rating"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="4.2"
-                      style={inputStyles}
-    
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setRating(e.target.value)}
                     />
                   </div>
 
@@ -255,7 +235,7 @@ export default function page() {
                       id="discountPercentage"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="2300"
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setDiscountPercentage(e.target.value)}
                     />
                   </div>
 
@@ -274,7 +254,7 @@ export default function page() {
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="15"
                       required=""
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setStock(e.target.value)}
                     />
                   </div>
 
@@ -292,7 +272,7 @@ export default function page() {
                       id="brand"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Nike"
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setBrand(e.target.value)}
                     />
                   </div>
 
@@ -310,10 +290,10 @@ export default function page() {
                       id="weight"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="25 kg"
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setWeight(e.target.value)}
                     />
                   </div>
-                   
+
                   {/* warranty */}
                   <div className="col-span-6 sm:col-span-3">
                     <label
@@ -329,7 +309,7 @@ export default function page() {
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="15"
                       required=""
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setWarranty(e.target.value)}
                     />
                   </div>
 
@@ -347,7 +327,7 @@ export default function page() {
                       id="color"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Red"
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => setColor(e.target.value)}
                     />
                   </div>
 
