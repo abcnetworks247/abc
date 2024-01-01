@@ -31,16 +31,21 @@ export default function page() {
     title: "",
     price: "",
     discountPercentage: "",
-    rating: 4.4,
+    rating:"",
     category: "",
-    stock: ""
+    stock: "",
+    brand: "",
+    warranty: "",
+    color: "",
+    weight:""
+    
   });
 
   const [thumbnail, setThumbnail] = useState(null);
   const [gallery, setGallery] = useState(null);
 
   const inputStyles = {
-    textDecoration: "line-through",
+    // textDecoration: "line-through",
     color: "gray", // Adjust the color as needed
   };
   function onChange(e) {
@@ -51,7 +56,7 @@ export default function page() {
     const { name, value } = e.target;
 
     const processedValue =
-      name === "price" || name === "discountPercentage" || name === "stock"
+      name === "price" || name === "discountPercentage" || name === "stock" || name==="warranty" ||name ==="weight" ||name==="rating"
         ? parseFloat(value)
         : value;
     setFormData((prevData) => ({
@@ -82,7 +87,7 @@ export default function page() {
       console.log("Form data before submission", updatedFormData)
 
       const adminToken = Cookies.get("adminToken");
-
+      console.log("My token", adminToken)
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
         updatedFormData,
@@ -155,6 +160,7 @@ export default function page() {
             <div className="p-6 space-y-6">
               <div>
                 <div className="grid grid-cols-6 gap-6">
+                  {/* product title */}
                   <div className="col-span-6 sm:col-span-3">
                     <label
                       htmlFor="product-name"
@@ -172,6 +178,8 @@ export default function page() {
                       onChange={(e) => handleInputChange(e)}
                     />
                   </div>
+
+                  {/* product category */}
                   <div className="col-span-6 sm:col-span-3">
                     <label
                       htmlFor="category"
@@ -193,7 +201,8 @@ export default function page() {
                         })}
                     </select>
                   </div>
-
+                
+                  {/* price */}
                   <div className="col-span-6 sm:col-span-3">
                     <label
                       htmlFor="price"
@@ -212,7 +221,27 @@ export default function page() {
                       onChange={(e) => handleInputChange(e)}
                     />
                   </div>
+                  {/* rating */}
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="rating"
+                      className="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                      Rating
+                    </label>
+                    <input
+                      type="text"
+                      name="rating"
+                      id="rating"
+                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                      placeholder="4.2"
+                      style={inputStyles}
+    
+                      onChange={(e) => handleInputChange(e)}
+                    />
+                  </div>
 
+                  {/* discount */}
                   <div className="col-span-6 sm:col-span-3">
                     <label
                       htmlFor="discount"
@@ -225,14 +254,15 @@ export default function page() {
                       name="discountPercentage"
                       id="discountPercentage"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
-                      placeholder="$2300"
-                      required=""
+                      placeholder="2300"
                       onChange={(e) => handleInputChange(e)}
                     />
                   </div>
+
+                  {/* stock */}
                   <div className="col-span-6 sm:col-span-3">
                     <label
-                      htmlFor="discount"
+                      htmlFor="stock"
                       className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Stock left
@@ -247,6 +277,81 @@ export default function page() {
                       onChange={(e) => handleInputChange(e)}
                     />
                   </div>
+
+                  {/* brand */}
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="brand"
+                      className="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                      Brand
+                    </label>
+                    <input
+                      type="text"
+                      name="brand"
+                      id="brand"
+                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                      placeholder="Nike"
+                      onChange={(e) => handleInputChange(e)}
+                    />
+                  </div>
+
+                  {/* weight */}
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="weight"
+                      className="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                      Weight
+                    </label>
+                    <input
+                      type="number"
+                      name="weight"
+                      id="weight"
+                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                      placeholder="25 kg"
+                      onChange={(e) => handleInputChange(e)}
+                    />
+                  </div>
+                   
+                  {/* warranty */}
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="warranty"
+                      className="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                      Warranty
+                    </label>
+                    <input
+                      type="number"
+                      name="warranty"
+                      id="warranty"
+                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                      placeholder="15"
+                      required=""
+                      onChange={(e) => handleInputChange(e)}
+                    />
+                  </div>
+
+                  {/* color */}
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="color"
+                      className="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                      Color
+                    </label>
+                    <input
+                      type="text"
+                      name="color"
+                      id="color"
+                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                      placeholder="Red"
+                      onChange={(e) => handleInputChange(e)}
+                    />
+                  </div>
+
+                  {/* description */}
                   <div className="col-span-full">
                     <label
                       htmlFor="product-details"
@@ -271,6 +376,8 @@ export default function page() {
                     </EditorProvider>
                   </div>
                 </div>
+
+                {/* thumbnail */}
                 <div className="mt-3">
                   <p className="block mb-2 text-sm font-medium text-gray-900">
                     Produt Thumbnail
@@ -344,6 +451,7 @@ export default function page() {
                   </a>
                 </div>
 
+                {/* images */}
                 <div className="mt-3">
                   <p className="block mb-2 text-sm font-medium text-gray-900">
                     Product Gallery
