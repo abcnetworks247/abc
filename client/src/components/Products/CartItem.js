@@ -49,7 +49,7 @@ const CartItem = ({ product, updatePriceArray }) => {
           <div className="w-full px-4 mb-3 md:w-1/3">
             <div className="w-full h-96 md:h-24 md:w-24">
               <img
-                src={product.image}
+                src={product.thumbnail}
                 alt=""
                 className="object-contain w-full h-full"
               />

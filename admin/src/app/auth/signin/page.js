@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
+import Image from "next/image"
+import Logo from "@/resources/assets/images/AbcstudioNo.png";
 import HocsessionAuthenticated from "@/utils/HocSessionAuthenticated";
 function Page() {
   // for navigating to the dashboard page after login
@@ -167,8 +169,15 @@ function Page() {
         theme="light"
       />
       <section className="flex gap-4 m-8">
-        <div className="w-full mt-24 lg:w-3/5">
+        <div className="w-full mt-5 lg:w-3/5">
           <div className="text-center">
+          <Image 
+                src={Logo}
+                height={50}
+                width={50}
+                draggable={false}
+                className="object-contain h-[40px] w-full"
+                />
             <Typography variant="h2" className="mb-4 font-bold">
               Sign In
             </Typography>
@@ -256,9 +265,11 @@ function Page() {
           </div>
         </div>
         <div className="hidden w-2/5 h-full lg:block">
-          <img
-            src="/img/pattern.png"
-            className="object-cover w-full h-full rounded-3xl"
+          <Image
+              height={200}
+              width={200}
+            src="https://img.freepik.com/free-vector/realistic-news-studio-background_23-2149985600.jpg?w=900&t=st=1704041393~exp=1704041993~hmac=ef8c67168940ab32d52441d724c3e9071e9c512d39bb0c93b385396487e5aab3"
+            className="object-cover w-full h-[90svh] rounded-3xl"
           />
         </div>
       </section>
@@ -266,6 +277,6 @@ function Page() {
   );
 }
 
-// const Signin = HocsessionAuthenticated(Page);
+const Signin = HocsessionAuthenticated(Page);
 
-export default Page;
+export default Signin;

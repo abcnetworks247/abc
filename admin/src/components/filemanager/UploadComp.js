@@ -41,7 +41,7 @@ function UploadComp({ handleOpen, size }) {
       setUploadState("Uploading, please wait...");
       console.log("token", token);
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/file/upload`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/file/upload`,
         formData, // Pass the FormData directly as the second parameter
         {
           headers: {
@@ -155,11 +155,13 @@ function UploadComp({ handleOpen, size }) {
             )}
           </div>
         </DialogBody>
-        <DialogFooter className="flex flex-row items-center justify-between">
+        <DialogFooter className="">
           {!loading && <div className=""></div>}
 
           <div className="flex flex-row items-center gap-4 ml-5">
-            {loading && <Spinner />}
+            {loading && <Spinner />
+            
+            }
             <span className="text-sm"> {uploadstate}</span>
           </div>
 

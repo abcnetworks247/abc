@@ -8,7 +8,9 @@ import { toast, ToastContainer } from "react-toastify";
 import { PASSWORD_REGEX } from "@/utils/regex";
 import "react-toastify/dist/ReactToastify.css";
 import HocUpadate from "@/utils/HocUpadate";
- function Page() {
+import Image from "next/image";
+import Logo from "@/resources/assets/images/AbcstudioNo.png";
+function Page() {
   const router = useRouter();
   // using usesearcparams to get the search params
   const params = useSearchParams();
@@ -97,11 +99,11 @@ import HocUpadate from "@/utils/HocUpadate";
       return;
     }
 
-    if(formData.password !== formData.confrimpassword){
+    if (formData.password !== formData.confrimpassword) {
       toast.error("passwords do not match", {
         position: toast.POSITION.TOP_LEFT,
       });
-      return
+      return;
     }
     const id = toast.loading("changingpassword..", {
       position: toast.POSITION.TOP_LEFT,
@@ -163,6 +165,13 @@ import HocUpadate from "@/utils/HocUpadate";
       <section className="m-8 flex gap-4">
         <div className="w-full lg:w-3/5 mt-24">
           <div className="text-center">
+            <Image
+              src={Logo}
+              height={50}
+              width={50}
+              draggable={false}
+              className="object-contain h-[40px] w-full"
+            />
             <Typography variant="h2" className="font-bold mb-4">
               Recover your Account
             </Typography>
@@ -264,9 +273,11 @@ import HocUpadate from "@/utils/HocUpadate";
           </form>
         </div>
         <div className="w-2/5 h-full hidden lg:block">
-          <img
-            src="/img/pattern.png"
-            className="h-full w-full object-cover rounded-3xl"
+          <Image
+            height={200}
+            width={200}
+            src="https://img.freepik.com/free-vector/realistic-news-studio-background_23-2149985600.jpg?w=900&t=st=1704041393~exp=1704041993~hmac=ef8c67168940ab32d52441d724c3e9071e9c512d39bb0c93b385396487e5aab3"
+            className="object-cover w-full h-[90svh] rounded-3xl"
           />
         </div>
       </section>
@@ -274,6 +285,6 @@ import HocUpadate from "@/utils/HocUpadate";
   );
 }
 
-const updatepassword = HocUpadate(Page)
+const updatepassword = HocUpadate(Page);
 
 export default updatepassword;

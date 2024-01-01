@@ -31,7 +31,7 @@ const UploadPop = () => {
       setUploadState("Uploading, please wait...");
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/admin/file/upload`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/file/upload`,
         formData,
         {
           headers: {
@@ -48,7 +48,6 @@ const UploadPop = () => {
 
         setTimeout(() => {
           setSuccessful(null);
-          handleOpen(null);
         }, 5000);
       } else {
         setLoading(false);
@@ -56,7 +55,6 @@ const UploadPop = () => {
 
         setTimeout(() => {
           setSuccessful(null);
-          handleOpen(null);
         }, 2000);
       }
     } catch (error) {

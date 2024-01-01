@@ -1,20 +1,19 @@
 const Joi = require('joi');
 
 const ProductJoiSchema = Joi.object({
-  id: Joi.number().required(),
   title: Joi.string().required(),
   description: Joi.string().required(),
   price: Joi.number().required(),
-  discountPercentage: Joi.number().required(),
-  rating: Joi.number().required(),
+  discountPercentage: Joi.number().default(0),
+  rating: Joi.number().default(0),
   stock: Joi.number().required(),
-  brand: Joi.string().required(),
+  brand: Joi.string(),
   category: Joi.string().required(),
   thumbnail: Joi.string().required(),
   images: Joi.array().items(Joi.string()).required(),
-  color: Joi.string().required(),
-  warranty: Joi.string().required(),
-  weight: Joi.number().required(),
+  color: Joi.string().default('none'),
+  warranty: Joi.number().default(0),
+  weight: Joi.number().default(0),
 });
 
 module.exports = ProductJoiSchema;

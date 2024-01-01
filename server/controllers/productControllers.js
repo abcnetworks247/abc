@@ -1,23 +1,30 @@
 const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/productsSchema");
 const ProductJoi = require("../Utils/ProductJoiSchema");
+const {
+  NotFoundError,
+  UnAuthorizedError,
+  ValidationError,
+} = require("../errors/index");
 
 // Controller for creating a product (accessible only to admin)
 const createProduct = async (req, res) => {
+  console.log("hit product create");
   try {
     // Assuming you have middleware to authenticate and authorize users
-    if (
-      !req.user ||
-      (req.user.role !== "superadmin" && req.user.role !== "admin")
-    ) {
-      return res
-        .status(403)
-        .json({ error: "Unauthorized: Only admins can create products" });
+
+    if (!req.user) {
+      throw new UnAuthorizedError("You must be logged in to access this page");
+    }
+
+    if (!["superadmin", "admin"].includes(req.user.role)) {
+      throw new UnAuthorizedError(
+        "Only super admins or admins can access this page"
+      );
     }
 
     // Extract product data from the request body
     const {
-      id,
       title,
       description,
       price,
@@ -35,7 +42,6 @@ const createProduct = async (req, res) => {
 
     // Construct an object with the extracted data
     const productData = {
-      id,
       title,
       description,
       price,
@@ -55,15 +61,15 @@ const createProduct = async (req, res) => {
     const { error, value } = ProductJoi.validate(productData);
 
     if (error) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: error.details[0].message });
+      throw new ValidationError("Invalid data received");
     }
 
     // Save the product to the database
-    const savedProduct = await Product.save(value);
+    const savedProduct = await Product.create(value);
 
-    res.status(StatusCodes.CREATED).json(savedProduct);
+    res
+      .status(StatusCodes.CREATED)
+      .json({ message: "Product created successfully" });
   } catch (error) {
     console.error(error);
     res
@@ -155,9 +161,13 @@ const updateProduct = async (req, res) => {
     }
 
     // Update the existing product with the new data
-    const updatedProduct = Product.findByIdAndUpdate(existingProduct._id, value, {
-      new: true,
-    });
+    const updatedProduct = Product.findByIdAndUpdate(
+      existingProduct._id,
+      value,
+      {
+        new: true,
+      }
+    );
 
     res.status(StatusCodes.OK).json(updatedProduct);
   } catch (error) {
@@ -170,48 +180,66 @@ const updateProduct = async (req, res) => {
 
 //delete product from the database
 const deleteProduct = async (req, res) => {
-    try {
-        // Assuming you have middleware to authenticate and authorize users
-        if (!req.user || (req.user.role !== 'superadmin' && req.user.role !== 'admin')) {
-            return res.status(403).json({ error: 'Unauthorized: Only admins can delete products' });
-        }
+  try {
+    // Authenticate and authorize the user
+    const user = req.user;
 
-        const productId = req.params.id;
-
-        // Find the existing product by ID
-        const existingProduct = await Product.findById(productId);
-
-        if (!existingProduct) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
-        }
-
-        // Delete the product from the database
-        await existingProduct.remove();
-
-        res.status(StatusCodes.NO_CONTENT).json({message: "Product deleted successfully"})
-    } catch (error) {
-        console.error(error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
+    if (!user) {
+      throw new UnAuthorizedError("You must be logged in to access this page.");
     }
+
+    if (!["superadmin", "admin"].includes(user.role)) {
+      throw new UnAuthorizedError(
+        "You are not authorized to access this page."
+      );
+    }
+
+    const { id } = req.body;
+
+    // Find the product by ID
+    const existingProduct = await Product.findById(id);
+
+    if (!existingProduct) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "Product not found" });
+    }
+
+    // Remove the product from the database
+    await existingProduct.remove();
+
+    res
+      .status(StatusCodes.NO_CONTENT)
+      .json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal Server Error" });
+  }
 };
 
 //getting sinlge products based on the user parameters
 const getSingleProduct = async (req, res) => {
-    try {
-        const productId = req.params.id;
+  try {
+    const productId = req.params.id;
 
-        // Find the product by ID
-        const product = await Product.findById(productId);
+    // Find the product by ID
+    const product = await Product.findById(productId);
 
-        if (!product) {
-            return res.status(StatusCodes.NOT_FOUND).json({ error: 'Product not found' });
-        }
-
-        res.status(StatusCodes.OK).json(product);
-    } catch (error) {
-        console.error(error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
+    if (!product) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "Product not found" });
     }
+
+    res.status(StatusCodes.OK).json(product);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: "Internal Server Error" });
+  }
 };
 
 module.exports = {
@@ -219,5 +247,5 @@ module.exports = {
   getSingleProduct,
   getAllProducts,
   updateProduct,
-  deleteProduct
+  deleteProduct,
 };
