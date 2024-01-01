@@ -5,7 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-
+import {
+  Button,
+  CardFooter,
+  Checkbox,
+  Option,
+  Select,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Typography,
+} from "@material-tailwind/react";
 const Page = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -277,6 +288,19 @@ const Page = () => {
               </div>
             </article>
           ))}
+          <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
+          <Typography variant="small" color="blue-gray" className="font-normal">
+            Page 1 of 10
+          </Typography>
+          <div className="flex gap-2">
+            <Button variant="outlined" size="sm">
+              Previous
+            </Button>
+            <Button variant="outlined" size="sm">
+              Next
+            </Button>
+          </div>
+        </CardFooter>
         </div>
       )}
     </main>

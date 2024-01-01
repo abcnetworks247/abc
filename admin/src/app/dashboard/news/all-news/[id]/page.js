@@ -94,7 +94,7 @@ export default function BlogCard() {
             floated={false}
             shadow={false}
             color="transparent"
-            className="m-0 rounded flex items-center justify-center lg:w-[520px] md:w-[520px] lg:h-72 md:h-72 h-72 w-full`"
+            className="m-0 rounded flex items-center justify-center  lg:h-72 md:h-72 h-72 w-full`"
           >
             <img src={news.blogimage} alt="ui/ux review check" className="object-cover object-center w-full" />
           </CardHeader>
