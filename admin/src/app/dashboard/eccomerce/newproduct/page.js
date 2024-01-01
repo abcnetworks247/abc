@@ -137,7 +137,7 @@ export default function page() {
 
   return (
     <div>
-      <div className="grid max-w-2xl mx-auto mt-14 mt-8 mb-32">
+      <div className="grid max-w-2xl mx-auto  mt-8 mb-32">
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
           <form
             onSubmit={(e) => postProduct(e)}
