@@ -32,12 +32,14 @@ export const AdminProvider = ({ children }) => {
        if(Authtoken){
          setGenerror(true)
          setGenload(false)
+       }else{
+        setGenload(false)
        }
     },[])
 
-    //  if(genLoading){
-    //    return <Loading />
-    //  }
+     if(genLoading){
+       return <Loading />
+     }
   return (
     <AdminContext.Provider
       value={{
