@@ -12,14 +12,17 @@ import {
 } from "@material-tailwind/react";
 import { MdOutlineDelete } from "react-icons/md";
 import { IoAdd } from "react-icons/io5";
+import { usePathname, useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-const FileCompPop = () => {
+const FileCompPop = ({ setThumbnail, handleOpen, setGallery, setImageSrc }) => {
   const [fileData, setFileData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [checkurl, setCheckUrl] = useState([]);
   const [sortOption, setSortOption] = useState("newest");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
+  const pathname = usePathname();
 
   useEffect(() => {
     const socket = io.connect(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
@@ -38,15 +41,15 @@ const FileCompPop = () => {
 
   const itemsPerPage = 12;
 
-  const handleFileCheck = (imageurl) => {
-    let imgurl = String(imageurl);
-
+  const handleFileCheck = (item) => {
     setCheckUrl((prevCheckUrl) => {
-      if (!prevCheckUrl.includes(imgurl)) {
-        console.log("This is the check array", [imgurl, ...prevCheckUrl]);
-        return [imgurl, ...prevCheckUrl];
+      if (!prevCheckUrl.find((url) => url._id === item._id)) {
+        console.log("This is the check array", [...prevCheckUrl, item]);
+        return [...prevCheckUrl, item];
       } else {
-        const filteredCheckUrl = prevCheckUrl.filter((url) => url !== imgurl);
+        const filteredCheckUrl = prevCheckUrl.filter(
+          (url) => url._id !== item._id
+        );
         console.log("Removed from check array", filteredCheckUrl);
         return filteredCheckUrl;
       }
@@ -56,6 +59,43 @@ const FileCompPop = () => {
   const handleSortChange = (newSortOption) => {
     setSortOption(newSortOption);
     setSortOrder((prevSortOrder) => (prevSortOrder === "asc" ? "desc" : "asc"));
+  };
+
+  const HandleAdd = () => {
+    if (typeof window !== "undefined") {
+      const fragment = window.location.hash;
+      const valueWithoutPrefix = fragment.replace("#value=", "");
+
+      if (valueWithoutPrefix === "thumbnail") {
+        if (checkurl.length === 1) {
+          let newthumbnail = checkurl.slice(0, 1);
+          setThumbnail(newthumbnail[0].secure_url);
+          handleOpen(null);
+        } else {
+          alert("You can only select 1 product thumbnail");
+        }
+      }
+
+      if (valueWithoutPrefix === "gallery") {
+        if (checkurl.length === 3) {
+          let newgallery = checkurl.slice(0, 3);
+          setGallery(newgallery);
+          handleOpen(null);
+        } else {
+          alert("You can only select 3 product gallery");
+        }
+      }
+
+      if (valueWithoutPrefix === "newsimage") {
+        if (checkurl.length === 1) {
+          let newsimage = checkurl.slice(0, 1);
+          setImageSrc(newsimage[0].secure_url);
+          handleOpen(null);
+        } else {
+          alert("You can only select 1 news image");
+        }
+      }
+    }
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -72,11 +112,11 @@ const FileCompPop = () => {
       })
     : [];
 
-    const filteredItems = (fileData || []).filter((item) => {
-      const originalname = item?.originalname || ""; // Ensure originalname is defined
-    
-      return originalname.toLowerCase().includes(searchTerm.toLowerCase());
-    });
+  const filteredItems = (fileData || []).filter((item) => {
+    const originalname = item?.originalname || ""; // Ensure originalname is defined
+
+    return originalname.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
@@ -114,13 +154,18 @@ const FileCompPop = () => {
       <div className="h-[70vh]">
         <div className="flex flex-wrap items-center justify-between pt-8 border-t-gray-600">
           <div className="flex flex-row items-center gap-3 ml-4">
-            <button
-              variant=""
-              className="flex flex-row items-center gap-1 px-2 py-1 pr-2 text-sm text-white bg-green-600 rounded-md"
-            >
-              <IoAdd className="text-[18px] text-gray-100 hover:text-red-600 cursor-pointer" />
-              Add
-            </button>
+            {checkurl.length > 0 ? (
+              <button
+                variant=""
+                className="flex flex-row items-center gap-1 px-2 py-1 pr-2 text-sm text-white bg-green-600 rounded-md"
+                onClick={() => HandleAdd()}
+              >
+                <IoAdd className="text-[18px] text-gray-100 cursor-pointer" />
+                Add
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
           <div className="flex flex-row items-center gap-5">
             <Select
@@ -155,28 +200,27 @@ const FileCompPop = () => {
 
         <div className="grid grid-cols-2 gap-4 mt-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
           {currentItems &&
-            currentItems.map(({ secure_url, _id, originalname }) => (
+            currentItems.map((item) => (
               <div
                 className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
-                key={_id}
+                key={item._id}
               >
                 <div>
                   <img
                     className="object-cover object-center w-full h-40 max-w-full rounded-lg"
-                    src={secure_url}
+                    src={item.secure_url}
                     alt="gallery-photo"
                   />
                 </div>
 
                 <span className="w-[80%] overflow-hidden text-sm whitespace-nowrap text-ellipsis">
-                  {originalname}
+                  {item.originalname}
                 </span>
                 <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
                   <Checkbox
                     className="cursor-pointer"
                     onChange={() => {
-                      let imageurl = secure_url;
-                      handleFileCheck(imageurl);
+                      handleFileCheck(item);
                     }}
                   />
                   <></>
