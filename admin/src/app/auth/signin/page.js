@@ -9,6 +9,7 @@ import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import Image from "next/image"
+import Logo from "@/resources/assets/images/AbcstudioNo.png";
 import HocsessionAuthenticated from "@/utils/HocSessionAuthenticated";
 function Page() {
   // for navigating to the dashboard page after login
@@ -168,8 +169,15 @@ function Page() {
         theme="light"
       />
       <section className="flex gap-4 m-8">
-        <div className="w-full mt-24 lg:w-3/5">
+        <div className="w-full mt-5 lg:w-3/5">
           <div className="text-center">
+          <Image 
+                src={Logo}
+                height={50}
+                width={50}
+                draggable={false}
+                className="object-contain h-[40px] w-full"
+                />
             <Typography variant="h2" className="mb-4 font-bold">
               Sign In
             </Typography>

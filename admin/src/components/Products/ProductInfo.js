@@ -1,43 +1,70 @@
-"use client"
-import React from 'react'
-import axios from 'axios';
-import Cookies from 'js-cookie';
-
+"use client";
+import React from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { IconButton, Tooltip } from "@material-tailwind/react";
+import Swal from "sweetalert2";
 
 const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
 
-
-    const handleDelete = async (productId) => {
-        try {
-            const adminToken = Cookies.get("adminToken")
-            console.log("Admin Token:", adminToken);
+  
+  const handleDelete = async (productId) => {
+    try {
+      const adminToken = Cookies.get("adminToken");
+  
+      // Show confirmation dialog using SweetAlert2
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Your product will be deleted after this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#000000",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Delete!",
+      });
+  
+      // If user confirmed the deletion
+      if (result.isConfirmed) {
         const response = await axios.delete(
           `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
-
           {
             headers: {
               Authorization: `Bearer ${String(adminToken)}`,
               "Content-Type": "application/json",
             },
-
             data: { id: productId },
           }
         );
-
+  
+        // Check if the deletion was successful (HTTP status code 204)
         if (response.status === 204) {
-          // Product deleted successfully
-          // You may want to update the UI or take any other necessary actions
-            console.log("Product deleted successfully");
-            handleRefresh()
+          // Show success message using SweetAlert2
+          Swal.fire({
+            title: "Successful!",
+            text: "Your product has been deleted",
+            icon: "success",
+          });
+  
+          // Reload the page if it's in a browser environment
+          if (typeof window !== "undefined") {
+            window.location.reload();
+          }
         } else {
-          console.error("Failed to delete product");
-          // Handle error, e.g., show an error message to the user
+          // Show an error message using SweetAlert2 for unsuccessful deletion
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+            footer: '<a href="#">Why do I have this issue?</a>',
+          });
         }
-      } catch (error) {
-        console.error("Damn it", error);
-        // Handle error, e.g., show an error message to the user
       }
-    };
+    } catch (error) {
+      console.error("Error during product deletion:", error);
+      // Handle error, e.g., show an error message to the user
+    }
+  };
+  
   return (
     <>
       <tr className="hover:bg-gray-100">
@@ -55,65 +82,104 @@ const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
           </div>
         </td>
         <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-          <div className="text-base font-semibold text-gray-900">{title}</div>
-          <div className="text-sm font-normal text-gray-500">{category}</div>
+          <div className="text-sm font-normal text-gray-500">{title}</div>
+          
         </td>
         <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">
-          {"{"}
-          {"{"} .technology {"}"}
-          {"}"}
+        <div className="text-sm font-normal text-gray-500">{category}</div>
         </td>
-        <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">
+        <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
           {id}
         </td>
-        <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">
+        <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-700">
           {price}
         </td>
         <td className="p-4 whitespace-nowrap space-x-2">
-          <button
-            type="button"
-            data-modal-toggle="product-modal"
-            className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
-          >
-            <svg
-              className="mr-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-              <path
-                fillRule="evenodd"
-                d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Edit item
-          </button>
-          <button
-            onClick={() => handleDelete(id)}
-            type="button"
-            data-modal-toggle="delete-product-modal"
-            className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center"
-          >
-            <svg
-              className="mr-2 h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Delete item
-          </button>
+          <Tooltip content="Edit">
+            <IconButton variant="text">
+              <svg
+                className="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                <path
+                  fillRule="evenodd"
+                  d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+
+              {/* <PencilIcon className="h-4 w-4" /> */}
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip content="Delete">
+            <IconButton variant="text">
+              <svg
+                width="64px"
+                height="64px"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
+                className="h-5 w-5"
+                onClick={() => handleDelete(id)}
+              >
+                <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <g id="SVGRepo_iconCarrier">
+                  {" "}
+                  <path
+                    d="M10 12V17"
+                    stroke="#000000"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />{" "}
+                  <path
+                    d="M14 12V17"
+                    stroke="#000000"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />{" "}
+                  <path
+                    d="M4 7H20"
+                    stroke="#000000"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />{" "}
+                  <path
+                    d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10"
+                    stroke="#000000"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />{" "}
+                  <path
+                    d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"
+                    stroke="#000000"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />{" "}
+                </g>
+              </svg>
+
+              {/* <PencilIcon className="h-4 w-4" /> */}
+            </IconButton>
+          </Tooltip>
         </td>
       </tr>
     </>
   );
-}
+};
 
-export default ProductInfo
+export default ProductInfo;
