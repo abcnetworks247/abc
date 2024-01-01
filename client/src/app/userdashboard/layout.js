@@ -13,7 +13,7 @@ import MobileSide from "./components/sidebar/MobileSide";
 import HocNotAuthenticated from "@/utils/HocNotAuthenticated";
 import Sidebar from "@/components/sidebar/Sidebar";
 
- export default function layout({ children }) {
+function Layout({ children }) {
    const pathname = usePathname()
     const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
     const isDesktop = useMediaQuery({
@@ -46,6 +46,6 @@ import Sidebar from "@/components/sidebar/Sidebar";
   
 }
 
-// const layout = HocNotAuthenticated(Layout)
+const layout = HocNotAuthenticated(Layout)
 
-// export default layout;
+export default layout;
