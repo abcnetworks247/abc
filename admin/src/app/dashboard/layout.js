@@ -20,6 +20,6 @@ import Sidebar from "@/components/sidebar/Sidebar";
   );
 }
 
-// const layout = HocsessionNotAuth(Layout);
+const layout = HocsessionNotAuth(Layout);
 
 export default  Layout;

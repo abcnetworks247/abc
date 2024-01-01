@@ -277,6 +277,6 @@ function Page() {
   );
 }
 
-// const Signin = HocsessionAuthenticated(Page);
+const Signin = HocsessionAuthenticated(Page);
 
-export default Page;
+export default Signin;
