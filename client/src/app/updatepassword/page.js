@@ -5,12 +5,12 @@ import Api from "@/utils/Api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  PASSWORD_REGEX,
-
-} from "@/utils/regex";
+import { PASSWORD_REGEX } from "@/utils/regex";
 import HocUpdatePassword from "@/utils/HocUpdatePassword";
- function Page() {
+import Logo from "@/resources/assets/image/AbcstudioNo.png";
+import Image from "next/image";
+
+function Page() {
   // router for navigating to login page after password update
   const router = useRouter();
   // using usesearcparams to get the search params
@@ -20,8 +20,8 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
   const reset = params.get("reset");
   //  initial state for update password
   const [password, setNewPassword] = useState("");
-   const [confirmPassword, setConfirmpassword] = useState("");
-    const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPassword, setConfirmpassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   /**
    *
@@ -30,26 +30,25 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
    * @param {string} e.value - the value of the input
    */
 
-    //Define state for universal error
+  //Define state for universal error
 
-    const [universalError, setUniversalError] = useState("");
+  const [universalError, setUniversalError] = useState("");
 
-    // Define initial validation state
-    const [isValidData, setIsValidData] = useState(true);
-  
-    // Define initial form error state
-  
-    const [errorMessages, setErrorMessages] = useState({
-      confirmPassword: "",
-      password: "",
-    });
+  // Define initial validation state
+  const [isValidData, setIsValidData] = useState(true);
 
-   
+  // Define initial form error state
+
+  const [errorMessages, setErrorMessages] = useState({
+    confirmPassword: "",
+    password: "",
+  });
+
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
   };
-    
-      /**
+
+  /**
    *
    * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
    * @param {Object} regex - for checkking if the regex meet up the chaeteria required
@@ -76,44 +75,44 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
     }
   }
 
-    // Define Variable for allfield valid
+  // Define Variable for allfield valid
 
-    const allFieldsValid = Object.keys(errorMessages).every(
-      (field) => !errorMessages[field]
-    );
+  const allFieldsValid = Object.keys(errorMessages).every(
+    (field) => !errorMessages[field]
+  );
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
-    if(!isValidData){
+    if (!isValidData) {
       toast.error("please fill in all the fields correctly", {
         position: toast.POSITION.TOP_LEFT,
       });
-      return
+      return;
     }
 
-    if(password !== confirmPassword){
+    if (password !== confirmPassword) {
       toast.error("passwords do not match", {
         position: toast.POSITION.TOP_LEFT,
       });
-      return
+      return;
     }
     const id = toast.loading("changingpassword..", {
       position: toast.POSITION.TOP_LEFT,
     });
     console.log({ reset, password, confirmPassword });
     try {
-      const data = await Api.post(
-        "client/auth/account/updatepassword",
-        { reset, password, confirmPassword }
-      );
-      console.log('data status', data.status);
+      const data = await Api.post("client/auth/account/updatepassword", {
+        reset,
+        password,
+        confirmPassword,
+      });
+      console.log("data status", data.status);
       if (data.status !== 200) {
         toast.update(id, {
           render: `error on password update`,
           type: "error",
           isLoading: false,
         });
-
       }
       console.log("post successful", data.data.message);
       setTimeout(() => {
@@ -160,6 +159,13 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
         <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
+              <Image
+                src={Logo}
+                height={50}
+                width={50}
+                draggable={false}
+                className="object-contain h-[80px] w-full"
+              />
               <h1 className="mb-2 text-2xl font-extrabold text-blue-900 xl:text-4xl">
                 Update Password
               </h1>
@@ -264,7 +270,9 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
 
                 <div
                   className={`flex items-center justify-between py-3 px-5 h-10 bg-gray-100 border border-gray-200 rounded-lg  ${
-                    errorMessages.confirmPassword && confirmPassword && "border-red-500"
+                    errorMessages.confirmPassword &&
+                    confirmPassword &&
+                    "border-red-500"
                   }`}
                 >
                   <input
@@ -380,11 +388,11 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
             </div>
           </div>
         </div>
-        <div className="flex-1 hidden text-center bg-blue-900 md:flex">
+        <div className="flex-1 bg-gradient-to-t from-[#00045E] via-[#9D3615] to-[#00045E] w-fit h-screen text-center hidden md:flex">
           <div
-            className="w-full m-12 bg-center bg-no-repeat bg-contain xl:m-16 "
+            className=" h-screen w-full bg-contain bg-center bg-no-repeat "
             style={{
-              backgroundImage: `url(https://www.tailwindtap.com/assets/common/marketing.svg)`,
+              backgroundImage: `url("/Login.svg")`,
             }}
           ></div>
         </div>
@@ -393,7 +401,6 @@ import HocUpdatePassword from "@/utils/HocUpdatePassword";
   );
 }
 
-const updatePassword = HocUpdatePassword(Page)
+const updatePassword = HocUpdatePassword(Page);
 
 export default updatePassword;
-
