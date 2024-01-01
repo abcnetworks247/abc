@@ -189,7 +189,9 @@ const deleteProduct = async (req, res) => {
     }
 
     if (!["superadmin", "admin"].includes(user.role)) {
-      throw new UnAuthorizedError("You are not authorized to access this page.");
+      throw new UnAuthorizedError(
+        "You are not authorized to access this page."
+      );
     }
 
     const { id } = req.body;
@@ -216,7 +218,6 @@ const deleteProduct = async (req, res) => {
       .json({ error: "Internal Server Error" });
   }
 };
-
 
 //getting sinlge products based on the user parameters
 const getSingleProduct = async (req, res) => {
