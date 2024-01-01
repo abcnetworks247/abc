@@ -50,6 +50,7 @@ const TABLE_HEAD = ["Member", "Roles", "Date", "Employed", ""];
 
 export default function Page() {
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { user, isError, isLoading, isSuccess } = useallAdmin();
   const { CurrentUser } = useCurrentAdmin();
   const Admins = user?.data;
@@ -65,8 +66,15 @@ export default function Page() {
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentItems = Admins ? Admins.data.slice(startIndex, endIndex) : [];
 
+  const filteredUsers = user ? Admins.data.filter(user =>
+    user.fullname.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.trim().toLowerCase())
+  ) : [];
+  
+
+  const currentItems = filteredUsers.slice(startIndex, endIndex);
+  console.log( "search result", currentItems);
   function DeleteUser(role) {
     Swal.fire({
       title: `Are you sure you want to delete this ${role}`,
@@ -157,6 +165,8 @@ export default function Page() {
                 <Input
                   label="Search"
                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </div>
@@ -188,6 +198,16 @@ export default function Page() {
                 </tr>
               </thead>
               <tbody className="w-full">
+                {
+                  filteredUsers.length === 0 ? (
+                    <tr>
+                      <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                        No results found.
+                      </td>
+                    </tr>
+                  ) :
+                  (
+
                 <>
                   {Admins &&
                     currentItems.map(
@@ -330,6 +350,17 @@ export default function Page() {
                       }
                     )}
                 </>
+                  )
+                }
+
+                {CurrentUser && CurrentUser.data.olduser.length === 0 ? (
+                    <tr>
+                      <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                        No Admin Found.
+                      </td>
+                    </tr>
+                  ) :
+                  <></>}
               </tbody>
             </table>
           </CardBody>
@@ -359,6 +390,8 @@ export default function Page() {
           </CardFooter>
         </Card>
       )}
+
+      
     </>
   );
 }

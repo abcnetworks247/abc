@@ -65,6 +65,7 @@ const TABLE_HEAD = ["Member", "Package", "Creation Date", ""];
 export default function Page() {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const { users, isLoading, isError, isSuccess } = UseUserlist();
 
   console.log("tanstack users ", users);
@@ -81,7 +82,15 @@ export default function Page() {
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentItems = users ? users.data.slice(startIndex, endIndex) : [];
+
+  const filteredUsers = users ? users.data.filter(user =>
+    user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  ) : [];
+
+  const currentItems = filteredUsers.slice(startIndex, endIndex);
+
+  console.log(currentItems, "search result");
 
   return (
     <>
@@ -134,6 +143,8 @@ export default function Page() {
               <div className="w-72 flex justify-end">
                 <Input
                   label="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   icon={<MagnifyingGlassIcon className="h-5 w-5" />}
                 />
               </div>
@@ -177,6 +188,15 @@ export default function Page() {
                 </tr>
               </thead>
               <tbody className="w-full">
+
+                {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                    No User Found.
+                  </td>
+                </tr>
+              ) : (
+
                 <>
                   {users &&
                     currentItems.map(
@@ -322,6 +342,9 @@ export default function Page() {
                       }
                     )}
                 </>
+              )
+
+                }
               </tbody>
             </table>
           </CardBody>
@@ -343,6 +366,11 @@ export default function Page() {
                 Next
               </Button>
             </div>
+            <AddMember
+              open={open}
+              handleOpen={handleOpen}
+              // CurrentUser={CurrentUser}
+            />
 
           </CardFooter>
         </Card>

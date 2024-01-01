@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { PASSWORD_REGEX } from "@/utils/regex";
 import "react-toastify/dist/ReactToastify.css";
 import HocUpadate from "@/utils/HocUpadate";
+import Image from "next/image";
  function Page() {
   const router = useRouter();
   // using usesearcparams to get the search params
@@ -264,9 +265,11 @@ import HocUpadate from "@/utils/HocUpadate";
           </form>
         </div>
         <div className="w-2/5 h-full hidden lg:block">
-          <img
-            src="/img/pattern.png"
-            className="h-full w-full object-cover rounded-3xl"
+        <Image
+              height={200}
+              width={200}
+            src="https://img.freepik.com/free-vector/realistic-news-studio-background_23-2149985600.jpg?w=900&t=st=1704041393~exp=1704041993~hmac=ef8c67168940ab32d52441d724c3e9071e9c512d39bb0c93b385396487e5aab3"
+            className="object-cover w-full h-[90svh] rounded-3xl"
           />
         </div>
       </section>

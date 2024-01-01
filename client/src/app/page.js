@@ -27,13 +27,7 @@ export default function Home() {
     }
   }, [pathname]); // Include pathname in the dependency array
 
-  useEffect(() => {
-    const token = Cookies.get("authToken")
-    if (!token && typeof window !== undefined) {
-      window.location.reload()
-    }
- },[])
-
+  
   return (
     <main>
       <div className="flex flex-row items-center border border-gray-100 shadow-md">

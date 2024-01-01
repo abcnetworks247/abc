@@ -32,7 +32,7 @@ const SingleArrival = ({ product }) => {
         <div className="relative flex items-center shadow-sm justify-center w-full h-64 mb-4  -mt-56 overflow-hidden rounded -top-full bg-white ">
           <img
             className="object-contain w-[70%] h-full transition-all group-hover:scale-110 bg-transparent"
-            src={product.image}
+            src={product.thumbnail}
             alt=""
           />
           <div className="absolute flex flex-col top-4 right-4 z-[2]">
@@ -113,7 +113,7 @@ const SingleArrival = ({ product }) => {
             {Array(5)
               .fill()
               .map((_, i) => {
-                const rating = product.rating.rate;
+                const rating = product.rating;
                 const filledStars = Math.floor(rating);
                 const hasHalfStar = rating - filledStars >= 0.5;
 

@@ -8,7 +8,7 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import {useRouter} from "next/navigation"
 import "react-toastify/dist/ReactToastify.css";
-
+import Image from "next/image"
 export default function Page(){
   const router = useRouter()
 
@@ -130,10 +130,12 @@ export default function Page(){
 
 
             <div className="hidden w-2/5 h-full lg:block">
-        {/* <img
-          src="/img/pattern.png"
-          className="object-cover w-full h-full rounded-3xl"
-        /> */}
+            <Image
+              height={200}
+              width={200}
+            src="https://img.freepik.com/free-vector/realistic-news-studio-background_23-2149985600.jpg?w=900&t=st=1704041393~exp=1704041993~hmac=ef8c67168940ab32d52441d724c3e9071e9c512d39bb0c93b385396487e5aab3"
+            className="object-cover w-full h-[90svh] rounded-3xl"
+          />
       </div>
       <div className="flex flex-col items-center justify-center w-full lg:w-3/5">
         <div className="text-center">

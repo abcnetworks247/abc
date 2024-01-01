@@ -9,4 +9,5 @@ router.route('/products').post(authChecker, createProduct); // Create a new prod
 router.route('/products').patch(authChecker, updateProduct); // Update a product
 router.route('/products').delete(authChecker, deleteProduct); // Delete a product
 
+
 module.exports = router;
