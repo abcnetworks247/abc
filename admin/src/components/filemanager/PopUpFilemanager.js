@@ -19,7 +19,7 @@ import { BsFileEarmarkPlus } from "react-icons/bs";
 import UploadPop from "./UploadPop";
 import FileCompPop from "./FileCompPop";
 
-const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery}) => {
+const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery, setImageSrc}) => {
   const [selectedphoto, setSelectedPhoto] = useState(null);
   const [blogimage, setBlogImage] = useState(null);
 
@@ -28,7 +28,7 @@ const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery}) => {
       label: "Select",
       value: "select",
       icon: LuFiles,
-      childComponent: <FileCompPop />,
+      childComponent: <FileCompPop setThumbnail={setThumbnail} setGallery={setGallery} handleOpen={handleOpen} setImageSrc={setImageSrc} />,
     },
     {
       label: "Upload",

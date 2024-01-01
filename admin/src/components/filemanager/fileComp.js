@@ -21,15 +21,19 @@ const FileComp = ({ fileData, token }) => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleFileCheck = function (imageurl) {
-    let imgurl = String(imageurl);
-
+  const handleFileCheck = function (item) {
     setCheckUrl((prevCheckurl) => {
-      if (!prevCheckurl.includes(imgurl)) {
-        console.log("This is the check array", [imgurl, ...prevCheckurl]);
-        return [imgurl, ...prevCheckurl];
+      const isItemChecked = prevCheckurl.some(
+        (checkedItem) => checkedItem._id === item._id
+      );
+
+      if (!isItemChecked) {
+        console.log("This is the check array", [item, ...prevCheckurl]);
+        return [item, ...prevCheckurl];
       } else {
-        const filteredCheckurl = prevCheckurl.filter((url) => url !== imgurl);
+        const filteredCheckurl = prevCheckurl.filter(
+          (checkedItem) => checkedItem._id !== item._id
+        );
         console.log("Removed from check array", filteredCheckurl);
         return filteredCheckurl;
       }
@@ -73,18 +77,31 @@ const FileComp = ({ fileData, token }) => {
     }
   };
 
+  // const handleSelectAll = () => {
+  //   // Get the IDs of all items in the current page
+  //   const allItemIds = currentItems.map((item) => item._id);
+
+  //   // Update the state by merging existing checkurl with new IDs
+  //   setCheckUrl((prevCheckurl) => {
+  //     const updatedCheckUrl =
+  //       prevCheckurl.length === currentItems.length
+  //         ? [] // If all items are already selected, unselect all
+  //         : [...prevCheckurl, ...allItemIds]; // Otherwise, select all items
+
+  //     console.log("Updated checkurl:", updatedCheckUrl); // Log the updated checkurl
+  //     return updatedCheckUrl;
+  //   });
+  // };
+
   const handleSelectAll = () => {
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = fileData.slice(indexOfFirstItem, indexOfLastItem);
-
-    const allImageUrls = currentItems.map((item) => String(item.secure_url));
-
-    // Update the state by merging existing checkurl with new URLs
+    // Update the state by merging existing checkurl with all items on the current page
     setCheckUrl((prevCheckurl) => {
       const updatedCheckUrl =
-        prevCheckurl.length === allImageUrls.length ? [] : [...allImageUrls];
-      console.log("Updated checkurl:", updatedCheckUrl);
+        prevCheckurl.length === currentItems.length
+          ? [] // If all items are already selected, unselect all
+          : [...prevCheckurl, ...currentItems]; // Otherwise, select all items
+
+      console.log("Updated checkurl:", updatedCheckUrl); // Log the updated checkurl
       return updatedCheckUrl;
     });
   };
@@ -179,37 +196,55 @@ const FileComp = ({ fileData, token }) => {
 
         <div className="grid grid-cols-2 gap-4 mt-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4">
           {currentItems &&
-            currentItems.map(({ secure_url, _id, originalname }) => (
+            currentItems.map((item) => (
               <div
                 className="relative flex flex-col gap-4 p-4 rounded-lg shadow-sm"
-                key={_id}
+                key={item._id}
               >
                 <div>
                   <img
                     className="object-cover object-center w-full h-40 max-w-full rounded-lg"
-                    src={secure_url}
+                    src={item.secure_url}
                     alt="gallery-photo"
                   />
                 </div>
 
                 <span className="w-[80%] overflow-hidden text-sm whitespace-nowrap text-ellipsis">
-                  {originalname}
+                  {item.originalname}
                 </span>
                 <div className="absolute z-10 flex flex-row items-center justify-between top-3 w-[80%]">
                   <Checkbox
                     className="cursor-pointer"
-                    checked={checkurl.includes(secure_url)}
+                    checked={
+                      checkurl.includes(item._id) ||
+                      checkurl.some(
+                        (checkedItem) => checkedItem._id === item._id
+                      )
+                    }
                     onChange={() => {
-                      let imageurl = secure_url;
-                      handleFileCheck(imageurl);
+                      handleFileCheck(item);
                     }}
                   />
+                  {/* <Checkbox
+                    className="cursor-pointer"
+                    
+                    checked={
+                      handleSelectAll
+                        ? checkurl.includes(item._id)
+                        : checkurl.some(
+                            (checkedItem) => checkedItem._id === item._id
+                          )
+                    }
+                    onChange={() => {
+                      handleFileCheck(item);
+                    }}
+                  /> */}
 
                   {checkurl.length === 0 && (
                     <MdOutlineDelete
                       className="text-[26px] text-gray-300 hover:text-red-600 cursor-pointer"
                       onClick={() => {
-                        let id = _id;
+                        let id = item_id;
                         handleSingleDelete(id);
                       }}
                     />
