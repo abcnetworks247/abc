@@ -204,7 +204,7 @@ const handleRefresh = () => {
                         scope="col"
                         className="p-4 text-left text-xs font-medium text-gray-500 uppercase"
                       >
-                        Technology
+                        Category
                       </th>
                       <th
                         scope="col"
