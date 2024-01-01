@@ -22,4 +22,4 @@ import Sidebar from "@/components/sidebar/Sidebar";
 
 const layout = HocsessionNotAuth(Layout);
 
-export default  Layout;
+export default  layout;
