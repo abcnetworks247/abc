@@ -7,7 +7,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
-
+import Logo from "@/resources/assets/image/AbcstudioNo.png";
+import Image from 'next/image'
 import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
 
 function Page() {
@@ -160,6 +161,13 @@ function Page() {
         <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
+            <Image 
+                src={Logo}
+                height={50}
+                width={50}
+                draggable={false}
+                className="object-contain h-[80px] w-full"
+                />
               <h1 className="mb-2 text-2xl font-extrabold text-blue-900 xl:text-4xl">
                 Login
               </h1>
@@ -326,11 +334,11 @@ function Page() {
             </div>
           </div>
         </div>
-        <div className="flex-1 hidden text-center bg-blue-900 md:flex">
+        <div className="flex-1 bg-gradient-to-t from-[#00045E] via-[#9D3615] to-[#00045E] w-fit h-screen text-center hidden md:flex">
           <div
-            className="w-full m-12 bg-center bg-no-repeat bg-contain xl:m-16 "
+            className=" h-screen w-full bg-contain bg-center bg-no-repeat "
             style={{
-              backgroundImage: `url(https://www.tailwindtap.com/assets/common/marketing.svg)`,
+              backgroundImage: `url("/Login.svg")`,
             }}
           ></div>
         </div>
