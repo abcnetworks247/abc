@@ -33,6 +33,7 @@ export default function page() {
     discountPercentage: "",
     rating: 4.4,
     category: "",
+    stock: ""
   });
 
   const [thumbnail, setThumbnail] = useState(null);
@@ -50,7 +51,7 @@ export default function page() {
     const { name, value } = e.target;
 
     const processedValue =
-      name === "price" || name === "discountPercentage"
+      name === "price" || name === "discountPercentage" || name === "stock"
         ? parseFloat(value)
         : value;
     setFormData((prevData) => ({
@@ -73,12 +74,12 @@ export default function page() {
         rating: formData.rating,
         category: formData.category,
         description: html,
-        stock: 10,
+        stock: formData.stock,
         thumbnail: thumbnail,
         images: gallery,
       };
 
-      console.log("Before validation:", typeof updatedFormData.images);
+      console.log("Form data before submission", updatedFormData)
 
       const adminToken = Cookies.get("adminToken");
 
@@ -137,7 +138,7 @@ export default function page() {
 
   return (
     <div>
-      <div className="grid max-w-2xl mx-auto mt-14 mt-8 mb-32">
+      <div className="grid max-w-2xl mx-auto  mt-8 mb-32">
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
           <form
             onSubmit={(e) => postProduct(e)}
@@ -225,6 +226,23 @@ export default function page() {
                       id="discountPercentage"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="$2300"
+                      required=""
+                      onChange={(e) => handleInputChange(e)}
+                    />
+                  </div>
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="discount"
+                      className="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                      Stock left
+                    </label>
+                    <input
+                      type="number"
+                      name="stock"
+                      id="stock"
+                      className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                      placeholder="15"
                       required=""
                       onChange={(e) => handleInputChange(e)}
                     />
