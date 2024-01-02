@@ -11,7 +11,7 @@ const NewArrival = ({ allProducts }) => {
   // const { products } = useContext(ProductContext);
   const numberOfSkeletons = 10;
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 5;
+  const productsPerPage = 10;
 
   
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -50,7 +50,7 @@ const NewArrival = ({ allProducts }) => {
           <LoadingSkeleton numberOfSkeletons={numberOfSkeletons} />
         )}
 
-        <div className="sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 border-t p-4">
+        <div className="sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 p-4">
           <div className="flex items-center mb-4 sm:mb-0">
             <a
               href="#"
