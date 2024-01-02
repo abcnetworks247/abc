@@ -153,7 +153,7 @@ const Page = () => {
 
   return (
     <main className="px-5 mt-10">
-      <h1 className="text-3xl font-bold">All News</h1>
+      <h1 className="ml-10 text-3xl font-bold">All News</h1>
       <br />
       {loading ? (
         <div className="flex items-center justify-center h-[70svh] lg:h-full">
@@ -187,7 +187,7 @@ const Page = () => {
             >
               <div className="grid items-start grid-cols-1 space-y-3 lg:flex md:flex lg:space-y-0 md:space-y-0 sm:gap-8 lg:flex-row md:flex-row ">
                 <div
-                  className="rounded  lg:h-52 md:h-48 h-60 sm:w-full"
+                  className="rounded lg:h-52 md:h-48 h-60 sm:w-full"
                   aria-hidden="true"
                 >
                   {/* random image from unsplash*/}
@@ -200,7 +200,7 @@ const Page = () => {
                   </Link>
                 </div>
 
-                <div className="flex  flex-col gap-2 sm:space-y-1 break-words">
+                <div className="flex flex-col gap-2 break-words sm:space-y-1">
                   <span>
                     <button
                       onClick={() => {

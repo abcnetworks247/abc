@@ -6,43 +6,56 @@ import FooterComp from "@/components/Footer/FooterComp";
 import { ProductContext } from "../../../contexts/productContext";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
+import parse from "html-react-parser";
 import ProductSkeleton from "./ProductSkeleton";
+import ImageGallery from "@/components/Products/ImageGallery";
 const page = () => {
-    const router = useRouter();
+  const router = useRouter();
   const { selectedProduct, products } = useContext(ProductContext);
-    const params = useParams();
-     const [localSelectedProduct, setLocalSelectedProduct] = useState(selectedProduct || {});
-   console.log("local", localSelectedProduct)
-  const [loading, setLoading] = useState(true);
+  const params = useParams();
+  const [localSelectedProduct, setLocalSelectedProduct] = useState(
+    selectedProduct || {}
+  );
+
   
-    useEffect(() => {
-     console.log("Saving to localStorage:", selectedProduct);
-      if (!selectedProduct) return
-       localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
-   }, [selectedProduct]);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
-     // Load selectedProduct from localStorage when the component mounts
-     useEffect(() => {
-       const storedProduct = localStorage.getItem("selectedProduct");
-       
+  const openGallery = () => {
+    setIsGalleryOpen(true);
+  };
 
-       const isReloading = sessionStorage.getItem("isReloading");
-         
-        if (storedProduct && isReloading) {
-          const parsedProduct = JSON.parse(storedProduct);
-          setLocalSelectedProduct(parsedProduct);
-          setLoading(false); // Set loading to false once data is loaded
-        } else {
-          // Set the reloading flag for the next reload
-          sessionStorage.setItem("isReloading", "true");
-        }
-     }, []);
-   
-   
+  const closeGallery = () => {
+    setIsGalleryOpen(false);
+  };
+
+  console.log("local", localSelectedProduct);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log("Saving to localStorage:", selectedProduct);
+    if (!selectedProduct) return;
+    localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
+  }, [selectedProduct]);
+
+  // Load selectedProduct from localStorage when the component mounts
+  useEffect(() => {
+    const storedProduct = localStorage.getItem("selectedProduct");
+
+    const isReloading = sessionStorage.getItem("isReloading");
+
+    if (storedProduct && isReloading) {
+      const parsedProduct = JSON.parse(storedProduct);
+      setLocalSelectedProduct(parsedProduct);
+      setLoading(false); // Set loading to false once data is loaded
+    } else {
+      // Set the reloading flag for the next reload
+      sessionStorage.setItem("isReloading", "true");
+    }
+  }, []);
 
   return (
     <div className="bg-gray-200">
-      <div className="bg-white sticky top-0 z-50">
+      <div className="sticky top-0 z-50 bg-white">
         <Navbar />
       </div>
       <div className="px-2 py-4 mb-2 mt-2 bg-white lg:w-[80%] lg:mx-auto">
@@ -52,7 +65,7 @@ const page = () => {
               <div className="flex items-center">
                 <div
                   onClick={() => router.back()}
-                  className="ms-1  whitespace-nowrap  text-xs font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white cursor-pointer"
+                  className="text-xs font-medium text-gray-700 cursor-pointer ms-1 whitespace-nowrap hover:text-blue-600 md:ms-2 "
                 >
                   All products
                 </div>
@@ -61,7 +74,7 @@ const page = () => {
             <li aria-current="page">
               <div className="flex items-center">
                 <svg
-                  className="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1"
+                  className="w-3 h-3 mx-1 text-gray-400 rtl:rotate-180"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -75,7 +88,7 @@ const page = () => {
                     d="m1 9 4-4-4-4"
                   />
                 </svg>
-                <span className="ms-1 text-xs font-medium text-gray-500 md:ms-2 dark:text-gray-400 line-clamp-1">
+                <span className="text-xs font-medium text-gray-500 ms-1 md:ms-2 line-clamp-1">
                   {localSelectedProduct.title}
                 </span>
               </div>
@@ -87,8 +100,8 @@ const page = () => {
       {loading ? (
         <ProductSkeleton />
       ) : (
-        <div className=" relative py-12 overflow-hidden bg-white font-poppins dark:bg-gray-800 overflow-y-auto lg:w-[80%] lg:h-[70%] lg:mx-auto mb-12 lg:rounded-sm">
-          <div className="max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-6 bg-white">
+        <div className=" relative py-12 overflow-hidden bg-white font-poppins overflow-y-auto lg:w-[80%] lg:h-[70%] lg:mx-auto mb-12 lg:rounded-sm">
+          <div className="max-w-6xl px-4 py-4 mx-auto bg-white lg:py-8 md:px-6">
             <div className="flex flex-wrap -mx-4">
               <div className="w-full px-4 md:w-1/2 ">
                 <div className="sticky top-0 overflow-hidden ">
@@ -97,78 +110,49 @@ const page = () => {
                     style={{ height: "450px" }}
                   >
                     <img
-                      src={localSelectedProduct && localSelectedProduct.thumbnail}
+                      src={
+                        localSelectedProduct && localSelectedProduct.thumbnail
+                      }
                       alt=""
                       className="object-contain w-full h-full "
+                      onClick={openGallery}
                     />
                   </div>
                   <div className="flex-wrap hidden md:flex ">
-                    <div className="w-1/2 p-2 sm:w-1/4">
-                      <a
-                        href="#"
-                        className="block border border-blue-100 dark:border-gray-700 dark:hover:border-gray-600 hover:border-blue-300 "
-                      >
-                        <img
-                          src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
-                          }
-                          alt=""
-                          className="object-cover w-full lg:h-32"
-                        />
-                      </a>
-                    </div>
-                    <div className="w-1/2 p-2 sm:w-1/4">
-                      <a
-                        href="#"
-                        className="block border border-blue-100 dark:border-transparent dark:hover:border-gray-600 hover:border-blue-300"
-                      >
-                        <img
-                          src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
-                          }
-                          alt=""
-                          className="object-cover w-full lg:h-32"
-                        />
-                      </a>
-                    </div>
-                    <div className="w-1/2 p-2 sm:w-1/4">
-                      <a
-                        href="#"
-                        className="block border border-blue-100 dark:border-transparent dark:hover:border-gray-600 hover:border-blue-300"
-                      >
-                        <img
-                          src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
-                          }
-                          alt=""
-                          className="object-cover w-full lg:h-32"
-                        />
-                      </a>
-                    </div>
-                    <div className="w-1/2 p-2 sm:w-1/4">
-                      <a
-                        href="#"
-                        className="block border border-blue-100 dark:border-transparent dark:hover:border-gray-600 hover:border-blue-300"
-                      >
-                        <img
-                          src={
-                            localSelectedProduct && localSelectedProduct.thumbnail
-                          }
-                          alt=""
-                          className="object-cover w-full lg:h-32"
-                        />
-                      </a>
-                    </div>
+                    {localSelectedProduct.images.length > 0 &&
+                      localSelectedProduct.images.map((item, index) => (
+                        <div className="w-1/2 p-2 sm:w-1/4" key={index}>
+                          <a
+                            href="#"
+                            className="block border border-blue-100  hover:border-blue-300 "
+                          >
+                            <img
+                              src={item}
+                              alt={`Product Image ${index}`}
+                              className="object-cover w-full lg:h-32"
+                              onClick={openGallery}
+                            />
+                          </a>
+                        </div>
+                      ))}
                   </div>
+
+                  {/* Gallery Modal */}
+                  {isGalleryOpen && (
+                    <ImageGallery
+                      images={localSelectedProduct.images}
+                      onClose={closeGallery}
+                    />
+                  )}
                 </div>
               </div>
               <div className="w-full px-4 md:w-1/2 ">
                 <div className="lg:pl-20">
-                  <div className="pb-6 mb-8 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-lg font-medium text-rose-500 dark:text-rose-200">
+                  <div className="pb-6 mb-8 border-b border-gray-200">
+                    <span className="text-lg font-medium text-rose-500 ">
                       New
                     </span>
-                    <h2 className="max-w-xl mt-2 mb-6 text-xl font-bold dark:text-gray-300 md:text-4xl">
+                    <h2 className="max-w-xl mt-2 mb-6 text-xl font-bold  ">
                       {localSelectedProduct && localSelectedProduct.title}
                     </h2>
                     <div className="flex flex-wrap items-center mb-6">
@@ -203,80 +187,76 @@ const page = () => {
                                   ></path>{" "}
                                 </g>
                               </svg>
-                            )
+                            );
                           })}
                       </ul>
-                      <a
-                        className="mb-4 text-xs underline dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0"
-                        href="#"
-                      >
+                      <a className="mb-4 text-xs underline lg:mb-0" href="#">
                         Be the first to review the product
                       </a>
                     </div>
-                    <p className="max-w-md mb-8 text-gray-700 dark:text-gray-400">
-                      {localSelectedProduct && localSelectedProduct.description}
-                    </p>
-                    <div className="p-4 mb-8 border border-gray-300 dark:border-gray-700">
-                      <h2 className="mb-4 text-xl font-semibold dark:text-gray-400">
+                    <p className="max-w-md mb-8 text-gray-700 ">{}</p>
+                    {parse(
+                      `${
+                        localSelectedProduct && localSelectedProduct.description
+                      }`
+                    )}
+                    <div className="p-4 mb-8 border border-gray-300">
+                      <h2 className="mb-4 text-xl font-semibold">
                         Real time{" "}
-                        <span className="px-2 bg-blue-500 text-gray-50 rounded-full">
+                        <span className="px-2 bg-blue-500 rounded-full text-gray-50">
                           26
                         </span>{" "}
                         visitors right now!{" "}
                       </h2>
-                      <div className="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">
+                      <div className="mb-1 text-xs font-medium text-gray-700 ">
                         Hurry up! left {localSelectedProduct.stock} in Stock
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5  dark:bg-gray-600">
+                      <div className="w-full bg-gray-200 rounded-full h-2.5  ">
                         <div
-                          className="bg-blue-600 dark:bg-blue-400 h-2.5 rounded-full"
+                          className="bg-blue-600  h-2.5 rounded-full"
                           style={{ width: "45%" }}
                         ></div>
                       </div>
                     </div>
-                    <p className="inline-block text-2xl font-semibold text-gray-700 dark:text-gray-400 ">
+                    <p className="inline-block text-2xl font-semibold text-gray-700  ">
                       <span>{`$ ${
                         localSelectedProduct && localSelectedProduct.price
                       }`}</span>
-                      <span className="text-base font-normal text-gray-500 line-through dark:text-gray-400">
+                      <span className="text-base font-normal text-gray-500 line-through ">
                         $1500.00
                       </span>
                     </p>
                   </div>
                   <div className="mb-8">
-                    <h2 className="mb-2 text-xl font-bold dark:text-gray-400">
-                      Color
-                    </h2>
+                    <h2 className="mb-2 text-xl font-bold ">Color</h2>
                     <div className="flex flex-wrap -mb-2">
-                      <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400 dark:border-gray-800 dark:hover:border-gray-400 ">
+                      <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400 ">
                         <div className="w-6 h-6 bg-red-600 rounded-full"></div>
                       </button>
-                      <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400 dark:border-gray-800 dark:hover:border-gray-400">
+                      <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400">
                         <div className="w-6 h-6 bg-green-600 rounded-full"></div>
                       </button>
-                      <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400 dark:border-gray-800 dark:hover:border-gray-400">
+                      <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400">
                         <div className="w-6 h-6 bg-yellow-500 rounded-full"></div>
                       </button>
-                      <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400 dark:border-gray-800 dark:hover:border-gray-400">
+                      <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400">
                         <div className="w-6 h-6 rounded-full bg-sky-400"></div>
                       </button>
                     </div>
                   </div>
                   <div classNames="pb-6 mb-8 border-b border-gray-300 dark:border-gray-700">
-                    <h2 className="mb-2 text-xl font-bold dark:text-gray-400">
-                      Size
-                    </h2>
+                    <h2 className="mb-2 text-xl font-bold ">Size</h2>
                     <div className="flex flex-wrap -mb-2">
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 dark:border-gray-400 hover:text-blue-600 dark:hover:border-gray-300 dark:text-gray-400">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 dark:border-gray-400 hover:text-blue-600  ">
                         XL
                       </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 dark:hover:border-gray-300 dark:text-gray-400">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400  ">
                         S
                       </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 dark:hover:border-gray-300 dark:text-gray-400">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400  ">
                         M
                       </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 dark:hover:border-gray-300 dark:text-gray-400">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400  ">
                         XS
                       </button>
                     </div>
@@ -292,10 +272,10 @@ const page = () => {
                             -{" "}
                           </span>
 
-                          <span className="h-8 w-8 border flex items-center justify-center bg-white text-center text-xs outline-none">
+                          <span className="flex items-center justify-center w-8 h-8 text-xs text-center bg-white border outline-none">
                             {1}
                           </span>
-                          <span className="cursor-pointer rounded-r bg-gray-300 py-1 px-3 duration-100 hover:bg-gray-500 hover:text-blue-50">
+                          <span className="px-3 py-1 duration-100 bg-gray-300 rounded-r cursor-pointer hover:bg-gray-500 hover:text-blue-50">
                             {" "}
                             +{" "}
                           </span>
@@ -303,12 +283,12 @@ const page = () => {
                       </div>
                     </div>
                     <div className="mb-4 mr-4 lg:mb-0">
-                      <button className="w-full h-10 p-2 mr-4 rounded-md bg-blue-900 dark:text-gray-200 text-gray-50 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500">
+                      <button className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md  text-gray-50 hover:bg-blue-600 ">
                         Buy Now
                       </button>
                     </div>
-                    <div className="mb-4 mr-4 lg:mb-0 rounded-sm">
-                      <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50 dark:text-gray-200 dark:border-blue-600 hover:bg-blue-600 hover:border-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 dark:hover:border-blue-500 dark:hover:text-gray-300">
+                    <div className="mb-4 mr-4 rounded-sm lg:mb-0">
+                      <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50  hover:bg-blue-600 hover:border-blue-600 ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
@@ -321,8 +301,8 @@ const page = () => {
                         </svg>
                       </button>
                     </div>
-                    <div className="mb-4 lg:mb-0 rounded-sm">
-                      <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50 dark:text-gray-200 dark:border-blue-600 hover:bg-blue-600 hover:border-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 dark:hover:border-blue-500 dark:hover:text-gray-300">
+                    <div className="mb-4 rounded-sm lg:mb-0">
+                      <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50  hover:bg-blue-600 hover:border-blue-600 ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
