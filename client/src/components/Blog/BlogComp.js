@@ -193,7 +193,7 @@ export default function () {
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <Image
                         src={post.blogimage}
-                        className="rounded"
+                        className="rounded h-[212px]"
                         height={500}
                         width={500}
                         alt="img"
@@ -237,7 +237,7 @@ export default function () {
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <Image
                         src={post.blogimage}
-                        className="rounded"
+                        className="rounded h-[212px]"
                         height={500}
                         width={500}
                         alt="img"
