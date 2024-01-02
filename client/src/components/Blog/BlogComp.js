@@ -14,7 +14,7 @@ import { Autoplay, Navigation, HashNavigation } from "swiper/modules";
 // import link
 import Link from "next/link";
 
-export default function BlogComp() {
+export default function () {
   const [loading, setLoading] = useState(true);
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
@@ -182,9 +182,9 @@ export default function BlogComp() {
               {/* <!-- recent posts --> */}
               <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
                 <h2 className="text-3xl font-bold">Popular news</h2>
-                <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+                {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
-                </a>
+                </a> */}
               </div>
               <div className="block space-x-0 lg:flex lg:space-x-6">
                 {/* map through the fetched data.popular */}
@@ -206,13 +206,12 @@ export default function BlogComp() {
                           {post.shortdescription}
                         </p>
 
-                        <a
-                          href="#"
+                        <span
                           className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
                         >
                           {" "}
                           Read more{" "}
-                        </a>
+                        </span>
                       </div>
                     </Link>
                   </div>
@@ -227,9 +226,9 @@ export default function BlogComp() {
               {/* <!-- popular posts --> */}
               <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
                 <h2 className="text-3xl font-bold">Top news</h2>
-                <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+                {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
-                </a>
+                </a> */}
               </div>
               <div className="block space-x-0 lg:flex lg:space-x-6">
                 {/* map through top news */}
@@ -251,13 +250,12 @@ export default function BlogComp() {
                           {post.shortdescription}
                         </p>
 
-                        <a
-                          href="#"
+                        <span
                           className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
                         >
                           {" "}
                           Read more{" "}
-                        </a>
+                        </span>
                       </div>
                     </Link>
                   </div>
