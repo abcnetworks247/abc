@@ -58,7 +58,7 @@ const page = () => {
 
       <NewArrival allProducts={allProducts} />
       <Ads />
-      <Recommended />
+      <Recommended allProducts={allProducts} />
       <FooterComp />
       <ProductModal />
       {/* <SearchModal/> */}
