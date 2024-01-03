@@ -4,7 +4,7 @@ import SearchBar from "./SearchBar";
 import SearchMobile from "./SearchMobile";
 import ClickableSearch from "./ClickableSearch";
 
-const Banner = () => {
+const Banner = ({  allProducts}) => {
   return (
     // <div className="bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[38vh]">
     // <div className="bg-cover bg-no-repeat bg-center py-36 bg-[url('/assets/images/banner-bg.jpg')] h-[38vh]">
@@ -16,10 +16,11 @@ const Banner = () => {
         <p className="text-lg text-center text-gray-700 mt-10">
           Search All Products
         </p>
-        <SearchBar />
+        <SearchBar
+          allProducts={allProducts}
+        />
         <ClickableSearch />
       </div>
-        
 
       {/* <div className="">
             <a href="#" className="bg-primary border border-primary text-white px-8 py-3 font-medium 

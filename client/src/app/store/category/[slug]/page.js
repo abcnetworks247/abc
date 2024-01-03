@@ -10,31 +10,25 @@ import LoadingSkeleton from '@/components/NewArrival/Loadingskeleton'
 import { useRouter } from 'next/navigation'
 
 
+
 const page = () => {
-    const params = useParams()
-    const [category, setCategory] = useState([])
-    const numberOfSkeletons = 5
-    const router = useRouter()
+  const { allProducts } = UseProductProvider()
+   const [category, setCategory] = useState([]);
+  const params = useParams()
+  const cat = params.slug
+ 
+  const numberOfSkeletons = 5
+  const router = useRouter()
 
+  useEffect(() => {
+    const categoryProducts = allProducts.filter((product) => {
+      return product.category === cat
+    })
+    setCategory(categoryProducts)
+  },[])
+ 
+     
 
-    useEffect(() => {
-         const fetchProductsByCategory = async () => {
-        try {
-            // Assuming you have an API endpoint for fetching products by category
-            const response = await fetch(
-            `https://fakestoreapi.com/products/category/${params.slug}`
-            );
-            const data = await response.json();
-
-            // Update the products state with the fetched data
-            setCategory(data);
-           
-        } catch (error) {
-            console.error("Error fetching products:", error);
-        }
-    };
-        fetchProductsByCategory()
-    }, [])
     
     return (
       <>

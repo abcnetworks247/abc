@@ -9,14 +9,21 @@ import { useRouter } from "next/navigation";
 import parse from "html-react-parser";
 import ProductSkeleton from "./ProductSkeleton";
 import ImageGallery from "@/components/Products/ImageGallery";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
 const page = () => {
   const router = useRouter();
-  const { selectedProduct, products } = useContext(ProductContext);
+  const { selectedProduct, handleAddToWishlist, handleRemoveFromWishlist, handleCartClick } = UseProductProvider()
   const params = useParams();
   const [localSelectedProduct, setLocalSelectedProduct] = useState(
     selectedProduct || {}
   );
+  
+const [wishClick, setWishClick] = useState(false);
 
+const handleWishClick = () => {
+  setWishClick((prev) => !prev);
+};
+  
   
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
@@ -200,7 +207,7 @@ const page = () => {
                         localSelectedProduct && localSelectedProduct.description
                       }`
                     )}
-                    <div className="p-4 mb-8 border border-gray-300">
+                    {/* <div className="p-4 mb-8 border border-gray-300">
                       <h2 className="mb-4 text-xl font-semibold">
                         Real time{" "}
                         <span className="px-2 bg-blue-500 rounded-full text-gray-50">
@@ -217,7 +224,7 @@ const page = () => {
                           style={{ width: "45%" }}
                         ></div>
                       </div>
-                    </div>
+                    </div> */}
                     <p className="inline-block text-2xl font-semibold text-gray-700  ">
                       <span>{`$ ${
                         localSelectedProduct && localSelectedProduct.price
@@ -227,7 +234,7 @@ const page = () => {
                       </span>
                     </p>
                   </div>
-                  <div className="mb-8">
+                  {/* <div className="mb-8">
                     <h2 className="mb-2 text-xl font-bold ">Color</h2>
                     <div className="flex flex-wrap -mb-2">
                       <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400 ">
@@ -243,10 +250,10 @@ const page = () => {
                         <div className="w-6 h-6 rounded-full bg-sky-400"></div>
                       </button>
                     </div>
-                  </div>
+                  </div> */}
                   <div classNames="pb-6 mb-8 border-b border-gray-300 dark:border-gray-700">
-                    <h2 className="mb-2 text-xl font-bold ">Size</h2>
-                    <div className="flex flex-wrap -mb-2">
+                    {/* <h2 className="mb-2 text-xl font-bold ">Size</h2> */}
+                    {/* <div className="flex flex-wrap -mb-2">
                       <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 dark:border-gray-400 hover:text-blue-600  ">
                         XL
                       </button>
@@ -259,14 +266,14 @@ const page = () => {
                       <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400  ">
                         XS
                       </button>
-                    </div>
+                    </div> */}
                   </div>
 
-                  <div className="flex flex-wrap items-center mt-2 ">
+                  <div className="flex items-center mt-2 ">
                     <div className="mb-4 mr-4 lg:mb-0">
                       <div className="w-28 ">
                         {/* button */}
-                        <div className="flex items-center border-gray-100">
+                        {/* <div className="flex items-center border-gray-100">
                           <span className="cursor-pointer rounded-l bg-gray-300 py-1 px-3.5 duration-100 hover:bg-gray-500 hover:text-blue-50">
                             {" "}
                             -{" "}
@@ -279,12 +286,17 @@ const page = () => {
                             {" "}
                             +{" "}
                           </span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <div className="mb-4 mr-4 lg:mb-0">
-                      <button className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md  text-gray-50 hover:bg-blue-600 ">
-                        Buy Now
+                      <button
+                        onClick={(e) =>
+                          handleCartClick(e, localSelectedProduct)
+                        }
+                        className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md  text-gray-50 hover:bg-blue-600 "
+                      >
+                        Add to Cart
                       </button>
                     </div>
                     <div className="mb-4 mr-4 rounded-sm lg:mb-0">
@@ -301,19 +313,41 @@ const page = () => {
                         </svg>
                       </button>
                     </div>
-                    <div className="mb-4 rounded-sm lg:mb-0">
-                      <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50  hover:bg-blue-600 hover:border-blue-600 ">
+                    <div
+                      className="mb-4 rounded-sm lg:mb-0 cursor-pointer"
+                    >
+                      {wishClick ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className=" bi bi-heart"
+                          width="20"
+                          height="20"
+                          className={`bi bi-heart-fill}`}
                           viewBox="0 0 16 16"
+                          style={{ fill: "#FF6666" }}
+                          onClick={(e) => {
+                            handleWishClick();
+                            handleRemoveFromWishlist(e, localSelectedProduct);
+                          }}
                         >
-                          <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                          <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
                         </svg>
-                      </button>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          className={`bi bi-heart`}
+                          viewBox="0 0 16 16"
+                          stroke="red"
+                          fill="none"
+                          onClick={(e) => {
+                            handleWishClick();
+                            handleAddToWishlist(e,localSelectedProduct);
+                          }}
+                        >
+                          <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
+                        </svg>
+                      )}
                     </div>
                   </div>
                 </div>

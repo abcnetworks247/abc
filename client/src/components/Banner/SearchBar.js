@@ -2,26 +2,24 @@
 import React from "react";
 import { useState, useRef, useEffect } from "react";
 import AllResults from "./AllResults";
-import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useRouter } from "next/navigation";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
+import Link from "next/link";
 
 const SearchBar = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
-  const {
-    searchProducts,
-    setSearchResults,
-    searchResults,
-    fetchProductsByCategory,
-  } = UseProductProvider();
-  const dropDownRef = useRef(null)
+  const [searchTerm, setSearchTerm] = useState("");
+  const { searchResults, handleSearch, allProducts } = UseProductProvider()
+  
+  console.log("searchbar", searchResults)
+  console.log("handleSearch", handleSearch)
+  const dropDownRef = useRef(null);
 
   const handleDropdownRef = () => {
-    dropDownRef.current.style.display = "none"
-    handleDropdown()
-  }
-  
- 
+    dropDownRef.current.style.display = "none";
+    handleDropdown();
+  }; 
 
   const handleFocus = () => {
     setIsFocused((prev) => !prev);
@@ -33,22 +31,16 @@ const SearchBar = () => {
 
   const [isDropdown, setIsDropdown] = useState(false);
   const handleDropdown = () => {
-      setIsDropdown(prev => !prev)
-  } 
-  
- 
-  const hasSearchResults = searchResults && searchResults.length > 0;
-
-  const handleSearch = (e) => {
-    const query = e.target.value;
-    if (!query || query === "") {
-      // If the query is empty, clear the searchResults
-      setSearchResults([]);
-    } else {
-      // If there is a query, perform the search
-      searchProducts(query);
-    }
+    setIsDropdown((prev) => !prev);
   };
+
+ const hasSearchResults = searchResults && searchResults.length > 0;
+
+
+   
+
+
+
   return (
     <>
       <form
@@ -100,53 +92,18 @@ const SearchBar = () => {
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdown-button"
                 >
-                  <li>
-                    <button
-                      onClick={() =>
-                        router.push(`/store/category/${"men's clothing"}`)
-                      }
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Men
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() =>
-                        router.push(`/store/category/${"jewelery"}`)
-                      }
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Jewelry
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() =>
-                        router.push(`/store/category/${"electronics"}`)
-                      }
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Electronics
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() =>
-                        router.push(
-                          `/store/category/${"women's clothing"}`
-                        )
-                      }
-                    
-                      type="button"
-                      className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                    >
-                      Women'sclothing
-                    </button>
-                  </li>
+                  {Array.from(
+                    new Set(allProducts.map((product) => product.category))
+                  ).map((category) => (
+                    <li key={category}>
+                      <Link
+                        href={`/store/category/${category}`}
+                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >
+                        {category}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </>
@@ -163,9 +120,15 @@ const SearchBar = () => {
               className="block p-2.5 w-[30vw] py-2 bg-white outline-none border-none  text-lg text-gray-900 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:border-s-gray-700  dark:border-gray-600 placeholder-gray-400 dark:text-white "
               placeholder="Search here..."
               onFocus={handleFocus}
-              onChange={handleSearch}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                handleSearch(searchTerm);
+              }}
             />{" "}
-            <button className="bg-blue-500 absolute z-10 right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg">
+            <button
+              onClick={() => handleResultClick(searchTerm)}
+              className="bg-blue-500 absolute z-10 right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg"
+            >
               <svg
                 className="w-4 h-4 "
                 aria-hidden="true"
@@ -186,11 +149,10 @@ const SearchBar = () => {
         </div>
         {isFocused && hasSearchResults && (
           <AllResults
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
             hasSearchResults={hasSearchResults}
             isFocused={isFocused}
             handleFocus={handleFocus}
+            searchTerm={searchTerm}
           />
         )}
       </form>

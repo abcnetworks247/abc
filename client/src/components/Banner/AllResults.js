@@ -2,24 +2,20 @@
 import React from 'react'
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
+import { UseProductProvider } from '../../../contexts/ProductProvider';
 
-const AllResults = ({ searchResults, setSearchResults, isFocused,  handleFocus}) => {
+const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
   const modalRef = useRef(null);
+   const {handleResultClick, searchResults} = UseProductProvider()
+  console.log("all results", searchResults)
   
-    const router = useRouter()
-  const handleRoute = () => {
-      handleFocus();
-      router.push("/searchResults")
-      setSearchResults(searchResults);
-     
-    console.log("route change")
-       
-    };
+  
 
    const handleModalRef = () => {
      modalRef.current.style.display = "none";
      handleFocus();
-   };  
+  };  
+  
 
     return (
       <>
@@ -27,8 +23,8 @@ const AllResults = ({ searchResults, setSearchResults, isFocused,  handleFocus})
           {searchResults.map((product) => (
             <div
               className="flex items-center cursor-pointer p-2 hover:bg-gray-100 rounded-md z-40"
-              onClick={() => handleRoute()}
-              key={product.id}
+              onClick={() => handleResultClick(searchTerm)}
+              key={product._id}
             >
               <svg
                 className="w-4 h-4 text-gray-500 mr-2"

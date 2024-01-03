@@ -2,16 +2,42 @@
 import React from 'react'
 import Navbar from '@/components/navbar/Navbar'
 import NewArrival from '@/components/NewArrival/NewArrival'
-import { UseProductProvider } from '../../../contexts/ProductProvider'
+
 import SingleArrival from '@/components/NewArrival/SingleArrival'
 import LoadingSkeleton from '@/components/NewArrival/Loadingskeleton'
 import FooterComp from '@/components/Footer/FooterComp'
 
-
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { UseProductProvider } from '../../../contexts/ProductProvider'
 
 
 const page = () => {
-  const { searchResults } = UseProductProvider();
+   
+  const { searchResults, handleSearch, setSearchResult } = UseProductProvider()
+  
+  const params = useSearchParams()
+
+  const searchTerm = params.get("term")
+  console.log("result page", searchTerm)
+
+
+  useEffect(() => {
+   console.log("useEffect triggered with searchTerm:", searchTerm);
+   if (!searchResults) {
+       console.log("useeffect", searchTerm);
+       handleSearch(searchTerm);
+    }
+    
+}, []);
+
+  
+
+ 
+ 
+
+  
+  
   const numberOfSkeletons= 5
   return (
     <div>
