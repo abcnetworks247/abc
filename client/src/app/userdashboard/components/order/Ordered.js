@@ -7,7 +7,7 @@ const Ordered = ({product}) => {
     <div className=" flex items-center justify-between mt-4 px-2 py-2 border border-gray-200 gap-8">
       <div className="flex items-center gap-2 grow-0">
         <div className="h-24 w-24 ">
-          <img src={product.image} className="object-contain h-full w-full" />
+          <img src={product.thumbnail} className="object-contain h-full w-full" />
         </div>
         <div className="flex flex-col">
           <p className="text-gray-600 line-clamp-1">{product.title}</p>

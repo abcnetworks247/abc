@@ -74,10 +74,10 @@ const page = () => {
                     />
                   </svg> */}
                   <div
-                    onClick ={()=>router.back()}
+                    onClick={() => router.back()}
                     className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"
                   >
-                    All Products
+                    store
                   </div>
                 </div>
               </li>
@@ -106,12 +106,12 @@ const page = () => {
             </ol>
           </nav>
         </div>
-        <div className="bg-gray-700 py-6 px-2  ">
-          <h2 className="text-sm sm:text-md lg:text-lg font-medium text-white ">
-            Explore Results: {params.slug}
-          </h2>
-        </div>
+       
         <div className=" py-10 px-2  lg:px-28 bg-gray-50 h-full">
+          <div className="flex bg-white items-center justify-between border border-b border-gray-100 p-4">
+            <p className="text-lg">{cat} </p>
+            <p className="text-xs">{category.length} products found </p>
+          </div>
           {category.length > 0 ? (
             <div className="grid px-2 sm:px-4  grid-cols-2 gap-4 lg:gap-4 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {category.map((product) => (

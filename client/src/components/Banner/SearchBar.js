@@ -49,7 +49,7 @@ const SearchBar = () => {
         } hidden sm:block transition-all duration-300 relative`}
       >
         <div className="flex relative h-full">
-          <label
+          {/* <label
             for="search-dropdown"
             className="mb-2 text-sm font-medium sr-only dark:text-white"
           >
@@ -60,7 +60,7 @@ const SearchBar = () => {
             data-dropdown-toggle="dropdown"
             className="inline-flex items-center flex-shrink-0 h-full py-2 bg-opacity-25 border border-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:hover:bg-gray-600 "
             type="button"
-          ></button>
+          ></button> */}
           <div
             onClick={handleDropdown}
             className="flex flex-row items-center justify-center h-full gap-2 px-4 mr-1 text-sm font-medium text-center text-gray-900 bg-white rounded-s-lg"
@@ -120,6 +120,7 @@ const SearchBar = () => {
               className="block p-2.5 w-[30vw] py-2 bg-white outline-none border-none  text-lg text-gray-900 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:border-s-gray-700  dark:border-gray-600 placeholder-gray-400 dark:text-white "
               placeholder="Search here..."
               onFocus={handleFocus}
+              value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
                 handleSearch(searchTerm);
@@ -147,7 +148,7 @@ const SearchBar = () => {
             </button>
           </div>
         </div>
-        {isFocused && hasSearchResults && (
+        {isFocused && hasSearchResults && searchTerm && (
           <AllResults
             hasSearchResults={hasSearchResults}
             isFocused={isFocused}

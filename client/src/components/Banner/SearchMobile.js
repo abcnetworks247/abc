@@ -3,27 +3,20 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import Link from "next/link";
+import { useState } from "react";
 
 const SearchMobile = () => {
-  const { searchProducts, setSearchResults } = UseProductProvider();
+  const { handleSearch, setSearchResults, allProducts } = UseProductProvider();
   const router = useRouter();
 
-  const handleSearch = (e) => {
-    const query = e.target.value;
-    if (!query || query === "") {
-      // If the query is empty, clear the searchResults
-      setSearchResults([]);
-    } else {
-      // If there is a query, perform the search
-      searchProducts(query);
-    }
-  };
+  const [searchTerm, setSearchTerm] = useState("");
+  
 
   return (
     <form className="sm:hidden h-12 border border-blue-100 shadow-sm p-3">
       <div class="flex items-center justify-between bg-white h-full px-4">
         {/* <!-- Left Arrow Icon --> */}
-        <div onClick={() => router.push("/store")}>
+        <div onClick={() => router.back()}>
           <svg
             className="w-4 h-4 "
             aria-hidden="true"
@@ -46,7 +39,10 @@ const SearchMobile = () => {
           type="text"
           className=" h-full bg-transparent focus:outline-none "
           placeholder="Search..."
-          onChange={handleSearch}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            handleSearch(searchTerm);
+          }}
           autoFocus
         />
 

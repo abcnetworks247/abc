@@ -13,8 +13,6 @@ const ProductProvider = ({ children }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [hasFetchedData, setHasFetchedData] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
@@ -27,7 +25,7 @@ const ProductProvider = ({ children }) => {
    const [clickState, setClickState] = useState(false);
   const [screen, setScreen] = useState(!isTabletOrMobile)
   const [category, setCategory] = useState([]);
-  console.log("hasFetchedData", hasFetchedData)
+  
   
   
   
@@ -77,7 +75,7 @@ const ProductProvider = ({ children }) => {
   };
   const removeFromCart = (product) => {
     const newCartList = cartProducts.filter(
-      (cartProduct) => product.id !== cartProduct.id
+      (cartProduct) => product._id !== cartProduct._id
     );
     setCartProducts(newCartList)
     
@@ -89,7 +87,8 @@ const ProductProvider = ({ children }) => {
    const handleRemoveFromCart = (e, product) => {
      e.stopPropagation();
      removeFromCart(product);
-   };
+  };
+  
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
     addToWishlist(product);
@@ -120,9 +119,10 @@ const ProductProvider = ({ children }) => {
     }
   };
 
+
  const updateProduct = (updatedProduct) => {
    const updatedCart = cartProducts.map((product) =>
-     product.id === updatedProduct.id ? updatedProduct : product
+     product._id === updatedProduct._id ? updatedProduct : product
    );
 
    setCartProducts(updatedCart);
@@ -138,14 +138,14 @@ const ProductProvider = ({ children }) => {
     e.stopPropagation();
     //check first if the item exist in the cart
   const existingCartItem = cartProducts.find(
-    (cartItem) => cartItem.id === product.id
+    (cartItem) => cartItem._id === product._id
     );
   console.log("existing item", existingCartItem)
 
   if (existingCartItem) {
     // If the item already exists in the cart, increase its quantity
     const updatedCart = cartProducts.map((cartItem) =>
-      cartItem.id === product.id
+      cartItem._id === product._id
         ? { ...cartItem, quantity: cartItem.quantity + 1 }
         : cartItem
     );
@@ -178,7 +178,7 @@ const ProductProvider = ({ children }) => {
     setWishlist(savedWishItems);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
-  // Retrieve products from local storage
+  
 
   useEffect(() => {
     // Retrieve cartProducts from local storage when component mounts
@@ -189,16 +189,9 @@ const ProductProvider = ({ children }) => {
         : "[]"
     );
 
-    
   
-    const storedProducts = JSON.parse(
-    typeof window !== "undefined"
-      ? localStorage.getItem("cachedProducts") || "[]"
-      : "[]"
-  );
-
     setCartProducts(storedCartProducts);
-    setProducts(storedProducts)
+   
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
 
@@ -254,11 +247,10 @@ const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-        products,
+       
         cartProducts,
         selectedProduct,
         isModalOpen,
-        setProducts,
         handleProductClick,
         openModal,
         closeModal,
