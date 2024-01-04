@@ -12,7 +12,8 @@ import ImageGallery from "@/components/Products/ImageGallery";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 const page = () => {
   const router = useRouter();
-  const { selectedProduct, handleAddToWishlist, handleRemoveFromWishlist, handleCartClick } = UseProductProvider()
+  const { selectedProduct, handleAddToWishlist, handleRemoveFromWishlist,handleCartClick } =
+    UseProductProvider()
   const params = useParams();
   const [localSelectedProduct, setLocalSelectedProduct] = useState(
     selectedProduct || {}
@@ -145,12 +146,12 @@ const handleWishClick = () => {
                   </div>
 
                   {/* Gallery Modal */}
-                  {isGalleryOpen && (
+                  {/* {isGalleryOpen && (
                     <ImageGallery
                       images={localSelectedProduct.images}
                       onClose={closeGallery}
                     />
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="w-full px-4 md:w-1/2 ">
@@ -313,9 +314,7 @@ const handleWishClick = () => {
                         </svg>
                       </button>
                     </div>
-                    <div
-                      className="mb-4 rounded-sm lg:mb-0 cursor-pointer"
-                    >
+                    <div className="mb-4 rounded-sm lg:mb-0 cursor-pointer">
                       {wishClick ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -342,7 +341,7 @@ const handleWishClick = () => {
                           fill="none"
                           onClick={(e) => {
                             handleWishClick();
-                            handleAddToWishlist(e,localSelectedProduct);
+                            handleAddToWishlist(e, localSelectedProduct);
                           }}
                         >
                           <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
@@ -354,6 +353,12 @@ const handleWishClick = () => {
               </div>
             </div>
           </div>
+          {isGalleryOpen && (
+            <ImageGallery
+              images={localSelectedProduct.images}
+              onClose={closeGallery}
+            />
+          )}
         </div>
       )}
 

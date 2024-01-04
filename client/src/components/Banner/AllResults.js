@@ -41,7 +41,7 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                 />
               </svg>
-              {product.title}
+              <span className='text-sm line-clamp-1'>{product.title}</span>
             </div>
           ))}
         </div>
@@ -50,7 +50,6 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
             className="fixed inset-0 z-10 bg-black bg-opacity-30"
             onClick={handleModalRef}
             ref={modalRef}
-          
           ></div>
         )}
       </>

@@ -66,7 +66,7 @@ const ProductProvider = ({ children }) => {
 
   const removeFromWishlist = (product) => {
     const newWishList = Wishlist.filter(
-      (wishproduct) => product.id !== wishproduct.id
+      (wishproduct) => product._id !== wishproduct._id
     );
       setWishlist(newWishList)
      if (typeof window !== "undefined") {

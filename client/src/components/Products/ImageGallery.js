@@ -1,84 +1,68 @@
 "use client"
-
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import React from "react";
 import { useRef } from "react";
 const ImageGallery = ({ images, onClose }) => {
-   const scrollRef = useRef();
-   const imageWidth = window.innerWidth;
 
-   const scrollLeft = () => {
-     if (scrollRef.current) {
-       const currentScroll = scrollRef.current.scrollLeft;
-       const newScroll = currentScroll - imageWidth;
-       const targetIndex = Math.max(0, Math.floor(newScroll / imageWidth));
-       scrollRef.current.scrollTo({
-         left: targetIndex * imageWidth,
-         behavior: "smooth",
-       });
-     }
-   };
-
-   const scrollRight = () => {
-     if (scrollRef.current) {
-       const currentScroll = scrollRef.current.scrollLeft;
-       const newScroll = currentScroll + imageWidth;
-       const targetIndex = Math.min(
-         images.length - 1,
-         Math.floor(newScroll / imageWidth)
-       );
-       scrollRef.current.scrollTo({
-         left: targetIndex * imageWidth,
-         behavior: "smooth",
-       });
-     }
-   };
 
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center z-[50]">
-      <div className="relative max-w-3xl w-full h-[80vh] p-4 py-4 bg-white rounded-lg overflow-hidden">
-        <div className="flex items-center justify-between mb-4">
-          <span className="text-lg font-semibold text-gray-700">
-            Product Images
-          </span>
-          <button
-            onClick={onClose}
-            className="text-gray-700 hover:text-gray-900 focus:outline-none"
-          >
-            &#10005;
+    <div
+      className="fixed top-0 left-0 w-full h-full bg-black
+     bg-opacity-75 flex justify-center z-[2000]"
+    >
+      <div className="bg-white p-5 rounded-sm max-h-fit ">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-sm">Product Gallery</p>
+          <button onClick={onClose}>
+            <svg
+  
+              className="w-6 h-6"
+              viewBox="0 0 512 512"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              fill="#737373"
+              stroke="#737373"
+            >
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <title>cancel</title>
+                <g
+                  id="Page-1"
+                  stroke="none"
+                  strokeWidth="1"
+                  fill="none"
+                  fillRule="evenodd"
+                >
+                  <g
+                    id="work-case"
+                    fill="#737373"
+                    transform="translate(91.520000, 91.520000)"
+                  >
+                    <polygon
+                      id="Close"
+                      points="328.96 30.2933333 298.666667 1.42108547e-14 164.48 134.4 30.2933333 1.42108547e-14 1.42108547e-14 30.2933333 134.4 164.48 1.42108547e-14 298.666667 30.2933333 328.96 164.48 194.56 298.666667 328.96 328.96 298.666667 194.56 164.48"
+                    ></polygon>
+                  </g>
+                </g>
+              </g>
+            </svg>
           </button>
         </div>
-        <div
-          ref={scrollRef}
-          className="flex h-full overflow-x-scroll"
-          style={{ scrollSnapType: "x mandatory", scrollBehavior: "smooth" }}
-        >
-          
-          {images.map((image, index) => (
-            <div
-              key={index}
-              className="w-full h-full flex-shrink-0 flex-grow-0"
-            >
-              <img
-                src={image}
-                alt={`Product Image ${index}`}
-                className="object-contain w-full h-full"
-              />
-            </div>
-          ))}
+        <div className="w-full h-full sm:w-[30vw] sm:h-[30vh]">
+          <Carousel className="h-full" showArrows={true}>
+            {images.map((image) => (
+              <img src={image} alt={`Product Image`} />
+            ))}
+          </Carousel>
         </div>
-        <button
-          onClick={scrollLeft}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 text-white text-2xl p-2 focus:outline-none hover:bg-black hover:bg-opacity-50"
-        >
-          {"<"}
-        </button>
-        <button
-          onClick={scrollRight}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 text-white text-2xl p-2 focus:outline-none hover:bg-black hover:bg-opacity-50"
-        >
-          {">"}
-        </button>
       </div>
     </div>
   );
