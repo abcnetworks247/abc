@@ -23,7 +23,7 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
           {searchResults.map((product) => (
             <div
               className="flex items-center cursor-pointer p-2 hover:bg-gray-100"
-              onClick={() => handleResultClick(searchTerm)}
+              onClick={(e) => handleResultClick(searchTerm, e)}
               key={product._id}
             >
               <svg
@@ -47,7 +47,7 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
         </div>
         {isFocused && (
           <div
-            className="fixed top-[40px] left-0 w-full h-screen z-10 bg-black bg-opacity-30"
+            className="fixed top-[120px] left-0 w-full h-screen z-10 bg-black bg-opacity-30"
             onClick={handleModalRef}
             ref={modalRef}
           ></div>

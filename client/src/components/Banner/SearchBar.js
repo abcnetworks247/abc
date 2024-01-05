@@ -10,7 +10,7 @@ const SearchBar = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const { searchResults, handleSearch, allProducts } = UseProductProvider()
+  const { searchResults, handleSearch, allProducts, handleResultClick } = UseProductProvider()
   
   console.log("searchbar", searchResults)
   console.log("handleSearch", handleSearch)
@@ -120,8 +120,8 @@ const SearchBar = () => {
               }}
             />{" "}
             <button
-              onClick={() => handleResultClick(searchTerm)}
-              className="bg-blue-500 h-full w-[4vw] flex items-center justify-center rounded-r-md "
+              onClick={(e) => handleResultClick(searchTerm, e)}
+              className="bg-blue-500 h-full w-8 flex items-center justify-center rounded-r-md shrink-0"
             >
               <svg
                 className="w-4 h-full "
@@ -159,7 +159,7 @@ const SearchBar = () => {
       )} */}
       {isDropdown && (
         <div
-          className="fixed top-[200px] z-10 bg-black bg-opacity-30"
+          className="fixed top-12 z-10 bg-black bg-opacity-30"
           ref={dropDownRef}
           onClick={handleDropdownRef}
         ></div>
