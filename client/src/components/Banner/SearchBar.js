@@ -43,31 +43,25 @@ const SearchBar = () => {
 
   return (
     <>
-      <form
+      {/* <form
         className={`${isFocused && "z-40"}  ${
-          isDropdown && "z-[1000]"
+          isDropdown && "z-[]"
         } hidden sm:block transition-all duration-300 relative`}
+      > */}
+      <form
+        className={`${
+          isFocused && "z-40"
+        }  transition-all duration-300 relative border w-[80%] lg:w-[70%] h-10 bg-white gap-6 mx-auto border-gray-200 rounded-md`}
       >
-        <div className="flex relative h-full">
-          {/* <label
-            for="search-dropdown"
-            className="mb-2 text-sm font-medium sr-only dark:text-white"
-          >
-            Your Email
-          </label>
-          <button
-            id="dropdown-button"
-            data-dropdown-toggle="dropdown"
-            className="inline-flex items-center flex-shrink-0 h-full py-2 bg-opacity-25 border border-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:hover:bg-gray-600 "
-            type="button"
-          ></button> */}
+        <div className="flex items-center relative h-full w-full">
           <div
             onClick={handleDropdown}
-            className="flex flex-row items-center justify-center h-full gap-2 px-4 mr-1 text-sm font-medium text-center text-gray-900 bg-white rounded-s-lg"
+            className="flex flex-row items-center h-full gap-4 text-sm font-medium text-gray-900 bg-gray-200 px-2"
           >
-            All categories{" "}
+            <span>All</span>
+
             <svg
-              className="w-2.5 h-2.5 ms-2.5"
+              className="w-2.5 h-2.5 "
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -81,12 +75,12 @@ const SearchBar = () => {
                 d="m1 1 4 4 4-4"
               />
             </svg>
-          </div>
+          </div>{" "}
           {isDropdown && (
             <>
               <div
                 id="dropdown"
-                className={` absolute top-[3rem] left-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}
+                className={` absolute top-10 left-0 bg-white divide-y divide-gray-100  shadow w-44 border`}
               >
                 <ul
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -108,16 +102,15 @@ const SearchBar = () => {
               </div>
             </>
           )}
-
           <div
-            className={`relative flex flex-row h-full rounded-r-lg w-fit ${
+            className={`relative grow flex flex-row justify-between h-full rounded-r-lg w-fit pl-2 ${
               isFocused && "z-40"
             }`}
           >
             <input
               type="search"
               id="search-dropdown"
-              className="block p-2.5 w-[30vw] py-2 bg-white outline-none border-none  text-lg text-gray-900 rounded-e-xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:border-s-gray-700  dark:border-gray-600 placeholder-gray-400 dark:text-white "
+              className="outline-none grow text-sm bg-transparent text-gray-900  placeholder-gray-400  "
               placeholder="Search here..."
               onFocus={handleFocus}
               value={searchTerm}
@@ -128,10 +121,10 @@ const SearchBar = () => {
             />{" "}
             <button
               onClick={() => handleResultClick(searchTerm)}
-              className="bg-blue-500 absolute z-10 right-0 top-0 h-full  w-[4vw] flex items-center justify-center  rounded-e-lg"
+              className="bg-blue-500 h-full w-[4vw] flex items-center justify-center rounded-r-md "
             >
               <svg
-                className="w-4 h-4 "
+                className="w-4 h-full "
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -166,7 +159,7 @@ const SearchBar = () => {
       )} */}
       {isDropdown && (
         <div
-          className="fixed inset-0 z-10 bg-black bg-opacity-30"
+          className="fixed top-[200px] z-10 bg-black bg-opacity-30"
           ref={dropDownRef}
           onClick={handleDropdownRef}
         ></div>

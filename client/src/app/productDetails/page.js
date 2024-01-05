@@ -108,7 +108,7 @@ const handleWishClick = () => {
       {loading ? (
         <ProductSkeleton />
       ) : (
-        <div className=" relative py-12 overflow-hidden bg-white font-poppins overflow-y-auto lg:w-[80%] lg:h-[70%] lg:mx-auto mb-12 lg:rounded-sm">
+        <div className=" relative py-4 lg:py-12 overflow-hidden bg-white font-poppins overflow-y-auto lg:w-[80%] lg:h-[70%] lg:mx-auto mb-12 lg:rounded-sm">
           <div className="max-w-6xl px-4 py-4 mx-auto bg-white lg:py-8 md:px-6">
             <div className="flex flex-wrap -mx-4">
               <div className="w-full px-4 md:w-1/2 ">

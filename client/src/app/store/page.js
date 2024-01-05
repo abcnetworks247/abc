@@ -16,6 +16,7 @@ import SearchModal from '@/components/Banner/SearchModal'
 import { useState, useEffect } from "react"
 import axios from 'axios'
 import { UseProductProvider } from '../../../contexts/ProductProvider'
+import ProductNav from '@/components/Products/ProductNav'
 
 const page = () => {
 
@@ -34,6 +35,7 @@ const page = () => {
       <div className="bg-white sticky top-0 z-[20] ">
         <Navbar />
       </div>
+      <ProductNav/>
       <Banner
          allProducts={allProducts}
       />

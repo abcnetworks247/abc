@@ -19,10 +19,10 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
 
     return (
       <>
-        <div className="absolute top-[40px] z-50 right-0 left-0 mt-2 bg-white border border-gray-300 shadow-md rounded-md p-2">
+        <div className="absolute top-[40px] z-20 right-0 left-0 mt-2 bg-white border shadow-md ">
           {searchResults.map((product) => (
             <div
-              className="flex items-center cursor-pointer p-2 hover:bg-gray-100 rounded-md z-40"
+              className="flex items-center cursor-pointer p-2 hover:bg-gray-100"
               onClick={() => handleResultClick(searchTerm)}
               key={product._id}
             >
@@ -47,7 +47,7 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
         </div>
         {isFocused && (
           <div
-            className="fixed inset-0 z-10 bg-black bg-opacity-30"
+            className="fixed top-[40px] left-0 w-full h-screen z-10 bg-black bg-opacity-30"
             onClick={handleModalRef}
             ref={modalRef}
           ></div>
