@@ -15,50 +15,37 @@ import Banner from '@/components/Banner/Banner'
 import SearchModal from '@/components/Banner/SearchModal'
 import { useState, useEffect } from "react"
 import axios from 'axios'
-
+import { UseProductProvider } from '../../../contexts/ProductProvider'
+import ProductNav from '@/components/Products/ProductNav'
 
 const page = () => {
-   const [allProducts, setAllProducts] = useState([]);
+
+ const {allProducts}= UseProductProvider()
+  
    const [currentPage, setCurrentPage] = useState(1);
    const productsPerPage = 5;
 
-   const fetchData = async () => {
-     try {
-       const response = await axios.get(
-         `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
-       );
+  
+  console.log("store", allProducts)
 
-       if (response.status !== 200) {
-         throw new Error("Failed to fetch products");
-       }
 
-       const products = response.data;
-       setAllProducts(products);
-     } catch (error) {
-       console.error(error.message);
-     }
-   };
 
-   useEffect(() => {
-     fetchData();
-   }, []);
-
-   const handleRefresh = () => {
-     fetchData();
-   };
   return (
     <div className="relative">
       <div className="bg-white sticky top-0 z-[20] ">
         <Navbar />
       </div>
-      <Banner />
+      <ProductNav/>
+      <Banner
+         allProducts={allProducts}
+      />
       <Sidebar />
 
       <Features />
 
       <NewArrival allProducts={allProducts} />
       <Ads />
-      <Recommended />
+      <Recommended allProducts={allProducts} />
       <FooterComp />
       <ProductModal />
       {/* <SearchModal/> */}

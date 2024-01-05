@@ -3,20 +3,21 @@ import React from "react";
 import { ProductContext } from "./productContext";
 import { useEffect, useState, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const ProductProvider = ({ children }) => {
   const router = useRouter()
-   const [currentPage, setCurrentPage] = useState(1);
-   const [loading, setLoading] = useState(false);
-   const productsPerPage = 20;
-  const [products, setProducts] = useState([]);
-  const [hasFetchedData, setHasFetchedData] = useState(false);
+
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
   const [Wishlist, setWishlist] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const isDesktop = useMediaQuery({
     query: "(min-width: 600px)",
@@ -24,11 +25,8 @@ const ProductProvider = ({ children }) => {
    const [clickState, setClickState] = useState(false);
   const [screen, setScreen] = useState(!isTabletOrMobile)
   const [category, setCategory] = useState([]);
-  // console.log(cartProducts)
   
-
-  // console.log(products)
-  console.log("hasFetchedData", hasFetchedData)
+  
   
   
   
@@ -54,6 +52,7 @@ const ProductProvider = ({ children }) => {
     router.push('/productDetails')
   };
 
+  
   const addToWishlist = (product) => {
     // e.stopPropagation();
     // setWishlist((prev) => [...prev, product]);
@@ -67,7 +66,7 @@ const ProductProvider = ({ children }) => {
 
   const removeFromWishlist = (product) => {
     const newWishList = Wishlist.filter(
-      (wishproduct) => product.id !== wishproduct.id
+      (wishproduct) => product._id !== wishproduct._id
     );
       setWishlist(newWishList)
      if (typeof window !== "undefined") {
@@ -76,7 +75,7 @@ const ProductProvider = ({ children }) => {
   };
   const removeFromCart = (product) => {
     const newCartList = cartProducts.filter(
-      (cartProduct) => product.id !== cartProduct.id
+      (cartProduct) => product._id !== cartProduct._id
     );
     setCartProducts(newCartList)
     
@@ -88,7 +87,8 @@ const ProductProvider = ({ children }) => {
    const handleRemoveFromCart = (e, product) => {
      e.stopPropagation();
      removeFromCart(product);
-   };
+  };
+  
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
     addToWishlist(product);
@@ -119,9 +119,10 @@ const ProductProvider = ({ children }) => {
     }
   };
 
+
  const updateProduct = (updatedProduct) => {
    const updatedCart = cartProducts.map((product) =>
-     product.id === updatedProduct.id ? updatedProduct : product
+     product._id === updatedProduct._id ? updatedProduct : product
    );
 
    setCartProducts(updatedCart);
@@ -137,14 +138,14 @@ const ProductProvider = ({ children }) => {
     e.stopPropagation();
     //check first if the item exist in the cart
   const existingCartItem = cartProducts.find(
-    (cartItem) => cartItem.id === product.id
+    (cartItem) => cartItem._id === product._id
     );
   console.log("existing item", existingCartItem)
 
   if (existingCartItem) {
     // If the item already exists in the cart, increase its quantity
     const updatedCart = cartProducts.map((cartItem) =>
-      cartItem.id === product.id
+      cartItem._id === product._id
         ? { ...cartItem, quantity: cartItem.quantity + 1 }
         : cartItem
     );
@@ -160,20 +161,10 @@ const ProductProvider = ({ children }) => {
     addToCart(e, product);
   }
   };
+  
+  
 
 
-  const searchProducts = (query) => {
-    // const regex = new RegExp(`^${query}`, "i");
-    // Escape special characters in the query to avoid regex syntax errors
-    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-    // Create a regular expression with the escaped query
-    const regex = new RegExp(`^${escapedQuery}`, "i");
-
-    const results = products.filter((product) => regex.test(product.title));
-
-    setSearchResults(results);
-  };
 
   useEffect(() => {
     
@@ -187,7 +178,7 @@ const ProductProvider = ({ children }) => {
     setWishlist(savedWishItems);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
-  // Retrieve products from local storage
+  
 
   useEffect(() => {
     // Retrieve cartProducts from local storage when component mounts
@@ -198,64 +189,75 @@ const ProductProvider = ({ children }) => {
         : "[]"
     );
 
-    
   
-    const storedProducts = JSON.parse(
-    typeof window !== "undefined"
-      ? localStorage.getItem("cachedProducts") || "[]"
-      : "[]"
-  );
-
     setCartProducts(storedCartProducts);
-    setProducts(storedProducts)
+   
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
+
+  // fetch allProducts
+  useEffect(() => {
+     const fetchData = async () => {
+       try {
+         const response = await axios.get(
+           `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
+         );
+
+         if (response.status !== 200) {
+           throw new Error("Failed to fetch products");
+         }
+
+         const products = response.data;
+         setAllProducts(products);
+       } catch (error) {
+         console.error(error.message);
+       }
+    };
+    fetchData()
+    
+  }, [])
   
+  const handleSearch = (searchTerm) => {
+    console.log("hit", searchTerm)
+    // Filter products based on the search term
+    const filteredProducts = allProducts.filter(
+      (product) =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      if (!hasFetchedData) {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const json = await response.json();
-
-         const uniqueProducts = Array.from(new Set([...products, ...json]));
-         setProducts(uniqueProducts);
-        setHasFetchedData(true);
-
-        if (typeof window !== "undefined") {
-          localStorage.setItem("cachedProducts", JSON.stringify(json));
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    setSearchResults(filteredProducts);
+    console.log("filtered", filteredProducts)
+    console.log("allProduct in provider", allProducts)
   };
 
-  fetchData();
-}, [hasFetchedData]);
+  console.log("provider search results", searchResults)
 
+  const handleResultClick = (searchTerm) => {
+    // Redirect to the results page with the search term
+    router.push(`/searchResults?term=${searchTerm}`);
+    
+  }; 
+ 
+
+ 
   
 
-  // useEffect(() => {}, [cartProducts]);
 
   return (
     <ProductContext.Provider
       value={{
-        products,
+       
         cartProducts,
         selectedProduct,
         isModalOpen,
-        setProducts,
         handleProductClick,
         openModal,
         closeModal,
         handleCartClick,
         handleAddToWishlist,
         Wishlist,
-      
-        searchProducts,
-        searchResults,
+
         setSearchResults,
         handleRemoveFromWishlist,
         removeFromCart,
@@ -267,9 +269,12 @@ useEffect(() => {
         handleUser,
         clickState,
         updateProduct,
-      
-        category
-       
+        category,
+        allProducts,
+        handleSearch,
+        handleResultClick,
+        searchResults,
+        setSearchResults,
       }}
     >
       {children}

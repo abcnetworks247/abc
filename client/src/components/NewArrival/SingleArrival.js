@@ -17,8 +17,8 @@ const SingleArrival = ({ product }) => {
   
 
   if (!handleProductClick) {
-    console.error("handleProductClick is not available in the context.");
-    return null;
+    throw new Error("handleProductClick is not available in the context.");
+     return null;
   }
 
   
