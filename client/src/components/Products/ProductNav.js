@@ -3,8 +3,8 @@ import SearchBar from '../Banner/SearchBar';
 
 const ProductNav = () => {
   return (
-      <div className="bg-gray-50 sticky p-2 top-12 left-0 w-full z-[20] ">
-          <SearchBar/>
+    <div className="bg-[#111827] sticky p-2 top-14 left-0 w-full z-[20] ">
+      <SearchBar />
     </div>
   );
 }

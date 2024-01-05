@@ -196,7 +196,7 @@ const ProductProvider = ({ children }) => {
 
 
   // fetch allProducts
-  useEffect(() => {
+ 
      const fetchData = async () => {
        try {
          const response = await axios.get(
@@ -213,9 +213,10 @@ const ProductProvider = ({ children }) => {
          console.error(error.message);
        }
     };
-    fetchData()
-    
-  }, [])
+  
+    useEffect(() => {
+     fetchData();
+    }, []);
   
   const handleSearch = (searchTerm) => {
     
@@ -277,6 +278,8 @@ const ProductProvider = ({ children }) => {
         handleResultClick,
         searchResults,
         setSearchResults,
+        fetchData,
+        setAllProducts
       }}
     >
       {children}
