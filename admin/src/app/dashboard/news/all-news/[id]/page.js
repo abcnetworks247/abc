@@ -78,6 +78,7 @@ export default function BlogCard() {
           </svg>
         </div>
       ) : (
+          
         <Card className="lg:max-w-[70%] max-w-[90%] overflow-hidden">
           <div className="flex items-end justify-end m-0">
             <button
