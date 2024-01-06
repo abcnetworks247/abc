@@ -8,7 +8,6 @@ import * as yup from "yup";
 import Svg, { Circle, Path } from "react-native-svg";
 
 const userSchema = yup.object({
-  name: yup.string().required("Name is required"),
   email: yup.string().email("Email is not valid").required("Email is required"),
   password: yup
     .string()
@@ -31,30 +30,19 @@ export default function index() {
     >
       {({ handleBlur, handleChange, values, errors,handleSubmit }) => (
         <View className="flex items-center justify-center m-auto w-full px-6">
-          <View className="gap-6 w-full">
+          <View className="gap-4 w-full">
             <View className=" flex items-center justify-center ">
               <Image source={Logo} className="w-40 h-20" resizeMode="cover" />
               <Text className="text-3xl font-extrabold text-blue-900 mb-2 text-center">
-                Register
+              Login
               </Text>
               <Text className="text-[14px] text-gray-500">
-                Hey enter your details to create your account
+              Hey enter your details to create your account
               </Text>
             </View>
 
-            <View className="gap-2">
-              <View className="flex ">
-                <TextInput
-                  placeholder="Enter your name"
-                  className="w-auto px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none  focus:bg-white"
-                  onChange={handleChange("name")}
-                  onBlur={handleBlur("name")}
-                  value={values.name}
-                />
-                <Text className="text-red-500 my-1 text-[13px]">
-                  {errors.name}
-                </Text>
-              </View>
+            <View>
+
               <View>
                 <TextInput
                   placeholder="Enter your email"
@@ -105,17 +93,24 @@ export default function index() {
                     <Circle cx="8.5" cy="7" r="4" />
                     <Path d="M20 8v6M23 11h-6" />
                   </Svg>
-                  <Text className="text-white text-center">SignUp</Text>
+                  <Text className="text-white text-center">SignIn</Text>
                 </View>
               </TouchableOpacity>
             </View>
-            <View>
-              <Text className="text-center text-gray-500">
-                Already have an account?{" "}
-                <Link href="/auth/signin" className="text-blue-900 font-semibold">
-                  Login
-                </Link>
-              </Text>
+            <View className="flex items-center justify-between flex-row">
+                <Text className="text-sm text-center text-gray-600">New?
+                
+              <Link href="/auth/signup" className="font-semibold text-blue-900">
+                Register
+              </Link>
+                </Text>
+                <Text className="text-sm text-center text-gray-600">
+                
+              <Link href="/auth/signup" className="font-semibold text-blue-900">
+                Forgot Password?
+              </Link>
+                </Text>
+
             </View>
           </View>
         </View>
