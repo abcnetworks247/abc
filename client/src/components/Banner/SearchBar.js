@@ -51,7 +51,7 @@ const SearchBar = () => {
       <form
         className={`${
           isFocused && "z-40"
-        }  transition-all duration-300 relative border w-[80%] lg:w-[70%] h-10 bg-white gap-6 mx-auto border-gray-200 rounded-md`}
+        }  transition-all duration-300 relative border w-[90%] lg:w-[70%] h-10 bg-white gap-6 mx-auto border-gray-200 rounded-md`}
       >
         <div className="flex items-center relative h-full w-full">
           <div
@@ -121,7 +121,7 @@ const SearchBar = () => {
             />{" "}
             <button
               onClick={(e) => handleResultClick(searchTerm, e)}
-              className="bg-blue-500 h-full w-8 flex items-center justify-center rounded-r-md shrink-0"
+              className="bg-red-600 h-full w-8 flex items-center justify-center rounded-r-md shrink-0"
             >
               <svg
                 className="w-4 h-full "
