@@ -89,7 +89,7 @@ export default function () {
       ) : (
         <div>
           {/* <!-- component --> */}
-          <div className="max-w-screen-xl mx-auto md:max-w-screen-xl md:px-10">
+          <div className="max-w-screen-2xl mx-auto md:max-w-screen-xl md:px-10">
             <main className="">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
