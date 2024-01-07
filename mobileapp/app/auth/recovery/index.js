@@ -9,13 +9,10 @@ import Svg, { Circle, Path } from "react-native-svg";
 
 const userSchema = yup.object({
   email: yup.string().email("Email is not valid").required("Email is required"),
-  password: yup
-    .string()
-    .min(7, "Password is too short")
-    .required("Password is required"),
+
 });
 export default function index() {
-  const initialValue = { email: "", password: "" };
+  const initialValue = {  email: "" };
 
   const handleSubmit = (values, { setSubmitting }) => {
     // Handle form submission here
@@ -57,19 +54,7 @@ export default function index() {
                 </Text>
               </View>
 
-              <View>
-                <TextInput
-                  placeholder="Enter password"
-                  secureTextEntry={true}
-                  className="w-auto px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none  focus:bg-white"
-                  onChange={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                />
-                <Text className="text-red-500 my-1 text-[13px]">
-                  {errors.password}
-                </Text>
-              </View>
+             
             </View>
             <View>
               <TouchableOpacity
@@ -97,20 +82,13 @@ export default function index() {
                 </View>
               </TouchableOpacity>
             </View>
-            <View className="flex items-center justify-between flex-row">
-                <Text className="text-sm text-center text-gray-600">New?
-                
-              <Link href="/auth/signup" className="font-semibold text-blue-900">
-                Register
-              </Link>
-                </Text>
-                <Text className="text-sm text-center text-gray-600">
-                
-              <Link href="/auth/recovery" className="font-semibold text-blue-900">
-                Forgot Password?
-              </Link>
-                </Text>
-
+            <View>
+              <Text className="text-center text-gray-500">
+                Remeber your password?{" "}
+                <Link href="/auth/signin" className="text-blue-900 font-semibold">
+                  Login
+                </Link>
+              </Text>
             </View>
           </View>
         </View>
