@@ -37,20 +37,31 @@ export default function Navbar() {
   const WishlistValue = Wishlist.length;
 
   // wishlist local storage function
-  const [news, setNews] = useState([]);
+  const [type, setType] = useState([]);
+  const [category, setCategory] = useState([]);
 
-  const fetchNews = async () => {
+  const fetchData = async () => {
     try {
-      const res = await Api.get("admin/category/news/type");
-      setNews(res.data);
-      console.log("news", res.data);
+      const typeRes = await Api.get("admin/category/news/type");
+      const catRes = await Api.get("admin/category/news/category");
+
+      if (catRes.status === 200) {
+        console.log("------------->>", catRes.data);
+        setCategory(catRes.data.data);
+      }
+      if (typeRes.status === 200) {
+        console.log(typeRes.data.data);
+        setType(typeRes.data.data);
+      }
     } catch (error) {
-      console.log("errorr", error);
+      console.log(error);
+      setLoading(false);
+      alert("Something went wrong");
     }
   };
 
   useEffect(() => {
-    fetchNews();
+    fetchData();
   }, []);
 
   function Logout() {
