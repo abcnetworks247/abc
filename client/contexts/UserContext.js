@@ -14,6 +14,8 @@ export const UserContextProvider = ({ children }) => {
   const [UserData, setUserData] = useState([]);
   const [dummyUser, setDummyUser] = useState([])
 
+  console.log("user data", UserData)
+
   // loading state for user incoming data
 
   const [loading, setLoading] = useState(true);

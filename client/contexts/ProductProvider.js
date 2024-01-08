@@ -5,11 +5,12 @@ import { useEffect, useState, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { UserContextProvider } from "./UserContext";
 
 const ProductProvider = ({ children }) => {
   const router = useRouter()
 
-
+  const {UserData}= UserContextProvider()
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
