@@ -196,7 +196,7 @@ const ProductProvider = ({ children }) => {
 
 
   // fetch allProducts
-  useEffect(() => {
+ 
      const fetchData = async () => {
        try {
          const response = await axios.get(
@@ -213,11 +213,13 @@ const ProductProvider = ({ children }) => {
          console.error(error.message);
        }
     };
-    fetchData()
-    
-  }, [])
+  
+    useEffect(() => {
+     fetchData();
+    }, []);
   
   const handleSearch = (searchTerm) => {
+    
     console.log("hit", searchTerm)
     // Filter products based on the search term
     const filteredProducts = allProducts.filter(
@@ -233,7 +235,8 @@ const ProductProvider = ({ children }) => {
 
   console.log("provider search results", searchResults)
 
-  const handleResultClick = (searchTerm) => {
+  const handleResultClick = (searchTerm, e) => {
+    e.preventDefault()
     // Redirect to the results page with the search term
     router.push(`/searchResults?term=${searchTerm}`);
     
@@ -275,6 +278,8 @@ const ProductProvider = ({ children }) => {
         handleResultClick,
         searchResults,
         setSearchResults,
+        fetchData,
+        setAllProducts
       }}
     >
       {children}
