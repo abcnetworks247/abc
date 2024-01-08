@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
 
 import { NativeWindStyleSheet } from "nativewind";
-
 NativeWindStyleSheet.setOutput({
   default: "native",
 });
@@ -10,11 +9,12 @@ export default function Page() {
   return (
     <View style={styles.container}>
       <View style={styles.main}>
-        <Link href="/auth/signup"> 
+        <Link href="/home"> 
         
         <Text className="text-red-700 text-2xl">Hello World</Text>
         </Link>
         <Text style={styles.subtitle}>This is the first page of your app.</Text>
+    
       </View>
     </View>
   );
