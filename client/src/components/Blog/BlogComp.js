@@ -153,7 +153,7 @@ export default function () {
                 {/* <!-- sub-main posts --> */}
                 <div className=" border border-red-500 p-0">
                   {/* map through trending posts */}
-                  <h2 className="text-xl font-bold border border-green-500">Trending</h2>
+                  <h2 className="text-xl font-bold">Trending</h2>
                   <br />
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
