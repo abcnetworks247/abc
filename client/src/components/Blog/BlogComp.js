@@ -265,7 +265,7 @@ export default function () {
             </main>
             {/* <!-- main ends here --> */}
           </div>
-          <FooterComp />
+          
         </div>
       )}
     </>

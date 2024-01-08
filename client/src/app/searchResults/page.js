@@ -42,16 +42,14 @@ const page = () => {
   const numberOfSkeletons= 5
   return (
     <div className="bg-gray-50">
-      <div className="bg-white sticky top-0 z-[10] mb-10">
+      <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
       <div className="mx-6 mb-2 bg-white p-4">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-         
             <li>
               <div className="flex items-center">
-              
                 <Link
                   href="/store"
                   className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white"

@@ -6,12 +6,11 @@ import { redirect } from "next/navigation";
 export default function page() {
   return (
     <div>
-      <div className="bg-white sticky top-0 z-[10] mb-10">
+      <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
       <Sidebar />
       <section className="relative overflow-hidden bg-white">
-  
         <div className="relative flex flex-col items-center justify-center max-w-6xl px-8 py-4 mx-auto lg:pt-8 lg:pb-8">
           <div className="text-center">
             <p className="mt-8 text-2xl font-semibold tracking-tight text-black lg:text-3xl">
