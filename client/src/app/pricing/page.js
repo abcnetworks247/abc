@@ -92,7 +92,7 @@ export default function page() {
             </p>
           </div>
           <div className="grid grid-cols-1 gap-8 mt-12 lg:ap-2 lg:grid-cols-3">
-            <div className="lg:order-last">
+            <div className="order-last">
               <div className="flex flex-col">
                 {
                   <div className="p-8 shadow-2xl rounded-3xl bg-gradient-to-b from-purple-400 via-purple-400 to-purple-600 ring-1 ring-white/10">
@@ -196,7 +196,7 @@ export default function page() {
             </div>
 
               {Plans.map((plan) => (
-            <div className="lg:order-first">
+            <div className="order-first">
                 <div className="flex flex-col">
                   <div className="p-8 rounded-3xl bg-[#1c1f29] ring-1 ring-white/10 shadow-2xl">
                     <div className="flex justify-between">
