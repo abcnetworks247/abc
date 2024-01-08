@@ -192,7 +192,7 @@ export default function page() {
             <div className="order-first">
                 <div className="flex flex-col">
                   <div className="p-8 rounded-3xl bg-[#1c1f29] ring-1 ring-white/10 shadow-2xl">
-                    <div className="flex justify-between">
+                    <div className="flex-col justify-between">
                       <div className="flex items-center gap-3">
                         <svg
                           className="w-8 h-8 text-black rounded-full"
