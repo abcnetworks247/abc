@@ -89,7 +89,7 @@ export default function () {
       ) : (
         <div className="w-full flex justify-center m-0 p-2">
           {/* <!-- component --> */}
-          <div className="w-full bg-red-200 p-5 ">
+          <div className="w-full p-5 ">
             <main className=" w-full">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
