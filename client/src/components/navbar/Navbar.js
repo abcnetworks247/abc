@@ -159,12 +159,16 @@ export default function Navbar() {
             <label tabIndex="0">News</label>
             <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-red-300">
               <a className="dropdown-item text-sm">Profile</a>
-              <a tabIndex="-1" className="dropdown-item text-sm">
-                Account settings
-              </a>
-              <a tabIndex="-1" className="dropdown-item text-sm">
-                Subscriptions
-              </a>
+              {
+                type.map((item, index) => {
+                  return (
+                    <Link href={`/news/${item.type}`}>
+                      <a className="dropdown-item text-sm">{item}</a>
+                    </Link>
+                  );
+                })
+              }
+              
             </div>
           </a>
         </div>
