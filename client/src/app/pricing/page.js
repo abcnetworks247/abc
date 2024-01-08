@@ -236,7 +236,7 @@ export default function page() {
                       </div>
                       <p>
                         <span className="text-lg font-medium text-white uppercase lg:text-xl">
-                          {plan.price}
+                          ${plan.price}
                         </span>
                         <span className="text-base font-medium text-gray-500">
                           {" "}
