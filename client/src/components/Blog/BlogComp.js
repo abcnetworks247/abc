@@ -112,8 +112,9 @@ export default function () {
                     className="mySwiper"
                   >
                     {/* map through the fetched data.highlight */}
+                    <h2> Highlight</h2>
                     {highlight.map((post) => (
-                      <h2> Highlight</h2>
+                      
                       <SwiperSlide  key={post.shortdescription}>
                         {/* <!-- main post --> */}
                         <div
