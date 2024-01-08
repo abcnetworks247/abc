@@ -89,7 +89,7 @@ export default function () {
       ) : (
         <div>
           {/* <!-- component --> */}
-          <div className="max-w-screen-2xl mx-auto md:max-w-screen-xl md:px-10">
+          <div className="w-full mx-auto md:max-w-screen-xl md:px-10">
             <main className="">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
@@ -113,6 +113,7 @@ export default function () {
                   >
                     {/* map through the fetched data.highlight */}
                     {highlight.map((post) => (
+                      <h2> Highlight</h2>
                       <SwiperSlide  key={post.shortdescription}>
                         {/* <!-- main post --> */}
                         <div
@@ -150,6 +151,7 @@ export default function () {
                 {/* <!-- sub-main posts --> */}
                 <div className="w-full md:w-4/7">
                   {/* map through trending posts */}
+                  <h2>Trending</h2>
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <div className="flex flex-col w-full mb-10 rounded md:flex-row">
