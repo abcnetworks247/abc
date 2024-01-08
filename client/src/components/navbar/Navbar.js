@@ -46,7 +46,31 @@ export default function Navbar() {
       const catRes = await Api.get("admin/category/news/category");
 
       if (catRes.status === 200) {
+         const fetchData = async () => {
+    try {
+      const typeRes = await Api.get("admin/category/news/type");
+      const catRes = await Api.get("admin/category/news/category");
+
+      if (catRes.status === 200) {
         console.log("------------->>", catRes.data);
+        setCategory(catRes.data.data);
+        setLoading(false);
+      }
+      if (typeRes.status === 200) {
+        console.log("------------->>", typeRes.data.data);
+        setType(typeRes.data.data);
+       
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      alert("Something went wrong");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
         setCategory(catRes.data.data);
       }
       if (typeRes.status === 200) {
@@ -55,7 +79,6 @@ export default function Navbar() {
       }
     } catch (error) {
       console.log(error);
-      setLoading(false);
       alert("Something went wrong");
     }
   };
