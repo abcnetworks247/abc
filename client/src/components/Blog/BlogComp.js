@@ -94,7 +94,7 @@ export default function () {
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
                 {/* map throught the the fetched data.highlight */}
-                <h2 className="text-3xl font-bold"><Highlights></Highlights></h2>
+                <h2 className="text-3xl font-bold">Highlight</h2>
 
                 <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
                   <Swiper
