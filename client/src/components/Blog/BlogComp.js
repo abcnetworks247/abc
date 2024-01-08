@@ -151,7 +151,7 @@ export default function () {
                   </Swiper>
                 </div>
                 {/* <!-- sub-main posts --> */}
-                <div className=" border border-red-500 md:w-4/7">
+                <div className=" border border-red-500 p-0">
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Trending</h2>
                   <br />
