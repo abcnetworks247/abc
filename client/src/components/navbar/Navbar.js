@@ -45,7 +45,7 @@ export default function Navbar() {
       setNews(res.data);
       console.log("news", res.data);
     } catch (error) {
-      alert(error);
+      console.log("errorr", error);
     }
   };
 
