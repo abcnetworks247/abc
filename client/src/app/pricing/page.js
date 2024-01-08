@@ -12,10 +12,7 @@ export default function page() {
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
         "Live Video",
-        "-",
-        "-",
-        "-",
-        "-",
+
       ],
     },
     {
@@ -26,9 +23,7 @@ export default function page() {
       features: [
         "Special Discount",
         "Live Video",
-        "-",
-        "-",
-        "-",
+
       ],
     },
     {
@@ -40,8 +35,7 @@ export default function page() {
         "Special Discount",
         "Live Video",
         "Free Shipping",
-        "-",
-        "-",
+       
       ],
     },
     {
@@ -52,8 +46,7 @@ export default function page() {
       features: [
         "Special Discount",
         "Live Video",
-        "Free Shipping",
-        "Fast Delivery",
+        "Free Shipping / Fast Delivery",
         "Free ABCTV App Download",
       ],
     },

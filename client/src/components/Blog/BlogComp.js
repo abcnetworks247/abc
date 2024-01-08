@@ -97,6 +97,7 @@ export default function () {
 
                 <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
                 <h2 className="text-xl font-bold">Highlight</h2>
+                <br />
                   <Swiper
                     spaceBetween={30}
                     hashNavigation={{
@@ -153,6 +154,7 @@ export default function () {
                 <div className="w-fit md:w-4/7">
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Trending</h2>
+                  <br />
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <div className="flex flex-col w-full mb-10 rounded md:flex-row">
