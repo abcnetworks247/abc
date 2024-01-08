@@ -89,14 +89,15 @@ export default function () {
       ) : (
         <div className="w-full flex justify-center m-0 p-2">
           {/* <!-- component --> */}
-          <div className="w-full p-5 ">
+          <div className="w-full lg:p-5 p-2 ">
             <main className=" w-full">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
                 {/* map throught the the fetched data.highlight */}
 
-                <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
+                <div className="w-full block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
                 <h2 className="text-xl font-bold">Highlight</h2>
+                <br />
                   <Swiper
                     spaceBetween={30}
                     hashNavigation={{
@@ -150,9 +151,10 @@ export default function () {
                   </Swiper>
                 </div>
                 {/* <!-- sub-main posts --> */}
-                <div className="w-fit md:w-4/7">
+                <div className="w-full md:w-4/7">
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Trending</h2>
+                  <br />
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <div className="flex flex-col w-full mb-10 rounded md:flex-row">
@@ -161,7 +163,7 @@ export default function () {
                           height={500}
                           width={500}
                           alt="img"
-                          className="block object-cover w-[264px] h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
+                          className="block object-cover lg:w-[264px] lg:h-[60vh] w-full h-40 m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
                         />
                         <div className="px-4 bg-white rounded">
                           <span className="hidden text-sm text-green-700 md:block">

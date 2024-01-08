@@ -12,23 +12,18 @@ export default function page() {
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
         "Live Video",
-        "-",
-        "-",
-        "-",
-        "-",
+
       ],
     },
     {
-      name: "Starter pack",
+      name: "Prime -Silver Donor",
       price: "55 - 100",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
         "Special Discount",
         "Live Video",
-        "-",
-        "-",
-        "-",
+
       ],
     },
     {
@@ -40,8 +35,7 @@ export default function page() {
         "Special Discount",
         "Live Video",
         "Free Shipping",
-        "-",
-        "-",
+       
       ],
     },
     {
@@ -52,8 +46,7 @@ export default function page() {
       features: [
         "Special Discount",
         "Live Video",
-        "Free Shipping",
-        "Fast Delivery",
+        "Free Shipping / Fast Delivery",
         "Free ABCTV App Download",
       ],
     },
@@ -134,10 +127,10 @@ export default function page() {
                         </p>
                       </div>
                       <p>
-                        <span className="text-lg font-medium text-white uppercase lg:text-xl">
-                          {pro[0].price}
+                        <span className="text-base font-medium text-white uppercase lg:text-xl">
+                          ${pro[0].price}
                         </span>
-                        <span className="text-base font-medium text-white">
+                        <span className="text-sm font-medium text-white">
                           {" "}
                           /mo
                         </span>
@@ -151,7 +144,7 @@ export default function page() {
                         className="items-center justify-between inline-flex w-full font-medium px-6 py-2.5 text-center text-black duration-200 bg-white rounded-xl h-14 hover:bg-white/20 hover:border-white hover:text-white focus:outline-none focus-visible:outline-black text-base focus-visible:ring-black"
                         href="#"
                       >
-                        Get starter <span>→</span>
+                        Get started <span>→</span>
                       </a>
                     </div>
                   </div>
@@ -199,7 +192,7 @@ export default function page() {
             <div className="order-first">
                 <div className="flex flex-col">
                   <div className="p-8 rounded-3xl bg-[#1c1f29] ring-1 ring-white/10 shadow-2xl">
-                    <div className="flex justify-between">
+                    <div className="flex-col justify-between">
                       <div className="flex items-center gap-3">
                         <svg
                           className="w-8 h-8 text-black rounded-full"
@@ -230,19 +223,22 @@ export default function page() {
                             </clipPath>
                           </defs>
                         </svg>
-                        <p className="text-base font-medium text-white uppercase">
-                          {plan.name}
-                        </p>
-                      </div>
-                      <p>
-                        <span className="text-lg font-medium text-white uppercase lg:text-xl">
+                        <span className="flex flex-col">
+                          <p className="text-base font-medium text-white uppercase">
+                            {plan.name}
+                          </p>
+                          <p className="ml-3">
+                        <span className="text-base font-medium text-white uppercase lg:text-xl">
                           ${plan.price}
                         </span>
-                        <span className="text-base font-medium text-gray-500">
+                        <span className="text-sm font-medium text-gray-500">
                           {" "}
                           /mo
                         </span>
                       </p>
+                        </span>
+                      </div>
+                      
                     </div>
                     <p className="mt-8 text-sm font-medium text-gray-300">
                       {plan.description}
@@ -252,7 +248,7 @@ export default function page() {
                         className="items-center justify-between inline-flex w-full font-medium px-6 py-2.5 text-center text-white duration-200 bg-white/5 border border-white/5 rounded-xl h-14 hover:bg-white/10 hover:border-white/10 focus:outline-none focus-visible:outline-black text-base focus-visible:ring-black"
                         href="#"
                       >
-                        Get starter <span>→</span>
+                        Get started <span>→</span>
                       </a>
                     </div>
                   </div>
