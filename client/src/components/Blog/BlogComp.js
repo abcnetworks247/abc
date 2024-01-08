@@ -89,7 +89,7 @@ export default function () {
       ) : (
         <div className="w-full flex justify-center m-0 p-2">
           {/* <!-- component --> */}
-          <div className="w-full p-5 ">
+          <div className="w-full lg:p-5 p-2 ">
             <main className=" w-full">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
@@ -163,7 +163,7 @@ export default function () {
                           height={500}
                           width={500}
                           alt="img"
-                          className="block object-cover w-[264px] h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
+                          className="block object-cover lg:w-[264px] lg:h-[60vh] w-full h-40 m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
                         />
                         <div className="px-4 bg-white rounded">
                           <span className="hidden text-sm text-green-700 md:block">
