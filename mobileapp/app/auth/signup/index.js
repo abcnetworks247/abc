@@ -30,7 +30,7 @@ export default function index() {
       onSubmit={handleSubmit}
     >
       {({ handleBlur, handleChange, values, errors,handleSubmit }) => (
-        <View className="flex items-center justify-center m-auto w-full px-6">
+        <View className="flex items-center justify-center m-auto w-full px-6 bg-[#F2F2F2] h-full">
           <View className="gap-6 w-full">
             <View className=" flex items-center justify-center ">
               <Image source={Logo} className="w-40 h-20" resizeMode="cover" />

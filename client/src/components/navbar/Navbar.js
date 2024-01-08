@@ -54,8 +54,7 @@ export default function Navbar() {
         setType(typeRes.data.data);
       }
     } catch (error) {
-      console.log(" Error------------->>",error);
-
+      console.log(" Error------------->>", error);
     }
   };
 
@@ -158,13 +157,10 @@ export default function Navbar() {
           <a className="dropdown    dropdown-hover">
             <label tabIndex="0">News</label>
             <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-red-300">
-              <a className="dropdown-item text-sm">Profile</a>
-              <a tabIndex="-1" className="dropdown-item text-sm">
-                Account settings
-              </a>
-              <a tabIndex="-1" className="dropdown-item text-sm">
-                Subscriptions
-              </a>
+              {/* <a className="dropdown-item text-sm">Profile</a> */}
+              {type.map((item, index) => {
+                return <a key={index} className="dropdown-item text-sm">{item.name}</a>;
+              })}
             </div>
           </a>
         </div>

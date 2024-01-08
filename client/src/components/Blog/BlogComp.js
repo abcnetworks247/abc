@@ -87,10 +87,10 @@ export default function () {
           ))}
         </div>
       ) : (
-        <div>
+        <div className="w-full flex justify-center m-0 p-2">
           {/* <!-- component --> */}
-          <div className="w-full mx-auto md:max-w-screen-xl md:px-10">
-            <main className="">
+          <div className="w-full p-5 ">
+            <main className=" w-full">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
                 {/* map throught the the fetched data.highlight */}
@@ -150,7 +150,7 @@ export default function () {
                   </Swiper>
                 </div>
                 {/* <!-- sub-main posts --> */}
-                <div className="w-full md:w-4/7">
+                <div className="w-fit md:w-4/7">
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Trending</h2>
                   {trending.map((post) => (
@@ -161,7 +161,7 @@ export default function () {
                           height={500}
                           width={500}
                           alt="img"
-                          className="block object-cover w-auto h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
+                          className="block object-cover w-[264px] h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
                         />
                         <div className="px-4 bg-white rounded">
                           <span className="hidden text-sm text-green-700 md:block">
