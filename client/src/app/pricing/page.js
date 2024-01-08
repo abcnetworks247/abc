@@ -6,70 +6,70 @@ import { redirect } from "next/navigation";
 export default function page() {
   const Plans = [
     {
-      name: "Silver Surfer",
-      price: "15",
+      name: "General - Copper Donor",
+      price: "10 - 50",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
-        "10 deploys",
-        "1 members",
-        "5 TB cloud storage",
-        "Growth oriented",
-        "Marketing campaigns",
+        "Live Video",
+        "-",
+        "-",
+        "-",
+        "-",
       ],
     },
     {
       name: "Starter pack",
-      price: "5",
+      price: "55 - 100",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
-        "10 deploys",
-        "1 members",
-        "5 TB cloud storage",
-        "Growth oriented",
-        "Marketing campaigns",
+        "Special Discount",
+        "Live Video",
+        "-",
+        "-",
+        "-",
       ],
     },
     {
-      name: "Golden Unicorn",
-      price: "35",
+      name: "Patrons 1 - Gold Donor",
+      price: "105 - 200",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
-        "10 deploys",
-        "1 members",
-        "5 TB cloud storage",
-        "Growth oriented",
-        "Marketing campaigns",
+        "Special Discount",
+        "Live Video",
+        "Free Shipping",
+        "-",
+        "-",
       ],
     },
     {
-      name: "Golden Unicorn",
-      price: "35",
+      name: "Patron 2 - Diamond Donor",
+      price: "500",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
-        "10 deploys",
-        "1 members",
-        "5 TB cloud storage",
-        "Growth oriented",
-        "Marketing campaigns",
+        "Special Discount",
+        "Live Video",
+        "Free Shipping",
+        "Fast Delivery",
+        "Free ABCTV App Download",
       ],
     },
   ];
   const pro = [
     {
-      name: "Golden Unicorn",
-      price: "35",
+      name: "Patron 3 - Titanium Donor",
+      price: "1000",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
-        "10 deploys",
-        "1 members",
-        "5 TB cloud storage",
-        "Growth oriented",
-        "Marketing campaigns",
+        "Special Discount",
+        "Live Discount",
+        "Free ABCTV App Download",
+        "Free ABCTV Gadgets",
+        "Free Shipping / Free Delivery", 
       ],
     },
   ];
