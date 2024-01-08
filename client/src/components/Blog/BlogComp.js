@@ -157,7 +157,7 @@ export default function () {
                   <br />
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <div className="flex flex-col w-full mb-10 rounded md:flex-row">
+                      <div className="flex flex-col mb-10 rounded md:flex-row">
                         <Image
                           src={post.blogimage}
                           height={500}
