@@ -6,8 +6,9 @@ import User from "../../../assets/user.jpg";
 
 const Navbar = () => {
   return (
-    <View className="flex flex-row items-center justify-between px-4 bg-[#111827] border-b-2 backdrop-blur-2xl">
+    <View className="flex flex-row items-center justify-between px-4 bg-[#111827] border-b-2 backdrop-blur-2xl mb-4">
       <View className="h-[60px] w-20">
+
         <Image source={Logo} className="w-full h-full" />
       </View>
       <View className="flex flex-row gap-4 items-center">

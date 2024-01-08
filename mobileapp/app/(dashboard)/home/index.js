@@ -1,12 +1,16 @@
 import { View, Text, SafeAreaView } from 'react-native'
 import React from 'react'
 import Navbar from '../../components/navbar/Navbar'
-import globalStyels from '../../../styles/globalStyels'
+import globalStyels from '../../../styles/globalStyels';
+import HeroCarousel from '../../components/carousel/herocarousel/heroCarousel';
 
 const index = () => {
   return (
     <View >
-      <Text>index Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, voluptatem deserunt tempora quidem sequi ratione esse consequuntur earum reprehenderit magnam.</Text>
+      <View className="">
+
+      <HeroCarousel />
+      </View>
     </View>
   )
 }
