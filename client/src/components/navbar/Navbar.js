@@ -61,8 +61,9 @@ export default function Navbar() {
        
       }
     } catch (error) {
-      console.log(error);
-      alert("Something went wrong");
+      console.log("error====================>", error);
+      
+
     }
   };
 
