@@ -163,7 +163,7 @@ export default function () {
                           height={500}
                           width={500}
                           alt="img"
-                          className="block object-cover lg:w-[264px] lg:h-[60vh] w-full h-40 m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
+                          className="block object-cover object-top lg:w-[264px] lg:h-[30vh] w-full h-52 m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
                         />
                         <div className="px-4 bg-white rounded">
                           <span className="hidden text-sm text-green-700 md:block">
