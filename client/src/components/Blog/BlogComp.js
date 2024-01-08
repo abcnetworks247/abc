@@ -89,7 +89,7 @@ export default function () {
       ) : (
         <div className="w-full flex justify-center m-0 p-2">
           {/* <!-- component --> */}
-          <div className="w-full lg:p-5 p-2 ">
+          <div className="w-full lg:p-5 p-0 ">
             <main className=" w-full">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
@@ -151,7 +151,7 @@ export default function () {
                   </Swiper>
                 </div>
                 {/* <!-- sub-main posts --> */}
-                <div className=" md:w-4/7">
+                <div className=" border border-red-500 md:w-4/7">
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Trending</h2>
                   <br />
