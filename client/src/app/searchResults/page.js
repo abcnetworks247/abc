@@ -66,7 +66,7 @@ useEffect(() => {
   const numberOfSkeletons= 5
   return (
     <div className="relative bg-gray-50">
-      <div className="bg-white sticky top-0 z-[20] ">
+      <div className="bg-[#111827] sticky top-0 z-[20] ">
         <Navbar />
       </div>
       <ProductNav />
