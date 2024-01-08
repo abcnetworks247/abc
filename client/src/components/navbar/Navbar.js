@@ -46,39 +46,16 @@ export default function Navbar() {
       const catRes = await Api.get("admin/category/news/category");
 
       if (catRes.status === 200) {
-         const fetchData = async () => {
-    try {
-      const typeRes = await Api.get("admin/category/news/type");
-      const catRes = await Api.get("admin/category/news/category");
-
-      if (catRes.status === 200) {
-        console.log("------------->>", catRes.data);
+        console.log("cat------------->>", catRes.data);
         setCategory(catRes.data.data);
       }
       if (typeRes.status === 200) {
-        console.log("------------->>", typeRes.data.data);
-        setType(typeRes.data.data);
-       
-      }
-    } catch (error) {
-      console.log("error====================>", error);
-      
-
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-        setCategory(catRes.data.data);
-      }
-      if (typeRes.status === 200) {
-        console.log(typeRes.data.data);
+        console.log("type------------->>", typeRes.data.data);
         setType(typeRes.data.data);
       }
     } catch (error) {
-      console.log(error);
-      alert("Something went wrong");
+      console.log(" Error------------->>",error);
+
     }
   };
 
