@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import Marquee from "react-fast-marquee";
 import Cookies from "js-cookie";
 import FooterComp from "@/components/Footer/FooterComp";
+import Banner from "@/components/Home/HomeBanner";
 
 export default function Home() {
   const pathname = usePathname();
@@ -35,7 +36,7 @@ export default function Home() {
       <div className="bg-[#111827] sticky top-0 z-[10]">
         <Navbar />
       </div>
-      <div className="flex flex-row items-center border bg-[#111827] shadow-md mb-10 border-gray-400">
+      <div className="flex flex-row items-center border bg-[#111827] shadow-md border-gray-400">
         <div className="px-3 py-1 bg-red-700 border-gray-600 shadow-md">
           <span className="font-[4px] text-sm text-white">Announcement</span>
         </div>
@@ -52,6 +53,7 @@ export default function Home() {
           and compelling narratives, all in one dynamic platform.
         </Marquee>
       </div>
+      <Banner />
 
       <BlogComp />
 

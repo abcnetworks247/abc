@@ -1,5 +1,5 @@
 "use client";
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import { RiMenu2Fill } from "react-icons/ri";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
@@ -14,6 +14,7 @@ import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import { IoMdArrowDropdown } from "react-icons/io";
+import Api from "@/utils/Api";
 
 /**
  * Represents a navigation bar component.
@@ -36,6 +37,31 @@ export default function Navbar() {
   const WishlistValue = Wishlist.length;
 
   // wishlist local storage function
+  const [type, setType] = useState([]);
+  const [category, setCategory] = useState([]);
+
+  const fetchData = async () => {
+    try {
+      const typeRes = await Api.get("admin/category/news/type");
+      const catRes = await Api.get("admin/category/news/category");
+
+      if (catRes.status === 200) {
+        console.log("cat------------->>", catRes.data);
+        setCategory(catRes.data.data);
+      }
+      if (typeRes.status === 200) {
+        console.log("type------------->>", typeRes.data.data);
+        setType(typeRes.data.data);
+      }
+    } catch (error) {
+      console.log(" Error------------->>",error);
+
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   function Logout() {
     Swal.fire({
@@ -130,10 +156,8 @@ export default function Navbar() {
           </Link>
 
           <a className="dropdown    dropdown-hover">
-            <label tabIndex="0" className="text-[15px]">
-              News
-            </label>
-            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3">
+            <label tabIndex="0">News</label>
+            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-red-300">
               <a className="dropdown-item text-sm">Profile</a>
               <a tabIndex="-1" className="dropdown-item text-sm">
                 Account settings
