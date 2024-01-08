@@ -197,7 +197,7 @@ export default function page() {
 
               {Plans.map((plan) => (
             <div className="lg:order-first">
-                <div className="flex flex-row">
+                <div className="flex flex-col">
                   <div className="p-8 rounded-3xl bg-[#1c1f29] ring-1 ring-white/10 shadow-2xl">
                     <div className="flex justify-between">
                       <div className="flex items-center gap-3">
