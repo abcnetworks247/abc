@@ -147,14 +147,13 @@ export default function Navbar() {
           <a className="dropdown    dropdown-hover">
             <label tabIndex="0">News</label>
             <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-red-300">
-              {
-                news.map((item) => (
-
-                  <Link href={`/news/${item.slug}`} className="dropdown-item">
-                    {item.title}
-                  </Link>
-                ))
-              }
+              <a className="dropdown-item text-sm">Profile</a>
+              <a tabIndex="-1" className="dropdown-item text-sm">
+                Account settings
+              </a>
+              <a tabIndex="-1" className="dropdown-item text-sm">
+                Subscriptions
+              </a>
             </div>
           </a>
         </div>
