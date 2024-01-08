@@ -223,11 +223,11 @@ export default function page() {
                             </clipPath>
                           </defs>
                         </svg>
-                        <p className="text-base font-medium text-white uppercase">
-                          {plan.name}
-                        </p>
-                      </div>
-                      <p>
+                        <span className="flex flex-col">
+                          <p className="text-base font-medium text-white uppercase">
+                            {plan.name}
+                          </p>
+                          <p className="ml-3">
                         <span className="text-base font-medium text-white uppercase lg:text-xl">
                           ${plan.price}
                         </span>
@@ -236,6 +236,9 @@ export default function page() {
                           /mo
                         </span>
                       </p>
+                        </span>
+                      </div>
+                      
                     </div>
                     <p className="mt-8 text-sm font-medium text-gray-300">
                       {plan.description}
