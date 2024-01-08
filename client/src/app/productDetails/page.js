@@ -63,7 +63,7 @@ const handleWishClick = () => {
 
   return (
     <div className="bg-gray-200">
-      <div className="sticky top-0 z-50 bg-white">
+      <div className="sticky top-0 z-50 bg-[#111827]">
         <Navbar />
       </div>
       <div className="px-2 py-4 mb-2 mt-2 bg-white lg:w-[80%] lg:mx-auto">

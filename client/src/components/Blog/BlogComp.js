@@ -87,15 +87,16 @@ export default function () {
           ))}
         </div>
       ) : (
-        <div>
+        <div className="bg-red-200">
           {/* <!-- component --> */}
-          <div className="max-w-screen-lg mx-auto md:max-w-screen-xl md:px-10">
+          <div className="w-full  md:max-w-screen-xl md:px-10 border-2 ">
             <main className="">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
                 {/* map throught the the fetched data.highlight */}
 
                 <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
+                <h2 className="text-xl font-bold">Highlight</h2>
                   <Swiper
                     spaceBetween={30}
                     hashNavigation={{
@@ -113,6 +114,7 @@ export default function () {
                   >
                     {/* map through the fetched data.highlight */}
                     {highlight.map((post) => (
+                      
                       <SwiperSlide  key={post.shortdescription}>
                         {/* <!-- main post --> */}
                         <div
@@ -150,6 +152,7 @@ export default function () {
                 {/* <!-- sub-main posts --> */}
                 <div className="w-full md:w-4/7">
                   {/* map through trending posts */}
+                  <h2 className="text-xl font-bold">Trending</h2>
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <div className="flex flex-col w-full mb-10 rounded md:flex-row">
@@ -265,7 +268,7 @@ export default function () {
             </main>
             {/* <!-- main ends here --> */}
           </div>
-          <FooterComp />
+          
         </div>
       )}
     </>
