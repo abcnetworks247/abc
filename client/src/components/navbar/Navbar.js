@@ -54,7 +54,6 @@ export default function Navbar() {
       if (catRes.status === 200) {
         console.log("------------->>", catRes.data);
         setCategory(catRes.data.data);
-        setLoading(false);
       }
       if (typeRes.status === 200) {
         console.log("------------->>", typeRes.data.data);
@@ -63,7 +62,6 @@ export default function Navbar() {
       }
     } catch (error) {
       console.log(error);
-      setLoading(false);
       alert("Something went wrong");
     }
   };
