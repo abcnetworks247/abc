@@ -1,5 +1,5 @@
 "use client";
-import { useState, React } from "react";
+import { useState, React, useEffect } from "react";
 import { RiMenu2Fill } from "react-icons/ri";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
@@ -14,6 +14,7 @@ import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import { IoMdArrowDropdown } from "react-icons/io";
+import Api from "@/utils/Api";
 
 /**
  * Represents a navigation bar component.
@@ -36,6 +37,20 @@ export default function Navbar() {
   const WishlistValue = Wishlist.length;
 
   // wishlist local storage function
+  const [news, setNews] = useState([]);
+
+  const fetchNews = async () => {
+    try {
+      const res = await Api.get("admin/category/news/type");
+      setNews(res.data);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
 
   function Logout() {
     Swal.fire({
