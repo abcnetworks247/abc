@@ -51,7 +51,20 @@ console.log("fetched gallery", gallery)
           const response = await axios.get(
             `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productId}`
           );
-          setProduct(response.data);
+            
+            setTitle(response.data.title || "");
+            setHtml(response.data.description || "");
+            setPrice(response.data.price || 0);
+            setDiscountPercentage(response.data.discountPercentage || 0);
+            setRating(response.data.rating || 0);
+            setStock(response.data.stock || 0);
+            setBrand(response.data.brand || "");
+            setCategory(response.data.category || "");
+            setColor(response.data.color || "");
+            setWarranty(response.data.warranty || "");
+            setWeight(response.data.weight || 0);
+            setGallery(response.data.images || "");
+            setThumbnail(response.data.thumbnail || "");
         } catch (error) {
           console.error("Error during product fetching:", error);
         }
@@ -61,24 +74,7 @@ console.log("fetched gallery", gallery)
       console.log(product);
     }, [productId]);
     
-    useEffect(() => {
 
-        setTitle(product.title || "");
-        setHtml(product.description || "");
-        setPrice(product.price || 0);
-        setDiscountPercentage(product.discountPercentage || 0);
-        setRating(product.rating || 0);
-        setStock(product.stock || 0)
-        setBrand(product.brand || "");
-        setCategory(product.category || "");
-        setColor(product.color || "");
-        setWarranty(product.warranty || "");
-        setWeight(product.weight || 0);
-        setGallery(product.images || "");
-        setThumbnail(product.thumbnail || "");
-       
-    
-    }, [product]);
     
 
  
@@ -99,7 +95,7 @@ function onChange(e) {
       e.preventDefault();
       console.log("patch started");
 
-      
+       const secureUrls = gallery.map((image) => image.secure_url);
 
       try {
         const updatedFormData = {
@@ -112,7 +108,7 @@ function onChange(e) {
           brand: brand,
           category: category,
           thumbnail: thumbnail,
-          images: gallery,
+          images: secureUrls,
           color: color,
           warranty: warranty,
           weight: weight,
@@ -163,6 +159,18 @@ function onChange(e) {
 
        HandleFetch();
      }, []);
+  
+  const HandleDeleteGallery = (id) => {
+    if (gallery.length > 0) {
+      // Create a new array without the item with the specified ID
+      const newArray = gallery.filter((item) => item._id !== id);
+      setGallery(newArray);
+    } else {
+      // Handle the case when gallery is empty (if needed)
+      console.log("Gallery is empty");
+      setGallery(null);
+    }
+  };
 
     
 
@@ -200,8 +208,8 @@ function onChange(e) {
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Apple Imac 27”"
                       required=""
-                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                     />
                   </div>
 
@@ -219,9 +227,9 @@ function onChange(e) {
                       id="category"
                       required
                       value={category}
-                     onChange={(e) => setCategory(e.target.value)}
+                      onChange={(e) => setCategory(e.target.value)}
                     >
-                        <option>Select category</option>
+                      <option>Select category</option>
                       {uploadedCat &&
                         uploadedCat.map((item) => {
                           return <option value={item.name}>{item.name}</option>;
@@ -282,7 +290,7 @@ function onChange(e) {
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="2300"
                       value={discountPercentage}
-                     onChange={(e) => setDiscountPercentage(e.target.value)}
+                      onChange={(e) => setDiscountPercentage(e.target.value)}
                     />
                   </div>
 
@@ -360,7 +368,7 @@ function onChange(e) {
                       placeholder="15"
                       required=""
                       value={warranty}
-                     onChange={(e) => setWarranty(e.target.value)}
+                      onChange={(e) => setWarranty(e.target.value)}
                     />
                   </div>
 
@@ -379,7 +387,7 @@ function onChange(e) {
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Red"
                       value={color}
-                     onChange={(e) => setColor(e.target.value)}
+                      onChange={(e) => setColor(e.target.value)}
                     />
                   </div>
 
@@ -392,9 +400,8 @@ function onChange(e) {
                       Product Details
                     </label>
                     <EditorProvider>
-                    
-                       {/* <Editor value={html} onChange={onChange}>  */}
-                       <Editor value={html} onChange={onChange}> 
+                      {/* <Editor value={html} onChange={onChange}>  */}
+                      <Editor value={html} onChange={onChange}>
                         <Toolbar>
                           <BtnBold />
                           <Separator />
@@ -490,18 +497,26 @@ function onChange(e) {
                   <p className="block mb-2 text-sm font-medium text-gray-900">
                     Product Gallery
                   </p>
-                  {gallery  && (
-                    <div className="flex my-4 space-x-5">
-                      {gallery.map((item) => (
-                        <div>
-                          <img
-                            src={item}
-                            className="h-24"
-                            alt="imac image"
-                          />
+                  <div className="flex my-4 space-x-5">
+                    {gallery &&
+                      gallery.map((item) => (
+                        <div key={typeof item === "object" ? item._id : item}>
+                          {typeof item === "object" ? (
+                            <img
+                              src={item.secure_url}
+                              className="h-24"
+                              alt="imac image"
+                            />
+                          ) : (
+                            <img src={item} className="h-24" alt="imac image" />
+                          )}
                           <div
                             className="cursor-pointer"
-                            // onClick={() => HandleDeleteGallery(item._id)}
+                            onClick={() =>
+                              HandleDeleteGallery(
+                                typeof item === "object" ? item._id : item
+                              )
+                            }
                           >
                             <svg
                               className="w-6 h-6 -mt-5 text-red-600 cursor-pointer"
@@ -518,8 +533,8 @@ function onChange(e) {
                           </div>
                         </div>
                       ))}
-                    </div>
-                  )}
+                  </div>
+
                   <a href="#value=gallery">
                     <div className="flex items-center justify-center w-full">
                       <div

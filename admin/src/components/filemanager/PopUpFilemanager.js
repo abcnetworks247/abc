@@ -19,7 +19,13 @@ import { BsFileEarmarkPlus } from "react-icons/bs";
 import UploadPop from "./UploadPop";
 import FileCompPop from "./FileCompPop";
 
-const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery, setImageSrc}) => {
+const PopUpFilemanager = ({
+  handleOpen,
+  size,
+  setThumbnail,
+  setGallery,
+  setImageSrc,
+}) => {
   const [selectedphoto, setSelectedPhoto] = useState(null);
   const [blogimage, setBlogImage] = useState(null);
 
@@ -28,7 +34,14 @@ const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery, setImage
       label: "Select",
       value: "select",
       icon: LuFiles,
-      childComponent: <FileCompPop setThumbnail={setThumbnail} setGallery={setGallery} handleOpen={handleOpen} setImageSrc={setImageSrc} />,
+      childComponent: (
+        <FileCompPop
+          setThumbnail={setThumbnail}
+          setGallery={setGallery}
+          handleOpen={handleOpen}
+          setImageSrc={setImageSrc}
+        />
+      ),
     },
     {
       label: "Upload",
@@ -48,16 +61,13 @@ const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery, setImage
           size === "lg" ||
           size === "xl" ||
           size === "xxl"
-          
         }
-
-      
-        style={{ animation: 'none' }} 
+        style={{ animation: "none" }}
         key={Math.random()}
         size={size || "sm"}
         handler={handleOpen}
       >
-        <DialogBody className="px-6"  >
+        <DialogBody className="px-6">
           <Tabs value="select" className="h-fit">
             <TabsHeader className="m-0 w-fit h-fit">
               {data.map(({ label, value, icon }) => (
@@ -78,7 +88,6 @@ const PopUpFilemanager = ({ handleOpen, size, setThumbnail, setGallery, setImage
             </TabsBody>
           </Tabs>
         </DialogBody>
-        
       </Dialog>
     </div>
   );
