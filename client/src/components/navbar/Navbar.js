@@ -79,7 +79,7 @@ export default function Navbar() {
         <div className="hidden navbar-center md:block text-white">
           <Link
             href="/"
-            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
+            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
               pathname === "/" ? "border-b-[2px] border-[#0e1b2b] " : ""
             }`}
           >
@@ -87,7 +87,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/store"
-            className={`navbar-item rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item text-[15px] rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/store" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -95,16 +95,16 @@ export default function Navbar() {
           </Link>
           <Link
             href="/pricing"
-            className={`navbar-item rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
+            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
               pathname === "/pricing" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
-            Membership
+            Member
           </Link>
 
           <Link
             href="/about"
-            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/about" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -112,7 +112,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/contact"
-            className={`navbar-item mx-1  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -120,7 +120,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/contact mr-5"
-            className={`navbar-item mx-1 w-fit  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -130,7 +130,9 @@ export default function Navbar() {
           </Link>
 
           <a className="dropdown    dropdown-hover">
-            <label tabIndex="0">News</label>
+            <label tabIndex="0" className="text-[15px]">
+              News
+            </label>
             <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3">
               <a className="dropdown-item text-sm">Profile</a>
               <a tabIndex="-1" className="dropdown-item text-sm">
@@ -348,7 +350,7 @@ export default function Navbar() {
                   </Link>
                 </label>
                 <div className=" dropdown-container">
-                  <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                  <div className="dropdown-menu dropdown-menu-bottom-left mt-[5px] bg-white">
                     <a className="text-sm dropdown-item -z-50">
                       login or signup
                     </a>
