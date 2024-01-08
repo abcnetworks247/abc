@@ -8,10 +8,10 @@ function About() {
   return (
     <div>
       <Sidebar />
-      <div className="bg-white sticky top-0 z-[10]">
+      <div className="bg-[#111827] sticky top-0 z-[10]">
         <Navbar />
       </div>
-  
+
       <AboutComponent />
       <FooterComp />
     </div>

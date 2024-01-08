@@ -32,7 +32,7 @@ const page = () => {
     
     return (
       <>
-        <div className="bg-white sticky top-0 z-[10] mb-10">
+        <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
           <Navbar />
         </div>
         {/* bread crumb */}
@@ -106,7 +106,7 @@ const page = () => {
             </ol>
           </nav>
         </div>
-       
+
         <div className=" py-10 px-2  lg:px-28 bg-gray-50 h-full">
           <div className="flex bg-white items-center justify-between border border-b border-gray-100 p-4">
             <p className="text-lg">{cat} </p>

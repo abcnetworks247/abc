@@ -32,13 +32,11 @@ const page = () => {
 
   return (
     <div className="relative">
-      <div className="bg-white sticky top-0 z-[20] ">
+      <div className="bg-[#111827] sticky top-0 z-[20] ">
         <Navbar />
       </div>
-      <ProductNav/>
-      <Banner
-         allProducts={allProducts}
-      />
+      <ProductNav />
+      <Banner allProducts={allProducts} />
       <Sidebar />
 
       <Features />

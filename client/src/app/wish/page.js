@@ -13,9 +13,9 @@ const page = () => {
     
     return (
       <div>
-         <div className="bg-white sticky top-0 z-[10]">
-        <Navbar />
-      </div>
+        <div className="bg-[#111827] sticky top-0 z-[10]">
+          <Navbar />
+        </div>
         <Sidebar />
         {Wishlist.length > 0 ? (
           <div className="px-1 py-10 lg:px-28 bg-gray-50 h-contain">
@@ -32,17 +32,16 @@ const page = () => {
         ) : (
           <div className="w-auto bg-gray-100 h-[73vh] lg:h-screen sm:flex sm:items-center sm:justify-center ">
             <div className="bg-white sm:w-[30vw] sm:h-[40vh] h-full  flex flex-col justify-center items-center sm:shadow-md sm:rounded-md">
-                            
-                <img src="/assets/images/basket.png" className='w-32 h-auto'/>
-                <p className='text-bold'>You have no saved items</p>
+              <img src="/assets/images/basket.png" className="w-32 h-auto" />
+              <p className="text-bold">You have no saved items</p>
 
               <Link href="/store" className="text-sm text-blue-500 underline">
                 Go back to store
               </Link>
             </div>
           </div>
-            )}
-            <FooterComp/>
+        )}
+        <FooterComp />
       </div>
     );
 }

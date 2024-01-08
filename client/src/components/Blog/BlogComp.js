@@ -87,15 +87,16 @@ export default function () {
           ))}
         </div>
       ) : (
-        <div>
+        <div className="w-full flex justify-center m-0 p-2">
           {/* <!-- component --> */}
-          <div className="max-w-screen-2xl mx-auto md:max-w-screen-xl md:px-10">
-            <main className="">
+          <div className="w-full p-5 ">
+            <main className=" w-full">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
                 {/* map throught the the fetched data.highlight */}
 
                 <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
+                <h2 className="text-xl font-bold">Highlight</h2>
                   <Swiper
                     spaceBetween={30}
                     hashNavigation={{
@@ -113,6 +114,7 @@ export default function () {
                   >
                     {/* map through the fetched data.highlight */}
                     {highlight.map((post) => (
+                      
                       <SwiperSlide  key={post.shortdescription}>
                         {/* <!-- main post --> */}
                         <div
@@ -148,8 +150,9 @@ export default function () {
                   </Swiper>
                 </div>
                 {/* <!-- sub-main posts --> */}
-                <div className="w-full md:w-4/7">
+                <div className="w-fit md:w-4/7">
                   {/* map through trending posts */}
+                  <h2 className="text-xl font-bold">Trending</h2>
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <div className="flex flex-col w-full mb-10 rounded md:flex-row">
@@ -158,7 +161,7 @@ export default function () {
                           height={500}
                           width={500}
                           alt="img"
-                          className="block object-cover w-auto h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
+                          className="block object-cover w-[264px] h-[60vh] m-4 rounded-md md:hidden lg:block md:h-[23vh] md:m-0"
                         />
                         <div className="px-4 bg-white rounded">
                           <span className="hidden text-sm text-green-700 md:block">
@@ -265,7 +268,7 @@ export default function () {
             </main>
             {/* <!-- main ends here --> */}
           </div>
-          <FooterComp />
+          
         </div>
       )}
     </>
