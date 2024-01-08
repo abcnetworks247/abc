@@ -1,8 +1,9 @@
-"use client";
-import { createContext, useState, useContext, useEffect } from "react";
-import Cookies from "js-cookie";
-import Api from "@/utils/Api";
-import Loading from "@/components/loading/Loading";
+"use client"
+import { createContext, useState, useContext, useEffect } from "react"
+import Cookies from "js-cookie"
+import React from "react"
+import Api from "@/utils/Api"
+import Loading from "@/components/loading/Loading"
 
 const UserContext = createContext();
 
@@ -13,6 +14,8 @@ export const UserContextProvider = ({ children }) => {
   // initial state for user incoming data
   const [UserData, setUserData] = useState([]);
   const [dummyUser, setDummyUser] = useState([])
+
+  console.log("user data", UserData)
 
   // loading state for user incoming data
 

@@ -6,6 +6,7 @@ import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
+
 const ProductProvider = ({ children }) => {
   const router = useRouter()
 

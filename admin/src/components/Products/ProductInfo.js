@@ -4,10 +4,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { IconButton, Tooltip } from "@material-tailwind/react";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
 
-  
+  const router = useRouter()
   const handleDelete = async (productId) => {
     try {
       const adminToken = Cookies.get("adminToken");
@@ -64,6 +65,10 @@ const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
       // Handle error, e.g., show an error message to the user
     }
   };
+
+  const handleEdit = (id) => {
+    router.push(`/dashboard/eccomerce/editproduct/?id=${id}`)
+  }
   
   return (
     <>
@@ -98,6 +103,7 @@ const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
           <Tooltip content="Edit">
             <IconButton variant="text">
               <svg
+                onClick = {()=>handleEdit(id)}
                 className="h-5 w-5"
                 fill="currentColor"
                 viewBox="0 0 20 20"
