@@ -43,6 +43,7 @@ export default function Navbar() {
     try {
       const res = await Api.get("admin/category/news/type");
       setNews(res.data);
+      console.log("news", res.data);
     } catch (error) {
       alert(error);
     }

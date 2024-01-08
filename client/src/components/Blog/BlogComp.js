@@ -92,11 +92,11 @@ export default function () {
           <div className="w-full mx-auto md:max-w-screen-xl md:px-10">
             <main className="">
               {/* <!-- featured section --> */}
-              <div className="flex flex-col gap-5 space-x-0 lg:flex-col md:flex-col md:space-x-6">
+              <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
                 {/* map throught the the fetched data.highlight */}
-                <h2 className="text-xl font-bold">Highlight</h2>
 
                 <div className=" block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
+                <h2 className="text-xl font-bold">Highlight</h2>
                   <Swiper
                     spaceBetween={30}
                     hashNavigation={{
