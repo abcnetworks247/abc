@@ -135,7 +135,7 @@ export default function page() {
                       </div>
                       <p>
                         <span className="text-lg font-medium text-white uppercase lg:text-xl">
-                          {pro[0].price}
+                          ${pro[0].price}
                         </span>
                         <span className="text-base font-medium text-white">
                           {" "}
@@ -151,7 +151,7 @@ export default function page() {
                         className="items-center justify-between inline-flex w-full font-medium px-6 py-2.5 text-center text-black duration-200 bg-white rounded-xl h-14 hover:bg-white/20 hover:border-white hover:text-white focus:outline-none focus-visible:outline-black text-base focus-visible:ring-black"
                         href="#"
                       >
-                        Get starter <span>→</span>
+                        Get started <span>→</span>
                       </a>
                     </div>
                   </div>
@@ -252,7 +252,7 @@ export default function page() {
                         className="items-center justify-between inline-flex w-full font-medium px-6 py-2.5 text-center text-white duration-200 bg-white/5 border border-white/5 rounded-xl h-14 hover:bg-white/10 hover:border-white/10 focus:outline-none focus-visible:outline-black text-base focus-visible:ring-black"
                         href="#"
                       >
-                        Get starter <span>→</span>
+                        Get started <span>→</span>
                       </a>
                     </div>
                   </div>
