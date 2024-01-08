@@ -19,7 +19,7 @@ export default function page() {
       ],
     },
     {
-      name: "Starter pack",
+      name: "Prime -Silver Donor",
       price: "55 - 100",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
@@ -134,10 +134,10 @@ export default function page() {
                         </p>
                       </div>
                       <p>
-                        <span className="text-lg font-medium text-white uppercase lg:text-xl">
+                        <span className="text-base font-medium text-white uppercase lg:text-xl">
                           ${pro[0].price}
                         </span>
-                        <span className="text-base font-medium text-white">
+                        <span className="text-sm font-medium text-white">
                           {" "}
                           /mo
                         </span>
@@ -235,10 +235,10 @@ export default function page() {
                         </p>
                       </div>
                       <p>
-                        <span className="text-lg font-medium text-white uppercase lg:text-xl">
+                        <span className="text-base font-medium text-white uppercase lg:text-xl">
                           ${plan.price}
                         </span>
-                        <span className="text-base font-medium text-gray-500">
+                        <span className="text-sm font-medium text-gray-500">
                           {" "}
                           /mo
                         </span>
