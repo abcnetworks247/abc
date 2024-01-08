@@ -87,7 +87,7 @@ export default function () {
           ))}
         </div>
       ) : (
-        <div className="w-full flex justify-center m-0 p-0">
+        <div className="w-full flex justify-center m-0 p-2">
           {/* <!-- component --> */}
           <div className="w-full bg-red-200  ">
             <main className=" w-full">
