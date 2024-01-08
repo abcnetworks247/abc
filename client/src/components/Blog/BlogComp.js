@@ -151,13 +151,14 @@ export default function () {
                   </Swiper>
                 </div>
                 {/* <!-- sub-main posts --> */}
-                <div className=" border border-red-500 p-0">
+                <div className=" p-0">
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Trending</h2>
                   <br />
-                  {trending.map((post) => (
+                  <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 space-x-0 lg:grid lg:grid-cols-1 sm:space-x-3">
+                      {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <div className="flex flex-col mb-10 rounded md:flex-row m-0 p-0 border border-green-500" >
+                      <div className="flex flex-col mb-10 rounded md:flex-row m-0 p-0 " >
                         <Image
                           src={post.blogimage}
                           height={500}
@@ -165,7 +166,7 @@ export default function () {
                           alt="img"
                           className="block object-cover object-top lg:w-[264px] lg:h-[30vh] w-full h-52 rounded-md md:hidden lg:block md:h-[23vh] m-0 p-0 md:m-0"
                         />
-                        <div className="px-4 bg-white rounded">
+                        <div className="px-4 sm:px-0 bg-white rounded ">
                           <span className="hidden text-sm text-green-700 md:block">
                             {" "}
                             {post.category}{" "}
@@ -180,6 +181,8 @@ export default function () {
                       </div>
                     </Link>
                   ))}
+                  </div>
+                  
                 </div>
               </div>
               {/* <!-- end featured section --> */}
@@ -191,10 +194,10 @@ export default function () {
                   View all
                 </a> */}
               </div>
-              <div className="block space-x-0 lg:flex lg:space-x-6">
+              <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 space-x-0 lg:flex lg:space-x-6">
                 {/* map through the fetched data.popular */}
                 {popular.map((post) => (
-                  <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
+                  <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0 ">
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                       <Image
                         src={post.blogimage}
@@ -235,7 +238,7 @@ export default function () {
                   View all
                 </a> */}
               </div>
-              <div className="block space-x-0 lg:flex lg:space-x-6">
+              <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 space-x-0 lg:flex lg:space-x-6">
                 {/* map through top news */}
                 {topNews.map((post) => (
                   <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
