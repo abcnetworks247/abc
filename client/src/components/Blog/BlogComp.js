@@ -153,11 +153,11 @@ export default function () {
                 {/* <!-- sub-main posts --> */}
                 <div className=" border border-red-500 p-0">
                   {/* map through trending posts */}
-                  <h2 className="text-xl font-bold">Trending</h2>
+                  <h2 className="text-xl font-bold border">Trending</h2>
                   <br />
                   {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <div className="flex flex-col mb-10 rounded md:flex-row m-0 p-0" >
+                      <div className="flex flex-col mb-10 rounded md:flex-row m-0 p-0 border" >
                         <Image
                           src={post.blogimage}
                           height={500}
