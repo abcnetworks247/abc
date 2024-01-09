@@ -7,7 +7,7 @@ const HeroCarousel = () => {
   const width = Dimensions.get("window").width -10;
   return (
     <View >
-      <View className="flex-1 pl-1">
+      <View className="flex-1 pl-1 mt-2">
         <Carousel
           loop
           width={width}

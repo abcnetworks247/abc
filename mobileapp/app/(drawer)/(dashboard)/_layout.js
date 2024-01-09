@@ -3,7 +3,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Svg, { Path, G } from "react-native-svg";
 import globalStyels from "../../../styles/globalStyels";
 import Navbar from "../../components/navbar/Navbar";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View } from "react-native";
+import { useState } from "react";
+import { useRoute } from "@react-navigation/native";
 export default function layout() {
   return (
    <>
@@ -90,7 +92,9 @@ export default function layout() {
         options={{
           header: () => null,
           title: "Profile",
-          headerTitleAllowFontScaling: true,
+          headerStyle: {
+            fontSize: 20,
+          },
           
           tabBarIcon: () => (
             <Svg
@@ -115,6 +119,30 @@ export default function layout() {
           ),
         }}
       />
+
+
+  <Tabs.Screen
+   
+    name="test/index"
+    
+    options={{
+        
+      tabBarStyle: {  animated: true},
+       header: () => null,
+      title: () => "test",
+      headerStyle: {
+        fontSize: 20,
+      },
+  
+      tabBarItemStyle: {
+        display: 'none',
+      },
+      tabBarIcon: () => null,
+        
+    }}
+    
+  />
+
     </Tabs>
    </>
   );
