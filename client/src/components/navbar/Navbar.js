@@ -26,6 +26,7 @@ export default function Navbar() {
   const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
   const { cartProducts, Wishlist } = UseProductProvider();
   const pathname = usePathname();
+  const pathUrl = "/news/"
 
   // console.log('tokk',Authtoken)
 
@@ -159,7 +160,7 @@ export default function Navbar() {
             <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase">
               {/* <a className="dropdown-item text-sm">Profile</a> */}
               {type.map((item, index) => {
-                return <a key={index} className="dropdown-item text-sm">{item.name}</a>;
+                return <Link key={index} href={`${pathUrl}${item.name}`} className="dropdown-item text-sm hover:bg-gray-200">{item.name}</Link>;
               })}
             </div>
           </a>
@@ -279,7 +280,7 @@ export default function Navbar() {
               <div className="flex items-center justify-center h-fit ">
                 <div className="flex m-5 border shadow-sm w-fit item-center rounded-xl">
                   <Link href="/login">
-                    <button className="px-4 py-2 m-0 text-white transition bg-white rounded-l-xl hover:bg-white/80">
+                    <button className="px-4 py-2 m-0 text-black transition bg-white rounded-l-xl hover:bg-white/80">
                       Login
                     </button>
                   </Link>
@@ -366,7 +367,7 @@ export default function Navbar() {
                 >
                   {" "}
                   <Link href={`${!Authtoken ? "/login" : "/userdashboard"}`}>
-                    <FaRegUser className="text-white hover:text-gray-300 transition  text-[26px] cursor-pointer block lg:hidden" />
+                    <FaRegUser className="text-white hover:text-btn-primary transition  text-[26px] cursor-pointer block lg:hidden" />
                   </Link>
                 </label>
                 <div className=" dropdown-container">
