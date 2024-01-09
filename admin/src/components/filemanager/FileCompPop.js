@@ -15,7 +15,7 @@ import { IoAdd } from "react-icons/io5";
 import { usePathname, useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
-const FileCompPop = ({ setThumbnail, handleOpen, setGallery,  setImageSrc }) => {
+const FileCompPop = ({ setThumbnail, handleOpen, setGallery, setGallery2, setImageSrc }) => {
   const [fileData, setFileData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [checkurl, setCheckUrl] = useState([]);
@@ -86,16 +86,21 @@ const FileCompPop = ({ setThumbnail, handleOpen, setGallery,  setImageSrc }) => 
         }
       }
 
-      
       if (valueWithoutPrefix === "gallery2") {
         if (checkurl.length === 3) {
           let newgallery = checkurl.slice(0, 3);
-          setGallery2(newgallery);
+
+          const newdata = newgallery.map((url) => url.secure_url);
+          console.log("newdata", newdata);
+          setGallery2(newdata);
           handleOpen(null);
         } else {
           alert("You can only select 3 product gallery");
         }
       }
+
+      
+     
 
       if (valueWithoutPrefix === "newsimage") {
         if (checkurl.length === 1) {

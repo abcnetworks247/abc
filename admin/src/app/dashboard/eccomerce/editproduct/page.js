@@ -40,7 +40,7 @@ const productId = params.get("id");
    const [warranty, setWarranty] = useState(0);
    const [weight, setWeight] = useState(0);
    const [thumbnail, setThumbnail] = useState(null);
-   const [gallery, setGallery] = useState(null);
+   const [gallery, setGallery2] = useState(null);
 
 console.log("fetched gallery", gallery)
     
@@ -63,7 +63,7 @@ console.log("fetched gallery", gallery)
             setColor(response.data.color || "");
             setWarranty(response.data.warranty || "");
             setWeight(response.data.weight || 0);
-            setGallery(response.data.images || "");
+            setGallery2(response.data.images);
             setThumbnail(response.data.thumbnail || "");
         } catch (error) {
           console.error("Error during product fetching:", error);
@@ -87,7 +87,12 @@ function onChange(e) {
     
   
 
-
+const HandleDeleteGallery = (index) => {
+  // Use the index to remove the corresponding item from the gallery array
+  const updatedGallery = [...gallery];
+  updatedGallery.splice(index, 1);
+  setGallery2(updatedGallery);
+};
     
     
 
@@ -95,7 +100,7 @@ function onChange(e) {
       e.preventDefault();
       console.log("patch started");
 
-       const secureUrls = gallery.map((image) => image.secure_url);
+       const secureUrls = gallery
 
       try {
         const updatedFormData = {
@@ -107,11 +112,12 @@ function onChange(e) {
           stock: stock,
           brand: brand,
           category: category,
-          thumbnail: thumbnail,
+          thumbnail: thumbnail, 
           images: secureUrls,
           color: color,
           warranty: warranty,
           weight: weight,
+          productId:productId
         };
 
         console.log("Form data before submission", updatedFormData);
@@ -160,18 +166,6 @@ function onChange(e) {
        HandleFetch();
      }, []);
   
-  const HandleDeleteGallery = (id) => {
-    if (gallery.length > 0) {
-      // Create a new array without the item with the specified ID
-      const newArray = gallery.filter((item) => item._id !== id);
-      setGallery(newArray);
-    } else {
-      // Handle the case when gallery is empty (if needed)
-      console.log("Gallery is empty");
-      setGallery(null);
-    }
-  };
-
     
 
   return (
@@ -499,24 +493,13 @@ function onChange(e) {
                   </p>
                   <div className="flex my-4 space-x-5">
                     {gallery &&
-                      gallery.map((item) => (
-                        <div key={typeof item === "object" ? item._id : item}>
-                          {typeof item === "object" ? (
-                            <img
-                              src={item.secure_url}
-                              className="h-24"
-                              alt="imac image"
-                            />
-                          ) : (
-                            <img src={item} className="h-24" alt="imac image" />
-                          )}
+                      gallery.map((item, index) => (
+                        <div key={item}>
+                          <img src={item} className="h-24" alt="imac image" />
+
                           <div
                             className="cursor-pointer"
-                            onClick={() =>
-                              HandleDeleteGallery(
-                                typeof item === "object" ? item._id : item
-                              )
-                            }
+                            onClick={() => HandleDeleteGallery(index)}
                           >
                             <svg
                               className="w-6 h-6 -mt-5 text-red-600 cursor-pointer"
@@ -535,7 +518,7 @@ function onChange(e) {
                       ))}
                   </div>
 
-                  <a href="#value=gallery">
+                  <a href="#value=gallery2">
                     <div className="flex items-center justify-center w-full">
                       <div
                         className="flex flex-col w-full h-32 border-2 border-gray-300 border-dashed rounded cursor-pointer hover:bg-gray-50"
@@ -580,7 +563,7 @@ function onChange(e) {
           handleOpen={handleOpen}
           size={size}
           setThumbnail={setThumbnail}
-          setGallery={setGallery}
+          setGallery2={setGallery2}
         />
       </div>
     </div>
