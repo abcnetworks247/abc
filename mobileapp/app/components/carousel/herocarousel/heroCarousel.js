@@ -13,7 +13,7 @@ const HeroCarousel = () => {
           width={width}
           height={0}
           autoPlay={true}
-          className="h-[430px] w-full"
+          className="h-[450px] w-full"
           data={[...new Array(6).keys()]}
           scrollAnimationDuration={1000}
         //   onSnapToItem={(index) => console.log("current index:", index)}

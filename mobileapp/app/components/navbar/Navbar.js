@@ -1,14 +1,21 @@
-import { View, Text, Image, SafeAreaView } from "react-native";
+import { View, Text, Image, SafeAreaView, Button, TouchableOpacity } from "react-native";
 import React from "react";
 import Logo from "../../../assets/AbcstudioNo.png";
 import Svg, { Path, G } from "react-native-svg";
 import User from "../../../assets/user.jpg";
+import { useNavigation } from "expo-router";
+import { DrawerActions } from "@react-navigation/native";
+
 
 const Navbar = () => {
+  const navigation = useNavigation()
+  const OnTogle = ()=>{
+      navigation.dispatch(DrawerActions.toggleDrawer())
+  }
   return (
-    <View className="flex flex-row items-center justify-between px-4 bg-[#111827] border-b-2 backdrop-blur-2xl mb-4">
+    <View className="flex flex-row items-center justify-between px-4 bg-[#111827] border-b-2 backdrop-blur-2xl mb-2">
       <View className="h-[60px] w-20">
-
+   
         <Image source={Logo} className="w-full h-full" />
       </View>
       <View className="flex flex-row gap-4 items-center">
@@ -34,9 +41,10 @@ const Navbar = () => {
       />
     </Svg>
         </View>
-        <View >
-        <Image source={User} className="w-10 h-10 rounded-full border-2 border-[#f5f5f5]" />
-        </View>
+        <TouchableOpacity onPress={OnTogle} >
+   
+        <Image source={User} className="w-10 h-10 rounded-full border-2 border-[#f5f5f5]"  />
+        </TouchableOpacity>
       </View>
     </View>
   );

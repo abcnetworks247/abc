@@ -1,15 +1,13 @@
 import { Tabs } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Svg, { Path, G } from "react-native-svg";
-import globalStyels from "../../styles/globalStyels";
-import Navbar from "../components/navbar/Navbar";
+import globalStyels from "../../../styles/globalStyels";
+import Navbar from "../../components/navbar/Navbar";
 import { SafeAreaView } from "react-native";
 export default function layout() {
   return (
    <>
-   <SafeAreaView style={globalStyels.droidSafeArea}>
 
-       <Navbar />
     <Tabs  screenOptions={{
       tabBarStyle: {
         opacity: 5,
@@ -92,6 +90,8 @@ export default function layout() {
         options={{
           header: () => null,
           title: "Profile",
+          headerTitleAllowFontScaling: true,
+          
           tabBarIcon: () => (
             <Svg
               width="24px"
@@ -116,7 +116,6 @@ export default function layout() {
         }}
       />
     </Tabs>
-   </SafeAreaView>
    </>
   );
 }
