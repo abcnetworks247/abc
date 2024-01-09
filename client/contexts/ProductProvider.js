@@ -5,9 +5,12 @@ import { useEffect, useState, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import io from "socket.io-client"
 
 
 const ProductProvider = ({ children }) => {
+
+  const socket = io.connect(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
   const router = useRouter()
 
 
@@ -53,6 +56,11 @@ const ProductProvider = ({ children }) => {
     router.push('/productDetails')
   };
 
+
+   const handleWishAdd = (productId, userId) => {
+     // Emit the 'wishadd' event to the server
+     socket.emit("wishadd", { productid: productId, userid: userId });
+   };
   
   const addToWishlist = (product) => {
     // e.stopPropagation();
@@ -64,6 +72,11 @@ const ProductProvider = ({ children }) => {
       localStorage.setItem("Wishlist", JSON.stringify(updatedWish));
     }
   };
+
+
+
+
+
 
   const removeFromWishlist = (product) => {
     const newWishList = Wishlist.filter(
@@ -280,7 +293,8 @@ const ProductProvider = ({ children }) => {
         searchResults,
         setSearchResults,
         fetchData,
-        setAllProducts
+        setAllProducts,
+        handleWishAdd
       }}
     >
       {children}

@@ -16,6 +16,8 @@ const Editform = ({
   handleSubmit,
   handleImageChange,
   selectedPhoto,
+  loading,
+  setLoading
 
 }) => {
   const router = useRouter();

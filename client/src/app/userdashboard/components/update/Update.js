@@ -27,6 +27,7 @@ const Update = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
+  const [loading, setLoading] = useState(true)
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -83,6 +84,7 @@ const Update = () => {
       if (response.status === 200) {
         await HandleGetUser();
         console.log("Updated UserData:", UserData);
+        setLoading(false)
         setIsEditable(false);
 
         console.log("use profle updated successfully");
@@ -115,6 +117,8 @@ const Update = () => {
           handleSubmit={handleSubmit}
           handleImageChange={handleImageChange}
           selectedPhoto={selectedPhoto}
+          loading={loading}
+          setLoading={setLoading}
         />
       ) : (
         <StaticForm userData={UserData} handleEdit={handleEdit} />
