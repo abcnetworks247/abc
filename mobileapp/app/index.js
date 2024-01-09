@@ -11,7 +11,15 @@ export default function Page() {
       <View style={styles.main}>
         <Link href="/home"> 
         
-        <Text className="text-red-700 text-2xl">Hello World</Text>
+        <Text className="text-red-700 text-2xl">Home</Text>
+        </Link>
+        <Link href="/pricing"> 
+        
+        <Text className="text-red-700 text-2xl">Prcing</Text>
+        </Link>
+        <Link href="/auth/signup"> 
+        
+        <Text className="text-red-700 text-2xl">Auth</Text>
         </Link>
         <Text style={styles.subtitle}>This is the first page of your app.</Text>
     
