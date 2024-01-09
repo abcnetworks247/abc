@@ -16,6 +16,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 
 const { handleNewComment } = require("./controllers/blogControllers");
+const { Wishlist, Cart } = require("./controllers/clientAuthControllers");
 
 const {
   HandleUpload,
@@ -58,6 +59,8 @@ const io = new Server(server, {
 handleNewComment(io);
 HandleUpload(io);
 DeleteUpload(io);
+Wishlist(io);
+Cart(io);
 
 app.use(
   bodyParser.urlencoded({

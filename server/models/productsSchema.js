@@ -22,9 +22,11 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   stock: { type: Number, required: true },
+  quantity: { type: Number, required: true,  },
+
   brand: {
     type: String,
-    default: "none"
+    default: "none",
   },
   category: {
     type: String,
@@ -40,11 +42,11 @@ const productSchema = new mongoose.Schema({
   },
   color: {
     type: String,
-    default: "none"
+    default: "none",
   },
   warranty: {
     type: Number,
-    default: 0
+    default: 0,
   },
   weight: {
     type: Number,

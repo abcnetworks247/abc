@@ -1,4 +1,5 @@
 const Client = require("../models/clientAuthSchema");
+const Product = require("../models/productsSchema");
 const Admin = require("../models/adminAuthSchema");
 const Blog = require("../models/blogSchema");
 const { StatusCodes } = require("http-status-codes");
@@ -326,8 +327,7 @@ const userSignOut = async (req, res) => {
 };
 
 const userDelete = async (req, res) => {
-
-  const {email, password}  = req.body
+  const { email, password } = req.body;
 
   try {
     if (!req.user) {
@@ -335,15 +335,15 @@ const userDelete = async (req, res) => {
     }
 
     if (email !== req.user.email) {
-      throw new UnAuthorizedError("you are not authorized to delete this user")
+      throw new UnAuthorizedError("you are not authorized to delete this user");
     }
 
     const olduser = await Client.findById(req.user.id);
 
     const authenticatedUser = await olduser.checkPassword(password);
 
-    if(!authenticatedUser) {
-      throw new UnAuthorizedError("you are not authorized to delete this user")
+    if (!authenticatedUser) {
+      throw new UnAuthorizedError("you are not authorized to delete this user");
     }
 
     const deleteUser = await Client.findByIdAndDelete(req.user);
@@ -358,6 +358,104 @@ const userDelete = async (req, res) => {
   }
 };
 
+const Wishlist = (io) => {
+  io.on("connection", (socket) => {
+    socket.on("wishadd", async (wish) => {
+      try {
+        console.log(whistlist);
+
+        const user = await Client.findById(wish.userid);
+
+        if (!user) {
+          throw new NotFoundError("User not found");
+        }
+
+        const product = await Product.findById(wish.productid);
+
+        if (!product) {
+          console.log("Product not found");
+          throw new NotFoundError("Product not found");
+        } else if (user.wishlist.includes(wish.productid)) {
+          console.log("true id is already in the list");
+          const index = user.wishlist.indexOf(wish.productid);
+          user.wishlist.splice(index, 1);
+
+          user.save();
+
+          console.log("Like removed with userid: " + wish.productid);
+
+          const userwishlist = user.wishlist;
+
+          console.log(userwishlist);
+
+          socket.emit("wishlist", userwishlist);
+        } else {
+          user.wishlist.unshift(wish.productid);
+
+          user.save();
+
+          console.log("Like added with userid: " + wish.productid);
+
+          const userwish = user.wishlist;
+
+          console.log(userwish);
+
+          socket.emit("alllike", userwish);
+        }
+      } catch (error) {}
+    });
+  });
+};
+
+const Cart = (io) => {
+  io.on("connection", (socket) => {
+    socket.on("cartadd", async (cart) => {
+      try {
+        console.log("cart");
+
+        const user = await Client.findById(cart.userid);
+
+        if (!user) {
+          throw new NotFoundError("User not found");
+        }
+
+        const product = await Product.findById(cart.productid);
+
+        if (!product) {
+          console.log("Product not found");
+          throw new NotFoundError("Product not found");
+        } else if (user.wishlist.includes(cart.productid)) {
+          console.log("true id is already in the list");
+          const index = user.wishlist.indexOf(cart.productid);
+          user.wishlist.splice(index, 1);
+
+          user.save();
+
+          console.log("Like removed with userid: " + cart.productid);
+
+          const userwishlist = user.wishlist;
+
+          console.log(userwishlist);
+
+          socket.emit("wishlist", userwishlist);
+        } else {
+          user.wishlist.unshift(wish.productid);
+
+          user.save();
+
+          console.log("Like added with userid: " + wish.productid);
+
+          const userwish = user.wishlist;
+
+          console.log(userwish);
+
+          socket.emit("alllike", userwish);
+        }
+      } catch (error) {}
+    });
+  });
+};
+
 module.exports = {
   signUp,
   signIn,
@@ -369,4 +467,6 @@ module.exports = {
   userUpdate,
   userSignOut,
   userDelete,
+  Wishlist,
+  Cart,
 };

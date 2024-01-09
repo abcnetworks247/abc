@@ -135,7 +135,16 @@ const updateProduct = async (req, res) => {
       color,
       warranty,
       weight,
+      productid,
     } = req.body;
+
+    const existingProduct = await Product.findById(productid);
+
+    if (!existingProduct) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "Product not found" });
+    }
 
     // Construct an object with the extracted data
     const productData = {
@@ -151,7 +160,7 @@ const updateProduct = async (req, res) => {
       images,
       color,
       warranty,
-      weight,
+      weight
     };
 
     // Validate the request body against the Joi schema
@@ -163,16 +172,9 @@ const updateProduct = async (req, res) => {
         .json({ error: error.details[0].message });
     }
 
-    const productId = req.params.id;
-
     // Find the existing product by ID
-    const existingProduct = await Product.findById(productId);
-
-    if (!existingProduct) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Product not found" });
-    }
+  
+   
 
     // Update the existing product with the new data
     const updatedProduct = Product.findByIdAndUpdate(
