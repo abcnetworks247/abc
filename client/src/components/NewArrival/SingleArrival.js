@@ -3,9 +3,11 @@ import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../../../contexts/productContext";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { useRouter } from "next/navigation";
 
 
 const SingleArrival = ({ product }) => {
+  const router = useRouter()
   const { handleProductClick, handleCartClick } = useContext(ProductContext);
   const { handleAddToWishlist , handleRemoveFromWishlist} = UseProductProvider()
   const [hoverState, setHoverState] = useState(false)
@@ -25,7 +27,7 @@ const SingleArrival = ({ product }) => {
   return (
     <div
       className="mt-56 bg-white rounded shadow cursor-pointer"
-      onClick={() => handleProductClick(product)}
+      onClick={() => router.push(`/productDetails/?id=${product._id}`)}
       onMouseEnter={() => setHoverState(true)}
     >
       <div className="relative  py-6 group ">

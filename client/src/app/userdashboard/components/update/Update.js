@@ -18,7 +18,7 @@ const Update = () => {
   const [formData, setFormData] = useState({
     fullname: UserData?.fullname,
     email: UserData.email,
-    phone: UserData.phone,
+    phone: UserData.phone || '',
     shippingaddress: UserData.shippingaddress,
     userdp: UserData.userdp,
   });
@@ -29,8 +29,7 @@ const Update = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
-
- 
+  
   // Function to handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -67,7 +66,8 @@ const Update = () => {
       submitForm.append("phone", formData.phone);
       submitForm.append("shippingaddress", formData.shippingaddress);
       submitForm.append("userdp", formData.userdp);
-
+       console.log("my phonenumber", formData.phone);
+ 
       // Make a PATCH request
       const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,

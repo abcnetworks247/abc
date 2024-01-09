@@ -82,6 +82,7 @@ const Editform = ({
           placeholder="Email"
           value={formData?.email}
           onChange={(e) => handleInputChange(e)}
+          readOnly
         />
       </div>
       <div className="relative z-0 w-full mb-5 group">
