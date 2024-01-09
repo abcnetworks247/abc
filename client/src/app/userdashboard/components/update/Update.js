@@ -57,13 +57,14 @@ const Update = () => {
       // Create a new FormData instance
       const submitForm = new FormData();
 
+      console.log("userphoto", formData.userphoto);
       // Append form data to the FormData instance
 
       submitForm.append("fullname", formData.fullname);
       submitForm.append("email", formData.email);
       submitForm.append("phone", formData.phone);
       submitForm.append("shippingaddress", formData.shippingaddress);
-      submitForm.append("userdp", formData.userdp);
+      submitForm.append("userphoto", formData.userdp);
        console.log("my phonenumber", formData.phone);
  
       // Make a PATCH request
