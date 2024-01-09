@@ -66,7 +66,7 @@ const Editform = ({
           type="text"
           name="fullname"
           placeholder="Fulll name"
-          value={formData && formData.fullname}
+          value={formData.fullname}
           onChange={(e) => handleInputChange(e)}
         />
       </div>
@@ -107,7 +107,7 @@ const Editform = ({
           value={formData?.shippingaddress}
           onChange={(e) => handleInputChange(e)}
           type="text"
-          placeholder="3 Market Avenue, Port Harcourt "
+          placeholder=" Enter our shipping address.."
           className="w-full px-4 dark:placeholder-gray-500 dark:text-gray-400 py-2.5 text-base text-gray-900 rounded-lg font-normal border border-gray-200"
         ></textarea>
       </div>
@@ -121,7 +121,7 @@ const Editform = ({
         </label>
         <div className="py-2 shrink-0">
           <img
-            src={selectedPhoto}
+            src={selectedPhoto ? selectedPhoto : formData.userphoto}
             alt=""
             className="object-cover rounded-full w-11 h-11"
           />

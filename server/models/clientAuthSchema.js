@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-const subscriptionSchema =  new mongoose.Schema({
+const subscriptionSchema = new mongoose.Schema({
   user: { type: mongoose.Types.ObjectId, ref: "Client" },
   price: { type: Number, required: true },
   subscriptionType: {

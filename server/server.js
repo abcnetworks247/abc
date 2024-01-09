@@ -8,7 +8,7 @@ const productRouter = require("./routes/productRoute");
 const uploadRouter = require("./routes/uploadRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-const categoryRouter = require('./routes/categoryRoute');
+const categoryRouter = require("./routes/categoryRoute");
 
 const path = require("path");
 const cors = require("cors");
@@ -91,7 +91,6 @@ app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/commerce", productRouter);
 app.use("/api/v1/admin/blog", blogRouter);
 app.use("/api/v1/admin/file", uploadRouter);
-
 
 //category Route
 app.use("/api/v1/admin/category", categoryRouter);

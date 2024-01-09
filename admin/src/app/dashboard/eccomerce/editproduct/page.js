@@ -24,7 +24,7 @@ import {
 const page = () => {
 const params = useSearchParams();
 
-const productId = params.get("id");
+const productid = params.get("id");
     
    const [product, setProduct] = useState({});
    const [uploadedCat, setUploadedCat] = useState(null);
@@ -49,7 +49,7 @@ console.log("fetched gallery", gallery)
         try {
           console.log("fetching product");
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productId}`
+            `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productid}`
           );
             
             setTitle(response.data.title || "");
@@ -72,7 +72,7 @@ console.log("fetched gallery", gallery)
 
       getSingleProduct();
       console.log(product);
-    }, [productId]);
+    }, [productid]);
     
 
     
@@ -111,13 +111,13 @@ const HandleDeleteGallery = (index) => {
           rating: rating,
           stock: stock,
           brand: brand,
-          category: category,
+          category: category, 
           thumbnail: thumbnail, 
           images: secureUrls,
           color: color,
           warranty: warranty,
           weight: weight,
-          productId:productId
+          productid:productid
         };
 
         console.log("Form data before submission", updatedFormData);

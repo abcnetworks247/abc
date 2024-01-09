@@ -67,7 +67,7 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-  console.log("hit sign");
+  
   const { email, password } = req.body;
 
   try {
@@ -190,8 +190,6 @@ const userVerifyPasswordReset = async (req, res) => {
 
   try {
     const decodedId = VerifyToken(token);
-
-    console.log("hit");
 
     if (!decodedId) {
       console.log("Invalid token");

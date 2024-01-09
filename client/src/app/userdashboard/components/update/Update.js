@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { useState, useEffect } from "react";
 import { UseProductProvider } from "../../../../../contexts/ProductProvider";
@@ -10,34 +10,23 @@ import Editform from "../edit/Editform";
 import Swal from "sweetalert2";
 import { RotatingLines } from "react-loader-spinner";
 
-
-
 const Update = () => {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState({
+    fullname: UserData?.fullname,
+    email: UserData.email,
+    phone: UserData.phone,
+    shippingaddress: UserData.shippingaddress,
+    userphoto: UserData.userdp,
+  });
   const { screen } = UseProductProvider();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [selecteddp, setSelectedDp] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
-
-  useEffect(() => {
-    // Update formData when userData changes
-    setFormData({
-      fullname: UserData?.fullname,
-      email: UserData.email,
-      phone: UserData.phone,
-      shippingaddress: UserData.shippingaddress,
-      userdp: selecteddp,
-    });
-
-    setSelectedPhoto(UserData.userdp);
-  }, [UserData]);
-
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -51,31 +40,31 @@ const Update = () => {
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
-  
+
     const imageUrl = URL.createObjectURL(selectedFile);
 
     setSelectedPhoto(imageUrl);
-    setSelectedDp(selectedFile);
-    console.log("selecteddp", selecteddp)
-    
+    setFormData({ ...formData, userphoto: selectedFile });
+
+    console.log("this is formData", formData);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-   
+
     try {
       // Create a new FormData instance
       const submitForm = new FormData();
 
+      console.log("userphoto", formData.userphoto);
       // Append form data to the FormData instance
-      // submitForm.append("fullname", formData?.fullname);
-      submitForm.append("fullname", formData?.fullname);
-      submitForm.append("email", formData?.email);
-      submitForm.append("userphoto", formData?.userdp);
-      submitForm.append("phone", formData?.phone);
-      submitForm.append("shippingaddress", formData?.shippingaddress);
-      submitForm.append("userdp", formData?.selecteddp);
+
+      submitForm.append("fullname", formData.fullname);
+      submitForm.append("email", formData.email);
+      submitForm.append("phone", formData.phone);
+      submitForm.append("shippingaddress", formData.shippingaddress);
+      submitForm.append("userphoto", formData.userphoto);
 
       // Make a PATCH request
       const response = await axios.patch(
@@ -91,19 +80,17 @@ const Update = () => {
 
       // Check the response status
       if (response.status === 200) {
-        
         await HandleGetUser();
-         console.log("Updated UserData:", UserData);
+        console.log("Updated UserData:", UserData);
         setIsEditable(false);
-        
-        console.log("use profle updated successfully")
+
+        console.log("use profle updated successfully");
       } else {
         console.error("Failed to update user profile.");
       }
     } catch (error) {
       console.error("Error updating user profile:", error);
     }
-   
   };
 
   const handleClosePopup = () => {
@@ -117,7 +104,7 @@ const Update = () => {
   return (
     <div className={` p-8 px-4 basis-2/3`}>
       <p></p>
-  
+
       {isEditable ? (
         <Editform
           formData={formData}
@@ -127,7 +114,6 @@ const Update = () => {
           handleSubmit={handleSubmit}
           handleImageChange={handleImageChange}
           selectedPhoto={selectedPhoto}
-        
         />
       ) : (
         <StaticForm userData={UserData} handleEdit={handleEdit} />
