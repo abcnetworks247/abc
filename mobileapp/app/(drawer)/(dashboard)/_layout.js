@@ -123,7 +123,7 @@ export default function layout() {
 
   <Tabs.Screen
    
-    name="test/index"
+    name="pricing/index"
     
     options={{
         
