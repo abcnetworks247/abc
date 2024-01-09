@@ -122,7 +122,7 @@ const Editform = ({
         </label>
         <div className="py-2 shrink-0">
           <img
-            src={selectedPhoto ? selectedPhoto : formData.userdp}
+            src={selectedPhoto ? selectedPhoto : formData.userphoto}
             alt=""
             className="object-cover rounded-full w-11 h-11"
           />
