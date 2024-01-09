@@ -3,11 +3,17 @@ import React from "react";
 import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../../../contexts/productContext";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { useRouter } from "next/navigation";
+import { UserContextProvider } from "../../../contexts/UserContext";
 
 
 const SingleArrival = ({ product }) => {
-  const { handleProductClick, handleCartClick } = useContext(ProductContext);
-  const { handleAddToWishlist , handleRemoveFromWishlist} = UseProductProvider()
+  const router = useRouter()
+  const { UserData } = UserContextProvider()
+  const { handleCartClick} =
+    useContext(ProductContext);
+  const { handleAddToWishlist, handleRemoveFromWishlist, handleWishAdd } =
+    UseProductProvider();
   const [hoverState, setHoverState] = useState(false)
   const [wishClick, setWishClick] = useState(false)
 
@@ -16,16 +22,11 @@ const SingleArrival = ({ product }) => {
   }
   
 
-  if (!handleProductClick) {
-    throw new Error("handleProductClick is not available in the context.");
-     return null;
-  }
-
   
   return (
     <div
       className="mt-56 bg-white rounded shadow cursor-pointer"
-      onClick={() => handleProductClick(product)}
+      onClick={() => router.push(`/productDetails/?id=${product._id}`)}
       onMouseEnter={() => setHoverState(true)}
     >
       <div className="relative  py-6 group ">
@@ -49,9 +50,12 @@ const SingleArrival = ({ product }) => {
                     className={`bi bi-heart-fill}`}
                     viewBox="0 0 16 16"
                     style={{ fill: "#FF6666" }}
-                    onClick={(e) => {
-                      handleWishClick();
-                      handleRemoveFromWishlist(e, product);
+                    // onClick={(e) => {
+                    //   handleWishClick();
+                    //   handleRemoveFromWishlist(e, product);
+                    // }}
+                    onClick={() => {
+                      handleWishAdd(product._id, UserData._id)
                     }}
                   >
                     <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>

@@ -155,16 +155,16 @@ export default function () {
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Trending</h2>
                   <br />
-                  <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 space-x-0 lg:grid lg:grid-cols-1 sm:space-x-3">
+                  <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 space-x-0 lg:grid lg:grid-cols-1 ">
                       {trending.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <div className="flex flex-col mb-10 rounded md:flex-row m-0 p-0 " >
+                      <div className="flex flex-col mb-5 rounded md:flex-row m-0 p-0 lg:space-x-3 md:space-x-2 space-x-0  " >
                         <Image
                           src={post.blogimage}
                           height={500}
                           width={200}
                           alt="img"
-                          className="block object-cover object-top lg:w-[264px] lg:h-[30vh] w-full h-52 rounded-md md:hidden lg:block md:h-[23vh] m-0 p-0 md:m-0"
+                          className="block object-cover object-top lg:w-[200px] lg:h-[25vh] w-full h-52 rounded-md md:hidden lg:block md:h-[23vh] m-0 p-0 md:m-0"
                         />
                         <div className="px-4 sm:px-0 bg-white rounded ">
                           <span className="hidden text-sm text-green-700 md:block">

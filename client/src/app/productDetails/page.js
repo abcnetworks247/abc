@@ -10,14 +10,17 @@ import parse from "html-react-parser";
 import ProductSkeleton from "./ProductSkeleton";
 import ImageGallery from "@/components/Products/ImageGallery";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { useSearchParams } from "next/navigation";
+
+import axios from "axios";
 const page = () => {
-  const router = useRouter();
-  const { selectedProduct, handleAddToWishlist, handleRemoveFromWishlist,handleCartClick } =
-    UseProductProvider()
-  const params = useParams();
-  const [localSelectedProduct, setLocalSelectedProduct] = useState(
-    selectedProduct || {}
-  );
+
+const router = useRouter();
+const params = useSearchParams()
+const productid = params.get("id");
+const { handleAddToWishlist, handleRemoveFromWishlist,handleCartClick } =UseProductProvider()
+ 
+  const [localSelectedProduct, setLocalSelectedProduct] = useState({});
   
 const [wishClick, setWishClick] = useState(false);
 
@@ -39,27 +42,49 @@ const handleWishClick = () => {
   console.log("local", localSelectedProduct);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
-    console.log("Saving to localStorage:", selectedProduct);
-    if (!selectedProduct) return;
-    localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
-  }, [selectedProduct]);
+    const getSingleProduct = async () => {
+      try {
+        console.log("fetching product");
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productid}`
+        );
 
-  // Load selectedProduct from localStorage when the component mounts
-  useEffect(() => {
-    const storedProduct = localStorage.getItem("selectedProduct");
+        setLocalSelectedProduct(response.data)
+        setLoading(false)
+      } catch (error) {
+        console.error("Error during product fetching:", error);
+      }
+    };
 
-    const isReloading = sessionStorage.getItem("isReloading");
+    getSingleProduct();
+    console.log(localSelectedProduct)
+  
+  }, [productid]);
+    
 
-    if (storedProduct && isReloading) {
-      const parsedProduct = JSON.parse(storedProduct);
-      setLocalSelectedProduct(parsedProduct);
-      setLoading(false); // Set loading to false once data is loaded
-    } else {
-      // Set the reloading flag for the next reload
-      sessionStorage.setItem("isReloading", "true");
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log("Saving to localStorage:", selectedProduct);
+  //   if (!selectedProduct) return;
+  //   localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
+  // }, [selectedProduct]);
+
+  // // Load selectedProduct from localStorage when the component mounts
+  // useEffect(() => {
+  //   const storedProduct = localStorage.getItem("selectedProduct");
+
+  //   const isReloading = sessionStorage.getItem("isReloading");
+
+  //   if (storedProduct && isReloading) {
+  //     const parsedProduct = JSON.parse(storedProduct);
+  //     setLocalSelectedProduct(parsedProduct);
+  //     setLoading(false); // Set loading to false once data is loaded
+  //   } else {
+  //     // Set the reloading flag for the next reload
+  //     sessionStorage.setItem("isReloading", "true");
+  //   }
+  // }, []);
 
   return (
     <div className="bg-gray-200">
