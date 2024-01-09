@@ -90,7 +90,7 @@ export default function Navbar() {
         <div>
           <div className="w-fit ">
             <label htmlFor="sidebar-mobile-fixed" className=" md:hidden">
-              <RiMenu2Fill className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer" />
+              <RiMenu2Fill className="text-white hover:text-gray-300 transition  text-[26px] cursor-pointer" />
             </label>
           </div>
         </div>
@@ -279,7 +279,7 @@ export default function Navbar() {
               <div className="flex items-center justify-center h-fit ">
                 <div className="flex m-5 border shadow-sm w-fit item-center rounded-xl">
                   <Link href="/login">
-                    <button className="px-4 py-2 m-0 text-black transition bg-white rounded-l-xl hover:bg-white/80">
+                    <button className="px-4 py-2 m-0 text-white transition bg-white rounded-l-xl hover:bg-white/80">
                       Login
                     </button>
                   </Link>
@@ -366,7 +366,7 @@ export default function Navbar() {
                 >
                   {" "}
                   <Link href={`${!Authtoken ? "/login" : "/userdashboard"}`}>
-                    <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block lg:hidden" />
+                    <FaRegUser className="text-white hover:text-gray-300 transition  text-[26px] cursor-pointer block lg:hidden" />
                   </Link>
                 </label>
                 <div className=" dropdown-container">
