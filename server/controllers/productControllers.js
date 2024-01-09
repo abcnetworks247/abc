@@ -131,7 +131,7 @@ const updateProduct = async (req, res) => {
       brand,
       category,
       thumbnail,
-      images,
+      images, 
       color,
       warranty,
       weight,
