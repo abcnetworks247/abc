@@ -11,6 +11,7 @@ function page() {
   const [data, setData] = useState([]);
   // const [type, setType] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchData = async () => {
     try {
