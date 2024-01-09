@@ -111,7 +111,7 @@ const HandleDeleteGallery = (index) => {
           rating: rating,
           stock: stock,
           brand: brand,
-          category: category,
+          category: category, 
           thumbnail: thumbnail, 
           images: secureUrls,
           color: color,
