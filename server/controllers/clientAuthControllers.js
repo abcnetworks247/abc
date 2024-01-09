@@ -246,6 +246,7 @@ const userUpdate = async (req, res) => {
         .status(StatusCodes.OK)
         .json({ data: mainuser, message: "Account updated successfully" });
     } else {
+
       const { path } = req.file;
 
       console.log(path);
