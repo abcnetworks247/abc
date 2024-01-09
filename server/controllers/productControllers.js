@@ -9,7 +9,6 @@ const {
 
 // Controller for creating a product (accessible only to admin)
 const createProduct = async (req, res) => {
-  console.log("hit product create");
   try {
     // Assuming you have middleware to authenticate and authorize users
 
@@ -138,6 +137,7 @@ const updateProduct = async (req, res) => {
       productid,
     } = req.body;
 
+
     const existingProduct = await Product.findById(productid);
 
     if (!existingProduct) {
@@ -160,25 +160,24 @@ const updateProduct = async (req, res) => {
       images,
       color,
       warranty,
-      weight
+      weight,
     };
 
     // Validate the request body against the Joi schema
     const { error, value } = ProductJoi.validate(productData);
 
     if (error) {
-      return res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: error.details[0].message });
+      console.log("");
+      throw new ValidationError("Invalid data received")
     }
 
+    console.log("value", value);
+
     // Find the existing product by ID
-  
-   
 
     // Update the existing product with the new data
-    const updatedProduct = Product.findByIdAndUpdate(
-      existingProduct._id,
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productid,
       value,
       {
         new: true,
