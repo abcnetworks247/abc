@@ -7,13 +7,13 @@ const HeroCarousel = () => {
   const width = Dimensions.get("window").width -10;
   return (
     <View >
-      <View className="flex-1 pl-1 mt-2">
+      <View className="flex-1 pl-1 ">
         <Carousel
           loop
           width={width}
           height={0}
           autoPlay={true}
-          className="h-[450px] w-full"
+          className="h-[490px] w-full"
           data={[...new Array(6).keys()]}
           scrollAnimationDuration={1000}
         //   onSnapToItem={(index) => console.log("current index:", index)}
