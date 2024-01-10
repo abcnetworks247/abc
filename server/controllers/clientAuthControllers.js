@@ -246,7 +246,6 @@ const userUpdate = async (req, res) => {
         .status(StatusCodes.OK)
         .json({ data: mainuser, message: "Account updated successfully" });
     } else {
-
       const { path } = req.file;
 
       console.log(path);
@@ -363,27 +362,33 @@ const Wishlist = (io) => {
   io.on("connection", (socket) => {
     socket.on("wishadd", async (wish) => {
       try {
-        console.log(whistlist);
+        console.log("wishlist", wish);
 
-        const user = await Client.findById(wish.userid);
+        const user = await Client.findById(wish.userId).populate("wislist");
+        
 
         if (!user) {
+          console.log("user not found");
           throw new NotFoundError("User not found");
         }
 
-        const product = await Product.findById(wish.productid);
+        const product = await Product.findById(wish.productId);
+        console.log(product);
 
         if (!product) {
           console.log("Product not found");
           throw new NotFoundError("Product not found");
-        } else if (user.wishlist.includes(wish.productid)) {
+        } else if (user.wishlist.includes(wish.productId)) {
           console.log("true id is already in the list");
-          const index = user.wishlist.indexOf(wish.productid);
+          const index = user.wishlist.indexOf(wish.productId);
           user.wishlist.splice(index, 1);
 
+          
           user.save();
 
-          console.log("Like removed with userid: " + wish.productid);
+          // const currentuser = Client.findById(wish.userId).populate("wishlist", )
+
+          console.log("Like removed with userid: " + wish.productId);
 
           const userwishlist = user.wishlist;
 
@@ -391,11 +396,11 @@ const Wishlist = (io) => {
 
           socket.emit("wishlist", userwishlist);
         } else {
-          user.wishlist.unshift(wish.productid);
+          user.wishlist.unshift(wish.productId);
 
           user.save();
 
-          console.log("Like added with userid: " + wish.productid);
+          console.log("Like added with userid: " + wish.productId);
 
           const userwish = user.wishlist;
 
@@ -425,7 +430,7 @@ const Cart = (io) => {
         if (!product) {
           console.log("Product not found");
           throw new NotFoundError("Product not found");
-        } else if (user.wishlist.includes(cart.productid)) {
+        } else if (user.cart.includes(cart.productid)) {
           console.log("true id is already in the list");
           const index = user.wishlist.indexOf(cart.productid);
           user.wishlist.splice(index, 1);
