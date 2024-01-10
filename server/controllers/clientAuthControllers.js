@@ -362,10 +362,8 @@ const Wishlist = (io) => {
   io.on("connection", (socket) => {
     socket.on("wishadd", async (wish) => {
       try {
-        console.log("wishlist", wish);
 
-        const user = await Client.findById(wish.userId).populate("wislist");
-        
+        const user = await Client.findById(wish.userId);
 
         if (!user) {
           console.log("user not found");
@@ -373,7 +371,6 @@ const Wishlist = (io) => {
         }
 
         const product = await Product.findById(wish.productId);
-        console.log(product);
 
         if (!product) {
           console.log("Product not found");
@@ -383,18 +380,17 @@ const Wishlist = (io) => {
           const index = user.wishlist.indexOf(wish.productId);
           user.wishlist.splice(index, 1);
 
-          
           user.save();
 
           // const currentuser = Client.findById(wish.userId).populate("wishlist", )
 
           console.log("Like removed with userid: " + wish.productId);
 
-          const userwishlist = user.wishlist;
+          const userwish = await user.populate("wishlist");
 
-          console.log(userwishlist);
+          console.log("already removed with userid: " + userwish.wishlist);
 
-          socket.emit("wishlist", userwishlist);
+          socket.emit("wishlist", userwish.wishlist);
         } else {
           user.wishlist.unshift(wish.productId);
 
@@ -402,11 +398,11 @@ const Wishlist = (io) => {
 
           console.log("Like added with userid: " + wish.productId);
 
-          const userwish = user.wishlist;
+          const userwish = await user.populate("wishlist");
 
-          console.log(userwish);
+          console.log("this is whishlist", userwish.wishlist);
 
-          socket.emit("alllike", userwish);
+          socket.emit("alllike", userwish.wishlist);
         }
       } catch (error) {}
     });
