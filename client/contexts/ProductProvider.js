@@ -68,14 +68,14 @@ const ProductProvider = ({ children }) => {
    
   
 
-   const handleWishAdd = (productId, userId) => {
-     console.log(
-       {
-         productId: productId,
+  const handleWishAdd = (productId, userId) => {
+     
+
+     const wishdata = {
+          productId: productId,
          userId:userId
-       }
-     )
-     socket.emit("wishadd", { productid: productId, userid: userId });
+     }
+     socket.emit("wishadd", wishdata);
      console.log("wish emmited")
    };
 
