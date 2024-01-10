@@ -53,10 +53,10 @@ const SearchBar = () => {
           isFocused && "z-40"
         }  transition-all duration-300 relative border w-[90%] lg:w-[70%] h-10 bg-white gap-6 mx-auto border-gray-200 rounded-md`}
       >
-        <div className="flex items-center relative h-full w-full">
+        <div className="flex items-center relative h-full w-full cursor-pointer">
           <div
             onClick={handleDropdown}
-            className="flex flex-row items-center h-full gap-4 text-sm font-medium text-gray-900 bg-gray-200 px-2"
+            className="flex flex-row items-center h-full gap-4 text-sm font-medium text-gray-900 bg-gray-200 px-2 rounded-l-md"
           >
             <span>All</span>
 

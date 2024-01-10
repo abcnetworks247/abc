@@ -20,7 +20,7 @@ const Update = () => {
     shippingaddress: UserData.shippingaddress,
     userphoto: UserData.userdp,
   });
-  const { screen } = UseProductProvider();
+
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -125,17 +125,17 @@ const Update = () => {
         <StaticForm userData={UserData} handleEdit={handleEdit} />
       )}
       {loading && (
-        <RotatingLines
-          visible={true}
-          height="96"
-          width="96"
-          color="grey"
-          strokeWidth="5"
-          animationDuration="0.75"
-          ariaLabel="rotating-lines-loading"
-          wrapperStyle={{}}
-          wrapperClass=""
-        />
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+          <RotatingLines
+            visible={true}
+            height="96"
+            width="96"
+            color="gray"
+            strokeWidth="5"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
       )}
     </div>
   );

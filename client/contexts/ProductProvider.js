@@ -56,6 +56,17 @@ const ProductProvider = ({ children }) => {
     router.push('/productDetails')
   };
 
+  // add to cart socket
+  const handleAddToCart = (productid, userid) => {
+    const cart = {
+      productid,
+      userid
+       }
+      socket.emit("cartadd", cart)
+  };
+  
+   
+  
 
    const handleWishAdd = (productId, userId) => {
      console.log(
@@ -201,6 +212,7 @@ const ProductProvider = ({ children }) => {
     addToCart(e, product);
   }
   };
+
   
   
 
