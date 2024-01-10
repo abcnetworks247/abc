@@ -232,7 +232,7 @@ export default function Navbar() {
                           </div>
                         </label>
 
-                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50">
                           <Link
                             href="/userdashboard"
                             className="text-sm dropdown-item -z-50"
