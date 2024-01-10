@@ -68,16 +68,16 @@ const ProductProvider = ({ children }) => {
      console.log("wish emmited")
    };
 
-  useEffect(() => {
+  
      socket.on("alllike", (userwishlist) => {
        // Update the local state with the updated
        console.log(userwishlist)
        setWishlist(userwishlist);
        console.log("returning wishlist", wishlist);
      });
-  },[socket])
+
     
-  useEffect(() => {
+
     socket.on("wishlist", (userwishlist) => {
       // Update the local state with the updated
         
@@ -85,7 +85,6 @@ const ProductProvider = ({ children }) => {
       console.log("returning wishlist", wishlist);
     });
 
-  },[socket])
      
   
   

@@ -27,7 +27,7 @@ const Update = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -55,6 +55,7 @@ const Update = () => {
     console.log(formData);
 
     try {
+      setLoading(true)
       // Create a new FormData instance
       const submitForm = new FormData();
 
@@ -122,6 +123,19 @@ const Update = () => {
         />
       ) : (
         <StaticForm userData={UserData} handleEdit={handleEdit} />
+      )}
+      {loading && (
+        <RotatingLines
+          visible={true}
+          height="96"
+          width="96"
+          color="grey"
+          strokeWidth="5"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
       )}
     </div>
   );
