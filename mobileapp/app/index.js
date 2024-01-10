@@ -13,9 +13,9 @@ export default function Page() {
         
         <Text className="text-red-700 text-2xl">Home</Text>
         </Link>
-        <Link href="/pricing"> 
+        <Link href="/cart"> 
         
-        <Text className="text-red-700 text-2xl">Prcing</Text>
+        <Text className="text-red-700 text-2xl">Cart</Text>
         </Link>
         <Link href="/auth/signup"> 
         

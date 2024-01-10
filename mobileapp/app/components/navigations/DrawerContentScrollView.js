@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "../../../assets/AbcstudioNo.png";
 import Svg, { Path } from "react-native-svg";
-import User from "../../../assets/user.jpg"
+import User from "../../../assets/user.jpg";
 
 const DrawerContentScrollView = () => {
   const router = useRouter();
@@ -164,22 +164,21 @@ const DrawerContentScrollView = () => {
         label={"Contact"}
         icon={({ color, size }) => (
           <Svg
-          stroke="currentColor"
-          fill="currentColor"
-          strokeWidth={0}
-          viewBox="0 0 24 24"
-          className=" text-black opacity-75"
-          height="2em"
-          width="2em"
-          xmlns="http://www.w3.org/2000/svg"
-         
-        >
-          <Path fill="none" d="M0 0h24v24H0V0z" stroke="none" />
-          <Path
-            d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM4 0h16v2H4zm0 22h16v2H4zm8-10a2.5 2.5 0 000-5 2.5 2.5 0 000 5zm0-3.5c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm5 7.49C17 13.9 13.69 13 12 13s-5 .9-5 2.99V17h10v-1.01zm-8.19-.49c.61-.52 2.03-1 3.19-1 1.17 0 2.59.48 3.2 1H8.81z"
-            stroke="none"
-          />
-        </Svg>
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth={0}
+            viewBox="0 0 24 24"
+            className=" text-black opacity-75"
+            height="2em"
+            width="2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <Path fill="none" d="M0 0h24v24H0V0z" stroke="none" />
+            <Path
+              d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM4 0h16v2H4zm0 22h16v2H4zm8-10a2.5 2.5 0 000-5 2.5 2.5 0 000 5zm0-3.5c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm5 7.49C17 13.9 13.69 13 12 13s-5 .9-5 2.99V17h10v-1.01zm-8.19-.49c.61-.52 2.03-1 3.19-1 1.17 0 2.59.48 3.2 1H8.81z"
+              stroke="none"
+            />
+          </Svg>
         )}
         onPress={() => router.push("/contact")}
       />
@@ -188,21 +187,19 @@ const DrawerContentScrollView = () => {
         label={"Wishlist"}
         icon={({ color, size }) => (
           <Svg
-          stroke="currentColor"
-          fill="currentColor"
-          strokeWidth={0}
-          viewBox="0 0 512 512"
-   
-          height="2em"
-          width="2em"
-          xmlns="http://www.w3.org/2000/svg"
- 
-        >
-          <Path
-            d="M458.4 64.3C400.6 15.7 311.3 23 256 79.3 200.7 23 111.4 15.6 53.6 64.3-21.6 127.6-10.6 230.8 43 285.5l175.4 178.7c10 10.2 23.4 15.9 37.6 15.9 14.3 0 27.6-5.6 37.6-15.8L469 285.6c53.5-54.7 64.7-157.9-10.6-221.3zm-23.6 187.5L259.4 430.5c-2.4 2.4-4.4 2.4-6.8 0L77.2 251.8c-36.5-37.2-43.9-107.6 7.3-150.7 38.9-32.7 98.9-27.8 136.5 10.5l35 35.7 35-35.7c37.8-38.5 97.8-43.2 136.5-10.6 51.1 43.1 43.5 113.9 7.3 150.8z"
-            stroke="none"
-          />
-        </Svg>
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth={0}
+            viewBox="0 0 512 512"
+            height="2em"
+            width="2em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <Path
+              d="M458.4 64.3C400.6 15.7 311.3 23 256 79.3 200.7 23 111.4 15.6 53.6 64.3-21.6 127.6-10.6 230.8 43 285.5l175.4 178.7c10 10.2 23.4 15.9 37.6 15.9 14.3 0 27.6-5.6 37.6-15.8L469 285.6c53.5-54.7 64.7-157.9-10.6-221.3zm-23.6 187.5L259.4 430.5c-2.4 2.4-4.4 2.4-6.8 0L77.2 251.8c-36.5-37.2-43.9-107.6 7.3-150.7 38.9-32.7 98.9-27.8 136.5 10.5l35 35.7 35-35.7c37.8-38.5 97.8-43.2 136.5-10.6 51.1 43.1 43.5 113.9 7.3 150.8z"
+              stroke="none"
+            />
+          </Svg>
         )}
         onPress={() => router.push("/Wishlist")}
       />
@@ -211,37 +208,36 @@ const DrawerContentScrollView = () => {
         label={"Cart"}
         icon={({ color, size }) => (
           <Svg
-      xmlns="http://www.w3.org/2000/svg"
-      height="2em"
-      width="2em"
-      viewBox="0 0 24 24"
-      strokeWidth={2}
-      stroke="currentColor"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-     
-    >
-      <Path d="M0 0h24v24H0z" stroke="none" />
-      <Path d="M7 10l5-6 5 6M21 10l-2 8a2 2.5 0 01-2 2H7a2 2.5 0 01-2-2l-2-8z" />
-      <Path d="M10 15a2 2 0 104 0 2 2 0 10-4 0" />
-    </Svg>
+            xmlns="http://www.w3.org/2000/svg"
+            height="2em"
+            width="2em"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <Path d="M0 0h24v24H0z" stroke="none" />
+            <Path d="M7 10l5-6 5 6M21 10l-2 8a2 2.5 0 01-2 2H7a2 2.5 0 01-2-2l-2-8z" />
+            <Path d="M10 15a2 2 0 104 0 2 2 0 10-4 0" />
+          </Svg>
         )}
         onPress={() => router.push("/Cart")}
       />
 
-
       <View className="mt-10">
-
-
-      <DrawerItem
-        labelStyle={{ marginLeft: -20, fontSize: 18 }}
-        label={"Prince Ajuzie"}
-        icon={({ color, size }) => (
-        <Image source={User} className="w-10 h-10 rounded-full border-2 border-[#f5f5f5]"  />
-        )}
-        onPress={() => router.push("/profile")}
-      />
+        <DrawerItem
+          labelStyle={{ marginLeft: -20, fontSize: 18 }}
+          label={"Prince Ajuzie"}
+          icon={({ color, size }) => (
+            <Image
+              source={User}
+              className="w-10 h-10 rounded-full border-2 border-[#f5f5f5]"
+            />
+          )}
+          onPress={() => router.push("/profile")}
+        />
       </View>
     </View>
   );

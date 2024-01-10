@@ -7,17 +7,17 @@ import globalStyels from '../../../../styles/globalStyels';
 
 const index = () => {
   return (
+             <SafeAreaView style={globalStyels.droidSafeArea} >
     <View >
-             <SafeAreaView style={globalStyels.droidSafeArea}>
 
 <Navbar />
 
-   </SafeAreaView> 
       <View className="">
 
       <HeroCarousel />
       </View>
     </View>
+   </SafeAreaView> 
   )
 }
 
