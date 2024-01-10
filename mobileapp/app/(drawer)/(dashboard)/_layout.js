@@ -121,7 +121,7 @@ export default function layout() {
       />
 
 
-  <Tabs.Screen
+  {/* <Tabs.Screen
    
     name="pricing/index"
     
@@ -141,7 +141,7 @@ export default function layout() {
         
     }}
     
-  />
+  /> */}
 
     </Tabs>
    </>

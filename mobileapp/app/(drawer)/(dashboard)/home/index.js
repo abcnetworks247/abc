@@ -1,24 +1,22 @@
-import { View, Text, SafeAreaView } from 'react-native'
-import React from 'react';
+import { View, Text, SafeAreaView } from "react-native";
+import React from "react";
 
-import HeroCarousel from '../../../components/carousel/herocarousel/heroCarousel';
-import Navbar from '../../../components/navbar/Navbar';
-import globalStyels from '../../../../styles/globalStyels';
+import HeroCarousel from "../../../components/carousel/herocarousel/heroCarousel";
+import Navbar from "../../../components/navbar/Navbar";
+import globalStyels from "../../../../styles/globalStyels";
 
 const index = () => {
   return (
-    <View >
-             <SafeAreaView style={globalStyels.droidSafeArea}>
+    <SafeAreaView style={globalStyels.droidSafeArea}>
+      <View>
+        <Navbar />
 
-<Navbar />
-
-   </SafeAreaView> 
-      <View className="">
-
-      <HeroCarousel />
+        <View className="">
+          <HeroCarousel />
+        </View>
       </View>
-    </View>
-  )
-}
+    </SafeAreaView>
+  );
+};
 
-export default index
+export default index;
