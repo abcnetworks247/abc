@@ -20,7 +20,7 @@ const ProductProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
-  const [Wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState(null);
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const isDesktop = useMediaQuery({
@@ -58,20 +58,47 @@ const ProductProvider = ({ children }) => {
 
 
    const handleWishAdd = (productId, userId) => {
-     // Emit the 'wishadd' event to the server
+     console.log(
+       {
+         productId: productId,
+         userId:userId
+       }
+     )
      socket.emit("wishadd", { productid: productId, userid: userId });
+     console.log("wish emmited")
    };
+
+  useEffect(() => {
+     socket.on("alllike", (userwishlist) => {
+       // Update the local state with the updated
+       console.log(userwishlist)
+       setWishlist(userwishlist);
+       console.log("returning wishlist", wishlist);
+     });
+  },[socket])
+    
+  useEffect(() => {
+    socket.on("wishlist", (userwishlist) => {
+      // Update the local state with the updated
+        
+      setWishlist(userwishlist);
+      console.log("returning wishlist", wishlist);
+    });
+
+  },[socket])
+     
   
-  const addToWishlist = (product) => {
-    // e.stopPropagation();
-    // setWishlist((prev) => [...prev, product]);
-    const updatedWish = [...Wishlist, product];
-    setWishlist(updatedWish);
-    // Update local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("Wishlist", JSON.stringify(updatedWish));
-    }
-  };
+  
+  // const addToWishlist = (product) => {
+  //   // e.stopPropagation();
+  //   // setWishlist((prev) => [...prev, product]);
+  //   const updatedWish = [...Wishlist, product];
+  //   setWishlist(updatedWish);
+  //   // Update local storage
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("Wishlist", JSON.stringify(updatedWish));
+  //   }
+  // };
 
 
 
@@ -273,7 +300,7 @@ const ProductProvider = ({ children }) => {
         closeModal,
         handleCartClick,
         handleAddToWishlist,
-        Wishlist,
+        wishlist,
 
         setSearchResults,
         handleRemoveFromWishlist,

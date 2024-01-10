@@ -24,7 +24,7 @@ export default function Navbar() {
   const router = useRouter();
 
   const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
-  const { cartProducts, Wishlist } = UseProductProvider();
+  const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
   const pathUrl = "/news/"
 
@@ -35,7 +35,7 @@ export default function Navbar() {
 
   // Wishlist value variable
 
-  const WishlistValue = Wishlist.length;
+  const WishlistValue = wishlist ? wishlist.length : 0
 
   // wishlist local storage function
   const [type, setType] = useState([]);
