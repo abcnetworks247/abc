@@ -56,28 +56,39 @@ const ProductProvider = ({ children }) => {
     router.push('/productDetails')
   };
 
-
-   const handleWishAdd = (productId, userId) => {
-     console.log(
-       {
-         productId: productId,
-         userId:userId
+  // add to cart socket
+  const handleAddToCart = (productid, userid) => {
+    const cart = {
+      productid,
+      userid
        }
-     )
-     socket.emit("wishadd", { productid: productId, userid: userId });
+      socket.emit("cartadd", cart)
+  };
+  
+   
+  
+
+  const handleWishAdd = (productId, userId) => {
+     
+
+     const wishdata = {
+          productId: productId,
+         userId:userId
+     }
+     socket.emit("wishadd", wishdata);
      console.log("wish emmited")
    };
 
-  useEffect(() => {
+  
      socket.on("alllike", (userwishlist) => {
        // Update the local state with the updated
        console.log(userwishlist)
        setWishlist(userwishlist);
        console.log("returning wishlist", wishlist);
      });
-  },[socket])
+
     
-  useEffect(() => {
+
     socket.on("wishlist", (userwishlist) => {
       // Update the local state with the updated
         
@@ -85,7 +96,6 @@ const ProductProvider = ({ children }) => {
       console.log("returning wishlist", wishlist);
     });
 
-  },[socket])
      
   
   
@@ -202,6 +212,7 @@ const ProductProvider = ({ children }) => {
     addToCart(e, product);
   }
   };
+
   
   
 

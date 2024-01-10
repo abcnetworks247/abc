@@ -20,14 +20,14 @@ const Update = () => {
     shippingaddress: UserData.shippingaddress,
     userphoto: UserData.userdp,
   });
-  const { screen } = UseProductProvider();
+
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -55,6 +55,7 @@ const Update = () => {
     console.log(formData);
 
     try {
+      setLoading(true)
       // Create a new FormData instance
       const submitForm = new FormData();
 
@@ -122,6 +123,19 @@ const Update = () => {
         />
       ) : (
         <StaticForm userData={UserData} handleEdit={handleEdit} />
+      )}
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+          <RotatingLines
+            visible={true}
+            height="96"
+            width="96"
+            color="gray"
+            strokeWidth="5"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
       )}
     </div>
   );
