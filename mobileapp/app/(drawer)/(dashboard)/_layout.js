@@ -125,21 +125,20 @@ export default function layout() {
    
     name="membership/index"
     
-    // options={{
-        
-     
-    //    header: () => null,
-    //   title: () => "test",
-    //   headerStyle: {
-    //     fontSize: 20,
-    //   },
-  
-    //   tabBarItemStyle: {
-    //     display: 'none',
-    //   },
-    //   tabBarIcon: () => null,
-        
-    // }}
+
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="about/index"
+    
 
     options={{
             header: () => null,
