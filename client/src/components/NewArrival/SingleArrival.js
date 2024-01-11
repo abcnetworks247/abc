@@ -11,10 +11,12 @@ import { UseUserContext } from "../../../contexts/UserContext";
 const SingleArrival = ({ product }) => {
   const router = useRouter()
   const { UserData } = UseUserContext();
-  const { handleCartClick} =
-    useContext(ProductContext);
-  const { handleAddToWishlist, handleRemoveFromWishlist, handleWishAdd } =
-    UseProductProvider();
+
+  const {
+  
+    handleWishAdd,
+    handleAddToCart
+  } = UseProductProvider();
   const [hoverState, setHoverState] = useState(false)
   const [wishClick, setWishClick] = useState(false)
 
@@ -56,8 +58,9 @@ const SingleArrival = ({ product }) => {
                     //   handleRemoveFromWishlist(e, product);
                     // }}
                     onClick={(e) => {
-                      e.stopPropagation()
+                      e.stopPropagation();
                       handleWishAdd(product._id, UserData._id);
+                      handleWishClick();
                     }}
                   >
                     <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
@@ -71,9 +74,10 @@ const SingleArrival = ({ product }) => {
                     viewBox="0 0 16 16"
                     stroke="red"
                     fill="none"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleWishAdd(product._id, UserData._id);
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleWishAdd(product._id, UserData._id);
+                      handleWishClick();
                     }}
                   >
                     <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
@@ -83,7 +87,12 @@ const SingleArrival = ({ product }) => {
             </a>
             <a
               className="flex items-center"
-              onClick={(e) => handleCartClick(e, product)}
+              // onClick={(e) => handleCartClick(e, product)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToCart(product._id, UserData._id);
+              
+              }}
             >
               <div
                 className={`relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all 
