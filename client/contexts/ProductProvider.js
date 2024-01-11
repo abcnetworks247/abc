@@ -6,10 +6,12 @@ import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import io from "socket.io-client"
+import { BiSolidRocket } from "react-icons/bi";
+import { UseUserContext } from "./UserContext";
 
 
 const ProductProvider = ({ children }) => {
-
+   const {UserData} = UseUserContext()
   const socket = io.connect(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
   const router = useRouter()
 
@@ -64,7 +66,31 @@ const ProductProvider = ({ children }) => {
        }
       socket.emit("cartadd", cart)
   };
-  
+
+  useEffect(() => {
+    const fetchWishlistFromServer = async () => {
+      try {
+        // Map through the wishlist IDs and fetch product details
+        const productsPromises = UserData.wishlist.map(async (productId) => {
+          const productResponse = await axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productId}`
+          );
+          return productResponse.data; // Adjust to your server's response structure
+        });
+
+        const products = await Promise.all(productsPromises);
+
+        setWishlist(products);
+      } catch (error) {
+        console.error("Error fetching wishlist from the server:", error);
+      }
+    };
+
+    // Fetch wishlist from the server when the component mounts
+    fetchWishlistFromServer();
+
+   
+  }, []);
    
   
 
@@ -79,13 +105,15 @@ const ProductProvider = ({ children }) => {
      console.log("wish emmited")
    };
 
-  
-     socket.on("alllike", (userwishlist) => {
-       // Update the local state with the updated
-       console.log(userwishlist)
-       setWishlist(userwishlist);
-       console.log("returning wishlist", wishlist);
-     });
+
+    socket.on("alllike", (userwishlist) => {
+        // Update the local state with the updated
+        console.log(userwishlist);
+        setWishlist(userwishlist);
+        console.log("returning wishlist", wishlist);
+      });
+ 
+   
 
     
 
@@ -95,6 +123,8 @@ const ProductProvider = ({ children }) => {
       setWishlist(userwishlist);
       console.log("returning wishlist", wishlist);
     });
+  
+  console.log('wishlist from socket', wishlist)
 
      
   
