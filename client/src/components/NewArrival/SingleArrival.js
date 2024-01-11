@@ -11,11 +11,9 @@ import { UseUserContext } from "../../../contexts/UserContext";
 const SingleArrival = ({ product }) => {
   const router = useRouter()
   const { UserData } = UseUserContext();
-  const { handleCartClick} =
-    useContext(ProductContext);
+
   const {
-    handleAddToWishlist,
-    handleRemoveFromWishlist,
+  
     handleWishAdd,
     handleAddToCart
   } = UseProductProvider();

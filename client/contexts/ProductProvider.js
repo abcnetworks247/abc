@@ -31,6 +31,9 @@ const ProductProvider = ({ children }) => {
   const [screen, setScreen] = useState(!isTabletOrMobile);
   const [category, setCategory] = useState([]);
 
+
+  console.log("cart product from server", cartProducts)
+
   const handleUser = () => {
     setClickState(true);
     // Open the modal when the link is clicked on mobile
@@ -48,29 +51,32 @@ const ProductProvider = ({ children }) => {
   };
 
   // add to cart socket
-  const handleAddToCart = (productid, userid) => {
-    const cart = {
-      productid: productid,
-      userid: userid,
+  const handleAddToCart = (productId, userId) => {
+    console.log("emmiting value to add to cart")
+    const cartdata = {
+      productId: productId,
+      userId: userId,
     };
-    socket.emit("cartadd", cart);
+
+    console.log("cartdata", cartdata)
+    socket.emit("cartadd", cartdata);
   };
 
   // remove item from cart
-  const handleRemoveFromCart = (productid, userid) => {
+  const handleRemoveFromCart = (productId, userId) => {
     const cartdata = {
-      productid: productid,
-      userid: userid,
+      productId: productId,
+      userId: userId,
     };
 
     socket.emit("cartremove", cartdata);
   };
 
   // minus cart quantity
-  const handleCartDecrease = (productid, userid) => {
+  const handleCartDecrease = (productId, userId) => {
     const cartdata = {
-      productid: productid,
-      userid: userid,
+      productId: productId,
+      userId: userId,
     };
 
     socket.emit("cartminus", cartdata);
@@ -78,7 +84,9 @@ const ProductProvider = ({ children }) => {
 
   // get the cart products back from the server
   socket.on("cart", (cartItems) => {
+    console.log("cart sent back")
     setCartProducts(cartItems);
+
   });
 
   useEffect(() => {
@@ -122,16 +130,16 @@ const ProductProvider = ({ children }) => {
     console.log("returning wishlist", wishlist);
   });
 
-  const removeFromCart = (product) => {
-    const newCartList = cartProducts.filter(
-      (cartProduct) => product._id !== cartProduct._id
-    );
-    setCartProducts(newCartList);
+  // const removeFromCart = (product) => {
+  //   const newCartList = cartProducts.filter(
+  //     (cartProduct) => product._id !== cartProduct._id
+  //   );
+  //   setCartProducts(newCartList);
 
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cartProducts", JSON.stringify(newCartList));
-    }
-  };
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("cartProducts", JSON.stringify(newCartList));
+  //   }
+  // };
 
   //  const handleRemoveFromCart = (e, product) => {
   //    e.stopPropagation();
@@ -151,29 +159,29 @@ const ProductProvider = ({ children }) => {
     setIsModalOpen(false);
   };
 
-  const addToCart = (e, product) => {
-    e.stopPropagation();
-    const updatedProduct = { ...product, quantity: 1 };
-    const updatedCart = [...cartProducts, updatedProduct];
-    setCartProducts(updatedCart);
-    // Update local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
-    }
-  };
+  // const addToCart = (e, product) => {
+  //   e.stopPropagation();
+  //   const updatedProduct = { ...product, quantity: 1 };
+  //   const updatedCart = [...cartProducts, updatedProduct];
+  //   setCartProducts(updatedCart);
+  //   // Update local storage
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+  //   }
+  // };
 
-  const updateProduct = (updatedProduct) => {
-    const updatedCart = cartProducts.map((product) =>
-      product._id === updatedProduct._id ? updatedProduct : product
-    );
+  // const updateProduct = (updatedProduct) => {
+  //   const updatedCart = cartProducts.map((product) =>
+  //     product._id === updatedProduct._id ? updatedProduct : product
+  //   );
 
-    setCartProducts(updatedCart);
+  //   setCartProducts(updatedCart);
 
-    // Update local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
-    }
-  };
+  //   // Update local storage
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+  //   }
+  // };
 
   const handleCartClick = (e, product) => {
     e.stopPropagation();
@@ -282,8 +290,7 @@ const ProductProvider = ({ children }) => {
         wishlist,
 
         setSearchResults,
-        handleRemoveFromWishlist,
-        removeFromCart,
+
         handleRemoveFromCart,
         handleLinkClick,
         isDesktop,
@@ -291,7 +298,7 @@ const ProductProvider = ({ children }) => {
         screen,
         handleUser,
         clickState,
-        updateProduct,
+
         category,
         allProducts,
         handleSearch,
