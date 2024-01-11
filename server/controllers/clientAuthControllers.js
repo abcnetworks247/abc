@@ -362,7 +362,6 @@ const Wishlist = (io) => {
   io.on("connection", (socket) => {
     socket.on("wishadd", async (wish) => {
       try {
-
         const user = await Client.findById(wish.userId);
 
         if (!user) {
@@ -409,50 +408,80 @@ const Wishlist = (io) => {
   });
 };
 
-
 const Cart = (io) => {
   io.on("connection", (socket) => {
     socket.on("cartadd", async (cart) => {
       try {
-        console.log("cart");
-
-        const user = await Client.findById(cart.userid);
+        const user = await Client.findById(cart.userId);
 
         if (!user) {
+          console.log("user not found");
           throw new NotFoundError("User not found");
         }
 
-        const product = await Product.findById(cart.productid);
+        const product = await Product.findById(cart.productId);
 
         if (!product) {
           console.log("Product not found");
           throw new NotFoundError("Product not found");
-        } else if (user.cart.includes(cart.productid)) {
+        } else if (user.cart.includes(cart.productId)) {
+          const newdata = { ...cart, quantity: +1 };
+
+          user.cart.unshift(newdata);
+
+          user.save();
+
+          socket.emit("alllike", user.cart);
+        }
+      } catch (error) {}
+    });
+    socket.on("cartminus", async (cart) => {
+      try {
+        const user = await Client.findById(cart.userId);
+
+        if (!user) {
+          console.log("user not found");
+          throw new NotFoundError("User not found");
+        }
+
+        const product = await Product.findById(cart.productId);
+
+        if (!product) {
+          console.log("Product not found");
+          throw new NotFoundError("Product not found");
+        } else if (user.cart.includes(cart.productId)) {
+          const newdata = { ...cart, quantity:  -1 };
+
+          user.cart.unshift(newdata);
+
+          user.save();
+
+          socket.emit("alllike", user.cart);
+        }
+      } catch (error) {}
+    });
+    socket.on("cartremove", async (cart) => {
+      try {
+        const user = await Client.findById(cart.userId);
+
+        if (!user) {
+          console.log("user not found");
+          throw new NotFoundError("User not found");
+        }
+
+        const product = await Product.findById(cart.productId);
+
+        if (!product) {
+          console.log("Product not found");
+          throw new NotFoundError("Product not found");
+        } else if (user.cart.includes(cart.productId)) {
           console.log("true id is already in the list");
-          const index = user.wishlist.indexOf(cart.productid);
+          const index = user.wishlist.indexOf(cart.productId);
           user.wishlist.splice(index, 1);
 
           user.save();
 
-          console.log("Like removed with userid: " + cart.productid);
-
-          const userwishlist = user.wishlist;
-
-          console.log(userwishlist);
-
-          socket.emit("wishlist", userwishlist);
-        } else {
-          user.wishlist.unshift(wish.productid);
-
-          user.save();
-
-          console.log("Like added with userid: " + wish.productid);
-
-          const userwish = user.wishlist;
-
-          console.log(userwish);
-
-          socket.emit("alllike", userwish);
+          socket.emit("wishlist", userwish.cart);
         }
       } catch (error) {}
     });
