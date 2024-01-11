@@ -24,7 +24,7 @@ export default function Navbar() {
   const router = useRouter();
 
   const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
-  const { cartProducts, Wishlist } = UseProductProvider();
+  const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
   const pathUrl = "/news/"
 
@@ -35,7 +35,7 @@ export default function Navbar() {
 
   // Wishlist value variable
 
-  const WishlistValue = Wishlist.length;
+  const WishlistValue = wishlist ? wishlist.length : 0
 
   // wishlist local storage function
   const [type, setType] = useState([]);
@@ -232,7 +232,7 @@ export default function Navbar() {
                           </div>
                         </label>
 
-                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50">
                           <Link
                             href="/userdashboard"
                             className="text-sm dropdown-item -z-50"

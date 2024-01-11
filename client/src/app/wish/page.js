@@ -9,7 +9,7 @@ import Sidebar from '@/components/sidebar/Sidebar'
 
 const page = () => {
 
-    const {Wishlist } = UseProductProvider()
+    const {wishlist } = UseProductProvider()
     
     return (
       <div>
@@ -17,15 +17,15 @@ const page = () => {
           <Navbar />
         </div>
         <Sidebar />
-        {Wishlist.length > 0 ? (
+        {wishlist && wishlist.length > 0 ? (
           <div className="px-1 py-10 lg:px-28 bg-gray-50 h-contain">
             <h2 className="mb-6 text-xl font-medium text-gray-800 ">
               Saved Items
             </h2>
 
             <div className="grid grid-cols-2 gap-4 px-4 lg:gap-4 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-              {Wishlist.map((product) => (
-                <Wishlistcard key={product.id} product={product} />
+              {wishlist.map((product) => (
+                <Wishlistcard key={product._id} product={product} />
               ))}
             </div>
           </div>

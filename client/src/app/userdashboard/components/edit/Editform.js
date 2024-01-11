@@ -7,7 +7,6 @@ import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
-
 const Editform = ({
   formData,
   handleEdit,
@@ -16,7 +15,8 @@ const Editform = ({
   handleSubmit,
   handleImageChange,
   selectedPhoto,
-
+  loading,
+  setLoading,
 }) => {
   const router = useRouter();
   // const inputRef = useRef(null)
@@ -82,6 +82,7 @@ const Editform = ({
           placeholder="Email"
           value={formData?.email}
           onChange={(e) => handleInputChange(e)}
+          readOnly
         />
       </div>
       <div className="relative z-0 w-full mb-5 group">
@@ -143,7 +144,6 @@ const Editform = ({
       >
         Save
       </button>
-     
     </form>
   );
 };

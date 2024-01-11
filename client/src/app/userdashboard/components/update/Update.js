@@ -16,17 +16,18 @@ const Update = () => {
   const [formData, setFormData] = useState({
     fullname: UserData?.fullname,
     email: UserData.email,
-    phone: UserData.phone,
+    phone: UserData.phone || '',
     shippingaddress: UserData.shippingaddress,
     userphoto: UserData.userdp,
   });
-  const { screen } = UseProductProvider();
+
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isEditable, setIsEditable] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
+  const [loading, setLoading] = useState(false)
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -54,6 +55,7 @@ const Update = () => {
     console.log(formData);
 
     try {
+      setLoading(true)
       // Create a new FormData instance
       const submitForm = new FormData();
 
@@ -64,8 +66,9 @@ const Update = () => {
       submitForm.append("email", formData.email);
       submitForm.append("phone", formData.phone);
       submitForm.append("shippingaddress", formData.shippingaddress);
-      submitForm.append("userphoto", formData.userphoto);
-
+      submitForm.append("userphoto", formData.userdp);
+       console.log("my phonenumber", formData.phone);
+ 
       // Make a PATCH request
       const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
@@ -82,6 +85,7 @@ const Update = () => {
       if (response.status === 200) {
         await HandleGetUser();
         console.log("Updated UserData:", UserData);
+        setLoading(false)
         setIsEditable(false);
 
         console.log("use profle updated successfully");
@@ -114,9 +118,24 @@ const Update = () => {
           handleSubmit={handleSubmit}
           handleImageChange={handleImageChange}
           selectedPhoto={selectedPhoto}
+          loading={loading}
+          setLoading={setLoading}
         />
       ) : (
         <StaticForm userData={UserData} handleEdit={handleEdit} />
+      )}
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
+          <RotatingLines
+            visible={true}
+            height="96"
+            width="96"
+            color="gray"
+            strokeWidth="5"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
       )}
     </div>
   );

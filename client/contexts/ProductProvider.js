@@ -5,9 +5,14 @@ import { useEffect, useState, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import io from "socket.io-client"
+import { BiSolidRocket } from "react-icons/bi";
+import { UseUserContext } from "./UserContext";
 
 
 const ProductProvider = ({ children }) => {
+   const {UserData} = UseUserContext()
+  const socket = io.connect(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
   const router = useRouter()
 
 
@@ -17,7 +22,7 @@ const ProductProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState([]);
-  const [Wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState(null);
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const isDesktop = useMediaQuery({
@@ -53,17 +58,92 @@ const ProductProvider = ({ children }) => {
     router.push('/productDetails')
   };
 
-  
-  const addToWishlist = (product) => {
-    // e.stopPropagation();
-    // setWishlist((prev) => [...prev, product]);
-    const updatedWish = [...Wishlist, product];
-    setWishlist(updatedWish);
-    // Update local storage
-    if (typeof window !== "undefined") {
-      localStorage.setItem("Wishlist", JSON.stringify(updatedWish));
-    }
+  // add to cart socket
+  const handleAddToCart = (productid, userid) => {
+    const cart = {
+      productid,
+      userid
+       }
+      socket.emit("cartadd", cart)
   };
+
+  useEffect(() => {
+    const fetchWishlistFromServer = async () => {
+      try {
+        // Map through the wishlist IDs and fetch product details
+        const productsPromises = UserData.wishlist.map(async (productId) => {
+          const productResponse = await axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productId}`
+          );
+          return productResponse.data; // Adjust to your server's response structure
+        });
+
+        const products = await Promise.all(productsPromises);
+
+        setWishlist(products);
+      } catch (error) {
+        console.error("Error fetching wishlist from the server:", error);
+      }
+    };
+
+    // Fetch wishlist from the server when the component mounts
+    fetchWishlistFromServer();
+
+   
+  }, []);
+   
+  
+
+  const handleWishAdd = (productId, userId) => {
+     
+
+     const wishdata = {
+          productId: productId,
+         userId:userId
+     }
+     socket.emit("wishadd", wishdata);
+     console.log("wish emmited")
+   };
+
+
+    socket.on("alllike", (userwishlist) => {
+        // Update the local state with the updated
+        console.log(userwishlist);
+        setWishlist(userwishlist);
+        console.log("returning wishlist", wishlist);
+      });
+ 
+   
+
+    
+
+    socket.on("wishlist", (userwishlist) => {
+      // Update the local state with the updated
+        
+      setWishlist(userwishlist);
+      console.log("returning wishlist", wishlist);
+    });
+  
+  console.log('wishlist from socket', wishlist)
+
+     
+  
+  
+  // const addToWishlist = (product) => {
+  //   // e.stopPropagation();
+  //   // setWishlist((prev) => [...prev, product]);
+  //   const updatedWish = [...Wishlist, product];
+  //   setWishlist(updatedWish);
+  //   // Update local storage
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("Wishlist", JSON.stringify(updatedWish));
+  //   }
+  // };
+
+
+
+
+
 
   const removeFromWishlist = (product) => {
     const newWishList = Wishlist.filter(
@@ -162,6 +242,7 @@ const ProductProvider = ({ children }) => {
     addToCart(e, product);
   }
   };
+
   
   
 
@@ -260,7 +341,7 @@ const ProductProvider = ({ children }) => {
         closeModal,
         handleCartClick,
         handleAddToWishlist,
-        Wishlist,
+        wishlist,
 
         setSearchResults,
         handleRemoveFromWishlist,
@@ -280,7 +361,8 @@ const ProductProvider = ({ children }) => {
         searchResults,
         setSearchResults,
         fetchData,
-        setAllProducts
+        setAllProducts,
+        handleWishAdd
       }}
     >
       {children}
