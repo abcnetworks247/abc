@@ -148,6 +148,19 @@ export default function layout() {
     }}
     
   />
+  <Tabs.Screen
+   
+    name="contact/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
 
     </Tabs>
    </>

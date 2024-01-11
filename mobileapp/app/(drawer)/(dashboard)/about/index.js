@@ -84,10 +84,10 @@ const index = () => {
               </Text>
             </View>
           </View>
-     {data.map(({description, title})=>{
+     {data.map(({description, title, index})=>{
         return(
 
-          <View className="shadow-2xl">
+          <View className="shadow-2xl" key={index}>
             <TouchableOpacity
               className="block rounded-xl border border-gray-200 p-8 shadow-2xl transition hover:border-blue-500 hover:shadow-blue-500/10"
               href="/about#"
