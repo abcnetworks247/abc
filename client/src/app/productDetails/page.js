@@ -11,6 +11,7 @@ import ProductSkeleton from "./ProductSkeleton";
 import ImageGallery from "@/components/Products/ImageGallery";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useSearchParams } from "next/navigation";
+import { UseUserContext } from "../../../contexts/UserContext";
 
 import axios from "axios";
 const page = () => {
@@ -18,7 +19,13 @@ const page = () => {
 const router = useRouter();
 const params = useSearchParams()
 const productid = params.get("id");
-const { handleAddToWishlist, handleRemoveFromWishlist,handleCartClick } =UseProductProvider()
+ const {UserData}=UseUserContext()
+const {
+  handleAddToWishlist,
+  handleRemoveFromWishlist,
+  handleCartClick,
+  handleWishAdd,
+} = UseProductProvider();
  
   const [localSelectedProduct, setLocalSelectedProduct] = useState({});
   
@@ -349,8 +356,12 @@ const handleWishClick = () => {
                           viewBox="0 0 16 16"
                           style={{ fill: "#FF6666" }}
                           onClick={(e) => {
+                            e.stopPropagation();
+                            handleWishAdd(
+                              localSelectedProduct._id,
+                              UserData._id
+                            );
                             handleWishClick();
-                            handleRemoveFromWishlist(e, localSelectedProduct);
                           }}
                         >
                           <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>
@@ -365,8 +376,9 @@ const handleWishClick = () => {
                           stroke="red"
                           fill="none"
                           onClick={(e) => {
+                            e.stopPropagation();
+                            handleWishAdd(localSelectedProduct._id, UserData._id);
                             handleWishClick();
-                            handleAddToWishlist(e, localSelectedProduct);
                           }}
                         >
                           <path d="M8 2.748L8 2.748C10.68 0.377 15.36 1.344 15.36 6.792C15.36 9.868 12.206 12.44 8.464 15.665C8.18 15.89 7.82 15.89 7.536 15.665C3.794 12.44 0.64 9.868 0.64 6.792C0.64 1.344 5.32 0.377 8 2.748Z"></path>

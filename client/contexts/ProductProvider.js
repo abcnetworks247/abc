@@ -61,11 +61,40 @@ const ProductProvider = ({ children }) => {
   // add to cart socket
   const handleAddToCart = (productid, userid) => {
     const cart = {
-      productid,
-      userid
+      productid:productid,
+      userid:userid,
        }
       socket.emit("cartadd", cart)
   };
+
+  // get the cart products back from the server
+    socket.on("cartadd", (cartItems) => {
+       setCartProducts(cartItems)
+    });
+  
+  
+  
+  const handleRemoveFromCart = (productid, userid) => {
+    const cartdata = {
+      productid: productid,
+      userid: userid,
+    };
+
+    socket.emit("cartremove", cartdata)
+  }
+
+  
+  const handleCartDecrease = (productid, userid) => {
+    const cartdata = {
+      productid: productid,
+      userid: userid,
+    };
+
+    socket.emit("cartdecrease", cartdata);
+  };
+ 
+ 
+
 
   useEffect(() => {
     const fetchWishlistFromServer = async () => {
@@ -93,19 +122,21 @@ const ProductProvider = ({ children }) => {
   }, []);
    
   
-
+// emit signals to add to wish list
   const handleWishAdd = (productId, userId) => {
      
 
      const wishdata = {
-          productId: productId,
-         userId:userId
+       productId: productId,
+       userId: userId
+         
      }
      socket.emit("wishadd", wishdata);
      console.log("wish emmited")
    };
 
 
+  //reevie the response from the server
     socket.on("alllike", (userwishlist) => {
         // Update the local state with the updated
         console.log(userwishlist);
@@ -117,7 +148,7 @@ const ProductProvider = ({ children }) => {
 
     
 
-    socket.on("wishlist", (userwishlist) => {
+  socket.on("wishlist", (userwishlist) => {
       // Update the local state with the updated
         
       setWishlist(userwishlist);
@@ -126,34 +157,9 @@ const ProductProvider = ({ children }) => {
   
   console.log('wishlist from socket', wishlist)
 
-     
-  
-  
-  // const addToWishlist = (product) => {
-  //   // e.stopPropagation();
-  //   // setWishlist((prev) => [...prev, product]);
-  //   const updatedWish = [...Wishlist, product];
-  //   setWishlist(updatedWish);
-  //   // Update local storage
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("Wishlist", JSON.stringify(updatedWish));
-  //   }
-  // };
+ 
 
 
-
-
-
-
-  const removeFromWishlist = (product) => {
-    const newWishList = Wishlist.filter(
-      (wishproduct) => product._id !== wishproduct._id
-    );
-      setWishlist(newWishList)
-     if (typeof window !== "undefined") {
-       localStorage.setItem("Wishlist", JSON.stringify(newWishList));
-     }
-  };
   const removeFromCart = (product) => {
     const newCartList = cartProducts.filter(
       (cartProduct) => product._id !== cartProduct._id
@@ -165,10 +171,10 @@ const ProductProvider = ({ children }) => {
      }
   };
 
-   const handleRemoveFromCart = (e, product) => {
-     e.stopPropagation();
-     removeFromCart(product);
-  };
+  //  const handleRemoveFromCart = (e, product) => {
+  //    e.stopPropagation();
+  //    removeFromCart(product);
+  // };
   
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
@@ -177,10 +183,6 @@ const ProductProvider = ({ children }) => {
 
   
 
-  const handleRemoveFromWishlist = (e, product) => {
-    e.stopPropagation();
-    removeFromWishlist(product);
-  };
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -332,7 +334,6 @@ const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-       
         cartProducts,
         selectedProduct,
         isModalOpen,
@@ -362,7 +363,10 @@ const ProductProvider = ({ children }) => {
         setSearchResults,
         fetchData,
         setAllProducts,
-        handleWishAdd
+        handleWishAdd,
+        handleAddToCart,
+        handleRemoveFromCart,
+        handleCartDecrease,
       }}
     >
       {children}

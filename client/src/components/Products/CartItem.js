@@ -1,12 +1,18 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
-import { UseProductProvider} from "../../../contexts/ProductProvider";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { UseUserContext } from "../../../contexts/UserContext";
 
 
 const CartItem = ({ product, updatePriceArray }) => {
-  
-  const { handleRemoveFromCart, cartProducts, updateProduct} =UseProductProvider();
+  const { UserData } = UseUserContext()
+  const {
+    handleRemoveFromCart,
+    cartProducts,
+    updateProduct,
+    handleCartDecrease,
+  } = UseProductProvider();
   
   const [quantity, setQuantity] = useState(product.quantity)
   console.log(quantity)
@@ -56,9 +62,14 @@ const CartItem = ({ product, updatePriceArray }) => {
             </div>
           </div>
           <div className="w-2/3 px-4">
-            <h2 className="mb-2 text-md font-bold text-gray-900">{product.title}</h2>
+            <h2 className="mb-2 text-md font-bold text-gray-900">
+              {product.title}
+            </h2>
             <p className="text-gray-500 ">Picture frame</p>
-            <div onClick={(e)=>handleRemoveFromCart(e, product)} className="flex items-center justify-center bg-gray-100 cursor-pointer py-2 px-2 hover:bg-blue-300 w-fit rounded-md">
+            <div
+              onClick={() => handleRemoveFromCart(product._id, UserData._id)}
+              className="flex items-center justify-center bg-gray-100 cursor-pointer py-2 px-2 hover:bg-blue-300 w-fit rounded-md"
+            >
               <p className="text-blue-900 text-xs font-bold">REMOVE</p>
             </div>
           </div>
@@ -72,7 +83,7 @@ const CartItem = ({ product, updatePriceArray }) => {
         <div className="flex items-center border-gray-100">
           <span
             className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
-            onClick={reduceItem}
+            onClick={() => handleCartDecrease(product._id, UserData._id)}
           >
             {" "}
             -{" "}
@@ -83,7 +94,7 @@ const CartItem = ({ product, updatePriceArray }) => {
           </span>
           <span
             className="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"
-            onClick={increaseItem}
+            onClick={() => handleAddToCart(product._id, UserData._id)}
           >
             {" "}
             +{" "}
