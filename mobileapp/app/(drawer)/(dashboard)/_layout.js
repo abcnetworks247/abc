@@ -121,27 +121,46 @@ export default function layout() {
       />
 
 
-  {/* <Tabs.Screen
+  <Tabs.Screen
    
-    name="pricing/index"
+    name="membership/index"
     
+
+
     options={{
-        
-      tabBarStyle: {  animated: true},
-       header: () => null,
-      title: () => "test",
-      headerStyle: {
-        fontSize: 20,
-      },
-  
-      tabBarItemStyle: {
+            header: () => null,
+           tabBarItemStyle: {
         display: 'none',
-      },
-      tabBarIcon: () => null,
-        
+       },
     }}
     
-  /> */}
+  />
+  <Tabs.Screen
+   
+    name="about/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="contact/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
 
     </Tabs>
    </>
