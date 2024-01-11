@@ -424,8 +424,12 @@ const Cart = (io) => {
         if (!product) {
           console.log("Product not found");
           throw new NotFoundError("Product not found");
-        } else if (user.cart.includes(cart.productId)) {
-          const newdata = { ...cart, quantity: +1 };
+        }
+
+        const checkid = user.cart.map((product) => product._id)
+        
+        if (checkid.includes(cart.productId)) {
+          const newdata = { ...product, quantity: quantity + 1 };
 
           user.cart.unshift(newdata);
 
@@ -433,6 +437,16 @@ const Cart = (io) => {
 
           socket.emit("cart", user.cart);
         }
+        else {
+          const newdata = { ...product, quantity: 1 };
+
+          user.cart.unshift(newdata);
+
+          user.save();
+
+          socket.emit("cart", user.cart);
+        }
+
       } catch (error) {}
     });
     socket.on("cartminus", async (cart) => {
@@ -449,8 +463,13 @@ const Cart = (io) => {
         if (!product) {
           console.log("Product not found");
           throw new NotFoundError("Product not found");
-        } else if (user.cart.includes(cart.productId)) {
-          const newdata = { ...cart, quantity:  -1 };
+        }
+
+        const checkid = user.cart.map((product) => product._id)
+        
+        if (checkid.includes(cart.productId)) {
+
+          const newdata = { ...product, quantity: quantity -1 };
 
           user.cart.unshift(newdata);
 
@@ -474,10 +493,14 @@ const Cart = (io) => {
         if (!product) {
           console.log("Product not found");
           throw new NotFoundError("Product not found");
-        } else if (user.cart.includes(cart.productId)) {
+        }
+
+        const checkid = user.cart.map((product) => product._id);
+
+        if (checkid.includes(cart.productId)) {
           console.log("true id is already in the list");
-          const index = user.wishlist.indexOf(cart.productId);
-          user.wishlist.splice(index, 1);
+          const index = checkid.indexOf(cart.productId);
+          user.cart.splice(index, 1);
 
           user.save();
 
