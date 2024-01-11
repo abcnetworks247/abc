@@ -50,10 +50,9 @@ const NewArrival = ({ allProducts }) => {
           <LoadingSkeleton numberOfSkeletons={numberOfSkeletons} />
         )}
 
-        <div className="sticky sm:flex items-center w-full sm:justify-between bottom-0 right-0 p-4">
+        <div className="sm:flex items-center w-full sm:justify-between p-4">
           <div className="flex items-center mb-4 sm:mb-0">
-            <a
-              href="#"
+            <div
               className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center"
             >
               <svg
@@ -68,16 +67,14 @@ const NewArrival = ({ allProducts }) => {
                   clipRule="evenodd"
                 />
               </svg>
-            </a>
-            <a
-              href="#"
-              className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center mr-2"
+            </div>
+            <a className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center mr-2"
             >
               <svg
                 className="w-7 h-7"
                 fill="currentColor"
                 viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http://www.w3.org/2000/svg" 
               >
                 <path
                   fillRule="evenodd"
