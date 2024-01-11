@@ -401,7 +401,7 @@ const Wishlist = (io) => {
 
           console.log("this is whishlist", userwish.wishlist);
 
-          socket.emit("alllike", userwish.wishlist);
+          socket.emit("wishlist", userwish.wishlist);
         }
       } catch (error) {}
     });
@@ -431,7 +431,7 @@ const Cart = (io) => {
 
           user.save();
 
-          socket.emit("alllike", user.cart);
+          socket.emit("cart", user.cart);
         }
       } catch (error) {}
     });
@@ -456,7 +456,7 @@ const Cart = (io) => {
 
           user.save();
 
-          socket.emit("alllike", user.cart);
+          socket.emit("cart", user.cart);
         }
       } catch (error) {}
     });
@@ -481,7 +481,7 @@ const Cart = (io) => {
 
           user.save();
 
-          socket.emit("wishlist", userwish.cart);
+          socket.emit("cart", userwish.cart);
         }
       } catch (error) {}
     });
