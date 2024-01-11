@@ -11,8 +11,11 @@ const index = () => {
       <View>
         <Navbar />
 
-        <View className="">
+        <View className="flex flex-col">
           <HeroCarousel />
+          <View>
+            <Text>Home</Text>
+          </View>
         </View>
       </View>
     </SafeAreaView>
