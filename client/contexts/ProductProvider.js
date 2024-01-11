@@ -11,10 +11,9 @@ import { UseUserContext } from "./UserContext";
 
 
 const ProductProvider = ({ children }) => {
-   const {UserData} = UseUserContext()
+  const { UserData } = UseUserContext();
   const socket = io.connect(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
-  const router = useRouter()
-
+  const router = useRouter();
 
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -28,73 +27,59 @@ const ProductProvider = ({ children }) => {
   const isDesktop = useMediaQuery({
     query: "(min-width: 600px)",
   });
-   const [clickState, setClickState] = useState(false);
-  const [screen, setScreen] = useState(!isTabletOrMobile)
+  const [clickState, setClickState] = useState(false);
+  const [screen, setScreen] = useState(!isTabletOrMobile);
   const [category, setCategory] = useState([]);
-  
-  
-  
-  
-  
-  
+
   const handleUser = () => {
-    setClickState(true)
+    setClickState(true);
     // Open the modal when the link is clicked on mobile
     if (isTabletOrMobile) {
       // e.preventDefault(); // Prevent default navigation
-      setScreen(prev => !prev)
-    } 
-   
+      setScreen((prev) => !prev);
+    }
   };
-  
- 
 
-  
+  const handleLinkClick = () => setUserNav(!isTabletOrMobile);
 
-  const handleLinkClick = () => setUserNav(!isTabletOrMobile)
-  
   const handleProductClick = (product) => {
     setSelectedProduct(product);
-    router.push('/productDetails')
+    router.push("/productDetails");
   };
 
   // add to cart socket
   const handleAddToCart = (productid, userid) => {
     const cart = {
-      productid:productid,
-      userid:userid,
-       }
-      socket.emit("cartadd", cart)
+      productid: productid,
+      userid: userid,
+    };
+    socket.emit("cartadd", cart);
   };
 
-  // get the cart products back from the server
-    socket.on("cartadd", (cartItems) => {
-       setCartProducts(cartItems)
-    });
-  
-  
-  
+  // remove item from cart
   const handleRemoveFromCart = (productid, userid) => {
     const cartdata = {
       productid: productid,
       userid: userid,
     };
 
-    socket.emit("cartremove", cartdata)
-  }
+    socket.emit("cartremove", cartdata);
+  };
 
-  
+  // minus cart quantity
   const handleCartDecrease = (productid, userid) => {
     const cartdata = {
       productid: productid,
       userid: userid,
     };
 
-    socket.emit("cartdecrease", cartdata);
+    socket.emit("cartminus", cartdata);
   };
- 
- 
 
+  // get the cart products back from the server
+  socket.on("cart", (cartItems) => {
+    setCartProducts(cartItems);
+  });
 
   useEffect(() => {
     const fetchWishlistFromServer = async () => {
@@ -117,71 +102,46 @@ const ProductProvider = ({ children }) => {
 
     // Fetch wishlist from the server when the component mounts
     fetchWishlistFromServer();
-
-   
   }, []);
-   
-  
-// emit signals to add to wish list
+
+  // emit signals to add to wish list
   const handleWishAdd = (productId, userId) => {
-     
-
-     const wishdata = {
-       productId: productId,
-       userId: userId
-         
-     }
-     socket.emit("wishadd", wishdata);
-     console.log("wish emmited")
-   };
-
+    const wishdata = {
+      productId: productId,
+      userId: userId,
+    };
+    socket.emit("wishadd", wishdata);
+    console.log("wish emmited");
+  };
 
   //reevie the response from the server
-    socket.on("alllike", (userwishlist) => {
-        // Update the local state with the updated
-        console.log(userwishlist);
-        setWishlist(userwishlist);
-        console.log("returning wishlist", wishlist);
-      });
- 
-   
-
-    
-
   socket.on("wishlist", (userwishlist) => {
-      // Update the local state with the updated
-        
-      setWishlist(userwishlist);
-      console.log("returning wishlist", wishlist);
-    });
-  
-  console.log('wishlist from socket', wishlist)
-
- 
-
+    // Update the local state with the updated
+    console.log(userwishlist);
+    setWishlist(userwishlist);
+    console.log("returning wishlist", wishlist);
+  });
 
   const removeFromCart = (product) => {
     const newCartList = cartProducts.filter(
       (cartProduct) => product._id !== cartProduct._id
     );
-    setCartProducts(newCartList)
-    
-     if (typeof window !== "undefined") {
-       localStorage.setItem("cartProducts", JSON.stringify(newCartList));
-     }
+    setCartProducts(newCartList);
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartProducts", JSON.stringify(newCartList));
+    }
   };
 
   //  const handleRemoveFromCart = (e, product) => {
   //    e.stopPropagation();
   //    removeFromCart(product);
   // };
-  
+
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
     addToWishlist(product);
   };
-
-  
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -193,7 +153,7 @@ const ProductProvider = ({ children }) => {
 
   const addToCart = (e, product) => {
     e.stopPropagation();
-    const updatedProduct ={...product, quantity:1}
+    const updatedProduct = { ...product, quantity: 1 };
     const updatedCart = [...cartProducts, updatedProduct];
     setCartProducts(updatedCart);
     // Update local storage
@@ -202,57 +162,46 @@ const ProductProvider = ({ children }) => {
     }
   };
 
+  const updateProduct = (updatedProduct) => {
+    const updatedCart = cartProducts.map((product) =>
+      product._id === updatedProduct._id ? updatedProduct : product
+    );
 
- const updateProduct = (updatedProduct) => {
-   const updatedCart = cartProducts.map((product) =>
-     product._id === updatedProduct._id ? updatedProduct : product
-   );
+    setCartProducts(updatedCart);
 
-   setCartProducts(updatedCart);
-
-   // Update local storage
-   if (typeof window !== "undefined") {
-     localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
-   }
- };
-
+    // Update local storage
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+    }
+  };
 
   const handleCartClick = (e, product) => {
     e.stopPropagation();
     //check first if the item exist in the cart
-  const existingCartItem = cartProducts.find(
-    (cartItem) => cartItem._id === product._id
+    const existingCartItem = cartProducts.find(
+      (cartItem) => cartItem._id === product._id
     );
-  console.log("existing item", existingCartItem)
+    console.log("existing item", existingCartItem);
 
-  if (existingCartItem) {
-    // If the item already exists in the cart, increase its quantity
-    const updatedCart = cartProducts.map((cartItem) =>
-      cartItem._id === product._id
-        ? { ...cartItem, quantity: cartItem.quantity + 1 }
-        : cartItem
-    );
+    if (existingCartItem) {
+      // If the item already exists in the cart, increase its quantity
+      const updatedCart = cartProducts.map((cartItem) =>
+        cartItem._id === product._id
+          ? { ...cartItem, quantity: cartItem.quantity + 1 }
+          : cartItem
+      );
 
-    setCartProducts(updatedCart);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+      setCartProducts(updatedCart);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
+      }
+    } else {
+      // If the item is not in the cart, add it
+      addToCart(e, product);
     }
-  
-    
-  } else {
-    // If the item is not in the cart, add it
-    addToCart(e, product);
-  }
   };
 
-  
-  
-
-
-
   useEffect(() => {
-    
-
     const savedWishItems = JSON.parse(
       typeof window !== "undefined"
         ? localStorage.getItem("Wishlist") || "[]"
@@ -261,8 +210,6 @@ const ProductProvider = ({ children }) => {
 
     setWishlist(savedWishItems);
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
-
-  
 
   useEffect(() => {
     // Retrieve cartProducts from local storage when component mounts
@@ -273,38 +220,34 @@ const ProductProvider = ({ children }) => {
         : "[]"
     );
 
-  
     setCartProducts(storedCartProducts);
-   
   }, []); // Empty dependency array means this useEffect runs only once when the component mounts
 
-
   // fetch allProducts
- 
-     const fetchData = async () => {
-       try {
-         const response = await axios.get(
-           `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
-         );
 
-         if (response.status !== 200) {
-           throw new Error("Failed to fetch products");
-         }
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
+      );
 
-         const products = response.data;
-         setAllProducts(products);
-       } catch (error) {
-         console.error(error.message);
-       }
-    };
-  
-    useEffect(() => {
-     fetchData();
-    }, []);
-  
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch products");
+      }
+
+      const products = response.data;
+      setAllProducts(products);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleSearch = (searchTerm) => {
-    
-    console.log("hit", searchTerm)
+    console.log("hit", searchTerm);
     // Filter products based on the search term
     const filteredProducts = allProducts.filter(
       (product) =>
@@ -313,23 +256,17 @@ const ProductProvider = ({ children }) => {
     );
 
     setSearchResults(filteredProducts);
-    console.log("filtered", filteredProducts)
-    console.log("allProduct in provider", allProducts)
+    console.log("filtered", filteredProducts);
+    console.log("allProduct in provider", allProducts);
   };
 
-  console.log("provider search results", searchResults)
+  console.log("provider search results", searchResults);
 
   const handleResultClick = (searchTerm, e) => {
-    e.preventDefault()
+    e.preventDefault();
     // Redirect to the results page with the search term
     router.push(`/searchResults?term=${searchTerm}`);
-    
-  }; 
- 
-
- 
-  
-
+  };
 
   return (
     <ProductContext.Provider
