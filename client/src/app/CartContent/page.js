@@ -90,7 +90,7 @@ const page = () => {
                 </div>
                 <div className="py-4 mb-8 border-t border-b border-gray-300 border-opacity-[80%]">
                   {cartProducts.map((product) => (
-                    <CartItem key={product.id} product={product} />
+                    <CartItem key={product._id} product={product} />
                   ))}
                 </div>
               </div>

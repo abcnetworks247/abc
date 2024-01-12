@@ -5,43 +5,20 @@ import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { UseUserContext } from "../../../contexts/UserContext";
 
 
-const CartItem = ({ product, updatePriceArray }) => {
+const CartItem = ({ product }) => {
   const { UserData } = UseUserContext()
   const {
     handleRemoveFromCart,
-    cartProducts,
-    updateProduct,
     handleCartDecrease,
   } = UseProductProvider();
   
-  const [quantity, setQuantity] = useState(product.quantity)
-  console.log(quantity)
+  
 
-  const reduceItem = () => {
-    if (quantity > 1) {
-      const decreasevalue = product.quantity = quantity - 1
-      console.log('decrease value', decreasevalue);
-      console.log("decrease  cartProducts", cartProducts);
-      setQuantity(decreasevalue);
-      const updatedProduct = { ...product, quantity: decreasevalue };
-      updateProduct(updatedProduct);
-      }
-   
-  };
-
-  const increaseItem = () => {
-    const value = product.quantity = quantity + 1;
-    console.log('increased value', value);
-    console.log('increased cartProduct', cartProducts);
-    setQuantity(value);
-    const updatedProduct = { ...product, quantity: value };
-    updateProduct(updatedProduct);
-   
-  };
+  
 
 
   const calculateSubtotal = () => {
-    return quantity * product.price;
+    return product.quantity * product.price;
   };
 
 
