@@ -379,7 +379,7 @@ const Wishlist = (io) => {
           const index = user.wishlist.indexOf(wish.productId);
           user.wishlist.splice(index, 1);
 
-          user.save();
+          user.save(); 
 
           // const currentuser = Client.findById(wish.userId).populate("wishlist", )
 
