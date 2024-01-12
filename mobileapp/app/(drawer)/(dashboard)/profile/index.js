@@ -145,7 +145,7 @@ export default function index() {
               <View className=" ">
                 <View className="flex flex-row gap-1">
 
-                <View className="">
+       
                   <Svg
                     width="24px"
                     height="24px"
@@ -167,7 +167,6 @@ export default function index() {
                       />
                     </G>
                   </Svg>
-                </View>
                 <Text className="text-lg text-gray-600">Cart</Text>
                 </View>
               </View>
