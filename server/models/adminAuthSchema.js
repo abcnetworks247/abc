@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
+const saltRounds = 10;
+
 const AdminSchema = new mongoose.Schema(
   {
     fullname: {
@@ -39,9 +41,10 @@ const AdminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+
 AdminSchema.pre('save', async function (next) {
-  const gensalt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, gensalt);
+  
+  this.password = await bcrypt.hash(this.password, saltRounds);
   next();
 });
 
@@ -51,8 +54,8 @@ AdminSchema.methods.checkPassword = async function (password) {
 };
 
 AdminSchema.methods.newHashPassword = async function (password) {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
   return hashedPassword;
 };
 
