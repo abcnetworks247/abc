@@ -86,6 +86,7 @@ const ProductProvider = ({ children }) => {
   socket.on("cart", (cartItems) => {
     console.log("cart sent back")
     setCartProducts(cartItems);
+    console.log(cartProducts)
 
   });
 
