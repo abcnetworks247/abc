@@ -161,6 +161,19 @@ export default function layout() {
     }}
     
   />
+  <Tabs.Screen
+   
+    name="news/[id]/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
 
     </Tabs>
    </>

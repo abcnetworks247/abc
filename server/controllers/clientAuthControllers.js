@@ -73,7 +73,7 @@ const signIn = async (req, res) => {
     const authenticatedUser = await olduser.checkPassword(password);
 
     if (!authenticatedUser) {
-      throw new UnAuthorizedError("Invalid credentials");
+      throw new UnAuthorizedError("Invalid email or password");
     }
 
     const MaxAge = 3 * 24 * 60 * 60;
@@ -426,8 +426,8 @@ const Cart = (io) => {
           throw new NotFoundError("Product not found");
         }
 
-        const checkid = user.cart.map((product) => product._id)
-        
+        const checkid = user.cart.map((product) => product._id);
+
         if (checkid.includes(cart.productId)) {
           const newdata = { ...product, quantity: quantity + 1 };
 
@@ -436,8 +436,7 @@ const Cart = (io) => {
           user.save();
 
           socket.emit("cart", user.cart);
-        }
-        else {
+        } else {
           const newdata = { ...product, quantity: 1 };
 
           user.cart.unshift(newdata);
@@ -446,7 +445,6 @@ const Cart = (io) => {
 
           socket.emit("cart", user.cart);
         }
-
       } catch (error) {}
     });
     socket.on("cartminus", async (cart) => {
@@ -465,11 +463,10 @@ const Cart = (io) => {
           throw new NotFoundError("Product not found");
         }
 
-        const checkid = user.cart.map((product) => product._id)
-        
-        if (checkid.includes(cart.productId)) {
+        const checkid = user.cart.map((product) => product._id);
 
-          const newdata = { ...product, quantity: quantity -1 };
+        if (checkid.includes(cart.productId)) {
+          const newdata = { ...product, quantity: quantity - 1 };
 
           user.cart.unshift(newdata);
 
