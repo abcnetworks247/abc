@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StatusBar, StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
 
 import { NativeWindStyleSheet } from "nativewind";
@@ -7,6 +7,8 @@ NativeWindStyleSheet.setOutput({
 });
 export default function Page() {
   return (
+    <>
+    <StatusBar barStyle="dark-content" backgroundColor="#2c3e50" />
     <View style={styles.container}>
       <View style={styles.main}>
         <Link href="/home"> 
@@ -21,10 +23,17 @@ export default function Page() {
         
         <Text className="text-red-700 text-2xl">Auth</Text>
         </Link>
+        <Link href="/news/12">
+          <Text className="text-red-700 text-2xl">Go to the "[ID]" page</Text>
+          
+        </Link>
         <Text style={styles.subtitle}>This is the first page of your app.</Text>
+
+        
     
       </View>
     </View>
+    </>
   );
 }
 

@@ -73,7 +73,7 @@ const signIn = async (req, res) => {
     const authenticatedUser = await olduser.checkPassword(password);
 
     if (!authenticatedUser) {
-      throw new UnAuthorizedError("Invalid credentials");
+      throw new UnAuthorizedError("Invalid email or password");
     }
 
     const MaxAge = 3 * 24 * 60 * 60;
@@ -362,7 +362,6 @@ const Wishlist = (io) => {
   io.on("connection", (socket) => {
     socket.on("wishadd", async (wish) => {
       try {
-
         const user = await Client.findById(wish.userId);
 
         if (!user) {
@@ -380,7 +379,7 @@ const Wishlist = (io) => {
           const index = user.wishlist.indexOf(wish.productId);
           user.wishlist.splice(index, 1);
 
-          user.save();
+          user.save(); 
 
           // const currentuser = Client.findById(wish.userId).populate("wishlist", )
 
@@ -402,57 +401,107 @@ const Wishlist = (io) => {
 
           console.log("this is whishlist", userwish.wishlist);
 
-          socket.emit("alllike", userwish.wishlist);
+          socket.emit("wishlist", userwish.wishlist);
         }
       } catch (error) {}
     });
   });
 };
 
-
 const Cart = (io) => {
   io.on("connection", (socket) => {
     socket.on("cartadd", async (cart) => {
       try {
-        console.log("cart");
-
-        const user = await Client.findById(cart.userid);
+        const user = await Client.findById(cart.userId);
 
         if (!user) {
+          console.log("user not found");
           throw new NotFoundError("User not found");
         }
 
-        const product = await Product.findById(cart.productid);
+        const product = await Product.findById(cart.productId);
 
         if (!product) {
           console.log("Product not found");
           throw new NotFoundError("Product not found");
-        } else if (user.cart.includes(cart.productid)) {
-          console.log("true id is already in the list");
-          const index = user.wishlist.indexOf(cart.productid);
-          user.wishlist.splice(index, 1);
+        }
+
+        const checkid = user.cart.map((product) => product._id);
+
+        if (checkid.includes(cart.productId)) {
+          const newdata = { ...product, quantity: quantity + 1 };
+
+          user.cart.unshift(newdata);
 
           user.save();
 
-          console.log("Like removed with userid: " + cart.productid);
-
-          const userwishlist = user.wishlist;
-
-          console.log(userwishlist);
-
-          socket.emit("wishlist", userwishlist);
+          socket.emit("cart", user.cart);
         } else {
-          user.wishlist.unshift(wish.productid);
+          const newdata = { ...product, quantity: 1 };
+
+          user.cart.unshift(newdata);
 
           user.save();
 
-          console.log("Like added with userid: " + wish.productid);
+          socket.emit("cart", user.cart);
+        }
+      } catch (error) {}
+    });
+    socket.on("cartminus", async (cart) => {
+      try {
+        const user = await Client.findById(cart.userId);
 
-          const userwish = user.wishlist;
+        if (!user) {
+          console.log("user not found");
+          throw new NotFoundError("User not found");
+        }
 
-          console.log(userwish);
+        const product = await Product.findById(cart.productId);
 
-          socket.emit("alllike", userwish);
+        if (!product) {
+          console.log("Product not found");
+          throw new NotFoundError("Product not found");
+        }
+
+        const checkid = user.cart.map((product) => product._id);
+
+        if (checkid.includes(cart.productId)) {
+          const newdata = { ...product, quantity: quantity - 1 };
+
+          user.cart.unshift(newdata);
+
+          user.save();
+
+          socket.emit("cart", user.cart);
+        }
+      } catch (error) {}
+    });
+    socket.on("cartremove", async (cart) => {
+      try {
+        const user = await Client.findById(cart.userId);
+
+        if (!user) {
+          console.log("user not found");
+          throw new NotFoundError("User not found");
+        }
+
+        const product = await Product.findById(cart.productId);
+
+        if (!product) {
+          console.log("Product not found");
+          throw new NotFoundError("Product not found");
+        }
+
+        const checkid = user.cart.map((product) => product._id);
+
+        if (checkid.includes(cart.productId)) {
+          console.log("true id is already in the list");
+          const index = checkid.indexOf(cart.productId);
+          user.cart.splice(index, 1);
+
+          user.save();
+
+          socket.emit("cart", userwish.cart);
         }
       } catch (error) {}
     });

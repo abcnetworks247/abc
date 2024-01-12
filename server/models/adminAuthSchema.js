@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
+
 const AdminSchema = new mongoose.Schema(
   {
     fullname: {
@@ -40,9 +41,14 @@ const AdminSchema = new mongoose.Schema(
 );
 
 AdminSchema.pre('save', async function (next) {
-  const gensalt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, gensalt);
-  next();
+  try {
+    const gensalt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, gensalt);
+    next();
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    next(error);
+  }
 });
 
 AdminSchema.methods.checkPassword = async function (password) {
