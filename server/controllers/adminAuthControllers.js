@@ -67,7 +67,6 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-  
   const { email, password } = req.body;
 
   try {
@@ -318,7 +317,6 @@ const userUpdate = async (req, res) => {
 };
 
 const currentUser = async (req, res) => {
-  
   try {
     if (req.user) {
       const olduser = await Admin.findById(req.user._id);
