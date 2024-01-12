@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
 import { Link } from "expo-router";
 
 import { NativeWindStyleSheet } from "nativewind";
@@ -8,7 +8,7 @@ NativeWindStyleSheet.setOutput({
 export default function Page() {
   return (
     <>
-    <StatusBar barStyle="dark-content" backgroundColor="#2c3e50" />
+<StatusBar barStyle="dark-content" backgroundColor={Platform.OS === 'ios' ? '#2c3e50' : '#2c3e50'} />
     <View style={styles.container}>
       <View style={styles.main}>
         <Link href="/home"> 
