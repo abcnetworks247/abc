@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-const saltRounds = 10;
 
 const AdminSchema = new mongoose.Schema(
   {
@@ -41,11 +40,15 @@ const AdminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
 AdminSchema.pre('save', async function (next) {
-  
-  this.password = await bcrypt.hash(this.password, saltRounds);
-  next();
+  try {
+    const gensalt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, gensalt);
+    next();
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    next(error);
+  }
 });
 
 AdminSchema.methods.checkPassword = async function (password) {
@@ -54,8 +57,8 @@ AdminSchema.methods.checkPassword = async function (password) {
 };
 
 AdminSchema.methods.newHashPassword = async function (password) {
-  
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
 };
 
