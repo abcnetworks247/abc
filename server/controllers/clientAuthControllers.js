@@ -73,7 +73,7 @@ const signIn = async (req, res) => {
     const authenticatedUser = await olduser.checkPassword(password);
 
     if (!authenticatedUser) {
-      throw new UnAuthorizedError("Invalid credentials");
+      throw new UnAuthorizedError("Invalid email or password");
     }
 
     const MaxAge = 3 * 24 * 60 * 60;
