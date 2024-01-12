@@ -8,8 +8,7 @@ import globalStyels from '../../../../../styles/globalStyels'
 // imort global styles
 
 const index = () => {
-    StatusBar.setBarStyle('ldark-content'); // Options: 'default', 'light-content', 'dark-content'
-    StatusBar.setBackgroundColor('#2c3e50'); // Set any hex color code here.
+    
     //4 random images in an object
     const images = {
         image1: "https://source.unsplash.com/200x200/?fashion?1",
