@@ -410,44 +410,42 @@ const Wishlist = (io) => {
 
 const Cart = (io) => {
   io.on("connection", (socket) => {
-  socket.on("cartadd", async (cart) => {
-    try {
-      const user = await Client.findById(cart.userId);
+ socket.on("cartadd", async (cart) => {
+   try {
+     const user = await Client.findById(cart.userId);
 
-      if (!user) {
-        console.log("User not found");
-        throw new NotFoundError("User not found");
-      }
+     if (!user) {
+       console.log("User not found");
+       throw new NotFoundError("User not found");
+     }
 
-      const product = await Product.findById(cart.productId);
+     const product = await Product.findById(cart.productId);
 
-      if (!product) {
-        console.log("Product not found");
-        throw new NotFoundError("Product not found");
-      }
+     if (!product) {
+       console.log("Product not found");
+       throw new NotFoundError("Product not found");
+     }
 
-      const existingCartItem = user.cart.find((item) =>
-        item.productId.equals(cart.productId)
-      );
+     const existingProduct = user.cart.find((p) =>
+       p._id.equals(cart.productId)
+     );
 
-      if (existingCartItem) {
-        existingCartItem.quantity += 1;
-      } else {
-        // If the product is not in the cart, add it with quantity 1
-        user.cart.unshift({ ...product.toObject(), quantity: 1 });
-      }
+     if (existingProduct) {
+       existingProduct.quantity += 1;
+     } else {
+       user.cart.unshift({ ...product.toObject(), quantity: 1 });
+     }
 
-      await user.save();
+     await user.save();
 
-      // Populate the cart with product details before emitting
-      await user.populate("cart").execPopulate();
-
-      
-      socket.emit("cart", user.cart);
-    } catch (error) {
-      console.error(error);
-    }
-  });
+     socket.emit(
+       "cart", user.cart
+     
+     );
+   } catch (error) {
+     console.error(error);
+   }
+ });
 
     socket.on("cartminus", async (cart) => {
       try {
