@@ -24,8 +24,10 @@ export default function Page() {
         <Text className="text-red-700 text-2xl">Auth</Text>
         </Link>
         <Link href="/news/12">
-          <Text className="text-red-700 text-2xl">Go to the "[ID]" page</Text>
-          
+          <Text className="text-red-700 text-xl">Go to the news "[ID]" page</Text>
+        </Link>
+        <Link href="/news/type/12">
+          <Text className="text-red-700 text-xl">Go to the  news type "[ID]" page</Text>
         </Link>
         <Text style={styles.subtitle}>This is the first page of your app.</Text>
 

@@ -426,20 +426,27 @@ const Cart = (io) => {
           throw new NotFoundError("Product not found");
         }
 
-        const existingProduct = user.cart.find((p) =>
-          p._id.equals(cart.productId)
+        const existingProduct = user.cart.find(
+          (p) => String(p.product) === cart.productId
         );
 
-        if (existingProduct) {
-          
-          existingProduct.quantity += 1;
+        if (!existingProduct) {
+          console.log("Product does not exist in the cart, adding...");
+          user.cart.unshift({ product: product._id, quantity: 1 });
         } else {
-          user.cart.unshift({ ...product.toObject(), quantity: 1 });
+          console.log("Product already exists in the cart");
+          existingProduct.quantity += 1;
         }
 
         await user.save();
 
-        socket.emit("cart", user.cart);
+        const populatedCart = await Client.populate(user, {
+          path: "cart.product",
+        });
+
+        console.log('Populated' + populatedCart);
+
+        socket.emit("cart", populatedCart.cart);
       } catch (error) {
         console.error(error);
       }
@@ -455,7 +462,7 @@ const Cart = (io) => {
         }
 
         const existingProduct = user.cart.find((p) =>
-          p._id.equals(cart.productId)
+          p.product.equals(cart.productId)
         );
 
         if (existingProduct && existingProduct.quantity > 1) {
@@ -479,7 +486,7 @@ const Cart = (io) => {
           throw new NotFoundError("User not found");
         }
 
-        user.cart.pull(cart.productId);
+        user.cart.pull({ product: cart.productId });
 
         await user.save();
 
@@ -490,7 +497,6 @@ const Cart = (io) => {
     });
   });
 };
-
 
 module.exports = {
   signUp,
