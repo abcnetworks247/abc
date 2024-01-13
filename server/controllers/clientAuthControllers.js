@@ -410,42 +410,47 @@ const Wishlist = (io) => {
 
 const Cart = (io) => {
   io.on("connection", (socket) => {
- socket.on("cartadd", async (cart) => {
-   try {
-     const user = await Client.findById(cart.userId);
+    socket.on("cartadd", async (cart) => {
+      try {
+        const user = await Client.findById(cart.userId);
 
-     if (!user) {
-       console.log("User not found");
-       throw new NotFoundError("User not found");
-     }
+        if (!user) {
+          console.log("User not found");
+          throw new NotFoundError("User not found");
+        }
 
-     const product = await Product.findById(cart.productId);
+        const product = await Product.findById(cart.productId);
 
-     if (!product) {
-       console.log("Product not found");
-       throw new NotFoundError("Product not found");
-     }
+        if (!product) {
+          console.log("Product not found");
+          throw new NotFoundError("Product not found");
+        }
 
-     const existingProduct = user.cart.find((p) =>
-       p._id.equals(cart.productId)
-     );
+        const existingProduct = user.cart.find(
+          (p) => String(p.product) === cart.productId
+        );
 
-     if (existingProduct) {
-       existingProduct.quantity += 1;
-     } else {
-       user.cart.unshift({ ...product.toObject(), quantity: 1 });
-     }
+        if (!existingProduct) {
+          console.log("Product does not exist in the cart, adding...");
+          user.cart.unshift({ product: product._id, quantity: 1 });
+        } else {
+          console.log("Product already exists in the cart");
+          existingProduct.quantity += 1;
+        }
 
-     await user.save();
+        await user.save();
 
-     socket.emit(
-       "cart", user.cart
-     
-     );
-   } catch (error) {
-     console.error(error);
-   }
- });
+        const populatedCart = await Client.populate(user, {
+          path: "cart.product",
+        });
+
+        console.log('Populated' + populatedCart);
+
+        socket.emit("cart", populatedCart.cart);
+      } catch (error) {
+        console.error(error);
+      }
+    });
 
     socket.on("cartminus", async (cart) => {
       try {
@@ -457,7 +462,7 @@ const Cart = (io) => {
         }
 
         const existingProduct = user.cart.find((p) =>
-          p._id.equals(cart.productId)
+          p.product.equals(cart.productId)
         );
 
         if (existingProduct && existingProduct.quantity > 1) {
@@ -481,7 +486,7 @@ const Cart = (io) => {
           throw new NotFoundError("User not found");
         }
 
-        user.cart.pull(cart.productId);
+        user.cart.pull({ product: cart.productId });
 
         await user.save();
 
@@ -492,7 +497,6 @@ const Cart = (io) => {
     });
   });
 };
-
 
 module.exports = {
   signUp,
