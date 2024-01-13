@@ -295,7 +295,9 @@ const userUpdate = async (req, res) => {
 const currentUser = async (req, res) => {
   try {
     if (req.user) {
-      const olduser = await Client.findById(req.user._id);
+      const olduser = await Client.populate(user, {
+        path: "cart.product",
+      });
 
       return res
         .status(200)
@@ -471,7 +473,13 @@ const Cart = (io) => {
 
         await user.save();
 
-        socket.emit("cart", user.cart);
+        const populatedCart = await Client.populate(user, {
+          path: "cart.product",
+        });
+
+        console.log("Populated" + populatedCart);
+
+        socket.emit("cart", populatedCart.cart);
       } catch (error) {
         console.error(error);
       }
@@ -490,7 +498,13 @@ const Cart = (io) => {
 
         await user.save();
 
-        socket.emit("cart", user.cart);
+        const populatedCart = await Client.populate(user, {
+          path: "cart.product",
+        });
+
+        console.log("Populated" + populatedCart);
+
+        socket.emit("cart", populatedCart.cart);
       } catch (error) {
         console.error(error);
       }
