@@ -434,21 +434,16 @@ const Cart = (io) => {
         existingCartItem.quantity += 1;
       } else {
         // If the product is not in the cart, add it with quantity 1
-        user.cart.unshift({ productId: cart.productId, quantity: 1 });
+        user.cart.unshift({ ...product.toObject(), quantity: 1 });
       }
 
       await user.save();
 
       // Populate the cart with product details before emitting
-      await user.populate("cart.productId").execPopulate();
+      await user.populate("cart").execPopulate();
 
-      // Extracting only productId and quantity from cart items
-      const cartWithProducts = user.cart.map((item) => ({
-        productId: item.productId,
-        quantity: item.quantity,
-      }));
-
-      socket.emit("cart", cartWithProducts);
+      
+      socket.emit("cart", user.cart);
     } catch (error) {
       console.error(error);
     }
