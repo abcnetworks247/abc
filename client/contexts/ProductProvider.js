@@ -58,8 +58,12 @@ const ProductProvider = ({ children }) => {
       userId: userId,
     };
 
-    console.log("cartdata", cartdata)
-    socket.emit("cartadd", cartdata);
+    try {
+      console.log("cartdata", cartdata);
+      socket.emit("cartadd", cartdata);
+    } catch (error) {
+      socket.disconnect();
+    }
   };
 
   // remove item from cart
