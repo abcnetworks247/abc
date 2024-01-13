@@ -431,6 +431,7 @@ const Cart = (io) => {
         );
 
         if (existingProduct) {
+          
           existingProduct.quantity += 1;
         } else {
           user.cart.unshift({ ...product.toObject(), quantity: 1 });
