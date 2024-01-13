@@ -295,7 +295,9 @@ const userUpdate = async (req, res) => {
 const currentUser = async (req, res) => {
   try {
     if (req.user) {
-      const olduser = await Client.findById(req.user._id);
+      const olduser = await Client.populate(user, {
+        path: "cart.product",
+      });
 
       return res
         .status(200)
