@@ -438,7 +438,13 @@ const Cart = (io) => {
 
         await user.save();
 
-        socket.emit("cart", user.cart);
+        socket.emit(
+          "cart",
+          user.cart.map((item) => ({
+            ...item.product,
+            quantity: item.quantity,
+          }))
+        );
       } catch (error) {
         console.error(error);
       }
