@@ -17,16 +17,11 @@ const HomeNews = () => {
     <>
       <StatusBar barStyle="light-content" backgroundColor="#2c3e50" />
       <SafeAreaView style={globalStyels.droidSafeArea}>
-        <ScrollView className="py-2">
-          <View className="container p-3 space-y-8">
-            <View className="space-y-2 text-center">
-              <Text className="text-3xl font-bold">
-                Partem reprimique an pro
-              </Text>
-              <Text className=" text-sm ">
-                Qualisque erroribus usu at, duo te agam soluta mucius.
-              </Text>
-            </View>
+        <ScrollView className="my-2 space-y-8`">
+          {/* trending news */}
+          <View className=" mb-16">
+            <Text className="py-1 text-xl font-bold h-fit">Partem reprimique an pro</Text>
+
             <View className=" grid grid-cols-1 gap-y-10 ">
               <View className="flex flex-col ">
                 <Image
@@ -78,8 +73,63 @@ const HomeNews = () => {
                   </View>
                 </View>
               </View>
-              
-              
+            </View>
+          </View>
+          {/* latest news */}
+          <View className=" mb-16">
+            <Text className="py-1 text-xl font-bold">Partem reprimique an pro</Text>
+
+            <View className=" grid grid-cols-1 gap-y-10 ">
+              <View className="flex flex-col ">
+                <Image
+                  alt=""
+                  className="object-cover w-full h-52 object-top rounded-t"
+                  source={{ uri: images.image1 }}
+                  resizeMode="contain"
+                  resizeMethod="resize"
+                />
+                <View className="flex flex-col flex-1 p-1">
+                  <Link
+                    rel="noopener noreferrer"
+                    href="#"
+                    className="text-xs tracki uppercase hover:underline dark:text-default-400"
+                  >
+                    Convenire
+                  </Link>
+                  <Text className="flex-1 py-2 text-lg font-semibold ">
+                    Te nulla oportere reprimique his dolorum
+                  </Text>
+                  <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                    <Text>June 1, 2020</Text>
+                    <Text>2.1K views</Text>
+                  </View>
+                </View>
+              </View>
+              <View className="flex flex-col ">
+                <Image
+                  alt=""
+                  className="object-cover w-full h-52 object-top rounded-t"
+                  source={{ uri: images.image1 }}
+                  resizeMode="contain"
+                  resizeMethod="resize"
+                />
+                <View className="flex flex-col flex-1 p-1">
+                  <Link
+                    rel="noopener noreferrer"
+                    href="#"
+                    className="text-xs tracki uppercase hover:underline dark:text-default-400"
+                  >
+                    Convenire
+                  </Link>
+                  <Text className="flex-1 py-2 text-lg font-semibold ">
+                    Te nulla oportere reprimique his dolorum
+                  </Text>
+                  <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                    <Text>June 1, 2020</Text>
+                    <Text>2.1K views</Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
         </ScrollView>
