@@ -7,7 +7,25 @@ const data = [11, 2, 22, 1,1,4];
 // console.log(data);
 
 
+const cartdata = [
+    {
+        id: 1,
+        name: "richard",
+        category:"men"
+    },
+    {
+        id: 2,
+        name: "mijan",
+        category:"woemn"
+    },
+    {
+        id: 3,
+        name: "igoni",
+        category:"electronic"
+    },
+]
+const existingCartItem = cartdata.find((item) =>
+  item.id == 3
+);
 
-const newdata = data.copyWithin(4,1)
- console.log(newdata);
- console.log(data);
+console.log(existingCartItem)

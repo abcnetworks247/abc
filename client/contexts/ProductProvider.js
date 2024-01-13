@@ -86,8 +86,10 @@ const ProductProvider = ({ children }) => {
   socket.on("cart", (cartItems) => {
     console.log("cart sent back")
     setCartProducts(cartItems);
-
+  
   });
+    console.log("cart products from socket", cartProducts);
+
 
   useEffect(() => {
     const fetchWishlistFromServer = async () => {
@@ -119,7 +121,7 @@ const ProductProvider = ({ children }) => {
       userId: userId,
     };
     socket.emit("wishadd", wishdata);
-    console.log("wish emmited");
+    
   };
 
   //reevie the response from the server
@@ -130,21 +132,7 @@ const ProductProvider = ({ children }) => {
     console.log("returning wishlist", wishlist);
   });
 
-  // const removeFromCart = (product) => {
-  //   const newCartList = cartProducts.filter(
-  //     (cartProduct) => product._id !== cartProduct._id
-  //   );
-  //   setCartProducts(newCartList);
-
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("cartProducts", JSON.stringify(newCartList));
-  //   }
-  // };
-
-  //  const handleRemoveFromCart = (e, product) => {
-  //    e.stopPropagation();
-  //    removeFromCart(product);
-  // };
+  
 
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
@@ -159,79 +147,7 @@ const ProductProvider = ({ children }) => {
     setIsModalOpen(false);
   };
 
-  // const addToCart = (e, product) => {
-  //   e.stopPropagation();
-  //   const updatedProduct = { ...product, quantity: 1 };
-  //   const updatedCart = [...cartProducts, updatedProduct];
-  //   setCartProducts(updatedCart);
-  //   // Update local storage
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
-  //   }
-  // };
 
-  // const updateProduct = (updatedProduct) => {
-  //   const updatedCart = cartProducts.map((product) =>
-  //     product._id === updatedProduct._id ? updatedProduct : product
-  //   );
-
-  //   setCartProducts(updatedCart);
-
-  //   // Update local storage
-  //   if (typeof window !== "undefined") {
-  //     localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
-  //   }
-  // };
-
-  const handleCartClick = (e, product) => {
-    e.stopPropagation();
-    //check first if the item exist in the cart
-    const existingCartItem = cartProducts.find(
-      (cartItem) => cartItem._id === product._id
-    );
-    console.log("existing item", existingCartItem);
-
-    if (existingCartItem) {
-      // If the item already exists in the cart, increase its quantity
-      const updatedCart = cartProducts.map((cartItem) =>
-        cartItem._id === product._id
-          ? { ...cartItem, quantity: cartItem.quantity + 1 }
-          : cartItem
-      );
-
-      setCartProducts(updatedCart);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("cartProducts", JSON.stringify(updatedCart));
-      }
-    } else {
-      // If the item is not in the cart, add it
-      addToCart(e, product);
-    }
-  };
-
-  useEffect(() => {
-    const savedWishItems = JSON.parse(
-      typeof window !== "undefined"
-        ? localStorage.getItem("Wishlist") || "[]"
-        : "[]"
-    );
-
-    setWishlist(savedWishItems);
-  }, []); // Empty dependency array means this useEffect runs only once when the component mounts
-
-  useEffect(() => {
-    // Retrieve cartProducts from local storage when component mounts
-
-    const storedCartProducts = JSON.parse(
-      typeof window !== "undefined"
-        ? localStorage.getItem("cartProducts") || "[]"
-        : "[]"
-    );
-
-    setCartProducts(storedCartProducts);
-  }, []); // Empty dependency array means this useEffect runs only once when the component mounts
-
-  // fetch allProducts
 
   const fetchData = async () => {
     try {
@@ -285,7 +201,6 @@ const ProductProvider = ({ children }) => {
         handleProductClick,
         openModal,
         closeModal,
-        handleCartClick,
         handleAddToWishlist,
         wishlist,
 
