@@ -56,6 +56,7 @@ const AuthSchema = new mongoose.Schema(
         type: mongoose.Types.ObjectId,
         ref: "Product",
       },
+      
     ],
     subscriptionhistory: [subscriptionSchema],
     wishlist: [
