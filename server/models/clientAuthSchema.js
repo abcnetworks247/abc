@@ -59,6 +59,7 @@ const AuthSchema = new mongoose.Schema(
           default: 1, // Assuming default quantity is 1
         },
       },
+      
     ],
     subscriptionhistory: [subscriptionSchema],
     wishlist: [

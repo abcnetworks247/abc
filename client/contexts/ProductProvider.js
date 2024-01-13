@@ -32,7 +32,7 @@ const ProductProvider = ({ children }) => {
   const [category, setCategory] = useState([]);
 
 
-  console.log("cart product from server", cartProducts)
+  console.log(UserData)
 
   const handleUser = () => {
     setClickState(true);
@@ -87,11 +87,15 @@ const ProductProvider = ({ children }) => {
   };
 
   // get the cart products back from the server
-  socket.on("cart", (cartItems) => {
-    console.log("cart sent back")
-    setCartProducts(cartItems);
+
+ 
+    socket.on("cart", (cartItems) => {
+      console.log("cart sent back");
+      setCartProducts(cartItems);
+    });
   
-  });
+ 
+ 
     console.log("cart products from socket", cartProducts);
 
 
@@ -117,6 +121,54 @@ const ProductProvider = ({ children }) => {
     // Fetch wishlist from the server when the component mounts
     fetchWishlistFromServer();
   }, []);
+
+//  const fetchCartWithProductDetails = async (cart) => {
+//    try {
+//      const cartWithProductDetails = await Promise.all(
+//        cart.map(async (cartItem) => {
+//          try {
+//            const response = await axios.get(
+//              `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${cartItem.product}`
+//            );
+//            const product = response.data;
+
+//            return {
+//              product:{...product},
+//              quantity: cartItem.quantity,
+//              _id: cartItem._id,
+//            };
+//          } catch (error) {
+//            console.error("Error fetching product details:", error);
+//            return null;
+//          }
+//        })
+//      );
+
+//      return cartWithProductDetails.filter(Boolean); // Remove any null entries
+//    } catch (error) {
+//      console.error("Error fetching cart with product details:", error);
+//      return [];
+//    }
+//  };
+
+//   useEffect(() => {
+//     const fetchInitialCart = async () => {
+//       try {
+      
+//         const cartWithProductDetails = await fetchCartWithProductDetails();
+//         setCartProducts(cartWithProductDetails);
+//       } catch (error) {
+//         console.error("Error fetching initial cart:", error);
+//       }
+//     };
+   
+
+//     fetchInitialCart();
+//     console.log(cartProducts)
+//   },[])
+ 
+
+ 
 
   // emit signals to add to wish list
   const handleWishAdd = (productId, userId) => {
