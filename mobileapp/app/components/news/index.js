@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 
 
 
+
 const HomeNews = () => {
   //4 random images in an object
   const images = {
@@ -35,7 +36,7 @@ const [trending, setTrending] = useState([]);
 const [topNews, setTopNews] = useState([]);
 const [popular, setPopular] = useState([]);
 const [loading, setLoading] = useState(true);
-const baseURL = "https://klipto-inc-abcstudio-server.onrender.com/api/v1/";
+const baseURL = process.env.EXPO_PUBLIC_SERVER_URL;
 
 
 
@@ -45,13 +46,13 @@ const fetchPosts = async () => {
     const res = await axios.get(`${baseURL}admin/blog`);
     setPosts(res.data);
     setHighlight(res.data.highlight);
-    console.log(res.data.highlight);
+    // console.log(res.data.highlight);
     setTrending(res.data.trending);
-    console.log(res.data.trending);
-    setTopNews(res.data.topNews);
-    console.log(res.data.topNews);
+    // console.log(res.data.trending);
+    setTopNews(res.data.top);
+    // console.log(res.data.topNews);
     setPopular(res.data.popular);
-    console.log(res.data.popular);
+    // console.log(res.data.popular);
      setLoading(false);
   } catch (err) {
     console.log(err);
@@ -62,6 +63,10 @@ useEffect(() => {
   fetchPosts();
 }, []);
 
+if (loading === true) {
+  return <Text>Loading...</Text>;
+};
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#2c3e50" />
@@ -69,9 +74,35 @@ useEffect(() => {
         <ScrollView className="my-2 space-y-8`">
           {/* trending news */}
           <View className=" mb-16">
-            <Text className="py-1 text-xl font-bold h-fit">Partem reprimique an pro</Text>
-
-            <View className=" grid grid-cols-1 gap-y-10 ">
+            <Text className="py-1 text-xl font-bold h-fit">Trending News</Text>
+              {
+               trending && trending.map((item, index) => (
+                  <View className="flex flex-col " key={index}>
+                    <Image
+                      alt=""
+                      className="object-cover w-full h-52 object-top rounded-t"
+                      source={{ uri: item.blogimage }}
+                      resizeMode="contain"
+                      resizeMethod="resize"
+                    />
+                    <View className="flex flex-col flex-1 p-1">
+                      <Link
+                        rel="noopener noreferrer"
+                        href="#"
+                        className="text-xs tracki uppercase hover:underline dark:text-default-400"
+                      >
+                        {item.category}
+                      </Link>
+                      <Text className="flex-1 py-2 text-lg font-semibold ">{item.title}</Text>
+                      <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                        <Text>{item.date}</Text>
+                        <Text>{item.views}</Text>
+                      </View>
+                    </View>
+                  </View>
+                ))
+              }
+            {/* <View className=" grid grid-cols-1 gap-y-10 ">
               <View className="flex flex-col ">
                 <Image
                   alt=""
@@ -122,64 +153,68 @@ useEffect(() => {
                   </View>
                 </View>
               </View>
-            </View>
+            </View> */}
           </View>
-          {/* latest news */}
+          {/* top news */}
           <View className=" mb-16">
-            <Text className="py-1 text-xl font-bold">Partem reprimique an pro</Text>
+            <Text className="py-1 text-xl font-bold">Top News</Text>
+              {
+                topNews && topNews.map((item, index) => (
+                    <View className="flex flex-col " key={index}>
+                      <Image
+                        alt=""
+                        className="object-cover w-full h-52 object-top rounded-t"
+                        source={{ uri: item.blogimage }}
+                        resizeMode="contain"
+                        resizeMethod="resize"
+                      />
+                      <View className="flex flex-col flex-1 p-1">
+                        <Text
+                          
+                          className="text-xs w-fit  uppercase hover:underline text-green-400 bg-slate-200 rounded-full"
+                        >
+                          {item.category}
+                        </Text>
+                        <Text className="flex-1 py-2 text-lg font-semibold ">{item.title}</Text>
+                        <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                          <Text>{item.date}</Text>
+                          <Text>{item.views}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  ))
+              }
+          </View>
 
-            <View className=" grid grid-cols-1 gap-y-10 ">
-              <View className="flex flex-col ">
-                <Image
-                  alt=""
-                  className="object-cover w-full h-52 object-top rounded-t"
-                  source={{ uri: images.image1 }}
-                  resizeMode="contain"
-                  resizeMethod="resize"
-                />
-                <View className="flex flex-col flex-1 p-1">
-                  <Link
-                    rel="noopener noreferrer"
-                    href="#"
-                    className="text-xs tracki uppercase hover:underline dark:text-default-400"
-                  >
-                    Convenire
-                  </Link>
-                  <Text className="flex-1 py-2 text-lg font-semibold ">
-                    Te nulla oportere reprimique his dolorum
-                  </Text>
-                  <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                    <Text>June 1, 2020</Text>
-                    <Text>2.1K views</Text>
-                  </View>
-                </View>
-              </View>
-              <View className="flex flex-col ">
-                <Image
-                  alt=""
-                  className="object-cover w-full h-52 object-top rounded-t"
-                  source={{ uri: images.image1 }}
-                  resizeMode="contain"
-                  resizeMethod="resize"
-                />
-                <View className="flex flex-col flex-1 p-1">
-                  <Link
-                    rel="noopener noreferrer"
-                    href="#"
-                    className="text-xs tracki uppercase hover:underline dark:text-default-400"
-                  >
-                    Convenire
-                  </Link>
-                  <Text className="flex-1 py-2 text-lg font-semibold ">
-                    Te nulla oportere reprimique his dolorum
-                  </Text>
-                  <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                    <Text>June 1, 2020</Text>
-                    <Text>2.1K views</Text>
-                  </View>
-                </View>
-              </View>
-            </View>
+          {/* popular news */}
+          <View className=" mb-16">
+            <Text className="py-1 text-xl font-bold">Popular News</Text>
+              {
+                popular && popular.map((item, index) => (
+                    <View className="flex flex-col " key={index}>
+                      <Image
+                        alt=""
+                        className="object-cover w-full h-52 object-top rounded-t"
+                        source={{ uri: item.blogimage }}
+                        resizeMode="contain"
+                        resizeMethod="resize"
+                      />
+                      <View className="flex flex-col flex-1 p-1">
+                        <Text
+                          
+                          className="text-xs w-fit  uppercase hover:underline text-green-400 bg-slate-200 rounded-full"
+                        >
+                          {item.category}
+                        </Text>
+                        <Text className="flex-1 py-2 text-lg font-semibold ">{item.title}</Text>
+                        <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                          <Text>{item.date}</Text>
+                          <Text>{item.views}</Text>
+                        </View>
+                      </View>
+                    </View>
+                  ))
+              }
           </View>
         </ScrollView>
       </SafeAreaView>

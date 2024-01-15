@@ -18,7 +18,7 @@ const index = () => {
 
         >
           <Navbar />
-          <HeroCarousel />
+          {/* <HeroCarousel /> */}
           <View className="container p-3 space-y-8">
             <HomeNews />
           </View>
