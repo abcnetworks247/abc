@@ -4,6 +4,22 @@ import { ScrollView, SafeAreaView } from "react-native";
 // import Link from react native
 import { Link } from "expo-router";
 import globalStyels from "../../../styles/globalStyels";
+import axios from "axios";
+
+// const Api = axios.create({
+//     baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+//     withCredentials: true,
+//     headers: {
+//         Accept: "application/json",
+//         "Content-Type": "application/json",
+//         },
+//     });
+// import Api from "../../utils/api";
+import { useEffect, useState } from "react";
+
+
+
+
 
 const HomeNews = () => {
   //4 random images in an object
@@ -13,6 +29,39 @@ const HomeNews = () => {
     image3: "https://source.unsplash.com/200x200/?fashion?3",
     image4: "https://source.unsplash.com/200x200/?fashion?4",
   };
+const [posts, setPosts] = useState([]);
+const [highlight, setHighlight] = useState([]);
+const [trending, setTrending] = useState([]);
+const [topNews, setTopNews] = useState([]);
+const [popular, setPopular] = useState([]);
+const [loading, setLoading] = useState(true);
+const baseURL = "https://klipto-inc-abcstudio-server.onrender.com/api/v1/";
+
+
+
+//fetch data from api
+const fetchPosts = async () => {
+  try {
+    const res = await axios.get(`${baseURL}admin/blog`);
+    setPosts(res.data);
+    setHighlight(res.data.highlight);
+    console.log(res.data.highlight);
+    setTrending(res.data.trending);
+    console.log(res.data.trending);
+    setTopNews(res.data.topNews);
+    console.log(res.data.topNews);
+    setPopular(res.data.popular);
+    console.log(res.data.popular);
+     setLoading(false);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+useEffect(() => {
+  fetchPosts();
+}, []);
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#2c3e50" />
