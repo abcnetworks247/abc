@@ -53,9 +53,13 @@ const AuthSchema = new mongoose.Schema(
     },
     cart: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: "Product",
+        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        quantity: {
+          type: Number,
+          default: 1, // Assuming default quantity is 1
+        },
       },
+      
     ],
     subscriptionhistory: [subscriptionSchema],
     wishlist: [

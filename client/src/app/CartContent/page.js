@@ -21,7 +21,7 @@ const page = () => {
  
   const totalPrice = cartProducts.reduce(
     (accumulator, product) =>
-      accumulator + product.quantity * product.price, 0
+      accumulator + product.quantity * product.product.price, 0
   )
   console.log(totalPrice)
  
