@@ -23,7 +23,7 @@ const {UserData}= UseUserContext()
     >
       {/* <div className="relative z-20 py-6 group shadow-md"> */}
       <div className="relative  py-6 group shadow-md">
-        <div className="relative flex items-center shadow-sm justify-center w-full h-64 mb-4  -mt-56 overflow-hidden rounded -top-full bg-white ">
+        <div className="relative flex items-center shadow-sm justify-center w-full h-52 mb-4  -mt-56 overflow-hidden rounded -top-full bg-white ">
           <img
             className="object-contain w-[70%] h-full transition-all group-hover:scale-110 bg-transparent"
             src={product.thumbnail}
@@ -75,13 +75,13 @@ const {UserData}= UseUserContext()
         </div>
         <div className="px-3">
           <a href="#">
-            <h2 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white line-clamp-1">
+            <h2 className="mb-2 text-base font-semibold text-gray-800 line-clamp-1">
               {product.title}
             </h2>
           </a>
-          <p className="mb-3 text-lg font-bold text-blue-500 dark:text-blue-300 ">
+          <p className="mb-3 text-base font-semibold flex flex-row items-center gap-1 justify-between text-blue-500 dark:text-blue-300 ">
             <span>$ {product.price}</span>
-            <span className="text-xs font-semibold text-gray-400 line-through ">
+            <span className="text-base font-semibold text-gray-400 line-through ">
               $ {product.price}
             </span>
           </p>
