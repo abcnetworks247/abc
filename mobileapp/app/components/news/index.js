@@ -73,7 +73,7 @@ if (loading === true) {
       <SafeAreaView style={globalStyels.droidSafeArea}>
         <ScrollView className="my-2 space-y-8`">
           {/* trending news */}
-          <View className=" mb-16">
+          <View className=" ">
             <Text className="py-1 text-xl font-bold h-fit">Trending News</Text>
               {
                trending && trending.map((item, index) => (
@@ -155,8 +155,10 @@ if (loading === true) {
               </View>
             </View> */}
           </View>
+          <View  className="border-b-gray-700 border-b mt-7 mb-5"/>
+
           {/* top news */}
-          <View className=" mb-16">
+          <View className="">
             <Text className="py-1 text-xl font-bold">Top News</Text>
               {
                 topNews && topNews.map((item, index) => (
@@ -185,9 +187,10 @@ if (loading === true) {
                   ))
               }
           </View>
+          <View  className="border-b-gray-700 border-b mt-7 mb-5"/>
 
           {/* popular news */}
-          <View className=" mb-16">
+          <View className=" mb-5">
             <Text className="py-1 text-xl font-bold">Popular News</Text>
               {
                 popular && popular.map((item, index) => (
