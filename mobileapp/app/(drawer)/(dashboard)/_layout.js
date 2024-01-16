@@ -1,74 +1,260 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  Image
-} from "react-native";
-import React from "react";
-import Navbar from "../../../../../components/navbar/Navbar";
-import globalStyels from "../../../../../../styles/globalStyels";
+import { Tabs } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Svg, { Path, G } from "react-native-svg";
-import { useRouter } from "expo-router";
-import Product from "../../../../../../assets/product.jpg";
-import * as ImagePicker from "expo-image-picker"
-const index = () => {
-
-  const router = useRouter();
-const SelectImagePicker = async ()=>{
-
-    try {
-        
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        })
-        if(!result.canceled){
-    
-        }
-    } catch (error) {
-        
-    }
-
-}
-
-
+import globalStyels from "../../../styles/globalStyels";
+import Navbar from "../../components/navbar/Navbar";
+import { SafeAreaView, View } from "react-native";
+import { useState } from "react";
+import { useRoute } from "@react-navigation/native";
+export default function layout() {
   return (
-    <SafeAreaView style={globalStyels.droidSafeArea}>
-      <View className="border-b-2 border-gray-200 py-2 px-2 w-full">
-        <TouchableOpacity
-          className="flex items-center flex-row gap-3  "
-          onPress={() => {
-            router.push("/profile");
-          }}
-        >
-          <Svg
-            width="30px"
-            height="30px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Path
-              d="M4 10l-.354.354L3.293 10l.353-.354L4 10zm16.5 8a.5.5 0 01-1 0h1zM8.646 15.354l-5-5 .708-.708 5 5-.708.708zm-5-5.708l5-5 .708.708-5 5-.708-.708zM4 9.5h10v1H4v-1zM20.5 16v2h-1v-2h1zM14 9.5a6.5 6.5 0 016.5 6.5h-1a5.5 5.5 0 00-5.5-5.5v-1z"
-              fill="#222"
+   <>
+
+    <Tabs  screenOptions={{
+      tabBarStyle: {
+        opacity: 5,
+        // backgroundColor: "red",
+
+      }
+    }} > 
+
+      <Tabs.Screen 
+        name="home/index"
+        options={{
+          header: () => null,
+          title: "Home",
+          tabBarActiveBackgroundColor: "#fff",
+    
+          tabBarIcon: () => (
+            <MaterialCommunityIcons
+              name="home-outline"
+              size={30}
+              color="black"
             />
-          </Svg>
-          <Text className="text-lg">Back</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView>
-        <View>
-          <View className="px-4 w-full">
-            <Text className="text-xl mt-8 ">Hey 👋 PrinceAjuize welcome back </Text>
+          ),
+          animation: "slide_from_right",
+        }}
+      />
+
+      <Tabs.Screen
+        name="store/index"
+        options={{
+          header: () => null,
+          title: "store",
+          tabBarIcon: () => (
+            <Svg
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <Path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M5 3a2 2 0 00-2 2v1.838l-1.51 4.53A2.001 2.001 0 003 13.963V20a2 2 0 002 2h14a2 2 0 002-2v-6.037a2.001 2.001 0 001.51-2.595L21 6.837V5a2 2 0 00-2-2H5zm10 17h4v-6H5v6h4v-3a3 3 0 116 0v3zm-4 0h2v-3a1 1 0 10-2 0v3zm-7.613-8l1.334-4H6.32l-.667 4H3.387zm4.293 0l.667-4H11v4H7.68zM13 12V8h2.653l.667 4H13zm5.347 0l-.667-4h1.6l1.333 4h-2.266zM19 5v1H5V5h14z"
+                fill="#000"
+              />
+            </Svg>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="cart/index"
+        options={{
+          header: () => null,
+          title: "cart",
+          tabBarIcon: () => (
+            <Svg
+              width="34px"
+              height="34px"
+              viewBox="-2.4 -2.4 28.80 28.80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <G stroke="#1C274C" strokeWidth={1.5}>
+                <Path
+                  d="M2 3l.265.088c1.32.44 1.98.66 2.357 1.184C5 4.796 5 5.492 5 6.883V9.5c0 2.828 0 4.243.879 5.121.878.879 2.293.879 5.121.879h2m6 0h-2"
+                  strokeLinecap="round"
+                />
+                <Path d="M7.5 18a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM16.5 18a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+                <Path
+                  d="M5 6h3m-2.5 7h10.522c.96 0 1.439 0 1.815-.248.375-.248.564-.688.942-1.57l.429-1c.81-1.89 1.214-2.833.77-3.508C19.532 6 18.505 6 16.45 6H12"
+                  strokeLinecap="round"
+                />
+              </G>
+            </Svg>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile/index"
+        options={{
+          header: () => null,
+          title: "Profile",
+          headerStyle: {
+            fontSize: 20,
+          },
+          
+          tabBarIcon: () => (
+            <Svg
+              width="24px"
+              height="24px"
+              viewBox="0 0 30.586 30.586"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <Path
+                d="M572.138 221.245a15.738 15.738 0 00-21.065-.253l-1.322-1.5a17.738 17.738 0 0123.741.28z"
+                transform="translate(-546.269 -195.397)"
+              />
+              <Path
+                d="M561.464 204.152a4.96 4.96 0 11-4.96 4.96 4.966 4.966 0 014.96-4.96m0-2a6.96 6.96 0 106.96 6.96 6.96 6.96 0 00-6.96-6.96z"
+                transform="translate(-546.269 -195.397)"
+              />
+              <Path
+                d="M561.562 197.4a13.293 13.293 0 11-13.293 13.293 13.308 13.308 0 0113.293-13.293m0-2a15.293 15.293 0 1015.293 15.293 15.293 15.293 0 00-15.293-15.293z"
+                transform="translate(-546.269 -195.397)"
+              />
+            </Svg>
+          ),
+        }}
+      />
 
 
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+  <Tabs.Screen
+   
+    name="membership/index"
+    
+
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="about/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="contact/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="news/[id]/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+ 
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/changepassword/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/editprofile/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/userprofile/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/orders/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/closeaccount/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="news/type/[id]/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+
+    </Tabs>
+   </>
   );
-};
-
-export default index;
+}
