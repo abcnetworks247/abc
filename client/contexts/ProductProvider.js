@@ -54,18 +54,18 @@ const ProductProvider = ({ children }) => {
     const cartdata = {
       productId: productId,
       userId: userId,
-    };
+    }
+  }
 
     console.log("cartdata", cartdata);
     socket.emit("cartadd", cartdata);
   };
 
-  // remove item from cart
   const handleRemoveFromCart = (productId, userId) => {
     const cartdata = {
       productId: productId,
       userId: userId,
-    };
+    }
 
     socket.emit("cartremove", cartdata);
   };
