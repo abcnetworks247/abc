@@ -11,6 +11,7 @@ const {UserData}= UseUserContext()
       handleProductClick,
       rating,
       handleCartClick,
+      handleAddToCart,
       handleWishAdd,
     } = UseProductProvider();
 
@@ -53,7 +54,10 @@ const {UserData}= UseUserContext()
             </a>
             <a
               className="flex items-center"
-              onClick={(e) => handleCartClick(e, product)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToCart(product._id, UserData._id);
+              }}
             >
               <div
                 className={`relative flex cursor-pointer hover:scale-125 items-center justify-center p-3 mb-3 transition-all 

@@ -5,10 +5,9 @@ import { useEffect, useState, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import io from "socket.io-client"
+import io from "socket.io-client";
 import { BiSolidRocket } from "react-icons/bi";
 import { UseUserContext } from "./UserContext";
-
 
 const ProductProvider = ({ children }) => {
   const { UserData } = UseUserContext();
@@ -31,8 +30,7 @@ const ProductProvider = ({ children }) => {
   const [screen, setScreen] = useState(!isTabletOrMobile);
   const [category, setCategory] = useState([]);
 
-
-  console.log(UserData)
+  console.log(UserData);
 
   const handleUser = () => {
     setClickState(true);
@@ -52,13 +50,13 @@ const ProductProvider = ({ children }) => {
 
   // add to cart socket
   const handleAddToCart = (productId, userId) => {
-    console.log("emmiting value to add to cart")
+    console.log("emmiting value to add to cart");
     const cartdata = {
       productId: productId,
       userId: userId,
     };
 
-    console.log("cartdata", cartdata)
+    console.log("cartdata", cartdata);
     socket.emit("cartadd", cartdata);
   };
 
@@ -84,16 +82,7 @@ const ProductProvider = ({ children }) => {
 
   // get the cart products back from the server
 
- 
-    socket.on("cart", (cartItems) => {
-      console.log("cart sent back");
-      setCartProducts(cartItems);
-    });
-  
- 
- 
-    console.log("cart products from socket", cartProducts);
-
+  console.log("cart products from socket", cartProducts);
 
   useEffect(() => {
     const fetchWishlistFromServer = async () => {
@@ -118,53 +107,62 @@ const ProductProvider = ({ children }) => {
     fetchWishlistFromServer();
   }, []);
 
-//  const fetchCartWithProductDetails = async (cart) => {
-//    try {
-//      const cartWithProductDetails = await Promise.all(
-//        cart.map(async (cartItem) => {
-//          try {
-//            const response = await axios.get(
-//              `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${cartItem.product}`
-//            );
-//            const product = response.data;
+  
 
-//            return {
-//              product:{...product},
-//              quantity: cartItem.quantity,
-//              _id: cartItem._id,
-//            };
-//          } catch (error) {
-//            console.error("Error fetching product details:", error);
-//            return null;
-//          }
-//        })
-//      );
+  useEffect(() => {
+    socket.on("cart", (cartItems) => {
+      console.log("cart sent back");
+      setCartProducts(cartItems);
+    });
+  }, [socket]);
 
-//      return cartWithProductDetails.filter(Boolean); // Remove any null entries
-//    } catch (error) {
-//      console.error("Error fetching cart with product details:", error);
-//      return [];
-//    }
-//  };
+  useEffect(() => {
+    setCartProducts(UserData.cart);
+  },[UserData]);
 
-//   useEffect(() => {
-//     const fetchInitialCart = async () => {
-//       try {
-      
-//         const cartWithProductDetails = await fetchCartWithProductDetails();
-//         setCartProducts(cartWithProductDetails);
-//       } catch (error) {
-//         console.error("Error fetching initial cart:", error);
-//       }
-//     };
-   
+  //  const fetchCartWithProductDetails = async (cart) => {
+  //    try {
+  //      const cartWithProductDetails = await Promise.all(
+  //        cart.map(async (cartItem) => {
+  //          try {
+  //            const response = await axios.get(
+  //              `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${cartItem.product}`
+  //            );
+  //            const product = response.data;
 
-//     fetchInitialCart();
-//     console.log(cartProducts)
-//   },[])
- 
+  //            return {
+  //              product:{...product},
+  //              quantity: cartItem.quantity,
+  //              _id: cartItem._id,
+  //            };
+  //          } catch (error) {
+  //            console.error("Error fetching product details:", error);
+  //            return null;
+  //          }
+  //        })
+  //      );
 
- 
+  //      return cartWithProductDetails.filter(Boolean); // Remove any null entries
+  //    } catch (error) {
+  //      console.error("Error fetching cart with product details:", error);
+  //      return [];
+  //    }
+  //  };
+
+  //   useEffect(() => {
+  //     const fetchInitialCart = async () => {
+  //       try {
+
+  //         const cartWithProductDetails = await fetchCartWithProductDetails();
+  //         setCartProducts(cartWithProductDetails);
+  //       } catch (error) {
+  //         console.error("Error fetching initial cart:", error);
+  //       }
+  //     };
+
+  //     fetchInitialCart();
+  //     console.log(cartProducts)
+  //   },[])
 
   // emit signals to add to wish list
   const handleWishAdd = (productId, userId) => {
@@ -173,7 +171,6 @@ const ProductProvider = ({ children }) => {
       userId: userId,
     };
     socket.emit("wishadd", wishdata);
-    
   };
 
   //reevie the response from the server
@@ -183,8 +180,6 @@ const ProductProvider = ({ children }) => {
     setWishlist(userwishlist);
     console.log("returning wishlist", wishlist);
   });
-
-  
 
   const handleAddToWishlist = (e, product) => {
     e.stopPropagation();
@@ -198,8 +193,6 @@ const ProductProvider = ({ children }) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
-
 
   const fetchData = async () => {
     try {

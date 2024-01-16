@@ -31,7 +31,7 @@ export default function Navbar() {
   // console.log('tokk',Authtoken)
 
   // cart value variable
-  const cartvalue = cartProducts.length;
+  const cartvalue = cartProducts ? cartProducts.length : 0;
 
   // Wishlist value variable
 
@@ -193,7 +193,7 @@ export default function Navbar() {
                 <TiShoppingCart />
               </div>
               <div className="text-xs leading-3 text-white">cart</div>
-              {cartProducts.length === 0 ? (
+              {  cartvalue === 0 ? (
                 <></>
               ) : (
                 <div className="absolute right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full left-4 -top-1">

@@ -53,10 +53,7 @@ const SingleArrival = ({ product }) => {
                     className={`bi bi-heart-fill}`}
                     viewBox="0 0 16 16"
                     style={{ fill: "#FF6666" }}
-                    // onClick={(e) => {
-                    //   handleWishClick();
-                    //   handleRemoveFromWishlist(e, product);
-                    // }}
+                  
                     onClick={(e) => {
                       e.stopPropagation();
                       handleWishAdd(product._id, UserData._id);
@@ -85,7 +82,7 @@ const SingleArrival = ({ product }) => {
                 )}
               </div>
             </a>
-            <a
+             <a
               className="flex items-center"
               // onClick={(e) => handleCartClick(e, product)}
               onClick={(e) => {
