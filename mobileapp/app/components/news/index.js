@@ -155,7 +155,7 @@ if (loading === true) {
               </View>
             </View> */}
           </View>
-          <View  className="border-b-gray-700 border-b mt-7 mb-5"/>
+          <View  className="border-b-gray-600 border-b mt-5 mb-5"/>
 
           {/* top news */}
           <View className="">
@@ -187,7 +187,7 @@ if (loading === true) {
                   ))
               }
           </View>
-          <View  className="border-b-gray-700 border-b mt-7 mb-5"/>
+          <View  className="border-b-gray-600 border-b mt-5 mb-5"/>
 
           {/* popular news */}
           <View className=" mb-5">
