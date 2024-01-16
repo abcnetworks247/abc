@@ -102,7 +102,7 @@ export default function Navbar() {
           </Link>
         </div>
         {/*  Pages  */}
-        <div className="hidden navbar-center md:block text-white">
+        <div className="hidden text-white navbar-center md:block">
           <Link
             href="/"
             className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
@@ -155,18 +155,18 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <a className="dropdown    dropdown-hover">
+          <a className="dropdown dropdown-hover">
             <label tabIndex="0">News</label>
-            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase">
-              {/* <a className="dropdown-item text-sm">Profile</a> */}
+            <div className="mt-3 text-black uppercase bg-white dropdown-menu dropdown-menu-bottom-right z-[90] rounded-sm">
+              {/* <a className="text-sm dropdown-item">Profile</a> */}
               {type.map((item, index) => {
-                return <Link key={index} href={`${pathUrl}${item.name}`} className="dropdown-item text-sm hover:bg-gray-200">{item.name}</Link>;
+                return <Link key={index} href={`${pathUrl}${item.name}`} className="text-sm dropdown-item hover:bg-gray-200">{item.name}</Link>;
               })}
             </div>
           </a>
         </div>
         <div className="hidden navbar-center md:block "></div>
-        <div className="flex flex-row items-center navbar-end text-white">
+        <div className="flex flex-row items-center text-white navbar-end">
           <div className="flex flex-row items-center gap-3 mr-4 text-white">
             <Link
               href="/wish"
