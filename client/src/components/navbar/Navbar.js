@@ -157,7 +157,7 @@ export default function Navbar() {
 
           <a className="dropdown    dropdown-hover">
             <label tabIndex="0">News</label>
-            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase">
+            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase z-[55] rounded-sm">
               {/* <a className="dropdown-item text-sm">Profile</a> */}
               {type.map((item, index) => {
                 return <Link key={index} href={`${pathUrl}${item.name}`} className="dropdown-item text-sm hover:bg-gray-200">{item.name}</Link>;
