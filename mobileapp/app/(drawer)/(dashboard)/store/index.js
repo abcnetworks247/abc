@@ -1,118 +1,12 @@
-git 
-import React from "react";
-import { View, Text, ScrollView, Button, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { AntDesign, Feather } from "@expo/vector-icons";
-import ProductCard from "../../../components/store/ProductCard";
-import ProductCard2 from "../../../components/store/ProductCard2";
+import { View, Text } from 'react-native'
+import React from 'react'
 
-
-
-
-const productsData = [
-  {
-    id: 1,
-    name: "REID Lace-Up Shoes Multi",
-    brand: "Aldo",
-    price: 100,
-    image: require("../../../../assets/products/1.png"),
-    size: [38, 39, 40, 41, 42, 43, 44],
-    colors: ["#FF5A5A", "#2878D5"],
-    bigImage:
-      "https://unsplash.com/photos/brown-nike-sneaker-on-yellow-textile-NOpsC3nWTzY",
-  },
-  {
-    id: 2,
-    name: "Prayrien Low Top Sneakers-Black",
-    brand: "Aldo",
-    price: 50,
-    discount: 10,
-    size: [39],
-    colors: ["#FF5A5A"],
-    image: require("../../../../assets/products/4.png"),
-    bigImage:
-      "https://unsplash.com/photos/a-person-tying-a-shoelace-on-a-tennis-court-R7PrDF2NLGk",
-  },
-  {
-    id: 3,
-    name: "OLIRANG-Genda",
-    brand: "Aldo",
-    price: 50,
-    discount: 10,
-    size: [39, 40, 41],
-    colors: ["#2878D5", "#FFFFFF"],
-    image: require("../../../../assets/products/5.png"),
-    bigImage:
-      "https://unsplash.com/photos/brown-leather-open-toe-heeled-sandals-S7a1XZ7a2vw",
-  },
-  {
-    id: 4,
-    name: "Prayrien Low Top Sneakers-Black",
-    brand: "Aldo",
-    price: 50,
-    discount: 10,
-    size: [39, 40, 41],
-    colors: ["#2878D5", "#000000", "#FFFFFF"],
-    image: require("../../../../assets/products/6.png"),
-    bigImage: "https://unsplash.com/photos/flat-screen-tv-ngMtsE5r9eI",
-  },
-  {
-    id: 5,
-    name: "Prayrien Low Top Sneakers-Black",
-    brand: "Aldo",
-    price: 10,
-    discount: 10,
-    size: [39, 40, 41],
-    colors: ["#2878D5", "#000000"],
-    image: require("../../../../assets/products/6.png"),
-    bigImage:"https://unsplash.com/photos/flat-screen-tv-turned-on-w4znns7NTA0",
-  },
-];
-
-export default function index() {
-  
-
+const index = () => {
   return (
     <View>
-      <View className=" bg-white h-full flex-1">
-        <Text className="text-lg font-light text-left py-7 px-5 tracking-widest">
-          All Products
-        </Text>
-        <View className="flex flex-row justify-between items-center px-5 mb-3">
-          <TouchableOpacity
-            // onPress={handlePresentModalPress}
-            className="border border-black inline-flex w-24 items-center flex-row text-center justify-center p-2 "
-          >
-            <AntDesign name="filter" size={16} color="black" />
-            <Text className="text-sm font-medium text-black ml-2">Filter</Text>
-          </TouchableOpacity>
-          <View className="flex flex-row justify-between items-center gap-2">
-            <TouchableOpacity
-              className="bg-black text-white p-2
-              border-black"
-            >
-              <Feather
-                name="list"
-                size={24}
-                color="black"
-                // onPress={() => {
-                //   dispatch(setProductView("list"));
-                // }}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity className="bg-black text-white p-2">
-              <Feather name="grid" size={24} color={"black"} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <ScrollView
-           className="grid grid-cols-2"
-        >
-          {productsData.map((product) => (
-            <ProductCard2 key={product.id} product={product} />
-          ))}
-        </ScrollView>
-      </View>
+      <Text>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Inventore quod fuga consequuntur dolorum, laboriosam ipsam error, ipsa deleniti aperiam tempora quas quasi dolores, exercitationem unde ratione iste dignissimos provident autem odit quidem voluptate modi accusamus assumenda? Odit sunt laborum corrupti, distinctio asperiores laudantium blanditiis sapiente. Nulla amet blanditiis vel. Quidem necessitatibus at qui ipsam ex enim quas nisi velit minima aliquam eaque praesentium sit magni tenetur aliquid, illo consequatur fugit perferendis dolore quos, in inventore? Sapiente perspiciatis voluptatem consequuntur. Animi optio doloremque debitis molestias, beatae quo praesentium accusantium voluptas libero. Dolores quibusdam debitis vel dolor saepe, omnis cumque similique et consequatur illum deleniti dolorem voluptatum qui totam quis quidem quas hic laborum nam reiciendis autem facere? Ullam maxime rerum tempora dolorem eius iste? Voluptatibus quia nemo deserunt nesciunt ut vero voluptatem aliquid nulla facere ratione! Voluptas accusantium quod aut eveniet saepe enim alias cumque animi hic excepturi amet omnis, magni soluta odit nihil sapiente, repudiandae ad illum delectus, repellendus qui iusto iste quibusdam ipsam! Nam, eaque eveniet mollitia optio tempore fugit aperiam aliquid tenetur accusamus laborum veritatis quisquam illo beatae ea ut reiciendis laudantium asperiores vitae. Ut ducimus tempore omnis sed, pariatur possimus cum libero tempora repellendus harum similique architecto.</Text>
     </View>
-  );
+  )
 }
+
+export default index
