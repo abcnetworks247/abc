@@ -243,7 +243,7 @@ export default function Navbar() {
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50 text-gray-900 rounded-sm">
                           <Link
                             href="/userdashboard"
-                            className="text-sm dropdown-item -z-50 hover:bg-gray-400"
+                            className="text-sm dropdown-item -z-50 hover:bg-gray-100 rounded-sm"
                           >
                             Profile
                           </Link>
@@ -251,20 +251,20 @@ export default function Navbar() {
                           <Link
                             href="/userdashboard/manageaccount"
                             tabIndex="-1"
-                            className="text-sm dropdown-item hover:bg-gray-400"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                           >
                             Account settings
                           </Link>
                           <Link
                             href="/userdashboard/subscription"
                             tabIndex="-1"
-                            className="text-sm dropdown-item hover:bg-gray-400"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                           >
                             Subscriptions
                           </Link>
                           <a
                             tabIndex="-1"
-                            className="text-sm dropdown-item hover:bg-gray-400"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                             onClick={Logout}
                           >
                             logout
