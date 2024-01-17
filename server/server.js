@@ -35,6 +35,7 @@ app.use(
       process.env.LOCAL_CLIENT_URL,
       process.env.LOCAL_ADMIN_URL,
       process.env.ADMIN_URL,
+      process.env.LOCAL_APP_URL,
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],

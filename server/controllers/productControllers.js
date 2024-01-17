@@ -1,11 +1,16 @@
 const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/productsSchema");
+const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
 } = require("../errors/index");
+
+const localurl = process.env.CLIENT_URL
+
+
 
 // Controller for creating a product (accessible only to admin)
 const createProduct = async (req, res) => {
@@ -130,13 +135,12 @@ const updateProduct = async (req, res) => {
       brand,
       category,
       thumbnail,
-      images, 
+      images,
       color,
       warranty,
       weight,
       productid,
     } = req.body;
-
 
     const existingProduct = await Product.findById(productid);
 
@@ -168,7 +172,7 @@ const updateProduct = async (req, res) => {
 
     if (error) {
       console.log("");
-      throw new ValidationError("Invalid data received")
+      throw new ValidationError("Invalid data received");
     }
 
     console.log("value", value);
@@ -176,13 +180,9 @@ const updateProduct = async (req, res) => {
     // Find the existing product by ID
 
     // Update the existing product with the new data
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productid,
-      value,
-      {
-        new: true,
-      }
-    );
+    const updatedProduct = await Product.findByIdAndUpdate(productid, value, {
+      new: true,
+    });
 
     res.status(StatusCodes.OK).json(updatedProduct);
   } catch (error) {
@@ -257,10 +257,34 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
+const StripeCheckout = async (req, res) => {
+  console.log("hit check out");
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "T-shirt",
+          },
+          unit_amount: 2000,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${localurl}/paymentsuccess?success=true`,
+    cancel_url: `${localurl}/paymenterror?canceled=true`,
+  });
+
+  res.send({ clientSecret: session.client_secret });
+};
+
 module.exports = {
   createProduct,
   getSingleProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
+  StripeCheckout,
 };
