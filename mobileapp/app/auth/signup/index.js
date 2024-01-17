@@ -5,6 +5,7 @@ import Logo from "../../../assets/AbcstudioNo.png";
 import { MyReactNativeForm } from "../../components/form/Formik";
 import { Formik } from "formik";
 import * as yup from "yup";
+import Api from "../../../utils/Api";
 import Svg, { Circle, Path } from "react-native-svg";
 
 const userSchema = yup.object({
