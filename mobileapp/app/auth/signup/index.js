@@ -5,21 +5,45 @@ import Logo from "../../../assets/AbcstudioNo.png";
 import { MyReactNativeForm } from "../../components/form/Formik";
 import { Formik } from "formik";
 import * as yup from "yup";
+import Api from "../../../utils/Api";
+import { useEffect } from "react";
 import Svg, { Circle, Path } from "react-native-svg";
 
 const userSchema = yup.object({
-  name: yup.string().required("Name is required"),
-  email: yup.string().email("Email is not valid").required("Email is required"),
+  name: yup
+    .string()
+    .matches(
+      /^[a-z ,.'-]+$/i,
+      "Name should only contain letters, commas, periods, apostrophes, and hyphens"
+    )
+    .required("Name is required"),
+  email: yup
+    .string()
+    .email("Email is not valid")
+    .required("Email is required"),
   password: yup
     .string()
-    .min(7, "Password is too short")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+      "Password must contain at least one lowercase letter, one uppercase letter, and one digit, with a minimum length of 8 characters"
+    )
+    .min(8, "Password is too short")
     .required("Password is required"),
 });
 export default function index() {
   const initialValue = { name: "", email: "", password: "" };
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit =  async (values, { setSubmitting }) => {
     // Handle form submission here
+    try {
+      
+      const data = await Api.post("admin/auth/signup", values)
+      console.log(data);
+    } catch (error) {
+       console.error(error);
+       
+    }
+
     console.log(values)
   };
 

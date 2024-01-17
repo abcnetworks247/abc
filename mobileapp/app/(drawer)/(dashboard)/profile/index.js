@@ -45,7 +45,7 @@ export default function index() {
           />
         </Svg>
       ),
-      link: "/profile/userinfo",
+      link: "/profile/userprofile",
     },
     {
       id: 2,
