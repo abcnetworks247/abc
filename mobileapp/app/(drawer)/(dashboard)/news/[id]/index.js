@@ -1,64 +1,95 @@
 import { View, Text, Image, StatusBar } from "react-native";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Navbar from "../../../../components/navbar/Navbar";
 import { ScrollView, SafeAreaView } from "react-native";
 // import Link from react native
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import globalStyels from "../../../../../styles/globalStyels";
-// imort global styles
+import { useParams } from 'react-router-native';
+import axios from "axios";
+
 
 const index = () => {
-  //4 random images in an object
-  const images = {
-    image1: "https://source.unsplash.com/200x200/?fashion?1",
-    image2: "https://source.unsplash.com/200x200/?fashion?2",
-    image3: "https://source.unsplash.com/200x200/?fashion?3",
-    image4: "https://source.unsplash.com/200x200/?fashion?4",
+  //get id from params
+  const { id, category, type, image, title } = useLocalSearchParams();
+  // log id to console
+  console.log(id, category, type, image);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const [news, setNews] = useState([]);
+  const baseURL = process.env.EXPO_PUBLIC_SERVER_URL;
+
+  // get news by id
+  const getNews = async () => {
+    try {
+      const response = await axios.get(`${baseURL}admin/blog/${id}`);
+      const data = response.data.blogdata;
+      setNews(data);
+      console.log("----",data);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
   };
+
+  // load for 2 seconds and then set loading to false
+  useEffect(() => {
+  getNews();
+  }, []);
+ 
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#2c3e50" />
       <SafeAreaView style={globalStyels.droidSafeArea}>
         <Navbar />
+       
         <ScrollView className="py-2">
-          <View className="container p-3 space-y-8">
-            <View className="space-y-2 text-center">
-              <Text className="text-3xl font-bold">
-                Partem reprimique an pro
-              </Text>
-              <Text className=" text-sm ">
-                Qualisque erroribus usu at, duo te agam soluta mucius.
-              </Text>
-            </View>
-            <View className=" grid grid-cols-1 gap-y-8 ">
-              <View className="flex flex-col ">
-                <Image
-                  alt=""
-                  className="object-cover w-full h-52 object-top rounded-t"
-                  source={{ uri: images.image1 }}
-                  resizeMode="contain"
-                  resizeMethod="resize"
-                />
-                <View className="flex flex-col flex-1 p-1">
-                  <Link
-                    rel="noopener noreferrer"
-                    href="#"
-                    className="text-xs tracki uppercase hover:underline dark:text-default-400"
-                  >
-                    Convenire
-                  </Link>
-                  <Text className="flex-1 py-2 text-lg font-semibold ">
-                    Te nulla oportere reprimique his dolorum
-                  </Text>
-                  <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                    <Text>June 1, 2020</Text>
-                    <Text>2.1K views</Text>
+          {
+           loading && loading ? (
+              <View className="flex-1 justify-center items-center">
+                <Text className="text-2xl font-bold">Loading...</Text>
+              </View>
+            ) : (
+              <View className="container p-3 space-y-8">
+              <View className="space-y-2 text-center">
+                <Text className="text-3xl font-bold">
+                  {title}
+                </Text>
+              </View>
+              <View className=" grid grid-cols-1 gap-y-8 ">
+                <View className="flex flex-col ">
+                  <Image
+                    alt=""
+                    className="object-cover w-full h-52 object-top rounded-t"
+                    source={{ uri: image}}
+                    resizeMode="contain"
+                    resizeMethod="resize"
+                  />
+                  <View className="flex flex-col flex-1 p-1">
+                    <Text
+                      
+                      className="text-xs tracki uppercase hover:underline text-blue-600"
+                    >
+                      {category}
+                    </Text>
+                    <Text className="flex-1 py-2 text-lg font-semibold w-full">
+                      {news.longdescription}
+                    </Text>
+                    <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                      <Text>June 1, 2020</Text>
+                      <Text>2.1K views</Text>
+                    </View>
                   </View>
                 </View>
+                
               </View>
-              
             </View>
-          </View>
+            )
+          }
+         
         </ScrollView>
       </SafeAreaView>
     </>

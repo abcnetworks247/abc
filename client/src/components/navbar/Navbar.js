@@ -157,10 +157,18 @@ export default function Navbar() {
 
           <a className="dropdown    dropdown-hover">
             <label tabIndex="0">News</label>
-            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase">
+            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase z-[55] rounded-sm">
               {/* <a className="dropdown-item text-sm">Profile</a> */}
               {type.map((item, index) => {
-                return <Link key={index} href={`${pathUrl}${item.name}`} className="dropdown-item text-sm hover:bg-gray-200">{item.name}</Link>;
+                return (
+                  <Link
+                    key={index}
+                    href={`${pathUrl}${item.name}`}
+                    className="dropdown-item text-sm hover:bg-gray-200"
+                  >
+                    {item.name}
+                  </Link>
+                );
               })}
             </div>
           </a>
@@ -232,10 +240,10 @@ export default function Navbar() {
                           </div>
                         </label>
 
-                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50">
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50 text-gray-900 rounded-sm">
                           <Link
                             href="/userdashboard"
-                            className="text-sm dropdown-item -z-50"
+                            className="text-sm dropdown-item -z-50 hover:bg-gray-100 rounded-sm"
                           >
                             Profile
                           </Link>
@@ -243,20 +251,20 @@ export default function Navbar() {
                           <Link
                             href="/userdashboard/manageaccount"
                             tabIndex="-1"
-                            className="text-sm dropdown-item"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                           >
                             Account settings
                           </Link>
                           <Link
                             href="/userdashboard/subscription"
                             tabIndex="-1"
-                            className="text-sm dropdown-item"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                           >
                             Subscriptions
                           </Link>
                           <a
                             tabIndex="-1"
-                            className="text-sm dropdown-item"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                             onClick={Logout}
                           >
                             logout

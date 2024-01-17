@@ -92,7 +92,7 @@ const SearchBar = () => {
                     <li key={category}>
                       <Link
                         href={`/store/category/${category}`}
-                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="inline-flex w-full px-4 py-2 hover:bg-gray-100 text-gray-800"
                       >
                         {category}
                       </Link>

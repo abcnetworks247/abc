@@ -26,16 +26,6 @@ const page = () => {
   console.log(totalPrice)
  
   const grandTotal = totalPrice + shippingFee
-  
-  
- 
-  
-
-
-
-
- 
- 
  
   
 
