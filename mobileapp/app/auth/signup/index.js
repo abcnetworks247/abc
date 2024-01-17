@@ -6,6 +6,7 @@ import { MyReactNativeForm } from "../../components/form/Formik";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Api from "../../../utils/Api";
+import { useEffect } from "react";
 import Svg, { Circle, Path } from "react-native-svg";
 
 const userSchema = yup.object({
@@ -32,8 +33,17 @@ const userSchema = yup.object({
 export default function index() {
   const initialValue = { name: "", email: "", password: "" };
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit =  async (values, { setSubmitting }) => {
     // Handle form submission here
+    try {
+      
+      const data = await Api.post("admin/auth/signup", values)
+      console.log(data);
+    } catch (error) {
+       console.error(error);
+       
+    }
+
     console.log(values)
   };
 
