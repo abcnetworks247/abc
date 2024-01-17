@@ -102,7 +102,7 @@ export default function Navbar() {
           </Link>
         </div>
         {/*  Pages  */}
-        <div className="hidden text-white navbar-center md:block">
+        <div className="hidden navbar-center md:block text-white">
           <Link
             href="/"
             className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
@@ -155,18 +155,26 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <a className="dropdown dropdown-hover">
+          <a className="dropdown    dropdown-hover">
             <label tabIndex="0">News</label>
-            <div className="mt-3 text-black uppercase bg-white dropdown-menu dropdown-menu-bottom-right z-[90] rounded-sm">
-              {/* <a className="text-sm dropdown-item">Profile</a> */}
+            <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase z-[55] rounded-sm">
+              {/* <a className="dropdown-item text-sm">Profile</a> */}
               {type.map((item, index) => {
-                return <Link key={index} href={`${pathUrl}${item.name}`} className="text-sm dropdown-item hover:bg-gray-200">{item.name}</Link>;
+                return (
+                  <Link
+                    key={index}
+                    href={`${pathUrl}${item.name}`}
+                    className="dropdown-item text-sm hover:bg-gray-200"
+                  >
+                    {item.name}
+                  </Link>
+                );
               })}
             </div>
           </a>
         </div>
         <div className="hidden navbar-center md:block "></div>
-        <div className="flex flex-row items-center text-white navbar-end">
+        <div className="flex flex-row items-center navbar-end text-white">
           <div className="flex flex-row items-center gap-3 mr-4 text-white">
             <Link
               href="/wish"
@@ -232,10 +240,10 @@ export default function Navbar() {
                           </div>
                         </label>
 
-                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50">
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50 text-gray-900 rounded-sm">
                           <Link
                             href="/userdashboard"
-                            className="text-sm dropdown-item -z-50"
+                            className="text-sm dropdown-item -z-50 hover:bg-gray-100 rounded-sm"
                           >
                             Profile
                           </Link>
@@ -243,20 +251,20 @@ export default function Navbar() {
                           <Link
                             href="/userdashboard/manageaccount"
                             tabIndex="-1"
-                            className="text-sm dropdown-item"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                           >
                             Account settings
                           </Link>
                           <Link
                             href="/userdashboard/subscription"
                             tabIndex="-1"
-                            className="text-sm dropdown-item"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                           >
                             Subscriptions
                           </Link>
                           <a
                             tabIndex="-1"
-                            className="text-sm dropdown-item"
+                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
                             onClick={Logout}
                           >
                             logout

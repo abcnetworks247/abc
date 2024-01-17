@@ -4,6 +4,7 @@ const HomeBanner = () => {
   return (
     <div>
       <header>
+        
         <div
           className="w-full bg-cover bg-center h-[50vh] mb-10"
           style={{
@@ -14,7 +15,7 @@ const HomeBanner = () => {
           <div className="flex items-center justify-center h-full w-full bg-gray-900 bg-opacity-50">
             <div className="text-center">
               <h1 className="text-white text-2xl font-semibold uppercase md:text-3xl">
-                ABC STUDIO{" "}
+                ABC NETWORKS{" "}
                 <span className="underline text-blue-400">24</span>
               </h1>
               
@@ -47,6 +48,7 @@ const HomeBanner = () => {
             </div>
           </div>
         </div>
+
       </header>
     </div>
   );

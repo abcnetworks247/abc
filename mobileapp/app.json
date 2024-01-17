@@ -29,7 +29,16 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+      
+          "expo-image-picker",
+          {
+            "photosPermission":"Select and upload images.",
+            "cameraPermision": "Allow ${PRODUCT_NAME} to access your camera"
+          }
+        
+      ]
     ]
   }
 }

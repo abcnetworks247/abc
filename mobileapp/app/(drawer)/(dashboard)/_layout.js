@@ -174,6 +174,72 @@ export default function layout() {
     }}
     
   />
+ 
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/changepassword/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/editprofile/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/userprofile/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/orders/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
+  <Tabs.Screen
+   
+    name="profile/(userdashboard)/closeaccount/index"
+    
+
+    options={{
+            header: () => null,
+           tabBarItemStyle: {
+        display: 'none',
+       },
+    }}
+    
+  />
   <Tabs.Screen
    
     name="news/type/[id]/index"

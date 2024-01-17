@@ -1,4 +1,4 @@
-import { Platform, StatusBar, StyleSheet, Text, View } from "react-native";
+import { Platform, StatusBar, StyleSheet, Text, View , } from "react-native";
 import { Link } from "expo-router";
 
 import { NativeWindStyleSheet } from "nativewind";
@@ -8,7 +8,7 @@ NativeWindStyleSheet.setOutput({
 export default function Page() {
   return (
     <>
-<StatusBar barStyle="dark-content" backgroundColor={Platform.OS === 'ios' ? '#2c3e50' : '#2c3e50'} />
+<StatusBar barStyle="default" backgroundColor={Platform.OS === 'ios' ? '#2c3e50' : '#2c3e50'} />
     <View style={styles.container}>
       <View style={styles.main}>
         <Link href="/home"> 
@@ -25,6 +25,9 @@ export default function Page() {
         </Link>
         <Link href="/news/12">
           <Text className="text-red-700 text-xl">Go to the news "[ID]" page</Text>
+        </Link>
+        <Link href="/profile/editprofile">
+          <Text className="text-red-700 text-xl">Go to the  editprofile  page</Text>
         </Link>
         <Link href="/news/type/12">
           <Text className="text-red-700 text-xl">Go to the  news type "[ID]" page</Text>

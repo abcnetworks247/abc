@@ -15,8 +15,9 @@ const _layout = () => {
   return (
     
         <Drawer drawerContent={props => <DrawerContentScrollView {...props} />}   >
-        <Drawer.Screen name="(dashboard)" options={{ header: () => null , title: "home",  animation: "slide_from_left"} } />
       
+        <Drawer.Screen name="(dashboard)" options={{ header: () => null , title: "home",  animation: "slide_from_left"} } />
+        <Drawer.Screen name="(userdashboard)" options={{ header: () => null , title: "home",  animation: "slide_from_left"} } />
     </Drawer>
    
 
