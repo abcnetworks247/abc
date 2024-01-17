@@ -5,7 +5,6 @@ import { ScrollView, SafeAreaView } from "react-native";
 // import Link from react native
 import { Link, useLocalSearchParams } from "expo-router";
 import globalStyels from "../../../../../styles/globalStyels";
-import { useParams } from 'react-router-native';
 import axios from "axios";
 
 
