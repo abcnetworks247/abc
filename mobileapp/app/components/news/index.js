@@ -1,223 +1,311 @@
-import { View, Text, Image, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StatusBar,
+  RefreshControl,
+  TouchableHighlight,
+  TouchableOpacity,
+  Linking,
+  Pressable,
+} from "react-native";
 import React from "react";
 import { ScrollView, SafeAreaView } from "react-native";
 // import Link from react native
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
+
 import globalStyels from "../../../styles/globalStyels";
 import axios from "axios";
 
-// const Api = axios.create({
-//     baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
-//     withCredentials: true,
-//     headers: {
-//         Accept: "application/json",
-//         "Content-Type": "application/json",
-//         },
-//     });
-// import Api from "../../utils/api";
-import { useEffect, useState } from "react";
-
-
-
-
-
+import { useEffect, useState, useCallback } from "react";
+// import {  TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeNews = () => {
-  //4 random images in an object
-  const images = {
-    image1: "https://source.unsplash.com/200x200/?fashion?1",
-    image2: "https://source.unsplash.com/200x200/?fashion?2",
-    image3: "https://source.unsplash.com/200x200/?fashion?3",
-    image4: "https://source.unsplash.com/200x200/?fashion?4",
+
+  const [posts, setPosts] = useState([]);
+  const [highlight, setHighlight] = useState([]);
+  const [trending, setTrending] = useState([]);
+  const [topNews, setTopNews] = useState([]);
+  const [popular, setPopular] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
+  const baseURL = process.env.EXPO_PUBLIC_SERVER_URL;
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+  const colors = ["#00876c", "#f44336", "#ff9800", "#2196f3", "#9c27b0"];
+  const route = useRouter();
+  //fetch data from api
+  const fetchPosts = async () => {
+    try {
+      const res = await axios.get(`${baseURL}admin/blog`);
+      setPosts(res.data);
+      setHighlight(res.data.highlight);
+      // console.log(res.data.highlight);
+      setTrending(res.data.trending);
+      // console.log(res.data.trending);
+      setTopNews(res.data.top);
+      // console.log(res.data.topNews);
+      setPopular(res.data.popular);
+      // console.log(res.data.popular);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
-const [posts, setPosts] = useState([]);
-const [highlight, setHighlight] = useState([]);
-const [trending, setTrending] = useState([]);
-const [topNews, setTopNews] = useState([]);
-const [popular, setPopular] = useState([]);
-const [loading, setLoading] = useState(true);
-const baseURL = process.env.EXPO_PUBLIC_SERVER_URL;
 
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+  //  const navigation = useNavigation();
+  // const nav = (id) => {
+  //   console.log(id);
+  //   navigation.navigate("/news", { params: id, key: 'news' });
+  // };
 
-
-//fetch data from api
-const fetchPosts = async () => {
-  try {
-    const res = await axios.get(`${baseURL}admin/blog`);
-    setPosts(res.data);
-    setHighlight(res.data.highlight);
-    // console.log(res.data.highlight);
-    setTrending(res.data.trending);
-    // console.log(res.data.trending);
-    setTopNews(res.data.top);
-    // console.log(res.data.topNews);
-    setPopular(res.data.popular);
-    // console.log(res.data.popular);
-     setLoading(false);
-  } catch (err) {
-    console.log(err);
+  if (loading === true) {
+    return <Text>Loading...</Text>;
   }
-};
-
-useEffect(() => {
-  fetchPosts();
-}, []);
-
-if (loading === true) {
-  return <Text>Loading...</Text>;
-};
 
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor="#2c3e50" />
       <SafeAreaView style={globalStyels.droidSafeArea}>
-        <ScrollView className="my-2 space-y-8`">
+        <ScrollView
+          className="my-2 space-y-8`"
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              enabled={true}
+              colors={colors}
+              size={"large"}
+            />
+          }
+        >
           {/* trending news */}
           <View className=" ">
             <Text className="py-1 text-xl font-bold h-fit">Trending News</Text>
-              {
-               trending && trending.map((item, index) => (
+
+            {trending &&
+              trending.map((item, index) => (
+                <TouchableHighlight key={index}>
                   <View className="flex flex-col " key={index}>
-                    <Image
-                      alt=""
-                      className="object-cover w-full h-52 object-top rounded-t"
-                      source={{ uri: item.blogimage }}
-                      resizeMode="contain"
-                      resizeMethod="resize"
-                    />
+                    <Link
+                      href={{
+                        pathname: `../../news/${item._id}`,
+                        params: {
+                          key: "news",
+                          image: item.blogimage,
+                          title: item.title,
+                          category: item.category,
+                          date: item.createdAt,
+                          type: item.type,
+                        },
+                      }}
+                      className="flex flex-col "
+                      asChild={true}
+                    >
+                      <Pressable>
+                        {() => (
+                          <Image
+                            alt=""
+                            className="object-cover w-full h-52 object-top rounded-t"
+                            source={{ uri: item.blogimage }}
+                            resizeMode="contain"
+                            resizeMethod="resize"
+                          />
+                        )}
+                      </Pressable>
+                    </Link>
+
                     <View className="flex flex-col flex-1 p-1">
                       <Link
-                        rel="noopener noreferrer"
-                        href="#"
-                        className="text-xs tracki uppercase hover:underline dark:text-default-400"
+                        href={{
+                          pathname: `../../news/${item._id}`,
+                          params: {
+                            key: "news",
+                            image: item.blogimage,
+                            title: item.title,
+                            category: item.category,
+                            date: item.createdAt,
+                            type: item.type,
+                          },
+                        }}
+                        className="text-xs tracki uppercase hover:underline text-blue-600"
+                        asChild={true}
                       >
-                        {item.category}
+                        <Pressable>
+                          {() => (
+                            <Text className="text-xs w-fit  uppercase hover:underline text-blue-600">
+                              {item.category}
+                            </Text>
+                          )}
+                        </Pressable>
                       </Link>
-                      <Text className="flex-1 py-2 text-lg font-semibold ">{item.title}</Text>
+                      <Text className="flex-1 py-2 text-lg font-semibold ">
+                        {item.title}
+                      </Text>
                       <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                        <Text>{item.date}</Text>
-                        <Text>{item.views}</Text>
+                        {/* <Text className="w-full">{item.shortdescription}</Text> */}
+                        {/* <Text className="w-full">{item.longdescription}</Text> */}
                       </View>
                     </View>
                   </View>
-                ))
-              }
-            {/* <View className=" grid grid-cols-1 gap-y-10 ">
-              <View className="flex flex-col ">
-                <Image
-                  alt=""
-                  className="object-cover w-full h-52 object-top rounded-t"
-                  source={{ uri: images.image1 }}
-                  resizeMode="contain"
-                  resizeMethod="resize"
-                />
-                <View className="flex flex-col flex-1 p-1">
-                  <Link
-                    rel="noopener noreferrer"
-                    href="#"
-                    className="text-xs tracki uppercase hover:underline dark:text-default-400"
-                  >
-                    Convenire
-                  </Link>
-                  <Text className="flex-1 py-2 text-lg font-semibold ">
-                    Te nulla oportere reprimique his dolorum
-                  </Text>
-                  <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                    <Text>June 1, 2020</Text>
-                    <Text>2.1K views</Text>
-                  </View>
-                </View>
-              </View>
-              <View className="flex flex-col ">
-                <Image
-                  alt=""
-                  className="object-cover w-full h-52 object-top rounded-t"
-                  source={{ uri: images.image1 }}
-                  resizeMode="contain"
-                  resizeMethod="resize"
-                />
-                <View className="flex flex-col flex-1 p-1">
-                  <Link
-                    rel="noopener noreferrer"
-                    href="#"
-                    className="text-xs tracki uppercase hover:underline dark:text-default-400"
-                  >
-                    Convenire
-                  </Link>
-                  <Text className="flex-1 py-2 text-lg font-semibold ">
-                    Te nulla oportere reprimique his dolorum
-                  </Text>
-                  <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                    <Text>June 1, 2020</Text>
-                    <Text>2.1K views</Text>
-                  </View>
-                </View>
-              </View>
-            </View> */}
+                </TouchableHighlight>
+              ))}
           </View>
-          <View  className="border-b-gray-600 border-b mt-5 mb-5"/>
+          <View className="border-b-gray-300 border-b mt-5 mb-5" />
 
           {/* top news */}
           <View className="">
             <Text className="py-1 text-xl font-bold">Top News</Text>
-              {
-                topNews && topNews.map((item, index) => (
-                    <View className="flex flex-col " key={index}>
-                      <Image
-                        alt=""
-                        className="object-cover w-full h-52 object-top rounded-t"
-                        source={{ uri: item.blogimage }}
-                        resizeMode="contain"
-                        resizeMethod="resize"
-                      />
-                      <View className="flex flex-col flex-1 p-1">
-                        <Text
-                          
-                          className="text-xs w-fit  uppercase hover:underline text-green-400 bg-slate-200 rounded-full"
-                        >
-                          {item.category}
-                        </Text>
-                        <Text className="flex-1 py-2 text-lg font-semibold ">{item.title}</Text>
-                        <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                          <Text>{item.date}</Text>
-                          <Text>{item.views}</Text>
-                        </View>
+            {topNews &&
+              topNews.map((item, index) => (
+                <TouchableHighlight key={index}>
+                  <View className="flex flex-col " key={index}>
+                    <Link
+                      href={{
+                        pathname: `../../news/${item._id}`,
+                        params: {
+                          key: "news",
+                          image: item.blogimage,
+                          title: item.title,
+                          category: item.category,
+                          date: item.createdAt,
+                          type: item.type,
+                        },
+                      }}
+                      className="flex flex-col "
+                      asChild={true}
+                    >
+                      <Pressable>
+                        {() => (
+                          <Image
+                            alt=""
+                            className="object-cover w-full h-52 object-top rounded-t"
+                            source={{ uri: item.blogimage }}
+                            resizeMode="contain"
+                            resizeMethod="resize"
+                          />
+                        )}
+                      </Pressable>
+                    </Link>
+
+                    <View className="flex flex-col flex-1 p-1">
+                      <Link
+                        href={{
+                          pathname: `../../news/${item._id}`,
+                          params: {
+                            key: "news",
+                            image: item.blogimage,
+                            title: item.title,
+                            category: item.category,
+                            date: item.createdAt,
+                            type: item.type,
+                          },
+                        }}
+                        className="text-xs tracki uppercase hover:underline text-blue-600"
+                        asChild={true}
+                      >
+                        <Pressable>
+                          {() => (
+                            <Text className="text-xs w-fit  uppercase hover:underline text-blue-600">
+                              {item.category}
+                            </Text>
+                          )}
+                        </Pressable>
+                      </Link>
+                      <Text className="flex-1 py-2 text-lg font-semibold ">
+                        {item.title}
+                      </Text>
+                      <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                        {/* <Text className="w-full">{item.shortdescription}</Text> */}
+                        {/* <Text className="w-full">{item.longdescription}</Text> */}
                       </View>
                     </View>
-                  ))
-              }
+                  </View>
+                </TouchableHighlight>
+              ))}
           </View>
-          <View  className="border-b-gray-600 border-b mt-5 mb-5"/>
+          <View className="border-b-gray-300 border-b mt-5 mb-5" />
 
           {/* popular news */}
           <View className=" mb-5">
             <Text className="py-1 text-xl font-bold">Popular News</Text>
-              {
-                popular && popular.map((item, index) => (
-                    <View className="flex flex-col " key={index}>
-                      <Image
-                        alt=""
-                        className="object-cover w-full h-52 object-top rounded-t"
-                        source={{ uri: item.blogimage }}
-                        resizeMode="contain"
-                        resizeMethod="resize"
-                      />
-                      <View className="flex flex-col flex-1 p-1">
-                        <Text
-                          
-                          className="text-xs w-fit  uppercase hover:underline text-green-400 bg-slate-200 rounded-full"
-                        >
-                          {item.category}
-                        </Text>
-                        <Text className="flex-1 py-2 text-lg font-semibold ">{item.title}</Text>
-                        <View className="flex flex-wrap justify-between pt-3 text-xs ">
-                          <Text>{item.date}</Text>
-                          <Text>{item.views}</Text>
-                        </View>
+            {popular &&
+              popular.map((item, index) => (
+                <TouchableHighlight key={index}>
+                  <View className="flex flex-col " key={index}>
+                    <Link
+                      href={{
+                        pathname: `../../news/${item._id}`,
+                        params: {
+                          key: "news",
+                          image: item.blogimage,
+                          title: item.title,
+                          category: item.category,
+                          date: item.createdAt,
+                          type: item.type,
+                        },
+                      }}
+                      className="flex flex-col "
+                      asChild={true}
+                    >
+                      <Pressable>
+                        {() => (
+                          <Image
+                            alt=""
+                            className="object-cover w-full h-52 object-top rounded-t"
+                            source={{ uri: item.blogimage }}
+                            resizeMode="contain"
+                            resizeMethod="resize"
+                          />
+                        )}
+                      </Pressable>
+                    </Link>
+
+                    <View className="flex flex-col flex-1 p-1">
+                      <Link
+                        href={{
+                          pathname: `../../news/${item._id}`,
+                          params: {
+                            key: "news",
+                            image: item.blogimage,
+                            title: item.title,
+                            category: item.category,
+                            date: item.createdAt,
+                            type: item.type,
+                          },
+                        }}
+                        className="text-xs tracki uppercase hover:underline text-blue-600"
+                        asChild={true}
+                      >
+                        <Pressable>
+                          {() => (
+                            <Text className="text-xs w-fit  uppercase hover:underline text-blue-600">
+                              {item.category}
+                            </Text>
+                          )}
+                        </Pressable>
+                      </Link>
+                      <Text className="flex-1 py-2 text-lg font-semibold ">
+                        {item.title}
+                      </Text>
+                      <View className="flex flex-wrap justify-between pt-3 text-xs ">
+                        {/* <Text className="w-full">{item.shortdescription}</Text> */}
+                        {/* <Text className="w-full">{item.longdescription}</Text> */}
                       </View>
                     </View>
-                  ))
-              }
+                  </View>
+                </TouchableHighlight>
+              ))}
           </View>
         </ScrollView>
       </SafeAreaView>
