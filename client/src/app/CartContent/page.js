@@ -35,8 +35,8 @@ const page = () => {
     console.log("Ready to checkout", cartProducts);
 
     let data = {
-      product: cartProducts
-    }
+      product: cartProducts,
+    };
 
     try {
       const response = await axios.post(
@@ -45,7 +45,7 @@ const page = () => {
         {}
       );
 
-      if (response.status === 200) {
+      if (response.data.clientSecret) {
         console.log("Success. Client Secret:", response.data.clientSecret);
       } else {
         console.log("error");
