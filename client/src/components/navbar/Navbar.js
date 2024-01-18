@@ -26,7 +26,7 @@ export default function Navbar() {
   const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
   const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
-  const pathUrl = "/news/"
+  const pathUrl = "/news/";
 
   // console.log('tokk',Authtoken)
 
@@ -35,7 +35,7 @@ export default function Navbar() {
 
   // Wishlist value variable
 
-  const WishlistValue = wishlist ? wishlist.length : 0
+  const WishlistValue = wishlist ? wishlist.length : 0;
 
   // wishlist local storage function
   const [type, setType] = useState([]);

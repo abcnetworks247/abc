@@ -37,7 +37,7 @@ export default function Home() {
         <Navbar />
       </div>
       <div className="flex flex-row items-center border bg-[#111827] shadow-md border-gray-400 w-full">
-        <div className="px-3 py-1 bg-red-700 border-gray-600 shadow-md w-[13%]">
+        <div className="px-3 py-1 bg-red-700 border-gray-600 shadow-md w-fit">
           <p className="font-[4px] text-sm text-white w-full">NEWS UPDATES</p>
         </div>
         <Marquee

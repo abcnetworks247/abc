@@ -4,29 +4,19 @@ import { useState, useEffect } from "react";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { UseUserContext } from "../../../contexts/UserContext";
 
-
 const CartItem = ({ product }) => {
-  const { UserData } = UseUserContext()
+  const { UserData } = UseUserContext();
   const { handleRemoveFromCart, handleCartDecrease, handleAddToCart } =
     UseProductProvider();
-  
-  
 
+  console.log({
+    quantity: product.quantity,
+    price: product.product.price,
+  });
   
-
-  console.log(
-    {
-      quantity: product.quantity,
-      price:product.product.price
-  }
-)
   const calculateSubtotal = () => {
     return product.quantity * product.product.price;
   };
-
-
-
-
 
   return (
     <div className="flex flex-wrap items-center mb-6 -mx-4 md:mb-8">
@@ -47,7 +37,9 @@ const CartItem = ({ product }) => {
             </h2>
             <p className="text-gray-500 ">Picture frame</p>
             <div
-              onClick={() => handleRemoveFromCart(product.product._id, UserData._id)}
+              onClick={() =>
+                handleRemoveFromCart(product.product._id, UserData._id)
+              }
               className="flex items-center justify-center bg-gray-100 cursor-pointer py-2 px-2 hover:bg-blue-300 w-fit rounded-md"
             >
               <p className="text-blue-900 text-xs font-bold">REMOVE</p>
@@ -56,14 +48,18 @@ const CartItem = ({ product }) => {
         </div>
       </div>
       <div className="hidden px-4 lg:block lg:w-2/12">
-        <p className="text-lg font-bold text-blue-900">$ {product.product.price}</p>
+        <p className="text-lg font-bold text-blue-900">
+          $ {product.product.price}
+        </p>
         <span className="text-xs text-gray-500 line-through">$1500</span>
       </div>
       <div className="w-auto px-4 md:w-1/6 lg:w-2/12 ">
         <div className="flex items-center border-gray-100">
           <span
             className="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"
-            onClick={() => handleCartDecrease(product.product._id, UserData._id)}
+            onClick={() =>
+              handleCartDecrease(product.product._id, UserData._id)
+            }
           >
             {" "}
             -{" "}

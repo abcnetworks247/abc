@@ -2,18 +2,27 @@
 
 import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
+import {
+  EmbeddedCheckoutProvider,
+  EmbeddedCheckout,
+} from "@stripe/react-stripe-js";
+
 import axios from "axios";
 
 const Page = () => {
   const [money, setMoney] = useState(20);
+  const [clientSecret, setClientSecret] = useState("");
+  const stripePromise = loadStripe(
+    "pk_live_51OSkAALEvvTkpvAdgETbl2ZHfKDtpETfSbCDIg0VKsH5Bb7eM9ArPE6SV3ELfsB0WUELsXcXunDyHTWX6SZULwBy00TeDOxUH6"
+  );
 
   const body = {
-    payment_method: "pm_card_visa", // Replace with the actual payment method ID
-    amount: 1999, // Replace with the actual amount in cents
+    payment_method: "pm_card_visa",
+    amount: 1999,
     currency: "usd",
     description: "Product Purchase",
-    quantity: 2, // Replace with the actual quantity of the product
-    receipt_email: "customer@example.com", // Replace with the customer's email
+    quantity: 2,
+    receipt_email: "customer@example.com",
     customer: {
       name: "John Doe",
       email: "customer@example.com",
@@ -27,32 +36,29 @@ const Page = () => {
       },
     },
     metadata: {
-      order_id: "12345", // Replace with your order ID or any other metadata
+      order_id: "12345",
       custom_field: "value",
     },
   };
 
   const PayWithStripe = async () => {
-    const stripe = await loadStripe(
-      "pk_live_51OSkAALEvvTkpvAdgETbl2ZHfKDtpETfSbCDIg0VKsH5Bb7eM9ArPE6SV3ELfsB0WUELsXcXunDyHTWX6SZULwBy00TeDOxUH6"
-    );
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/create-checkout-session`,
+        body
+      );
 
-    const response = axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}products/create-checkout-session`,
-      body,
-      // {
-      //   headers: {
-      //     Authorization: `Bearer ${String(token)}`,
-      //   },
-      // }
-    );
-
-    if (response.status === 200) {
-      console.log("success");
-    } else {
-      console.log("error");
+      if (response.status === 200) {
+        console.log("Success. Client Secret:", response.data.clientSecret);
+        setClientSecret(response.data.clientSecret);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.error("Error in PayWithStripe:", error);
     }
   };
+
   return (
     <div>
       <div className="a flex flex-col items-center justify-center h-screen w-full my-auto text-center gap-2">
@@ -66,6 +72,11 @@ const Page = () => {
           Pay with Stripe
         </button>
       </div>
+      {clientSecret && (
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={{}}>
+          <EmbeddedCheckout />
+        </EmbeddedCheckoutProvider>
+      )}
     </div>
   );
 };
