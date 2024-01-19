@@ -29,29 +29,36 @@ export default function Home() {
     }
   }, [pathname]); // Include pathname in the dependency array
 
-  
   return (
     <main>
       {/* navbar component  */}
       <div className="bg-[#111827] sticky top-0 z-[10]">
         <Navbar />
       </div>
-      <div className="flex flex-row items-center border bg-[#111827] shadow-md border-gray-400 w-full">
-        <div className="px-3 py-1 bg-red-700 border-gray-600 shadow-md w-fit">
-          <p className="font-[4px] text-sm text-white w-full">NEWS UPDATES</p>
+      <div className="relative flex flex-row items-center border bg-[#111827] shadow-md border-gray-400 w-full">
+        <div className="absolute top-0 left-0 py-1 bg-red-700 border-gray-600 shadow-md w-fit h-10">
+          <p className="text-sm text-white w-full p-2 text-center">
+            NEWS UPDATES
+          </p>
         </div>
-        <Marquee
+        {/* <div className="">
+          <p>News Updates</p>
+        </div> */}
+        <div
           style={{
             fontSize: "14px",
             color: "white",
+            overflow: "hidden", // Add overflow to handle long content in a better way
+            whiteSpace: "nowrap", // Prevent text from wrapping
           }}
+          className="marquee h-10 flex items-center"
         >
           Stay informed, inspired, and connected with the latest happenings
           across the globe. ABC Studio brings you a curated blend of breaking
           news, insightful features, and captivating stories that matter most.
           Dive into a world of diverse perspectives, thought-provoking analyses,
           and compelling narratives, all in one dynamic platform.
-        </Marquee>
+        </div>
       </div>
       <Banner />
 
