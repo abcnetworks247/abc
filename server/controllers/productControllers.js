@@ -1,6 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/productsSchema");
-const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const stripe = require("stripe")("sk_test_51OSkAALEvvTkpvAd07RmSfqTxr3CkjAXWxU7wU3xa9OGnzgsTMEF4lhZZHFcaveQFTSH04IEdI2vGodIvObv1qyU00gd9at83G");
+// const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
   NotFoundError,
@@ -8,9 +9,7 @@ const {
   ValidationError,
 } = require("../errors/index");
 
-const localurl = process.env.CLIENT_URL
-
-
+const localurl = process.env.CLIENT_URL;
 
 // Controller for creating a product (accessible only to admin)
 const createProduct = async (req, res) => {
@@ -258,27 +257,41 @@ const getSingleProduct = async (req, res) => {
 };
 
 const StripeCheckout = async (req, res) => {
-  console.log("hit check out");
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: "T-shirt",
-          },
-          unit_amount: 2000,
-        },
-        quantity: 1,
-      },
-    ],
-    mode: "payment",
-    success_url: `${localurl}/paymentsuccess?success=true`,
-    cancel_url: `${localurl}/paymenterror?canceled=true`,
-  });
+  try {
+    // Dummy product for testing
+    const dummyProduct = {
+      name: "Dummy T-shirt",
+      price: 2000, // Price in cents
+      quantity: 1,
+    };
 
-  res.send({ clientSecret: session.client_secret });
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: dummyProduct.name,
+            },
+            unit_amount: dummyProduct.price,
+          },
+          quantity: dummyProduct.quantity,
+        },
+      ],
+      mode: "payment",
+      success_url: `${localurl}/paymentsuccess?success=true`,
+      cancel_url: `${localurl}/paymenterror?canceled=true`,
+    });
+
+    res.status(StatusCodes.OK).send({ clientSecret: session.client_secret });
+  } catch (error) {
+    console.error("Error in StripeCheckout:", error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ error: "Internal server error" });
+  }
 };
+
 
 module.exports = {
   createProduct,

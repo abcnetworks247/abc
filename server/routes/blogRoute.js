@@ -19,6 +19,7 @@ const {
   deleteBlog,
   getUserBlog,
   postReaction,
+  getBlogsByType,
 } = require("../controllers/blogControllers");
 
 const router = require("express").Router();
@@ -32,5 +33,7 @@ router.route("/like").post(authChecker, postReaction);
 
 router.route("/update").patch(authChecker, updateBlog);
 router.route("/delete").delete(authChecker, deleteBlog);
+
+router.route("/news/:id").get(getBlogsByType);
 
 module.exports = router;

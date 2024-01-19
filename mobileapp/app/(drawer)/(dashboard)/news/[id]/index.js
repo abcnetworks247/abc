@@ -10,9 +10,11 @@ import axios from "axios";
 
 const index = () => {
   //get id from params
+  
   const { id, category, type, image, title } = useLocalSearchParams();
   // log id to console
   console.log(id, category, type, image);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 

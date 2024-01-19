@@ -8,12 +8,31 @@ import { useContext, useEffect } from "react";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import Sidebar from "@/components/sidebar/Sidebar";
 import FooterComp from "@/components/Footer/FooterComp";
+import { loadStripe } from "@stripe/stripe-js";
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
 
+
+
 const page = () => {
   const { cartProducts } = UseProductProvider();
+
+
+  const stripePromise = loadStripe(
+    "pk_test_51OSkAALEvvTkpvAdZcxbg55Ws3PhmvCBQS5SlH2xq354BrR32PEwNY6JQE7FSTF1y8b1zP9taVjfVyyrVnm0wBkc00Gn7gsnPg"
+  );
+
+  useEffect(() => {
+    // Initialize Stripe.js with your public key
+    const initStripe = async () => {
+      const stripe = await stripePromise;
+      // Now you can use the `stripe` object
+    };
+
+    initStripe();
+  }, []);
+
   //  console.log("cartproduct", cartProducts)
   const shippingFee = 5;
 
@@ -32,12 +51,6 @@ const page = () => {
   console.log("cart value", cartProducts);
 
   const CheckOut = async () => {
-    console.log("Ready to checkout", cartProducts);
-
-    let data = {
-      product: cartProducts,
-    };
-
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/create-checkout-session`,
@@ -45,15 +58,29 @@ const page = () => {
         {}
       );
 
-      if (response.data.clientSecret) {
-        console.log("Success. Client Secret:", response.data.clientSecret);
+      if (response.status === 200) {
+        const { clientSecret } = response.data;
+
+        console.log("yes", clientSecret);
+
+        // Open the Stripe Checkout session
+        const stripe = await stripePromise;
+
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: clientSecret,
+        });
+
+        if (error) {
+          console.error("Error redirecting to Checkout:", error);
+        }
       } else {
-        console.log("error");
+        console.log("Error:", response.data);
       }
     } catch (error) {
-      console.error("Error in PayWithStripe:", error);
+      console.error("Error in CheckOut:", error);
     }
   };
+
 
   return (
     <>
