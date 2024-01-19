@@ -326,9 +326,8 @@ const getBlogsByType = async (req, res) => {
       (blog) => blog.type === checkType.name
     );
 
-    console.log(newFilteredContent);
 
-    res.status(StatusCodes.OK).send({ data: newFilteredContent });
+    res.status(StatusCodes.OK).send({ data: newFilteredContent, name: checkType.name });
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ err: error.message });
   }
