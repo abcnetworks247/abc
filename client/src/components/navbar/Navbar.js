@@ -163,7 +163,7 @@ export default function Navbar() {
                 return (
                   <Link
                     key={index}
-                    href={`${pathUrl}${item.name}`}
+                    href={`${pathUrl}${item._id}`}
                     className="dropdown-item text-sm hover:bg-gray-200"
                   >
                     {item.name}
