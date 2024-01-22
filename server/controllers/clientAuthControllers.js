@@ -72,9 +72,8 @@ const signIn = async (req, res) => {
       throw new NotFoundError("User not found");
     }
 
-    
     const authenticatedUser = await olduser.checkPassword(password);
-    
+
     console.log("found user", authenticatedUser);
 
     if (!authenticatedUser) {
@@ -497,6 +496,7 @@ const Cart = (io) => {
     });
   });
 };
+
 
 module.exports = {
   signUp,

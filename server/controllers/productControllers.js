@@ -1,6 +1,18 @@
 const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/productsSchema");
-const stripe = require("stripe")("sk_test_51OSkAALEvvTkpvAd07RmSfqTxr3CkjAXWxU7wU3xa9OGnzgsTMEF4lhZZHFcaveQFTSH04IEdI2vGodIvObv1qyU00gd9at83G");
+const stripe = require("stripe")(
+  "sk_test_51OSkAALEvvTkpvAd07RmSfqTxr3CkjAXWxU7wU3xa9OGnzgsTMEF4lhZZHFcaveQFTSH04IEdI2vGodIvObv1qyU00gd9at83G"
+);
+
+var paystack = require("paystack")("secret_key");
+
+const OnrampSessionResource = stripe.StripeResource.extend({
+  create: stripe.StripeResource.method({
+    method: "POST",
+    path: "crypto/onramp_sessions",
+  }),
+});
+
 // const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
@@ -257,33 +269,37 @@ const getSingleProduct = async (req, res) => {
 };
 
 const StripeCheckout = async (req, res) => {
+
+  const { product } = req.body;
+
+  const user = req.user;
+
   try {
-    // Dummy product for testing
-    const dummyProduct = {
-      name: "Dummy T-shirt",
-      price: 2000, // Price in cents
-      quantity: 1,
-    };
+    
+    if (!user) {
+      throw new UnAuthorizedError("User must be logged in to purchase a product")
+    }
+
+    const lineItems = product.map((product) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: product.product.title,
+          images: [product.product.thumbnail],
+        },
+        unit_amount: product.product.price * 100,
+      },
+      quantity: product.quantity,
+    }));
 
     const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: dummyProduct.name,
-            },
-            unit_amount: dummyProduct.price,
-          },
-          quantity: dummyProduct.quantity,
-        },
-      ],
+      line_items: lineItems,
       mode: "payment",
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
     });
 
-    res.status(StatusCodes.OK).send({ clientSecret: session.client_secret });
+    res.status(StatusCodes.OK).send({ url: session.url });
   } catch (error) {
     console.error("Error in StripeCheckout:", error);
     res
@@ -292,6 +308,54 @@ const StripeCheckout = async (req, res) => {
   }
 };
 
+const PaystackCheckout = async (req, res) => { 
+
+  const { product } = req.body;
+
+  try {
+    const user = req.user;
+
+    if (!user) {
+      throw new UnAuthorizedError(
+        "User must be logged in to purchase a product"
+      );
+    }
+
+
+  } catch (error) {}
+
+}
+const Crypto = async (req, res) => { 
+
+  const { product } = req.body;
+
+  try {
+    const user = req.user;
+
+    if (!user) {
+      throw new UnAuthorizedError(
+        "User must be logged in to purchase a product"
+      );
+    }
+
+    const onrampSession = await new OnrampSessionResource(stripe).create({
+      transaction_details: {
+        destination_currency: transaction_details["destination_currency"],
+        destination_exchange_amount:
+          transaction_details["destination_exchange_amount"],
+        destination_network: transaction_details["destination_network"],
+      },
+      customer_ip_address: req.socket.remoteAddress,
+    });
+
+    res.send({
+      clientSecret: onrampSession.client_secret,
+    });
+
+
+  } catch (error) {}
+
+}
 
 module.exports = {
   createProduct,
@@ -300,4 +364,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   StripeCheckout,
+  PaystackCheckout,
 };
