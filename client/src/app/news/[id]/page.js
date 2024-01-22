@@ -29,7 +29,6 @@ function page() {
       const newdata = res.data.data;
       const type = res.data.name;
 
-
       console.log("news data", data);
 
       setData(newdata);
@@ -100,12 +99,12 @@ function page() {
       ) : (
         <div className="px-8 my-10">
           <div className="text-xl mx-auto px-4 pt-4 font-bold">
-           results for: {newstype}
+            results for: {newstype}
           </div>
 
-        
-            <section className=" flex flex-row flex-wrap mx-auto">
-              {data && data.map((item) => (
+          <section className=" flex flex-row flex-wrap mx-auto">
+            {data &&
+              data.map((item) => (
                 <div
                   key={item._id}
                   className="transition-all duration-150 flex w-full px-4 py-6 md:w-1/2 lg:w-1/3"
@@ -157,8 +156,7 @@ function page() {
                   </div>
                 </div>
               ))}
-            </section>
-
+          </section>
         </div>
       )}
       <FooterComp />

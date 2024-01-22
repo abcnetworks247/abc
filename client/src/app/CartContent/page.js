@@ -6,32 +6,19 @@ import { ProductContext } from "../../../contexts/productContext";
 import CartItem from "@/components/Products/CartItem";
 import { useContext, useEffect } from "react";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { UseUserContext } from "../../../contexts/UserContext";
 import Sidebar from "@/components/sidebar/Sidebar";
 import FooterComp from "@/components/Footer/FooterComp";
-import { loadStripe } from "@stripe/stripe-js";
 import Link from "next/link";
 import { useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
-
-
 
 const page = () => {
   const { cartProducts } = UseProductProvider();
+  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
-
-  const stripePromise = loadStripe(
-    "pk_test_51OSkAALEvvTkpvAdZcxbg55Ws3PhmvCBQS5SlH2xq354BrR32PEwNY6JQE7FSTF1y8b1zP9taVjfVyyrVnm0wBkc00Gn7gsnPg"
-  );
-
-  useEffect(() => {
-    // Initialize Stripe.js with your public key
-    const initStripe = async () => {
-      const stripe = await stripePromise;
-      // Now you can use the `stripe` object
-    };
-
-    initStripe();
-  }, []);
+  const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
   //  console.log("cartproduct", cartProducts)
   const shippingFee = 5;
@@ -51,36 +38,39 @@ const page = () => {
   console.log("cart value", cartProducts);
 
   const CheckOut = async () => {
+    console.log("Ready to checkout", cartProducts);
+
+    let data = {
+      product: cartProducts,
+    };
+
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/create-checkout-session`,
+      const session = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/stripe/create-checkout-session`,
         data,
-        {}
+        {
+          headers: {
+            Authorization: `Bearer ${Authtoken}`,
+          },
+          "Content-Type": "application/json",
+        }
       );
 
-      if (response.status === 200) {
-        const { clientSecret } = response.data;
+      if (session.status === 200) {
+        console.log("session", session);
+        
+        // const result = await stripe.redirectToCheckout({
+        //   sessionId: session.data.url,
+        // });
 
-        console.log("yes", clientSecret);
-
-        // Open the Stripe Checkout session
-        const stripe = await stripePromise;
-
-        const { error } = await stripe.redirectToCheckout({
-          sessionId: clientSecret,
-        });
-
-        if (error) {
-          console.error("Error redirecting to Checkout:", error);
-        }
+        window.location.href = session.data.url;
       } else {
-        console.log("Error:", response.data);
+        console.log("error");
       }
     } catch (error) {
-      console.error("Error in CheckOut:", error);
+      console.error("Error in PayWithStripe:", error);
     }
   };
-
 
   return (
     <>
@@ -192,7 +182,7 @@ const page = () => {
                     Name
                     onClick={CheckOut}
                   >
-                    Place and order
+                    Place an order
                   </button>
                 </div>
               </div>
