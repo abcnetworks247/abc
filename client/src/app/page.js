@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <main>
       {/* navbar component  */}
-      <div className="bg-[#111827] sticky top-0 z-[10]">
+      <div className="bg-[#111827] sticky top-0 z-[80]">
         <Navbar />
       </div>
       <div className="relative flex flex-row items-center border bg-[#111827] shadow-md border-gray-400">

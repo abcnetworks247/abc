@@ -15,6 +15,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
 const page = () => {
+  const [paymenttype, setPaymentType] = useState("Stripe");
   const { cartProducts } = UseProductProvider();
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
@@ -44,31 +45,33 @@ const page = () => {
       product: cartProducts,
     };
 
-    try {
-      const session = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/stripe/create-checkout-session`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${Authtoken}`,
-          },
-          "Content-Type": "application/json",
+    if (paymenttype === "Stripe") {
+      try {
+        const session = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/stripe/create-checkout-session`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${Authtoken}`,
+            },
+            "Content-Type": "application/json",
+          }
+        );
+
+        if (session.status === 200) {
+          console.log("session", session);
+
+          // const result = await stripe.redirectToCheckout({
+          //   sessionId: session.data.url,
+          // });
+
+          window.location.href = session.data.url;
+        } else {
+          console.log("error");
         }
-      );
-
-      if (session.status === 200) {
-        console.log("session", session);
-        
-        // const result = await stripe.redirectToCheckout({
-        //   sessionId: session.data.url,
-        // });
-
-        window.location.href = session.data.url;
-      } else {
-        console.log("error");
+      } catch (error) {
+        console.error("Error in PayWithStripe:", error);
       }
-    } catch (error) {
-      console.error("Error in PayWithStripe:", error);
     }
   };
 
@@ -171,11 +174,13 @@ const page = () => {
                   </label>
                   <select
                     id="payment"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => setPaymentType(e.target.value)}
+                    value={paymenttype}
                   >
                     <option selected>Stripe</option>
                     <option value="US">Paystack</option>
-                    <option value="CA">Crypto Payment</option>
+                    <option value="CA">Crypto</option>
                   </select>
                   <button
                     className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
