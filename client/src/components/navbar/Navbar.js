@@ -150,7 +150,7 @@ export default function Navbar() {
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
-            <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-lg">
+            <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-[3px]">
               Live
             </span>
           </Link>
@@ -286,14 +286,14 @@ export default function Navbar() {
           {!Authtoken || !Authtoken?.length === 0 ? (
             <div className={`hidden lg:block ${loading ? "hidden" : "block"}`}>
               <div className="flex items-center justify-center h-fit ">
-                <div className="flex m-5 border shadow-sm w-fit item-center rounded-xl">
-                  <Link href="/login">
-                    <button className="px-4 py-2 m-0 text-black transition bg-white rounded-l-xl hover:bg-white/80">
+                <div className="flex m-5 border gap-2 shadow-sm w-fit item-center rounded-xl p-1">
+                  <Link href="/login" className="w-fit">
+                    <button className="mx-4 py-1 m-0 text-white transition bg-transparent text-sm">
                       Login
                     </button>
                   </Link>
                   <Link href="/signup">
-                    <button className="px-4 py-2 transition rounded-r-xl bg-neutral-50 hover:bg-neutral-100">
+                    <button className="px-4 py-[5px] transition rounded-md text-sm bg-white text-black hover:bg-gray-100">
                       Register
                     </button>
                   </Link>

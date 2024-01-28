@@ -4,10 +4,12 @@ import FooterComp from "@/components/Footer/FooterComp";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { redirect } from "next/navigation";
+import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
 export default function page() {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  const public_stripe_key = process.env.NEXT_PUBLIC_STRIPE_PK;
 
   const Plans = [
     {
@@ -64,39 +66,46 @@ export default function page() {
   ];
 
   const SubscribeNow = async (plan) => {
-
+    const stripePromise = await loadStripe(public_stripe_key);
 
     if (!Authtoken) {
       redirect("/signin");
-    } else {
-      try {
-        const session = axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}client/sub/usersubscription`,
-          plan,
-          {
-            headers: {
-              Authorization: `Bearer ${Authtoken}`,
-            },
+      return; // Added return statement to exit function early
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}client/sub/usersubscription`,
+        plan,
+        {
+          headers: {
+            Authorization: `Bearer ${Authtoken}`,
             "Content-Type": "application/json",
-          }
+          },
+        }
+      );
+
+      if (response.status === 409) {
+        console.log(
+          "User is already subscribed, redirecting to billing portal"
         );
 
-        if (session.status === 200) {
-          console.log("session", session);
-
-          // const result = await stripe.redirectToCheckout({
-          //   sessionId: session.data.url,
-          // });
-
-          console.log("this is session", session);
-
-          window.location.href = session.data.url;
-        } else {
-          console.log("error");
+        if (response.data && response.data.redirectUrl) {
+          window.location.href = response.data.redirectUrl;
         }
-      } catch (error) {
-        console.error("Error in PayWithStripe:", error);
+      } else if (response.status === 200) {
+        // Adjusted condition to handle success
+
+        console.log("200");
+        const session = await response.data; // Use response.data instead of response.json()
+        stripePromise.redirectToCheckout({
+          sessionId: session.id,
+        });
+      } else {
+        console.error(`Unexpected response status: ${response.status}`);
       }
+    } catch (error) {
+      console.error("Error in SubscribeNow:", error);
     }
   };
 
