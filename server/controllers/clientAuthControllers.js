@@ -63,6 +63,8 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(email, password);
+
   try {
     const olduser = await Client.findOne({ email });
 
@@ -72,9 +74,13 @@ const signIn = async (req, res) => {
 
     const authenticatedUser = await olduser.checkPassword(password);
 
+    console.log("found user", authenticatedUser);
+
     if (!authenticatedUser) {
       throw new UnAuthorizedError("Invalid email or password");
     }
+
+    console.log("yes", authenticatedUser);
 
     const MaxAge = 3 * 24 * 60 * 60;
 
@@ -369,17 +375,14 @@ const Wishlist = (io) => {
         const user = await Client.findById(wish.userId);
 
         if (!user) {
-          console.log("user not found");
           throw new NotFoundError("User not found");
         }
 
         const product = await Product.findById(wish.productId);
 
         if (!product) {
-          console.log("Product not found");
           throw new NotFoundError("Product not found");
         } else if (user.wishlist.includes(wish.productId)) {
-          console.log("true id is already in the list");
           const index = user.wishlist.indexOf(wish.productId);
           user.wishlist.splice(index, 1);
 
@@ -387,11 +390,7 @@ const Wishlist = (io) => {
 
           // const currentuser = Client.findById(wish.userId).populate("wishlist", )
 
-          console.log("Like removed with userid: " + wish.productId);
-
           const userwish = await user.populate("wishlist");
-
-          console.log("already removed with userid: " + userwish.wishlist);
 
           socket.emit("wishlist", userwish.wishlist);
         } else {
@@ -399,11 +398,7 @@ const Wishlist = (io) => {
 
           user.save();
 
-          console.log("Like added with userid: " + wish.productId);
-
           const userwish = await user.populate("wishlist");
-
-          console.log("this is whishlist", userwish.wishlist);
 
           socket.emit("wishlist", userwish.wishlist);
         }
@@ -419,14 +414,12 @@ const Cart = (io) => {
         const user = await Client.findById(cart.userId);
 
         if (!user) {
-          console.log("User not found");
           throw new NotFoundError("User not found");
         }
 
         const product = await Product.findById(cart.productId);
 
         if (!product) {
-          console.log("Product not found");
           throw new NotFoundError("Product not found");
         }
 
@@ -435,10 +428,8 @@ const Cart = (io) => {
         );
 
         if (!existingProduct) {
-          console.log("Product does not exist in the cart, adding...");
           user.cart.unshift({ product: product._id, quantity: 1 });
         } else {
-          console.log("Product already exists in the cart");
           existingProduct.quantity += 1;
         }
 
@@ -447,8 +438,6 @@ const Cart = (io) => {
         const populatedCart = await Client.populate(user, {
           path: "cart.product",
         });
-
-        console.log('Populated' + populatedCart);
 
         socket.emit("cart", populatedCart.cart);
       } catch (error) {
@@ -461,7 +450,6 @@ const Cart = (io) => {
         const user = await Client.findById(cart.userId);
 
         if (!user) {
-          console.log("User not found");
           throw new NotFoundError("User not found");
         }
 
@@ -479,8 +467,6 @@ const Cart = (io) => {
           path: "cart.product",
         });
 
-        console.log("Populated" + populatedCart);
-
         socket.emit("cart", populatedCart.cart);
       } catch (error) {
         console.error(error);
@@ -492,7 +478,6 @@ const Cart = (io) => {
         const user = await Client.findById(cart.userId);
 
         if (!user) {
-          console.log("User not found");
           throw new NotFoundError("User not found");
         }
 
@@ -504,8 +489,6 @@ const Cart = (io) => {
           path: "cart.product",
         });
 
-        console.log("Populated" + populatedCart);
-
         socket.emit("cart", populatedCart.cart);
       } catch (error) {
         console.error(error);
@@ -513,6 +496,7 @@ const Cart = (io) => {
     });
   });
 };
+
 
 module.exports = {
   signUp,

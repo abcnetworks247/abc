@@ -35,6 +35,7 @@ app.use(
       process.env.LOCAL_CLIENT_URL,
       process.env.LOCAL_ADMIN_URL,
       process.env.ADMIN_URL,
+      process.env.LOCAL_APP_URL,
     ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type"],
@@ -62,11 +63,14 @@ DeleteUpload(io);
 Wishlist(io);
 Cart(io);
 
+
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
+
+
 
 connectDb(server);
 
@@ -92,8 +96,11 @@ app.use("/api/v1/admin/commerce", productRouter);
 app.use("/api/v1/admin/blog", blogRouter);
 app.use("/api/v1/admin/file", uploadRouter);
 
+
 //category Route
 app.use("/api/v1/admin/category", categoryRouter);
+
+
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));

@@ -1,11 +1,27 @@
 const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/productsSchema");
+const stripe = require("stripe")(
+  "sk_test_51OSkAALEvvTkpvAd07RmSfqTxr3CkjAXWxU7wU3xa9OGnzgsTMEF4lhZZHFcaveQFTSH04IEdI2vGodIvObv1qyU00gd9at83G"
+);
+
+var paystack = require("paystack")("secret_key");
+
+const OnrampSessionResource = stripe.StripeResource.extend({
+  create: stripe.StripeResource.method({
+    method: "POST",
+    path: "crypto/onramp_sessions",
+  }),
+});
+
+// const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
 } = require("../errors/index");
+
+const localurl = process.env.CLIENT_URL;
 
 // Controller for creating a product (accessible only to admin)
 const createProduct = async (req, res) => {
@@ -130,13 +146,12 @@ const updateProduct = async (req, res) => {
       brand,
       category,
       thumbnail,
-      images, 
+      images,
       color,
       warranty,
       weight,
       productid,
     } = req.body;
-
 
     const existingProduct = await Product.findById(productid);
 
@@ -168,7 +183,7 @@ const updateProduct = async (req, res) => {
 
     if (error) {
       console.log("");
-      throw new ValidationError("Invalid data received")
+      throw new ValidationError("Invalid data received");
     }
 
     console.log("value", value);
@@ -176,13 +191,9 @@ const updateProduct = async (req, res) => {
     // Find the existing product by ID
 
     // Update the existing product with the new data
-    const updatedProduct = await Product.findByIdAndUpdate(
-      productid,
-      value,
-      {
-        new: true,
-      }
-    );
+    const updatedProduct = await Product.findByIdAndUpdate(productid, value, {
+      new: true,
+    });
 
     res.status(StatusCodes.OK).json(updatedProduct);
   } catch (error) {
@@ -257,10 +268,101 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
+const StripeCheckout = async (req, res) => {
+
+  const { product } = req.body;
+
+  const user = req.user;
+
+  try {
+    
+    if (!user) {
+      throw new UnAuthorizedError("User must be logged in to purchase a product")
+    }
+
+    const lineItems = product.map((product) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: product.product.title,
+          images: [product.product.thumbnail],
+        },
+        unit_amount: product.product.price * 100,
+      },
+      quantity: product.quantity,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      line_items: lineItems,
+      mode: "payment",
+      success_url: `${localurl}/paymentsuccess?success=true`,
+      cancel_url: `${localurl}/paymenterror?canceled=true`,
+    });
+
+    res.status(StatusCodes.OK).send({ url: session.url });
+  } catch (error) {
+    console.error("Error in StripeCheckout:", error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ error: "Internal server error" });
+  }
+};
+
+const PaystackCheckout = async (req, res) => { 
+
+  const { product } = req.body;
+
+  try {
+    const user = req.user;
+
+    if (!user) {
+      throw new UnAuthorizedError(
+        "User must be logged in to purchase a product"
+      );
+    }
+
+
+  } catch (error) {}
+
+}
+const Crypto = async (req, res) => { 
+
+  const { product } = req.body;
+
+  try {
+    const user = req.user;
+
+    if (!user) {
+      throw new UnAuthorizedError(
+        "User must be logged in to purchase a product"
+      );
+    }
+
+    const onrampSession = await new OnrampSessionResource(stripe).create({
+      transaction_details: {
+        destination_currency: transaction_details["destination_currency"],
+        destination_exchange_amount:
+          transaction_details["destination_exchange_amount"],
+        destination_network: transaction_details["destination_network"],
+      },
+      customer_ip_address: req.socket.remoteAddress,
+    });
+
+    res.send({
+      clientSecret: onrampSession.client_secret,
+    });
+
+
+  } catch (error) {}
+
+}
+
 module.exports = {
   createProduct,
   getSingleProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
+  StripeCheckout,
+  PaystackCheckout,
 };

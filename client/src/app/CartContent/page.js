@@ -6,30 +6,75 @@ import { ProductContext } from "../../../contexts/productContext";
 import CartItem from "@/components/Products/CartItem";
 import { useContext, useEffect } from "react";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { UseUserContext } from "../../../contexts/UserContext";
 import Sidebar from "@/components/sidebar/Sidebar";
 import FooterComp from "@/components/Footer/FooterComp";
-import Link from "next/link"
-import { useState} from "react";
+import Link from "next/link";
+import { useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 
 const page = () => {
+  const [paymenttype, setPaymentType] = useState("Stripe");
   const { cartProducts } = UseProductProvider();
+  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+
+  const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+
   //  console.log("cartproduct", cartProducts)
   const shippingFee = 5;
 
-  const price = cartProducts.map((product) => product.price * product.quantity)
-  console.log("price", price)
- 
+  const price = cartProducts.map((product) => product.price * product.quantity);
+  console.log("price", price);
+
   const totalPrice = cartProducts.reduce(
     (accumulator, product) =>
-      accumulator + product.quantity * product.product.price, 0
-  )
-  console.log(totalPrice)
- 
-  const grandTotal = totalPrice + shippingFee
- 
-  
+      accumulator + product.quantity * product.product.price,
+    0
+  );
+  console.log(totalPrice);
+
+  const grandTotal = totalPrice + shippingFee;
 
   console.log("cart value", cartProducts);
+
+  const CheckOut = async () => {
+    console.log("Ready to checkout", cartProducts);
+
+    let data = {
+      product: cartProducts,
+    };
+
+    if (paymenttype === "Stripe") {
+      try {
+        const session = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/stripe/create-checkout-session`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${Authtoken}`,
+            },
+            "Content-Type": "application/json",
+          }
+        );
+
+        if (session.status === 200) {
+          console.log("session", session);
+
+          // const result = await stripe.redirectToCheckout({
+          //   sessionId: session.data.url,
+          // });
+
+          window.location.href = session.data.url;
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.error("Error in PayWithStripe:", error);
+      }
+    }
+  };
+
   return (
     <>
       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
@@ -120,11 +165,29 @@ const page = () => {
                       <p className="text-sm text-gray-700">including VAT</p>
                     </div>
                   </div>
+
+                  <label
+                    for="payment"
+                    class="block mb-2 mt-10 text-sm font-medium text-gray-900"
+                  >
+                    Choose a Payment Method
+                  </label>
+                  <select
+                    id="payment"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => setPaymentType(e.target.value)}
+                    value={paymenttype}
+                  >
+                    <option selected>Stripe</option>
+                    <option value="US">Paystack</option>
+                    <option value="CA">Crypto</option>
+                  </select>
                   <button
                     className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
                     Name
+                    onClick={CheckOut}
                   >
-                    Check out
+                    Place an order
                   </button>
                 </div>
               </div>

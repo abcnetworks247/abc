@@ -26,16 +26,16 @@ export default function Navbar() {
   const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
   const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
-  const pathUrl = "/news/"
+  const pathUrl = "/news/";
 
   // console.log('tokk',Authtoken)
 
   // cart value variable
-  const cartvalue = cartProducts.length;
+  const cartvalue = cartProducts ? cartProducts.length : 0;
 
   // Wishlist value variable
 
-  const WishlistValue = wishlist ? wishlist.length : 0
+  const WishlistValue = wishlist ? wishlist.length : 0;
 
   const [type, setType] = useState([]);
   const [category, setCategory] = useState([]);
@@ -162,7 +162,7 @@ export default function Navbar() {
                 return (
                   <Link
                     key={index}
-                    href={`${pathUrl}${item.name}`}
+                    href={`${pathUrl}${item._id}`}
                     className="dropdown-item text-sm hover:bg-gray-200"
                   >
                     {item.name}
@@ -200,7 +200,7 @@ export default function Navbar() {
                 <TiShoppingCart />
               </div>
               <div className="text-xs leading-3 text-white">cart</div>
-              {cartProducts.length === 0 ? (
+              {cartProducts && cartProducts.length === 0 ? (
                 <></>
               ) : (
                 <div className="absolute right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full left-4 -top-1">

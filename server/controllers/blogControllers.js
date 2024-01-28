@@ -5,6 +5,7 @@ const { StatusCodes } = require("http-status-codes");
 const fs = require("fs");
 const blog = require("../models/blogSchema");
 const Admin = require("../models/adminAuthSchema");
+const NewsType = require("../models/newsTypeSchema");
 require("dotenv").config();
 
 const clientUrl = process.env.CLIENT_URL;
@@ -17,7 +18,6 @@ const {
 const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const getAllBlog = async (req, res) => {
-
   try {
     const allblog = await blog
       .find()
@@ -310,7 +310,28 @@ const getUserBlog = async (req, res) => {
   }
 };
 
-//blog comment controller
+const getBlogsByType = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const checkType = await NewsType.findById(id);
+
+    if (!checkType) {
+      throw new NotFoundError("This Category is empty.");
+    }
+
+    const allblogs = await blog.find();
+
+    const newFilteredContent = allblogs.filter(
+      (blog) => blog.type === checkType.name
+    );
+
+
+    res.status(StatusCodes.OK).send({ data: newFilteredContent, name: checkType.name });
+  } catch (error) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ err: error.message });
+  }
+};
 
 const postReaction = (io) => {
   io.on("connection", (socket) => {
@@ -415,4 +436,5 @@ module.exports = {
   getUserBlog,
   postReaction,
   handleNewComment,
+  getBlogsByType,
 };
