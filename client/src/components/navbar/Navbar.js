@@ -37,7 +37,6 @@ export default function Navbar() {
 
   const WishlistValue = wishlist ? wishlist.length : 0
 
-  // wishlist local storage function
   const [type, setType] = useState([]);
   const [category, setCategory] = useState([]);
 
