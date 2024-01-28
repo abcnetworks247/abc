@@ -186,7 +186,7 @@ import {
         draggable
         pauseOnHover
         theme="light"
-        />
+      />
       <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
         <div className="flex-1 bg-blue-900 w-fit h-screen text-center hidden md:flex">
           <div
@@ -199,16 +199,14 @@ import {
         <div className="w-full  lg:w-1/2 xl:w-5/12 p-6  lg:flex-none flex items-center flex-col justify-center h-screen sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
-                <Image 
+              <Image
                 src={Logo}
                 height={50}
                 width={50}
                 draggable={false}
                 className="object-contain h-[80px] w-full"
-                />
-              <div className="flex items-center text-center">
-
-              </div>
+              />
+              <div className="flex items-center text-center"></div>
               <h1 className="text-2xl xl:text-2xl font-extrabold text-blue-900 mb-2 text-center">
                 Register
               </h1>
@@ -300,7 +298,7 @@ import {
                   <div onClick={togglePasswordVisibility}>
                     {passwordVisible ? (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +330,7 @@ import {
                       </svg>
                     ) : (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"

@@ -184,8 +184,8 @@ function Page() {
                   }`}
                 >
                   <input
-                    className={`w-full  placeholder-gray-500 text-sm focus:outline-none `}
-                    type="password"
+                    className={`w-full  placeholder-gray-500 text-sm focus:outline-none bg-transparent`}
+                    type={passwordVisible ? "text" : "password"}
                     name="password"
                     placeholder="Enter password"
                     onChange={(e) => {
@@ -203,7 +203,7 @@ function Page() {
                   <div onClick={togglePasswordVisibility}>
                     {passwordVisible ? (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -235,7 +235,7 @@ function Page() {
                       </svg>
                     ) : (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -276,8 +276,8 @@ function Page() {
                   }`}
                 >
                   <input
-                    className={`w-full h-full placeholder-gray-500 text-sm focus:outline-none `}
-                    type="password"
+                    className={`w-full h-full placeholder-gray-500 bg-transparent text-sm focus:outline-none `}
+                    type={passwordVisible ? "text" : "password"}
                     name="password"
                     placeholder="Enter password"
                     onChange={(e) => {
@@ -295,7 +295,7 @@ function Page() {
                   <div onClick={togglePasswordVisibility}>
                     {passwordVisible ? (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -327,7 +327,7 @@ function Page() {
                       </svg>
                     ) : (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"

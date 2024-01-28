@@ -124,7 +124,10 @@ function Page() {
           type: "success",
           isLoading: false,
         });
-        router.push("/");
+        if (typeof window !== "undefined") {
+          router.push("/");
+          window.location.reload();
+        }
 
         setdata(value);
       }
@@ -161,13 +164,13 @@ function Page() {
         <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
-            <Image 
+              <Image
                 src={Logo}
                 height={50}
                 width={50}
                 draggable={false}
                 className="object-contain h-[80px] w-full"
-                />
+              />
               <h1 className="mb-2 text-2xl font-extrabold text-blue-900 xl:text-4xl">
                 Login
               </h1>
@@ -233,7 +236,7 @@ function Page() {
                   <div onClick={togglePasswordVisibility}>
                     {passwordVisible ? (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -265,7 +268,7 @@ function Page() {
                       </svg>
                     ) : (
                       <svg
-                        className="w-5 h-5"
+                        className="w-5 h-5 cursor-pointer"
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
