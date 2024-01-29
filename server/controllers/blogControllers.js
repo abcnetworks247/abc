@@ -19,39 +19,53 @@ const cloudinary = require("../Utils/CloudinaryFileUpload");
 
 const getAllBlog = async (req, res) => {
   try {
-    const allblog = await blog
+    const fetchBlogsByType = async (blogType) => {
+      try {
+        const result = await blog
+          .find({ type: blogType })
+          .populate("author", "fullname username userdp");
+        return result;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+
+    const blogTypes = [
+      "Africa News Update",
+      "Dr. Martin Mungwa - Press Releases",
+      "Office of the President",
+      "Socio Cultural",
+      "Archives & Analysis",
+      "Breaking News",
+      "Sports",
+      "World News",
+      "Interim Government Updates",
+      "Business",
+    ];
+
+    const blogTypePromises = blogTypes.map(async (type) => {
+      const blogs = await fetchBlogsByType(type);
+      return { [type]: blogs };
+    });
+
+    const blogTypeResults = await Promise.all(blogTypePromises);
+
+    const allBlogs = await blog
       .find()
       .populate("author", "fullname username userdp");
 
-    const highlight = await blog
-      .find({ type: "highlight" })
-      .populate("author", "fullname username userdp");
-
-    const popular = await blog
-      .find({ type: "popular" })
-      .populate("author", "fullname username userdp");
-
-    const top = await blog
-      .find({ type: "top" })
-      .populate("author", "fullname username userdp");
-
-    const trending = await blog
-      .find({ type: "trending" })
-      .populate("author", "fullname username userdp");
-
-    if (allblog.length === 0) {
+    if (allBlogs.length === 0) {
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ message: "No blogs found" });
     }
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ allblog, highlight, popular, top, trending });
+    return res.status(StatusCodes.OK).json({ allBlogs, ...blogTypeResults });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: error });
+      .json({ message: error.message });
   }
 };
 
@@ -234,7 +248,7 @@ const deleteBlog = async (req, res) => {
     }
 
     // Check if the user is authorized to delete the blog
-    if (!["superadmin", "admin", "editor"].includes(currentUser.role)) {
+    if (!["superadmin", "admin", "editor", "owner"].includes(currentUser.role)) {
       throw new UnAuthorizedError("You are not authorized to delete this blog");
     }
 

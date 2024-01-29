@@ -497,7 +497,6 @@ const Cart = (io) => {
   });
 };
 
-
 module.exports = {
   signUp,
   signIn,

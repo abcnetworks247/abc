@@ -6,6 +6,7 @@ const clientRouter = require("./routes/clientAuthRoute");
 const adminRouter = require("./routes/adminAuthRoute");
 const productRouter = require("./routes/productRoute");
 const uploadRouter = require("./routes/uploadRoute");
+const subscriptionRouter = require("./routes/subscriptionRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const categoryRouter = require("./routes/categoryRoute");
@@ -91,6 +92,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use("/api/v1/client/auth", clientRouter);
+app.use("/api/v1/client/sub", subscriptionRouter);
 app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/commerce", productRouter);
 app.use("/api/v1/admin/blog", blogRouter);

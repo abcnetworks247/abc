@@ -29,7 +29,6 @@ export default function Home() {
     }
   }, [pathname]); // Include pathname in the dependency array
 
-  
   return (
     <main>
       {/* navbar component  */}
@@ -37,7 +36,7 @@ export default function Home() {
         <Navbar />
       </div>
       <div className="relative flex flex-row items-center border bg-[#111827] shadow-md border-gray-400">
-        <div className="absolute z-10 px-4 top-0 left-0 flex items-center justify-center first-line:px-3 py-1 bg-red-700 border-gray-600 shadow-md w-fit h-10">
+        <div className="absolute z-10 px-4 top-0 left-0 flex items-center justify-center first-line:px-3 py-1 bg-red-600 rounded-[3px] border-gray-600 shadow-md w-fit h-10">
           <span className="font-[4px] text-sm text-white w-full ">
             NEWS UPDATES
           </span>

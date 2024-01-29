@@ -43,7 +43,7 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://blog.creative-tim.com?ref=njs-profile"
                       >
-                        Blog
+                        Contact Us
                       </a>
                     </li>
                     <li>
@@ -51,7 +51,7 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://www.github.com/creativetimofficial?ref=njs-profile"
                       >
-                        Github
+                        Terms & Conditions
                       </a>
                     </li>
                     <li>
@@ -59,14 +59,14 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://www.creative-tim.com/bootstrap-themes/free?ref=njs-profile"
                       >
-                        Free Products
+                        Privacy Policy
                       </a>
                     </li>
                   </ul>
                 </div>
                 <div className="w-full lg:w-4/12 px-4">
                   <span className="block uppercase text-white text-[12px] font-semibold mb-2">
-                    Other Resources
+                    Social Accounts
                   </span>
                   <ul className="list-unstyled">
                     <li>
@@ -74,7 +74,7 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://github.com/creativetimofficial/notus-js/blob/main/LICENSE.md?ref=njs-profile"
                       >
-                        MIT License
+                        Facebook
                       </a>
                     </li>
                     <li>
@@ -82,7 +82,7 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://creative-tim.com/terms?ref=njs-profile"
                       >
-                        Terms  Conditions
+                        Twitter
                       </a>
                     </li>
                     <li>
@@ -90,7 +90,7 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://creative-tim.com/privacy?ref=njs-profile"
                       >
-                        Privacy Policy
+                        Instagram
                       </a>
                     </li>
                     <li>
@@ -98,7 +98,7 @@ export default function FooterComp() {
                         className="text-white hover:text-white  block pb-2 text-sm"
                         href="https://creative-tim.com/contact-us?ref=njs-profile"
                       >
-                        Contact Us
+                        Youtube
                       </a>
                     </li>
                   </ul>

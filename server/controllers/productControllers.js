@@ -1,8 +1,8 @@
 const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/productsSchema");
-const stripe = require("stripe")(
-  "sk_test_51OSkAALEvvTkpvAd07RmSfqTxr3CkjAXWxU7wU3xa9OGnzgsTMEF4lhZZHFcaveQFTSH04IEdI2vGodIvObv1qyU00gd9at83G"
-);
+const dotenv = require("dotenv").config();
+
+const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 
 var paystack = require("paystack")("secret_key");
 
@@ -13,7 +13,7 @@ const OnrampSessionResource = stripe.StripeResource.extend({
   }),
 });
 
-// const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
   NotFoundError,
@@ -294,10 +294,13 @@ const StripeCheckout = async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
+      customer_email: user.email,
       mode: "payment",
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
     });
+
+    
 
     res.status(StatusCodes.OK).send({ url: session.url });
   } catch (error) {
