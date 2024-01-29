@@ -69,7 +69,7 @@ export default function page() {
     const stripePromise = await loadStripe(public_stripe_key);
 
     if (!Authtoken) {
-      redirect("/signin");
+      redirect("/login");
       return; // Added return statement to exit function early
     }
 
