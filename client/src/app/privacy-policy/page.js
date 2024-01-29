@@ -5,8 +5,10 @@ import React from 'react'
 function page() {
     return (
         <>
-         <Navbar />
-            <div>
+         <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
+        <Navbar />
+      </div>
+            <div className='p-2'>
                 <h1>Privacy Policy</h1>
                 <p>Effective date: September 14, 2021</p>
                 <p>ABC Studio ("us", "we", or "our") operates the ABC Studio website (the "Service").</p>
