@@ -1,87 +1,121 @@
-const SubscriptionPlan = require('../models/subSchema');
-const Auth = require('../models/clientAuthSchema'); // Assuming your user model is named 'Auth'
-const subscriptionJoi = require('../Utils/SubJoiSchema');
-const { StatusCodes } = require('http-status-codes');
+const SubscriptionPlan = require("../models/subSchema");
+const Auth = require("../models/clientAuthSchema"); // Assuming your user model is named 'Auth'
+const subscriptionJoi = require("../Utils/SubJoiSchema");
+const { StatusCodes } = require("http-status-codes");
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require('../errors/index');
+} = require("../errors/index");
+
+const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 
 const createSubscription = async (req, res) => {
+  console.log("trying to create subscription");
+
+  const user = req.user;
+  const item = req.body;
+  let customer;
 
   try {
-    // Check if user is available in the request header
-    if (!req.user || !req.user._id) {
-      throw new UnAuthorizedError('User not authenticated');
+    if (!user) {
+      throw new UnAuthorizedError("User must be logged in to subscribe");
     }
 
-    const userId = req.user._id;
-
-    // Extract subscription data from the request body
-    const { price, subscriptionType, package, paymentType, startDate, renewalDate } = req.body;
-
-    // Validate the request body against the Joi schema
-    const { error, value } = subscriptionJoi.validate({
-      user: userId,
-      price,
-      subscriptionType,
-      package,
-      paymentType,
-      startDate,
-      renewalDate,
+    const existingCustomer = await stripe.customers.list({
+      email: user.email,
+      limit: 1,
     });
 
-    if (error) {
-      throw new ValidationError(error.details[0].message);
+    if (existingCustomer.data.length > 0) {
+      // Customer already exists
+      customer = existingCustomer.data[0];
+
+      // Check if the customer already has an active subscription
+      const subscriptions = await stripe.subscriptions.list({
+        customer: customer.id,
+        status: "active",
+        limit: 1,
+      });
+
+      if (subscriptions.data.length > 0) {
+        // Customer already has an active subscription, send them to biiling portal to manage subscription
+
+        const stripeSession = await stripe.billingPortal.sessions.create({
+          customer: customer.id,
+          return_url: "http://localhost:3000/",
+        });
+        return res.status(409).json({ redirectUrl: stripeSession.url });
+      }
+    } else {
+      // No customer found, create a new one
+      customer = await stripe.customers.create({
+        email: user.email,
+        metadata: {
+          userId: user._id, // Replace with actual Auth0 user ID
+        },
+      });
     }
 
-    // Create a new subscription plan
-    const newSubscription = new SubscriptionPlan(value);
+    const session = await stripe.checkout.sessions.create({
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
+      payment_method_types: ["card"],
+      mode: "subscription",
+      billing_address_collection: "auto",
+      customer_email: user.email,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.name,
+              description: `${item.description}\n \n${item.features}`,
+            },
+            unit_amount: item.price * 100,
+            recurring: {
+              interval: "month",
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId: user._id,
+      },
 
-    // Save the subscription plan to the database
-    const savedSubscription = await newSubscription.save();
+      customer: user._id,
+    });
 
-    // Add the subscription to the user's subscription history
-    const updatedUser = await Auth.findByIdAndUpdate(
-      userId,
-      { $push: { subscriptionhistory: savedSubscription._id } },
-      { new: true }
-    );
+    console.log("session created for " + session.id);
 
-    res.status(StatusCodes.CREATED).json(updatedUser);
+    res.status(StatusCodes.OK).json({ id: session.id });
+  } catch (error) {}
+};
+
+// Fetch all subscription plans from the database
+const getAllSubscriptionPlans = async (req, res) => {
+  try {
+    const { userRole } = req;
+
+    // Check if the user has the required role to access subscription plans
+    if (userRole === "superadmin" || userRole === "admin") {
+      // Fetch all subscription plans from the database
+      const subscriptionPlans = await SubscriptionPlan.find();
+
+      res.status(StatusCodes.OK).json(subscriptionPlans);
+    } else {
+      throw new UnAuthorizedError("Unauthorized to access subscription plans");
+    }
   } catch (error) {
     console.error(error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
   }
 };
 
- // Fetch all subscription plans from the database
- const getAllSubscriptionPlans = async (req, res) => {
-    try {
-      const { userRole } = req;
-  
-      // Check if the user has the required role to access subscription plans
-      if (userRole === "superadmin" || userRole === "admin") {
-        // Fetch all subscription plans from the database
-        const subscriptionPlans = await SubscriptionPlan.find();
-  
-        res.status(StatusCodes.OK).json(subscriptionPlans);
-      } 
-      else {
-        throw new UnAuthorizedError("Unauthorized to access subscription plans");
-      }
-
-    } catch (error) {
-      console.error(error);
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
-    }
-  };
-
-  
-  
-
 module.exports = {
-    createSubscription,
-    getAllSubscriptionPlans
+  createSubscription,
+  getAllSubscriptionPlans,
 };

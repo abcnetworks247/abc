@@ -210,6 +210,8 @@ const userVerifyPasswordReset = async (req, res) => {
 const userUpdatePassword = async (req, res) => {
   const { reset, password, confirmPassword } = req.body;
 
+  console.log(password, confirmPassword);
+
   try {
     if (password !== confirmPassword) {
       throw new ValidationError("Passwords do not match");
