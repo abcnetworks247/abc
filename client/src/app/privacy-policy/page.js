@@ -5,9 +5,14 @@ import React from 'react'
 function page() {
     return (
         <>
-         <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
+         <div className="bg-[#111827] sticky top-0 z-[10] mb-5">
         <Navbar />
       </div>
+        <div>
+            <h1>
+                Privacy Policy
+            </h1>
+        </div>
             <div className='p-2'>
                 <h1>Privacy Policy</h1>
                 <p>Effective date: September 14, 2021</p>
