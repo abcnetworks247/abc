@@ -285,7 +285,7 @@ export default function Navbar() {
           {!Authtoken || !Authtoken?.length === 0 ? (
             <div className={`hidden lg:block ${loading ? "hidden" : "block"}`}>
               <div className="flex items-center justify-center h-fit ">
-                <div className="flex m-5 border gap-2 shadow-sm w-fit item-center rounded-xl p-1">
+                <div className="flex m-5 border gap-2 shadow-sm w-fit item-center rounded-xl p-1 items-center">
                   <Link href="/login" className="w-fit">
                     <button className="mx-4 py-1 m-0 text-white transition bg-transparent text-sm">
                       Login

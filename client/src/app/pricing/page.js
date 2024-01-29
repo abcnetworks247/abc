@@ -3,13 +3,15 @@ import Navbar from "@/components/navbar/Navbar";
 import FooterComp from "@/components/Footer/FooterComp";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Sidebar from "@/components/sidebar/Sidebar";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
 export default function page() {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   const public_stripe_key = process.env.NEXT_PUBLIC_STRIPE_PK;
+
+  const router = useRouter();
 
   const Plans = [
     {
@@ -69,7 +71,7 @@ export default function page() {
     const stripePromise = await loadStripe(public_stripe_key);
 
     if (!Authtoken) {
-      redirect("/login");
+      router.push("/login");
       return; // Added return statement to exit function early
     }
 
@@ -126,7 +128,7 @@ export default function page() {
               does.
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-8 mt-12 lg:ap-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 mt-12 lg:ap-2 lg:grid-cols-3 mb-16">
             {Plans.map((plan) => (
               <div className="order-first" key={plan.id}>
                 <div className="flex flex-col">
