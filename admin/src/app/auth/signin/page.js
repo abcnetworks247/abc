@@ -118,9 +118,10 @@ function Page() {
           type: "success",
           isLoading: false,
         });
-        setTimeout(() => {
-          router.push("/");
-        }, 3000);
+         if (typeof window !== "undefined") {
+           router.push("/");
+           window.location.reload();
+         }
       } else if (data.status === 500) {
         const suberrormsg = toast.update(id, {
           render: `user email or name already exist `,

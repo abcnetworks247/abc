@@ -199,11 +199,16 @@ const page = () => {
                         </p>
 
                         {[
-                          "highlight",
-                          "Uncategorized",
-                          "popular",
-                          "trending",
-                          "top",
+                          "Africa News Update",
+                          "Dr. Martin Mungwa - Press Releases",
+                          "Office of the President",
+                          "Socio Cultural",
+                          "Archives & Analysis",
+                          "Breaking News",
+                          "Sports",
+                          "World News",
+                          "Interim Government Updates",
+                          "Business",
                         ].includes(item.name) ? (
                           <></>
                         ) : (
