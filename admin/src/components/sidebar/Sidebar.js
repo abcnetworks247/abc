@@ -89,9 +89,8 @@ export default function Sidebar() {
               icon={
                 <ChevronDownIcon
                   strokeWidth={2.5}
-                  className={`mx-auto h-4 w-4 transition-transform ${
-                    open === 2 ? "rotate-180" : ""
-                  }`}
+                  className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""
+                    }`}
                 />
               }
             >
@@ -234,9 +233,8 @@ export default function Sidebar() {
               icon={
                 <ChevronDownIcon
                   strokeWidth={2.5}
-                  className={`mx-auto h-4 w-4 transition-transform ${
-                    open2 === 2 ? "rotate-180" : ""
-                  }`}
+                  className={`mx-auto h-4 w-4 transition-transform ${open2 === 2 ? "rotate-180" : ""
+                    }`}
                 />
               }
             >
@@ -297,6 +295,74 @@ export default function Sidebar() {
                 </List>
               </AccordionBody>
             </Accordion>
+
+            <li>
+              <Link
+                href="/dashboard/privacy-policy"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  fill="currentColor"
+                  data-slot="icon"
+                  className="w-[18px] h-[18px] mr-4"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M256 0C114.84 0 0 114.84 0 256s114.84 256 256 256 256-114.84 256-256S397.16 0 256 0Zm0 480C132.48 480 32 379.52 32 256S132.48 32 256 32s224 100.48 224 224-100.48 224-224 224Z"
+                    clipRule="evenodd"
+                  />
+
+                  <path
+                    fillRule="evenodd"
+                    d="M256 128c-35.2 0-64 28.8-64 64s28.8 64 64 64 64-28.8 64-64-28.8-64-64-64Zm0 96c-17.664 0-32-14.336-32-32s14.336-32 32-32 32 14.336 32 32-14.336 32-32 32Z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    d="M256 224c-17.664 0-32 14.336-32 32s14.336 32 32 32 32-14.336 32-32-14.336-32-32-32Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>Privacy Policy</span>
+              </Link>
+            </li>
+
+            <li>
+              <Link
+                href="/dashboard/terms"
+                className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  fill="currentColor"
+                  data-slot="icon"
+                  className="w-[18px] h-[18px] mr-4"
+                > 
+                  <path
+                    fillRule="evenodd"
+                    d="M256 0C114.84 0 0 114.84 0 256s114.84 256 256 256 256-114.84 256-256S397.16 0 256 0Zm0 480C132.48 480 32 379.52 32 256S132.48 32 256 32s224 100.48 224 224-100.48 224-224 224Z"
+                    clipRule="evenodd"
+                  />
+                   
+                  <path
+                    fillRule="evenodd"
+                    d="M256 128c-35.2 0-64 28.8-64 64s28.8 64 64 64 64-28.8 64-64-28.8-64-64-64Zm0 96c-17.664 0-32-14.336-32-32s14.336-32 32-32 32 14.336 32 32-14.336 32-32 32Z"
+                    clipRule="evenodd"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    d="M256 224c-17.664 0-32 14.336-32 32s14.336 32 32 32 32-14.336 32-32-14.336-32-32-32Z"
+                    clipRule="evenodd"
+
+                  />
+                </svg>
+                <span>Terms and Condition</span>
+              </Link>
+            </li>
+
             <li>
               <Link
                 href="/dashboard/transactions"
