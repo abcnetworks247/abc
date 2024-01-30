@@ -18,7 +18,7 @@ import {
   BtnStyles,
   Separator,
 } from "react-simple-wysiwyg";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { IoFolderOpenOutline } from "react-icons/io5";
