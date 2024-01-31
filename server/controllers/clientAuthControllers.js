@@ -225,14 +225,17 @@ const userUpdatePassword = async (req, res) => {
 
 const activeUserUpdatePassword = async (req, res) => {
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
-  const user = req.user;
+  const {user} = req;
 
   try {
+    
     if (newPassword !== confirmNewPassword) {
       throw new ValidationError("Passwords do not match");
     }
 
-    const checkuser = await Client.findById(user._id);
+    let userid = String(user._id);
+
+    const checkuser = await Client.findById(userid);
 
     if (!checkuser) {
       throw new UnAuthorizedError("User not found");
@@ -251,6 +254,7 @@ const activeUserUpdatePassword = async (req, res) => {
       { password: hashedPassword },
       { new: true }
     );
+
 
     return res
       .status(StatusCodes.OK)
@@ -378,16 +382,20 @@ const userSignOut = async (req, res) => {
 const userDelete = async (req, res) => {
   const { email, password } = req.body;
 
+  const { user } = req;
+
   try {
-    if (!req.user) {
+    if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (email !== req.user.email) {
+    if (email !== user.email) {
       throw new UnAuthorizedError("you are not authorized to delete this user");
     }
 
-    const olduser = await Client.findById(req.user.id);
+    let userid = String(user._id);
+
+    const olduser = await Client.findById(userid);
 
     const authenticatedUser = await olduser.checkPassword(password);
 
@@ -395,7 +403,7 @@ const userDelete = async (req, res) => {
       throw new UnAuthorizedError("you are not authorized to delete this user");
     }
 
-    const deleteUser = await Client.findByIdAndDelete(req.user);
+    const deleteUser = await Client.findByIdAndDelete(userid);
 
     if (deleteUser) {
       res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
