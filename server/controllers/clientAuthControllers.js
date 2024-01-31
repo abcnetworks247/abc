@@ -223,6 +223,45 @@ const userUpdatePassword = async (req, res) => {
   }
 };
 
+const activeUserUpdatePassword = async (req, res) => {
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  const user = req.user;
+
+  try {
+    if (newPassword !== confirmNewPassword) {
+      throw new ValidationError("Passwords do not match");
+    }
+
+    const checkuser = await Client.findById(user._id);
+
+    if (!checkuser) {
+      throw new UnAuthorizedError("User not found");
+    }
+
+    const checkPassword = await checkuser.checkPassword(oldPassword);
+
+    if (!checkPassword) {
+      throw new UnAuthorizedError("old password is invalid");
+    }
+
+    const hashedPassword = await checkuser.newHashPassword(password);
+
+    await Client.findByIdAndUpdate(
+      checkuser._id,
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "password updated successfully" });
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
+
 const userUpdate = async (req, res) => {
   const { fullname, email, userbio, phone, shippingaddress } = req.body;
 
@@ -503,6 +542,7 @@ module.exports = {
   userRecovery,
   userUpdatePassword,
   userVerifyPasswordReset,
+  activeUserUpdatePassword,
   singleUser,
   currentUser,
   userUpdate,
