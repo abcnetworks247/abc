@@ -9,6 +9,7 @@ const {
   userUpdate,
   userSignOut,
   userDelete,
+  activeUserUpdatePassword,
 } = require("../controllers/clientAuthControllers");
 
 const router = require("express").Router();
@@ -34,6 +35,10 @@ router.route("/user/:id").get(authChecker, singleUser);
 
 router.route("/account/updatepassword/:token").get(userVerifyPasswordReset);
 router.route("/account/updatepassword").post(userUpdatePassword);
+router
+  .route("/account/activeuserupdatepassword")
+  .patch(authChecker, activeUserUpdatePassword);
+
 router.route("/account").get(authChecker, currentUser);
 router
   .route("/account")

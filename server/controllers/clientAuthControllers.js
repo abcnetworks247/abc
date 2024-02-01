@@ -223,6 +223,47 @@ const userUpdatePassword = async (req, res) => {
   }
 };
 
+const activeUserUpdatePassword = async (req, res) => {
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  const { user } = req;
+
+  try {
+    if (newPassword !== confirmNewPassword) {
+      throw new ValidationError("Passwords do not match");
+    }
+
+    let userid = String(user._id);
+
+    const checkuser = await Client.findById(userid);
+
+    if (!checkuser) {
+      throw new UnAuthorizedError("User not found");
+    }
+
+    const checkPassword = await checkuser.checkPassword(oldPassword);
+
+    if (!checkPassword) {
+      throw new UnAuthorizedError("old password is invalid");
+    }
+
+    const hashedPassword = await checkuser.newHashPassword(password);
+
+    await Client.findByIdAndUpdate(
+      checkuser._id,
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "password updated successfully" });
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
+
 const userUpdate = async (req, res) => {
   const { fullname, email, userbio, phone, shippingaddress } = req.body;
 
@@ -339,16 +380,20 @@ const userSignOut = async (req, res) => {
 const userDelete = async (req, res) => {
   const { email, password } = req.body;
 
+  const { user } = req;
+
   try {
-    if (!req.user) {
+    if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    if (email !== req.user.email) {
+    if (email !== user.email) {
       throw new UnAuthorizedError("you are not authorized to delete this user");
     }
 
-    const olduser = await Client.findById(req.user.id);
+    let userid = String(user._id);
+
+    const olduser = await Client.findById(userid);
 
     const authenticatedUser = await olduser.checkPassword(password);
 
@@ -356,7 +401,7 @@ const userDelete = async (req, res) => {
       throw new UnAuthorizedError("you are not authorized to delete this user");
     }
 
-    const deleteUser = await Client.findByIdAndDelete(req.user);
+    const deleteUser = await Client.findByIdAndDelete(userid);
 
     if (deleteUser) {
       res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
@@ -503,6 +548,7 @@ module.exports = {
   userRecovery,
   userUpdatePassword,
   userVerifyPasswordReset,
+  activeUserUpdatePassword,
   singleUser,
   currentUser,
   userUpdate,

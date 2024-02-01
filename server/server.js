@@ -10,6 +10,7 @@ const subscriptionRouter = require("./routes/subscriptionRoute");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const categoryRouter = require("./routes/categoryRoute");
+const pagesRouter = require("./routes/pagesRoute");
 
 const path = require("path");
 const cors = require("cors");
@@ -101,6 +102,9 @@ app.use("/api/v1/admin/file", uploadRouter);
 
 //category Route
 app.use("/api/v1/admin/category", categoryRouter);
+
+//pages Route
+app.use("/api/v1/admin/pages", pagesRouter);
 
 
 

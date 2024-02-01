@@ -98,9 +98,13 @@ AuthSchema.methods.checkPassword = async function (password) {
 };
 
 AuthSchema.methods.newHashPassword = async function (password) {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  return hashedPassword;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = bcrypt.hash(password, salt);
+    return hashedPassword;
+  } catch (error) {
+    
+  }
 };
 
 module.exports = mongoose.model("Client", AuthSchema);
