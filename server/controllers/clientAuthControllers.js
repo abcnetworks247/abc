@@ -225,10 +225,9 @@ const userUpdatePassword = async (req, res) => {
 
 const activeUserUpdatePassword = async (req, res) => {
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
-  const {user} = req;
+  const { user } = req;
 
   try {
-    
     if (newPassword !== confirmNewPassword) {
       throw new ValidationError("Passwords do not match");
     }
@@ -254,7 +253,6 @@ const activeUserUpdatePassword = async (req, res) => {
       { password: hashedPassword },
       { new: true }
     );
-
 
     return res
       .status(StatusCodes.OK)

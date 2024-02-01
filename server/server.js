@@ -92,7 +92,7 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.use("/api/v1/client/auth/", clientRouter);
+app.use("/api/v1/client/auth", clientRouter);
 app.use("/api/v1/client/sub", subscriptionRouter);
 app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/commerce", productRouter);

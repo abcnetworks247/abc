@@ -14,21 +14,21 @@ const {
 
 
 // Terms Routes
-router.route("terms").get(ReadTerms);
-router.route("terms").post(authChecker, CreateTerms);
-router.route("terms").patch(authChecker, UpdateTerms);
+router.route("/terms").get(ReadTerms);
+router.route("/terms").post(authChecker, CreateTerms);
+router.route("/terms").patch(authChecker, UpdateTerms);
 
 
 // Policy Routes
 router.route("/policy").get(ReadPolicy);
-router.route("policy").post(authChecker, CreatePolicy);
-router.route("policy").patch(authChecker, UpdatePolicy);
+router.route("/policy").post(authChecker, CreatePolicy);
+router.route("/policy").patch(authChecker, UpdatePolicy);
 
 
 // Policy Routes
-router.route("about").get(ReadAbout);
-router.route("about").patch(authChecker, CreateAbout);
-router.route("about").patch(authChecker, UpdateAbout);
+router.route("/about").get(ReadAbout);
+router.route("/about").patch(authChecker, CreateAbout);
+router.route("/about").patch(authChecker, UpdateAbout);
 
 
 module.exports = router;

@@ -26,23 +26,23 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.route("signup").post(signUp);
-router.route("signin").post(signIn);
-router.route("recovery").post(userRecovery);
-router.route("account/signout").delete(authChecker, userSignOut);
+router.route("/signup").post(signUp);
+router.route("/signin").post(signIn);
+router.route("/recovery").post(userRecovery);
+router.route("/account/signout").delete(authChecker, userSignOut);
 
-router.route("user/:id").get(authChecker, singleUser);
+router.route("/user/:id").get(authChecker, singleUser);
 
-router.route("account/updatepassword/:token").get(userVerifyPasswordReset);
-router.route("account/updatepassword").post(userUpdatePassword);
+router.route("/account/updatepassword/:token").get(userVerifyPasswordReset);
+router.route("/account/updatepassword").post(userUpdatePassword);
 router
-  .route("account/activeuserupdatepassword")
+  .route("/account/activeuserupdatepassword")
   .patch(authChecker, activeUserUpdatePassword);
 
-router.route("account").get(authChecker, currentUser);
+router.route("/account").get(authChecker, currentUser);
 router
-  .route("account")
+  .route("/account")
   .patch(authChecker, upload.single("userphoto"), userUpdate);
-router.route("account").delete(authChecker, userDelete);
+router.route("/account").delete(authChecker, userDelete);
 
 module.exports = router;
