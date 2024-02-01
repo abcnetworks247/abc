@@ -15,40 +15,60 @@ import {
 } from "react-simple-wysiwyg";
 import { useRouter } from 'next/router';
 import Api from '@/utils/Api';
+import Cookies from "js-cookie";
 
+
+//store Auth token
+const AuthToken = Cookies.get("adminToken");
 
 const PrivacyPolicyPage = () => {
     const [privacyContent, setPrivacyContent] = useState('');
-
-    useEffect(() => {
-        // Fetch the privacy content from the server and set it to the state
-        fetchPrivacyContent();
-    }, []);
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const fetchPrivacyContent = async () => {
         try {
             const response = await Api.get('admin/pages/policy');
-            const data = await response.json();
+            const data = await response.data
             // setPrivacyContent(data.content);
             console.log(data.content);
+            setLoading(false)
         } catch (error) {
             console.error('Error fetching privacy content:', error);
         }
     };
 
+    const data = {
+        description: privacyContent
+    }
+
     const savePrivacyContent = async () => {
         try {
-            // const res = await Api.post('admin/pages/policy', { description: privacyContent });
-           
-            console.log('Privacy content saved successfully!', privacyContent);
+            setLoading(true)
+            const res = await Api.post('admin/pages/terms', data, {
+                headers: { Authorization: `Bearer ${String(AuthToken)}` },
+            });
+
+            console.log('Privacy content saved successfully!', res);
+            setLoading(false)
         } catch (error) {
 
+            setError(error.message)
             console.error('Error saving privacy content:', error);
+            setLoading(false)
         }
     };
+
+
     const onChange = (e) => {
         setPrivacyContent(e.target.value);
     }
+
+
+    useEffect(() => {
+        // Fetch the privacy content from the server and set it to the state
+        fetchPrivacyContent();
+    }, []);
     return (
         <div>
             <div>
@@ -56,7 +76,7 @@ const PrivacyPolicyPage = () => {
                     <div className="z-10 p-10 bg-white  lg:w-[70%] md:w-[80%] w-[90%] shadow-md rounded-xl">
                         <div className="text-center">
                             <h2 className="mt-5 text-3xl font-bold text-gray-900">
-                                Create a post!
+                                Privacy Policy
                             </h2>
                             <p className="mt-2 text-sm text-gray-400">
                                 Lorem ipsum is placeholder text.
@@ -65,10 +85,7 @@ const PrivacyPolicyPage = () => {
                         </div>
                         <form
                             className="mt-8 space-y-3"
-                            onSubmit={() => {
-                                savePrivacyContent()
-                            }}
-                            method="POST"
+
                         >
 
                             <div className="grid grid-cols-1 space-y-2">
@@ -91,17 +108,20 @@ const PrivacyPolicyPage = () => {
                                     </Editor>
                                 </EditorProvider>
                             </div>
-                            <div>
-                                <button
-                                    type="submit"
-                                    className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
-                                >
 
-                                    <p>Upload</p>
-
-                                </button>
-                            </div>
                         </form>
+                        <div>
+                            <button
+                                onClick={savePrivacyContent}
+                                className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
+                            >
+                                {
+                                    loading ? <p>Loading...</p> : (
+                                        error || <p>Upload</p>
+                                    )
+                                }
+                            </button>
+                        </div>
                     </div>
                 </div>
 
