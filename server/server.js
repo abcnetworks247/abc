@@ -104,7 +104,7 @@ app.use("/api/v1/admin/file", uploadRouter);
 app.use("/api/v1/admin/category", categoryRouter);
 
 //pages Route
-app.use("/api/v1/admin/pages/", pagesRouter);
+app.use("/api/v1/admin/pages", pagesRouter);
 
 
 
