@@ -15,40 +15,75 @@ import {
 } from "react-simple-wysiwyg";
 import { useRouter } from 'next/router';
 import Api from '@/utils/Api';
+import Cookies from "js-cookie";
 
 
-const PrivacyPolicyPage = () => {
-    const [privacyContent, setPrivacyContent] = useState('');
+//store Auth token
+const AuthToken = Cookies.get("adminToken");
+
+const TermsPage = () => {
+    const [terms, setTerms] = useState('');
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const fetchTerms = async () => {
+        try {
+            const response = await Api.get('admin/pages/terms');
+            const data = await response.data
+            // setTerms(data);
+            console.log(data.content);
+            setLoading(false)
+            
+        } catch (error) {
+            console.error('Error fetching terms content:', error);
+        }
+    };
+
+    const data = {
+        description: terms
+    }
+
+    const saveTerms = async () => {
+        try {
+            setLoading(true)
+            const res = await Api.post('admin/pages/terms', data, {
+                headers: { Authorization: `Bearer ${String(AuthToken)}` },
+            });
+
+            console.log('Terms content saved successfully!', res);
+            setLoading(false)
+            if (res.status === 200) {
+                Swal.fire({
+                    title: "Terms content updated successfully!",
+                    icon: "success",
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+            }
+        } catch (error) {
+
+            setError(error.message)
+            console.error('Error saving Terms content:', error);
+            setLoading(false)
+            Swal.fire({
+                title: error.message,
+                icon: "error",
+                timer: 3000,
+                showConfirmButton: false,
+            });
+        }
+    };
+
+
+    const onChange = (e) => {
+        setTerms(e.target.value);
+    }
+
 
     useEffect(() => {
-        // Fetch the privacy content from the server and set it to the state
-        fetchPrivacyContent();
+        // Fetch the Terms content from the server and set it to the state
+        fetchTerms();
     }, []);
-
-    const fetchPrivacyContent = async () => {
-        try {
-            const response = await Api.get('admin/pages/policy');
-            const data = await response.json();
-            // setPrivacyContent(data.content);
-            console.log(data.content);
-        } catch (error) {
-            console.error('Error fetching privacy content:', error);
-        }
-    };
-
-    const savePrivacyContent = async () => {
-        try {
-            // const res = await Api.post('admin/pages/policy', { description: privacyContent });
-           
-            console.log('Privacy content saved successfully!', privacyContent);
-        } catch (error) {
-
-            console.error('Error saving privacy content:', error);
-        }
-    };
-    const onChange = (e) => {
-        setPrivacyContent(e.target.value);
-    }
     return (
         <div>
             <div>
@@ -56,7 +91,7 @@ const PrivacyPolicyPage = () => {
                     <div className="z-10 p-10 bg-white  lg:w-[70%] md:w-[80%] w-[90%] shadow-md rounded-xl">
                         <div className="text-center">
                             <h2 className="mt-5 text-3xl font-bold text-gray-900">
-                                Create a post!
+                                Terms and Conditions..
                             </h2>
                             <p className="mt-2 text-sm text-gray-400">
                                 Lorem ipsum is placeholder text.
@@ -65,10 +100,7 @@ const PrivacyPolicyPage = () => {
                         </div>
                         <form
                             className="mt-8 space-y-3"
-                            onSubmit={() => {
-                                savePrivacyContent()
-                            }}
-                            method="POST"
+
                         >
 
                             <div className="grid grid-cols-1 space-y-2">
@@ -76,7 +108,7 @@ const PrivacyPolicyPage = () => {
                                     Full Details
                                 </label>
                                 <EditorProvider>
-                                    <Editor value={privacyContent} onChange={onChange} className="h-[80vh">
+                                    <Editor value={terms} onChange={onChange} className="h-[80vh">
                                         <Toolbar>
                                             <BtnBold />
                                             <Separator />
@@ -91,17 +123,18 @@ const PrivacyPolicyPage = () => {
                                     </Editor>
                                 </EditorProvider>
                             </div>
-                            <div>
-                                <button
-                                    type="submit"
-                                    className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
-                                >
 
-                                    <p>Upload</p>
-
-                                </button>
-                            </div>
                         </form>
+                        <div>
+                            <button
+                                onClick={saveTerms}
+                                className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
+                            >
+                                {
+                                    loading ? <p>Loading...</p> :<p>Upload</p>
+                                }
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -111,4 +144,4 @@ const PrivacyPolicyPage = () => {
     );
 };
 
-export default PrivacyPolicyPage;
+export default TermsPage;

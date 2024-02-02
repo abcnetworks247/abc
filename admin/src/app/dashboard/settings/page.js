@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
-
+import { useRouter } from "next/navigation";
 const page = () => {
+  const router = useRouter();
   return (
     <div className="p-4 md:p-10">
       <h4 className="font-semibold text-2xl">General Settings</h4>
@@ -21,7 +23,9 @@ const page = () => {
                 </p>
               </div>
 
-              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1">
+              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1"
+                onClick={() => router.push("/dashboard/settings/terms")}
+              >
                 <svg
                   fill="#ffffff"
                   viewBox="0 0 32 32"
@@ -52,7 +56,9 @@ const page = () => {
                 </p>
               </div>
 
-              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1">
+              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1"
+                onClick={() => router.push("/dashboard/settings/privacy-policy")}
+              >
                 <svg
                   fill="#ffffff"
                   viewBox="0 0 32 32"
@@ -83,7 +89,9 @@ const page = () => {
                 </p>
               </div>
 
-              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1">
+              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1"
+                onClick={() => router.push("/dashboard/settings/about-us")}
+              >
                 <svg
                   fill="#ffffff"
                   viewBox="0 0 32 32"
