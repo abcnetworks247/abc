@@ -13,7 +13,6 @@ const OnrampSessionResource = stripe.StripeResource.extend({
   }),
 });
 
-
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
   NotFoundError,
@@ -269,15 +268,15 @@ const getSingleProduct = async (req, res) => {
 };
 
 const StripeCheckout = async (req, res) => {
-
   const { product } = req.body;
 
   const user = req.user;
 
   try {
-    
     if (!user) {
-      throw new UnAuthorizedError("User must be logged in to purchase a product")
+      throw new UnAuthorizedError(
+        "User must be logged in to purchase a product"
+      );
     }
 
     const lineItems = product.map((product) => ({
@@ -300,8 +299,6 @@ const StripeCheckout = async (req, res) => {
       cancel_url: `${localurl}/paymenterror?canceled=true`,
     });
 
-    
-
     res.status(StatusCodes.OK).send({ url: session.url });
   } catch (error) {
     console.error("Error in StripeCheckout:", error);
@@ -311,8 +308,7 @@ const StripeCheckout = async (req, res) => {
   }
 };
 
-const PaystackCheckout = async (req, res) => { 
-
+const PaystackCheckout = async (req, res) => {
   const { product } = req.body;
 
   try {
@@ -323,13 +319,9 @@ const PaystackCheckout = async (req, res) => {
         "User must be logged in to purchase a product"
       );
     }
-
-
   } catch (error) {}
-
-}
-const Crypto = async (req, res) => { 
-
+};
+const Crypto = async (req, res) => {
   const { product } = req.body;
 
   try {
@@ -354,11 +346,8 @@ const Crypto = async (req, res) => {
     res.send({
       clientSecret: onrampSession.client_secret,
     });
-
-
   } catch (error) {}
-
-}
+};
 
 module.exports = {
   createProduct,

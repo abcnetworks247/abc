@@ -76,9 +76,11 @@ const signIn = async (req, res) => {
       throw new NotFoundError("User not found");
     }
 
-    console.log(olduser);
+    // console.log(olduser);
 
     const authenticatedUser = await olduser.checkPassword(password);
+
+    console.log("Authenticated user", authenticatedUser);
 
     if (!authenticatedUser) {
       throw new UnAuthorizedError("Invalid login credentials");
@@ -209,6 +211,8 @@ const userVerifyPasswordReset = async (req, res) => {
 
 const userUpdatePassword = async (req, res) => {
   const { reset, password, confirmPassword } = req.body;
+
+  console.log(reset, password, confirmPassword);
 
   console.log(password, confirmPassword);
 

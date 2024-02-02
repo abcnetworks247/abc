@@ -40,20 +40,25 @@ const AdminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-AdminSchema.pre('save', async function (next) {
-  try {
-    const gensalt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, gensalt);
-    next();
-  } catch (error) {
-    console.error("Error hashing password:", error);
-    next(error);
-  }
+
+AdminSchema.pre("save", async function (next) {
+  const gensalt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, gensalt);
+  next();
 });
 
+
 AdminSchema.methods.checkPassword = async function (password) {
-  const checkPassword = await bcrypt.compare(password, this.password);
-  return checkPassword;
+  try {
+    const checkPassword = await bcrypt.compare(password, this.password);
+
+    console.log("Password comparison result:", checkPassword);
+
+    return checkPassword;
+  } catch (error) {
+    console.error("Error comparing passwords:", error);
+    throw new Error("Error comparing passwords");
+  }
 };
 
 AdminSchema.methods.newHashPassword = async function (password) {

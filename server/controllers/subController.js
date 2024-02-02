@@ -9,6 +9,7 @@ const {
 } = require("../errors/index");
 
 const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const localurl = process.env.CLIENT_URL;
 
 const createSubscription = async (req, res) => {
   console.log("trying to create subscription");
@@ -58,8 +59,8 @@ const createSubscription = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: `${localurl}/paymentsuccess?success=true`,
+      cancel_url: `${localurl}/paymenterror?canceled=true`,
       payment_method_types: ["card"],
       mode: "subscription",
       billing_address_collection: "auto",
