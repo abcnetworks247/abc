@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
-import Image from "next/image"
+import Image from "next/image";
 import Logo from "@/resources/assets/images/AbcstudioNo.png";
 import HocsessionAuthenticated from "@/utils/HocSessionAuthenticated";
 function Page() {
@@ -118,10 +118,10 @@ function Page() {
           type: "success",
           isLoading: false,
         });
-         if (typeof window !== "undefined") {
-           router.push("/");
-           window.location.reload();
-         }
+        if (typeof window !== "undefined") {
+          router.push("/");
+          window.location.reload();
+        }
       } else if (data.status === 500) {
         const suberrormsg = toast.update(id, {
           render: `user email or name already exist `,
