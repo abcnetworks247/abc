@@ -21,40 +21,40 @@ import Cookies from "js-cookie";
 //store Auth token
 const AuthToken = Cookies.get("adminToken");
 
-const PrivacyPolicyPage = () => {
-    const [privacyContent, setPrivacyContent] = useState('');
+const About = () => {
+    const [about, setAbout] = useState('');
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const fetchPrivacyContent = async () => {
+    const fetchAbout = async () => {
         try {
-            const response = await Api.get('admin/pages/policy');
+            const response = await Api.get('admin/pages/about');
             const data = await response.data
-            // setPrivacyContent(data.content);
+            // setabout(data.content);
             console.log(data.content);
             setLoading(false)
             
         } catch (error) {
-            console.error('Error fetching privacy content:', error);
+            console.error('Error fetching content:', error);
         }
     };
 
     const data = {
-        description: privacyContent
+        description: about
     }
 
-    const savePrivacyContent = async () => {
+    const saveAbout = async () => {
         try {
             setLoading(true)
-            const res = await Api.post('admin/pages/privacy', data, {
+            const res = await Api.post('admin/pages/about', data, {
                 headers: { Authorization: `Bearer ${String(AuthToken)}` },
             });
 
-            console.log('Privacy content saved successfully!', res);
+            console.log('Content saved successfully!', res);
             setLoading(false)
             if (res.status === 200) {
                 Swal.fire({
-                    title: "Privacy content updated successfully!",
+                    title: "Content updated successfully!",
                     icon: "success",
                     timer: 3000,
                     showConfirmButton: false,
@@ -63,7 +63,7 @@ const PrivacyPolicyPage = () => {
         } catch (error) {
 
             setError(error.message)
-            console.error('Error saving privacy content:', error);
+            console.error('Error saving content:', error);
             setLoading(false)
             Swal.fire({
                 title: error.message,
@@ -76,13 +76,13 @@ const PrivacyPolicyPage = () => {
 
 
     const onChange = (e) => {
-        setPrivacyContent(e.target.value);
+        setAbout(e.target.value);
     }
 
 
     useEffect(() => {
         // Fetch the privacy content from the server and set it to the state
-        fetchPrivacyContent();
+        fetchAbout();
     }, []);
     return (
         <div>
@@ -91,7 +91,7 @@ const PrivacyPolicyPage = () => {
                     <div className="z-10 p-10 bg-white  lg:w-[70%] md:w-[80%] w-[90%] shadow-md rounded-xl">
                         <div className="text-center">
                             <h2 className="mt-5 text-3xl font-bold text-gray-900">
-                                Privacy Policy
+                                About Us
                             </h2>
                             <p className="mt-2 text-sm text-gray-400">
                                 Lorem ipsum is placeholder text.
@@ -108,7 +108,7 @@ const PrivacyPolicyPage = () => {
                                     Full Details
                                 </label>
                                 <EditorProvider>
-                                    <Editor value={privacyContent} onChange={onChange} className="h-[80vh">
+                                    <Editor value={about} onChange={onChange} className="h-[80vh">
                                         <Toolbar>
                                             <BtnBold />
                                             <Separator />
@@ -127,7 +127,7 @@ const PrivacyPolicyPage = () => {
                         </form>
                         <div>
                             <button
-                                onClick={savePrivacyContent}
+                                onClick={saveAbout}
                                 className="flex justify-center w-full p-4 my-5 font-semibold tracking-wide text-gray-100 transition duration-300 ease-in bg-blue-500 rounded-full shadow-lg cursor-pointer focus:outline-none focus:shadow-outline hover:bg-blue-600"
                             >
                                 {
@@ -144,4 +144,4 @@ const PrivacyPolicyPage = () => {
     );
 };
 
-export default PrivacyPolicyPage;
+export default About;
