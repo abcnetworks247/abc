@@ -31,7 +31,7 @@ const PrivacyPolicyPage = () => {
             const response = await Api.get('admin/pages/policy');
             const data = await response.data
             // setPrivacyContent(data.content);
-            console.log(data.content);
+            console.log(response);
             setLoading(false)
             
         } catch (error) {
@@ -42,37 +42,47 @@ const PrivacyPolicyPage = () => {
     const data = {
         description: privacyContent
     }
-
+    // const baseUrl = process.env.NEXT_PUBLIC_API_URL;
     const savePrivacyContent = async () => {
         try {
-            setLoading(true)
-            const res = await Api.post('admin/pages/privacy', data, {
-                headers: { Authorization: `Bearer ${String(AuthToken)}` },
+            setLoading(true);
+    
+            const response = await fetch('https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/pages/terms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${String(AuthToken)}`,
+                },
+                body: JSON.stringify(data),
             });
-
+    
+            const res = await response.json();
+    
             console.log('Privacy content saved successfully!', res);
-            setLoading(false)
-            if (res.status === 200) {
+            setLoading(false);
+    
+            if (response.status === 200) {
                 Swal.fire({
-                    title: "Privacy content updated successfully!",
-                    icon: "success",
+                    title: 'Privacy content updated successfully!',
+                    icon: 'success',
                     timer: 3000,
                     showConfirmButton: false,
                 });
             }
         } catch (error) {
-
-            setError(error.message)
+            setError(error.message);
             console.error('Error saving privacy content:', error);
-            setLoading(false)
+            setLoading(false);
+    
             Swal.fire({
                 title: error.message,
-                icon: "error",
+                icon: 'error',
                 timer: 3000,
                 showConfirmButton: false,
             });
         }
     };
+    
 
 
     const onChange = (e) => {
