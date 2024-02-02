@@ -76,6 +76,12 @@ function Page() {
   };
 
   const HandleSubmit = async (e) => {
+
+    console.log(
+      "this is formdata",
+      formData.password, formData.confirmPassword
+    );
+    
     e.preventDefault();
     if (!isValidData) {
       toast.error("Please fill in all the fields correctly", {
@@ -399,7 +405,7 @@ function Page() {
                     <input
                       type={passwordVisible ? "text" : "password"}
                       placeholder="********"
-                      name="confrimPassword"
+                      name="confirmPassword"
                       onChange={(e) => {
                         HandleInputChange(e);
                         signUpValidate(
