@@ -72,8 +72,6 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     fullname: "",
-
-    password: "",
     role: "",
   });
 
@@ -294,10 +292,10 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                       ></label>
                       {CurrentUser &&
                       CurrentUser.data.olduser.role === "superadmin" ? (
-                         <Select variant="outlined" label="Select Role" name="role"   defaultValue={NewAdmin?.role}  onChange={(e) => { setFormData({ ...formData, role: e }); }} >
+                         <Select variant="outlined" label="Select Role" name="role"   value={NewAdmin?.role}  onChange={(e) => { setFormData({ ...formData, role: e }); }} >
                         {roles.map((role)=>(
 
-                        <Option  key={role} value={role}>{role}</Option>
+                        <Option  key={role} value={role} defaultValue={NewAdmin?.role}>{role}</Option>
                         ))}
 {/*                    
                         <option value="admin">Admin</option>
@@ -336,17 +334,8 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                         name="password"
                         placeholder="******"
                         disabled={NewAdmin?.role === "admin" || "editor" || "superadmin" || ""}
-                        onChange={(e) => {
-                          HandleInputChange(e);
-                          signUpValidate(
-                            "password",
-                            PASSWORD_REGEX,
-                            e.target.value,
-                            "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
-                          );
-                        }}
-                        required
-                        className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                     
+                        className="focus:shadow-primary-outline cursor-not-allowed dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
                       {errorMessages.password && formData.password && (
                         <span className="text-red-500 text-[13px]">
@@ -371,7 +360,7 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
             color="green"
             onClick={HandleSubmit}
           >
-            confirm
+            Update
           </Button>
         </DialogFooter>
       </Dialog>
