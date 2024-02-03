@@ -19,6 +19,8 @@ const {
 const CreateTerms = async (req, res) => {
   const { description } = req.body;
 
+  console.log(description);
+
   const { user } = req;
 
   try {
@@ -35,9 +37,14 @@ const CreateTerms = async (req, res) => {
     // Check if the category type already exists
     const existingTerms = await Terms.findOne();
 
+    console.log("existingTerms", existingTerms);
+
     if (existingTerms.length >= 1) {
+      console.log("The category type already exists");
       throw new UnAuthorizedError("Terms already exists");
     }
+
+    console.log("The category type is " + existingTerms);
 
     // Validate the terms description using Joi schema
     const { error, value } = TermsJoi.validate({ description });
@@ -58,11 +65,7 @@ const CreateTerms = async (req, res) => {
     });
   } catch (error) {
     return res
-      .status(
-        error instanceof CustomError
-          ? error.statusCode
-          : StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
   }
 };
@@ -78,7 +81,7 @@ const ReadTerms = async (req, res) => {
 
     return res
       .status(StatusCodes.OK)
-      .json({ data: terms, message: "Terms retrieved successfully" });
+      .json({ data: terms[0], message: "Terms retrieved successfully" });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -90,6 +93,8 @@ const UpdateTerms = async (req, res) => {
   try {
     const { description, id } = req.body;
     const { user } = req;
+
+    console.log(description, id);
 
     if (!user) {
       throw new NotFoundError("User not found");
@@ -106,7 +111,7 @@ const UpdateTerms = async (req, res) => {
       { new: true, runValidators: true } // To get the updated document and run validators
     );
 
-    await Terms.save();
+    console.log("successfully updated");
 
     if (!updatedTerms) {
       throw new NotFoundError("Terms not found");
@@ -117,7 +122,7 @@ const UpdateTerms = async (req, res) => {
       message: "Terms updated successfully",
     });
   } catch (error) {
-    return res
+    res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
   }
@@ -165,11 +170,7 @@ const CreatePolicy = async (req, res) => {
     });
   } catch (error) {
     return res
-      .status(
-        error instanceof CustomError
-          ? error.statusCode
-          : StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
   }
 };
@@ -185,7 +186,7 @@ const ReadPolicy = async (req, res) => {
 
     return res
       .status(StatusCodes.OK)
-      .json({ data: policy, message: "Policy retrieved successfully" });
+      .json({ data: policy[0], message: "Policy retrieved successfully" });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -197,6 +198,8 @@ const UpdatePolicy = async (req, res) => {
   try {
     const { description, id } = req.body;
     const { user } = req;
+
+    console.log(description, id);
 
     if (!user) {
       throw new NotFoundError("User not found");
@@ -213,7 +216,6 @@ const UpdatePolicy = async (req, res) => {
       { new: true, runValidators: true } // To get the updated document and run validators
     );
 
-    await Policy.save();
 
     if (!updatedPolicy) {
       throw new NotFoundError("About not found");
@@ -273,11 +275,7 @@ const CreateAbout = async (req, res) => {
     });
   } catch (error) {
     return res
-      .status(
-        error instanceof CustomError
-          ? error.statusCode
-          : StatusCodes.INTERNAL_SERVER_ERROR
-      )
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
   }
 };
