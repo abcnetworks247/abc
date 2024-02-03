@@ -22,6 +22,7 @@ import Api from "@/utils/Api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
 
@@ -30,7 +31,6 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     role: "",
     fullname: "",
     email: "",
-    password: "",
    // Add a field for the selected role
   });
 
@@ -108,10 +108,6 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     (field) => !errorMessages[field]
   );
 
-  const Handleclick = ()=>{
-    console.log(formData);
-    console.log(Allrole, "all role");
-  }
 
   const HandleSubmit = async (e) => {
 
@@ -133,23 +129,28 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     }
 
     handleOpen();
-    const id = toast.loading("creating..", {
+    const id = toast.loading("updating..", {
       position: toast.POSITION.TOP_LEFT,
     });
     try {
       // Log the current form data to the console
       console.log("formdata", formData);
 
+      const token =  Cookies.get('adminToken');
       // Perform an asynchronous API post request to sign up the user
       console.log("Before API post request");
-      const data = await Api.post("admin/auth/signup", formData);
+      const data = await Api.patch("admin/auth/signup", formData,{
+        headers: {
+          Authorization: `Bearer ${String(token)}`,
+          "Content-Type": "multipart/form-data",
+        }});
 
       // Log the response data to the console
       console.log("all data", data);
 
       // Check the status of the response and log success or failure messages
       if (data.status === 201) {
-        console.log("post successful", data.data.message);
+        console.log("patch successful", data.data.message);
         setTimeout(() => {
           toast.dismiss(id);
         }, 1000);
@@ -196,6 +197,8 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     }
   };
 
+
+  
   return (
     <>
       <ToastContainer
@@ -337,11 +340,6 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                      
                         className="focus:shadow-primary-outline cursor-not-allowed dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
-                      {errorMessages.password && formData.password && (
-                        <span className="text-red-500 text-[13px]">
-                          {errorMessages.password}
-                        </span>
-                      )}
                     </div>
                   </div>
                   <div className="flex flex-wrap mt-4 -mx-3"></div>
