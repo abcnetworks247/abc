@@ -23,7 +23,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 
-export function UpdateAdmin({ open, handleOpen, CurrentUser }) {
+export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
 
 
   const [formData, setFormData] = useState({
@@ -247,7 +247,8 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser }) {
                             "username start with letter, may include numbers or underscore(_)"
                           );
                         }}
-                        value={formData.fullname}
+                        defaultValue={NewAdmin?.fullname}
+                        // value={formData.fullname}
                         required
                         placeholder="eg. Michaeljackson"
                         className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
@@ -269,6 +270,7 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser }) {
                         type="email"
                         name="email"
                         placeholder="eg. soft@dashboard.com"
+                        defaultValue={NewAdmin?.email}
                         onChange={(e) => {
                           HandleInputChange(e);
                           signUpValidate(
@@ -292,7 +294,7 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser }) {
                       ></label>
                       {CurrentUser &&
                       CurrentUser.data.olduser.role === "superadmin" ? (
-                         <Select variant="outlined" label="Select Role" name="role" value={formData && formData.role}   onChange={(e) => { setFormData({ ...formData, role: e }); }} >
+                         <Select variant="outlined" label="Select Role" name="role"   defaultValue={NewAdmin?.role}  onChange={(e) => { setFormData({ ...formData, role: e }); }} >
                         {roles.map((role)=>(
 
                         <Option  key={role} value={role}>{role}</Option>
@@ -333,6 +335,7 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser }) {
                         type="password"
                         name="password"
                         placeholder="******"
+                        disabled={NewAdmin?.role === "admin" || "editor" || "superadmin" || ""}
                         onChange={(e) => {
                           HandleInputChange(e);
                           signUpValidate(

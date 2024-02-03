@@ -57,9 +57,33 @@ export default function Page() {
   const { CurrentUser } = useCurrentAdmin();
   const Admins = user?.data;
   console.log("all admins", Admins);
+  const value = Admins?.data;
+
+  console.log("new value for find ", value);
+ 
+
+  const [NewAdmin, setNewAdmin] = useState(null);
+
+  console.log("NewAdmin", NewAdmin);
 
   const handleOpen = () => setOpen(!open);
-  const handleOpen2 = () => setOpen2(!open2);
+  const handleOpen2 =  () => {
+    setOpen2(!open2);
+
+  //   const filteredData = value?.filter((admin) => admin._id === AnAdmin);
+
+  // // Check if the filteredData array has items
+  // if (filteredData && filteredData.length > 0) {
+  //   setNewAdmin(filteredData[0]); // Assuming that you only want the first matching admin
+  //   console.log(filteredData[0], "filteredData");
+  // } else {
+  //   setNewAdmin(null);
+  //   console.log("Admin not found");
+  // }
+}
+
+
+
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -216,7 +240,7 @@ export default function Page() {
                     {Admins &&
                       currentItems.map(
                         (
-                          { userdp, fullname, email, role, createdAt },
+                          { userdp, fullname, email, role, createdAt, _id },
                           index
                         ) => {
                           const isLast = index === Admins.data.length - 1;
@@ -296,6 +320,11 @@ export default function Page() {
                                     <IconButton
                                       variant="text"
                                       onClick={() => {
+
+                                        let data = {
+                                          userdp, fullname, email, role, createdAt, _id
+                                        }
+                                        setNewAdmin( data );
                                         handleOpen2();
                                       }}
                                     >
@@ -412,6 +441,7 @@ export default function Page() {
               open={open2}
               handleOpen={handleOpen2}
               CurrentUser={CurrentUser}
+              NewAdmin={NewAdmin}
             />
           </CardFooter>
         </Card>
