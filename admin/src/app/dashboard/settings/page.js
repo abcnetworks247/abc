@@ -90,7 +90,7 @@ const page = () => {
               </div>
 
               <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1"
-                onClick={() => router.push("/dashboard/settings/about-us")}
+                onClick={() => router.push("/dashboard/settings/about")}
               >
                 <svg
                   fill="#ffffff"

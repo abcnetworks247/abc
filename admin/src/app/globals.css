@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 * {
   padding: 0;
   margin: 0;
@@ -10,39 +9,39 @@
   gap: 0px;
 }
 
- ::-webkit-scrollbar {
-   margin-top: 2px;
-   width: 6px;
-   height: 8px;
- }
+::-webkit-scrollbar {
+  margin-top: 2px;
+  width: 6px;
+  height: 8px;
+}
 
- ::-webkit-scrollbar-track {
-   background-color: #ffff;
- }
+::-webkit-scrollbar-track {
+  background-color: #ffff;
+}
 
- ::-webkit-scrollbar-thumb {
-background-color: #817c7c9a;
-border-radius: 4px;
- }
+::-webkit-scrollbar-thumb {
+  background-color: #817c7c9a;
+  border-radius: 4px;
+}
 
- ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background-color: #817c7c9a;
   width: 4px;
- }
+}
 
- .desk {
+.desk {
   display: grid;
   grid-template-columns: 1fr 4fr;
- }
+}
 
- ::-webkit-scrollbar-corner {
+::-webkit-scrollbar-corner {
   background-color: #817c7c9a;
- }
- .has-mask {
+}
+.has-mask {
   position: absolute;
   clip: rect(10px, 150px, 130px, 10px);
 }
 
-.rsw-editor{
+.rsw-editor {
   height: 400px;
 }
