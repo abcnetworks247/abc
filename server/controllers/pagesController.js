@@ -216,7 +216,6 @@ const UpdatePolicy = async (req, res) => {
       { new: true, runValidators: true } // To get the updated document and run validators
     );
 
-
     if (!updatedPolicy) {
       throw new NotFoundError("About not found");
     }
@@ -283,7 +282,7 @@ const CreateAbout = async (req, res) => {
 const ReadAbout = async (req, res) => {
   try {
     // Assuming Terms is a model with a findById method
-    const about = await Policy.find();
+    const about = await About.find();
 
     if (!about) {
       throw new NotFoundError("About is Empty");
@@ -291,7 +290,7 @@ const ReadAbout = async (req, res) => {
 
     return res
       .status(StatusCodes.OK)
-      .json({ data: about, message: "About retrieved successfully" });
+      .json({ data: about[0], message: "About retrieved successfully" });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -300,8 +299,10 @@ const ReadAbout = async (req, res) => {
 };
 
 const UpdateAbout = async (req, res) => {
+  const { image, description, id } = req.body;
+
+
   try {
-    const { image, description, id } = req.body;
     const { user } = req;
 
     if (!user) {
@@ -319,7 +320,7 @@ const UpdateAbout = async (req, res) => {
       { new: true, runValidators: true } // To get the updated document and run validators
     );
 
-    await About.save();
+    console.log("updated document with description");
 
     if (!updatedAbout) {
       throw new NotFoundError("About not found");
