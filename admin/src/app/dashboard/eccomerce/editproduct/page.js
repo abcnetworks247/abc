@@ -1,13 +1,13 @@
-"use client"
-import React from 'react'
-import { useState, useEffect } from 'react';
+"use client";
+import React from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@material-tailwind/react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { useSearchParams } from 'next/navigation';
-import PopUpFilemanager from '@/components/filemanager/PopUpFilemanager';
-import { UseFileManager } from '@/context/FileManagerProvidert';
+import { useSearchParams } from "next/navigation";
+import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
+import { UseFileManager } from "@/context/FileManagerProvidert";
 import {
   BtnBold,
   BtnItalic,
@@ -22,151 +22,139 @@ import {
 } from "react-simple-wysiwyg";
 
 const page = () => {
-const params = useSearchParams();
+  const params = useSearchParams();
 
-const productid = params.get("id");
-    
-   const [product, setProduct] = useState({});
-   const [uploadedCat, setUploadedCat] = useState(null);
-   const [title, setTitle] = useState("");
-   const [html, setHtml] = useState("");
-   const [price, setPrice] = useState(0);
-   const [discountPercentage, setDiscountPercentage] = useState(0);
-   const [rating, setRating] = useState(0.0);
-   const [stock, setStock] = useState(0);
-   const [brand, setBrand] = useState("none");
-   const [category, setCategory] = useState("");
-   const [color, setColor] = useState("none");
-   const [warranty, setWarranty] = useState(0);
-   const [weight, setWeight] = useState(0);
-   const [thumbnail, setThumbnail] = useState(null);
-   const [gallery, setGallery2] = useState(null);
+  const productid = params.get("id");
 
-console.log("fetched gallery", gallery)
-    
-    useEffect(() => {
-      const getSingleProduct = async () => {
-        try {
-          console.log("fetching product");
-          const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productid}`
-          );
-            
-            setTitle(response.data.title || "");
-            setHtml(response.data.description || "");
-            setPrice(response.data.price || 0);
-            setDiscountPercentage(response.data.discountPercentage || 0);
-            setRating(response.data.rating || 0);
-            setStock(response.data.stock || 0);
-            setBrand(response.data.brand || "");
-            setCategory(response.data.category || "");
-            setColor(response.data.color || "");
-            setWarranty(response.data.warranty || "");
-            setWeight(response.data.weight || 0);
-            setGallery2(response.data.images);
-            setThumbnail(response.data.thumbnail || "");
-        } catch (error) {
-          console.error("Error during product fetching:", error);
-        }
-      };
+  const [product, setProduct] = useState({});
+  const [uploadedCat, setUploadedCat] = useState(null);
+  const [title, setTitle] = useState("");
+  const [html, setHtml] = useState("");
+  const [price, setPrice] = useState(0);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
+  const [rating, setRating] = useState(0.0);
+  const [stock, setStock] = useState(0);
+  const [brand, setBrand] = useState("none");
+  const [category, setCategory] = useState("");
+  const [color, setColor] = useState("none");
+  const [warranty, setWarranty] = useState(0);
+  const [weight, setWeight] = useState(0);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [gallery, setGallery2] = useState(null);
 
-      getSingleProduct();
-      console.log(product);
-    }, [productid]);
-    
+  console.log("fetched gallery", gallery);
 
-    
-
- 
-
-const { handleOpen, size } = UseFileManager();
-
-function onChange(e) {
-    setHtml(e.target.value);
-    }
-    
-  
-
-const HandleDeleteGallery = (index) => {
-  // Use the index to remove the corresponding item from the gallery array
-  const updatedGallery = [...gallery];
-  updatedGallery.splice(index, 1);
-  setGallery2(updatedGallery);
-};
-    
-    
-
-    const patchProduct = async (e) => {
-      e.preventDefault();
-      console.log("patch started");
-
-       const secureUrls = gallery
-
+  useEffect(() => {
+    const getSingleProduct = async () => {
       try {
-        const updatedFormData = {
-          title: title,
-          description: html,
-          price: price,
-          discountPercentage: discountPercentage,
-          rating: rating,
-          stock: stock,
-          brand: brand,
-          category: category, 
-          thumbnail: thumbnail, 
-          images: secureUrls,
-          color: color,
-          warranty: warranty,
-          weight: weight,
-          productid:productid
-        };
-
-        console.log("Form data before submission", updatedFormData);
-
-        const adminToken = Cookies.get("adminToken");
-        console.log("My token", adminToken);
-        const response = await axios.patch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
-          updatedFormData,
-
-          {
-            headers: {
-              Authorization: `Bearer ${String(adminToken)}`,
-            },
-            "Content-Type": "application/json",
-          }
+        console.log("fetching product");
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productid}`
         );
-          console.log("patch complete")
-          alert("patch complete")
-        console.log("Response from backend", response);
+
+        setTitle(response.data.title || "");
+        setHtml(response.data.description || "");
+        setPrice(response.data.price || 0);
+        setDiscountPercentage(response.data.discountPercentage || 0);
+        setRating(response.data.rating || 0);
+        setStock(response.data.stock || 0);
+        setBrand(response.data.brand || "");
+        setCategory(response.data.category || "");
+        setColor(response.data.color || "");
+        setWarranty(response.data.warranty || "");
+        setWeight(response.data.weight || 0);
+        setGallery2(response.data.images);
+        setThumbnail(response.data.thumbnail || "");
       } catch (error) {
-        console.error("An error in patching product", error);
+        console.error("Error during product fetching:", error);
       }
     };
 
-     const HandleDeleteThumbnail = () => {
-       setThumbnail(null);
+    getSingleProduct();
+    console.log(product);
+  }, [productid]);
+
+  const { handleOpen, size } = UseFileManager();
+
+  function onChange(e) {
+    setHtml(e.target.value);
+  }
+
+  const HandleDeleteGallery = (index) => {
+    // Use the index to remove the corresponding item from the gallery array
+    const updatedGallery = [...gallery];
+    updatedGallery.splice(index, 1);
+    setGallery2(updatedGallery);
+  };
+
+  const patchProduct = async (e) => {
+    e.preventDefault();
+    console.log("patch started");
+
+    const secureUrls = gallery;
+
+    try {
+      const updatedFormData = {
+        title: title,
+        description: html,
+        price: price,
+        discountPercentage: discountPercentage,
+        rating: rating,
+        stock: stock,
+        brand: brand,
+        category: category,
+        thumbnail: thumbnail,
+        images: secureUrls,
+        color: color,
+        warranty: warranty,
+        weight: weight,
+        productid: productid,
+      };
+
+      console.log("Form data before submission", updatedFormData);
+
+      const adminToken = Cookies.get("adminToken");
+      console.log("My token", adminToken);
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`,
+        updatedFormData,
+
+        {
+          headers: {
+            Authorization: `Bearer ${String(adminToken)}`,
+          },
+          "Content-Type": "application/json",
+        }
+      );
+      console.log("patch complete");
+      alert("patch complete");
+      console.log("Response from backend", response);
+    } catch (error) {
+      console.error("An error in patching product", error);
+    }
+  };
+
+  const HandleDeleteThumbnail = () => {
+    setThumbnail(null);
+  };
+
+  useEffect(() => {
+    const HandleFetch = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
+        );
+
+        if (response.status === 200) {
+          setUploadedCat(response.data.data);
+        }
+      } catch (error) {
+        console.log("damn error", error);
+      }
     };
-    
-     useEffect(() => {
-      
-       const HandleFetch = async () => {
-         try {
-           const response = await axios.get(
-             `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
-           );
 
-           if (response.status === 200) {
-             setUploadedCat(response.data.data);
-           }
-         } catch (error) {
-           console.log("damn error", error);
-         }
-       };
-
-       HandleFetch();
-     }, []);
-  
-    
+    HandleFetch();
+  }, []);
 
   return (
     <div>
@@ -568,6 +556,6 @@ const HandleDeleteGallery = (index) => {
       </div>
     </div>
   );
-}
+};
 
-export default page
+export default page;
