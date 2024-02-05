@@ -50,27 +50,23 @@ function page() {
       const catRes = await Api.get("admin/category/news/category");
 
       if (catRes.status === 200) {
-        console.log("------------->>", catRes.data);
         setCategory(catRes.data.data);
         setLoading(false);
       }
       if (typeRes.status === 200) {
-        console.log(typeRes.data.data);
         setType(typeRes.data.data);
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
       alert("Something went wrong");
+      throw new Error("Something went wrong", error);
     }
   };
   useEffect(() => {
     Api.get(`admin/blog/${id}`)
       .then((res) => {
         const data = res.data.blogdata;
-        console.log(data);
-        console.log(id);
         // setPost(data);
         setTitle(data.title);
         setShortDescription(data.shortdescription);
@@ -81,9 +77,10 @@ function page() {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        alert("Error: " + err)
         setError(true);
         setLoading(false);
+        throw new Error("Something went wrong", err);
       });
     fetchData();
   }, []);
@@ -103,7 +100,6 @@ function page() {
       };
 
       setLoad(true);
-      console.log("update data", data);
 
       const res = await Api.patch(`admin/blog/update`, data, {
         headers: {
@@ -111,7 +107,6 @@ function page() {
         },
       });
 
-      console.log("update response", res);
 
       if (res && res.status === 200 && res.data) {
         const message = res.data.message;
@@ -127,7 +122,6 @@ function page() {
 
         router.push("/dashboard/news/all-news");
       } else {
-        console.log("Unexpected response structure:", res);
 
         setLoad(false);
         Swal.fire({
@@ -140,7 +134,7 @@ function page() {
         });
       }
     } catch (error) {
-      console.log(error);
+  
 
       setLoad(false);
       Swal.fire({
@@ -151,6 +145,7 @@ function page() {
         timer: 2000,
       });
     }
+    
   };
 
   const handleChange = (e) => {
