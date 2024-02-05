@@ -73,6 +73,7 @@ const page = () => {
       }
     } catch (error) {
       alert("Error creating category:", error);
+      throw new Error("Error creating category:", error)
       // Handle the error or show an error message to the user
     }
   };
