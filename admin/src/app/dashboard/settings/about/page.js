@@ -41,7 +41,7 @@ const About = () => {
       setAllData(data.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching privacy content:", error);
+      throw new Error(error.message, "Error fetching About Content");
     }
   };
 
@@ -52,7 +52,6 @@ const About = () => {
       image: aboutImageSrc,
     };
 
-    console.log("this is data", data);
 
     try {
       setLoading(true);
@@ -61,7 +60,6 @@ const About = () => {
         headers: { Authorization: `Bearer ${String(AuthToken)}` },
       });
 
-      console.log("Content saved successfully!", res);
       setLoading(false);
       if (res.status === 200) {
         Swal.fire({
@@ -74,7 +72,6 @@ const About = () => {
       }
     } catch (error) {
       setError(error.message);
-      console.error("Error saving content:", error);
       setLoading(false);
       Swal.fire({
         title: error.message,

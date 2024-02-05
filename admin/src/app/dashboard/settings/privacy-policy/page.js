@@ -34,10 +34,9 @@ const PrivacyPolicyPage = () => {
       const response = await Api.get("admin/pages/policy");
       const data = await response.data;
       setPrivacy(data.data);
-      console.log(response.data.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching privacy content:", error);
+    throw new Error(error.message, "Error fetching privacy content");
     }
   };
 
@@ -54,7 +53,6 @@ const PrivacyPolicyPage = () => {
         headers: { Authorization: `Bearer ${String(AuthToken)}`},
       });
 
-      console.log("Privacy content saved successfully!", res);
 
 
       if (res.status === 200) {
@@ -69,7 +67,6 @@ const PrivacyPolicyPage = () => {
       }
     } catch (error) {
       setError(error.message);
-      console.error("Error saving privacy content:", error);
       setLoading(false);
 
       Swal.fire({
