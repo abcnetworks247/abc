@@ -87,8 +87,8 @@ export default function Page() {
     : [];
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
-
-   function DeleteUser(_id) {
+  const token = Cookies.get("adminToken");
+  function DeleteUser(_id) {
     const id = { _id };
 
     Swal.fire({
@@ -99,38 +99,43 @@ export default function Page() {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Delete!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-    Api.delete("account/client", {
-        id,
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      }).then((res)=>{
-        if(res.status === 200){
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Api.delete("admin/auth/account/client", {
+            id,
+            headers: {
+              Authorization: `Bearer ${String(token)}`,
 
-          Swal.fire({
-            title: "Acoount Deleted!",
-            text: `${res.data.message}`,
-            icon: "success",
-          });
-          window.location.reload()
-        }else{
-          Swal.fire({
-            title: "Account not Deleted!",
-            text: "Account Not Deleted. Error occurred during the request.",
-            icon: "error",
+             
+            }, withCredentials: true,
+          }).then((res) => {
+            console.log(res, "res from bg");
+            if (res && res.status === 200) {
+              console.log(res, "sucess");
+              Swal.fire({
+                title: "Acoount Deleted!",
+                text: `${res?.data?.message}`,
+                icon: "success",
+              });
+              window.location.reload();
+            } else {
+              Swal.fire({
+                title: "Account not Deleted!",
+                text: "Account Not Deleted. Error occurred during the request.",
+                icon: "error",
+              });
+            }
           });
         }
       })
-      }
-    }).catch(function (err) {
-      Swal.fire({
-        title: "Account not Deleted!",
-        text: `${err}`,
-        icon: "error",
+      .catch(function (err) {
+        Swal.fire({
+          title: "Account not Deleted!",
+          text: `${err}`,
+          icon: "error",
+        });
       });
-    })
   }
 
   return (

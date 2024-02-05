@@ -76,8 +76,6 @@ function ProfileMenu() {
 
   const closeMenu = () => setIsMenuOpen(false);
 
-  console.log("CurrentUser", UserInfo);
-
   function Logout() {
     Swal.fire({
       title: "Are you sure?",

@@ -15,7 +15,6 @@ export const AdminProvider = ({ children }) => {
   } = useCurrentAdmin();
   const Users = CurrentUser?.data;
   const UserInfo = Users?.olduser;
-  console.log('userinfo',UserInfo )
 
     // get user token from session
     const Authtoken = Cookies.get("adminToken");
