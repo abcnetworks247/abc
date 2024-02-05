@@ -59,17 +59,13 @@ export default function Page() {
   const { CurrentUser } = useCurrentAdmin();
   const Admins = user?.data;
   const value = Admins?.data;
- 
 
   const [NewAdmin, setNewAdmin] = useState(null);
 
   const handleOpen = () => setOpen(!open);
-  const handleOpen2 =  () => {
+  const handleOpen2 = () => {
     setOpen2(!open2);
-}
-
-
-
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -92,13 +88,19 @@ export default function Page() {
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
 
-  console.log(currentItems, "current items")
+  console.log(currentItems, "current items");
   const token = Cookies.get("adminToken");
 
   function DeleteUser(role, _id) {
-    const payload = { _id, };
+    const id = { _id };
 
-    console.log(payload), "payload";
+    console.log("id: " + id._id);
+
+    let data = {
+      id: id._id,
+    };
+
+
     Swal.fire({
       title: `Are you sure you want to delete this ${role}?`,
       text: "You won't be able to revert this!",
@@ -111,12 +113,11 @@ export default function Page() {
       .then((result) => {
         if (result.isConfirmed) {
           Api.delete("admin/auth/account/admin", {
-            payload,
+            data,
             headers: {
               Authorization: `Bearer ${String(token)}`,
-
-             
-            }, withCredentials: true,
+            },
+            withCredentials: true,
           }).then((res) => {
             console.log(res, "res from bg");
             if (res && res.status === 200) {
@@ -127,7 +128,7 @@ export default function Page() {
                 icon: "success",
               });
               window.location.reload();
-            } else if(res.status === 500) {
+            } else if (res.status === 500) {
               Swal.fire({
                 title: `${res.data.error}`,
                 text: "you're not eligble to make this request.",
@@ -145,7 +146,6 @@ export default function Page() {
         });
       });
   }
-
 
   return (
     <>
@@ -335,11 +335,15 @@ export default function Page() {
                                     <IconButton
                                       variant="text"
                                       onClick={() => {
-
                                         let data = {
-                                          userdp, fullname, email, role, createdAt, _id
-                                        }
-                                        setNewAdmin( data );
+                                          userdp,
+                                          fullname,
+                                          email,
+                                          role,
+                                          createdAt,
+                                          _id,
+                                        };
+                                        setNewAdmin(data);
                                         handleOpen2();
                                       }}
                                     >
@@ -360,7 +364,6 @@ export default function Page() {
                                       }}
                                     >
                                       <PencilIcon className="h-4 w-4 " />
-                                 
                                     </IconButton>
                                   </Tooltip>
                                 </td>

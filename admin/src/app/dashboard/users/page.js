@@ -86,10 +86,16 @@ export default function Page() {
       )
     : [];
 
+  
   const currentItems = filteredUsers.slice(startIndex, endIndex);
   const token = Cookies.get("adminToken");
+
   function DeleteUser(_id) {
     const id = { _id };
+
+    let data = {
+      id: id._id,
+    };
 
     Swal.fire({
       title: `Are you sure you want to delete this user?`,
@@ -103,12 +109,11 @@ export default function Page() {
       .then((result) => {
         if (result.isConfirmed) {
           Api.delete("admin/auth/account/client", {
-            id,
+            data,
             headers: {
               Authorization: `Bearer ${String(token)}`,
-
-             
-            }, withCredentials: true,
+            },
+            withCredentials: true,
           }).then((res) => {
             console.log(res, "res from bg");
             if (res && res.status === 200) {
