@@ -92,6 +92,7 @@ export default function Page() {
 
   function DeleteUser(_id) {
     const id = { _id };
+   console.log(id, "user id")
 
     let data = {
       id: id._id,

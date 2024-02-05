@@ -29,8 +29,6 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
 
   const [formData, setFormData] = useState({
     role: "",
-    fullname: "",
-    email: "",
    // Add a field for the selected role
   });
 
@@ -70,8 +68,6 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
   // Define initial form error state
 
   const [errorMessages, setErrorMessages] = useState({
-    email: "",
-    fullname: "",
     role: "",
   });
 
@@ -239,21 +235,13 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                       <input
                         type="text"
                         name="fullname"
-                        onChange={(e) => {
-                          HandleInputChange(e);
-                          signUpValidate(
-                            "fullname",
-                            USERNAME_REGEX,
-                            e.target.value,
-                            "username start with letter, may include numbers or underscore(_)"
-                          );
-                        }}
+                        
                         defaultValue={NewAdmin?.fullname}
                         // value={formData.fullname}
-                        required
+                        disabled={NewAdmin?.role === "admin" || "editor" || "superadmin" || ""}
                         placeholder="eg. Michaeljackson"
-                        className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                      />
+                        className="focus:shadow-primary-outline cursor-not-allowed dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                        />
                       {errorMessages.fullname && formData.fullname && (
                         <span className="text-red-500 text-[13px]">
                           {errorMessages.fullname}
@@ -272,18 +260,9 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                         name="email"
                         placeholder="eg. soft@dashboard.com"
                         defaultValue={NewAdmin?.email}
-                        onChange={(e) => {
-                          HandleInputChange(e);
-                          signUpValidate(
-                            "email",
-                            EMAIL_REGEX,
-                            e.target.value,
-                            "Please enter a valid email address."
-                          );
-                        }}
-                        required
-                        className="focus:shadow-primary-outline dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                      />
+                        disabled={NewAdmin?.role === "admin" || "editor" || "superadmin" || ""}
+                        className="focus:shadow-primary-outline cursor-not-allowed dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                        />
       
                     </div>
                   </div>
