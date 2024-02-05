@@ -1,13 +1,40 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {Image} from "next/image";
+import { Image } from "next/image";
+import Api from "@/utils/Api";
+import parse from "html-react-parser";
+import React, { useState, useEffect } from "react";
 
 export default function AboutComponent() {
-  /**
-   * The current pathname of the URL.
-   * @type {string}
-   */
+
+  const [about, setAbout] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [aboutImageSrc, setAboutImageSrc] = useState(null);
+
+  const fetchAbout = async () => {
+    try {
+      const response = await Api.get("admin/pages/about");
+      const data = await response.data;
+      setAbout(data.data.description);
+      setAboutImageSrc(data.data.image);
+      console.log("check", response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching privacy content:", error);
+    }
+  };
+
+  const data = {
+    description: about,
+    image: aboutImageSrc,
+  };
+
+  useEffect(() => {
+    fetchAbout();
+  }, []);
+
   const pathname = usePathname();
   return (
     <>
@@ -16,33 +43,27 @@ export default function AboutComponent() {
           <section className="bg-gray-100">
             <div className="container mx-auto py-16 px-4 sm:px-3 lg:px-3">
               <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
-                <div className="max-w-lg"> 
+                <div className="max-w-lg">
                   <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
                     About Us
                   </h2>
-                  <p className="mt-4 text-gray-600 text-lg">
-                    At Oravent, we go beyond decoration – we craft immersive
-                    experiences that tell a story. With a passion for
-                    transforming spaces, our dedicated team brings creativity
-                    and precision to every project, turning ordinary venues into
-                    extraordinary memories. From intimate gatherings to........
-                  </p>
+
                   <div className="mt-8">
                     <Link
-                      href="/about"
+                      href="/contact"
                       className="text-blue-500 hover:text-blue-600 font-medium"
                     >
-                      Read more about us
+                      For more information, visit our contact us page.
                       <span className="ml-2">&#8594;</span>
                     </Link>
                   </div>
                 </div>
-                <div className="mt-12 md:mt-0 w-full" >
+                <div className="mt-12 md:mt-0 w-full">
                   <Image
                     // link to a random image from unsplash source: https://source.unsplash.com/random
                     height={500}
                     width={500}
-                    src="/https://source.unsplash.com/random"
+                    src="https://source.unsplash/random"
                     alt="About Us Image"
                     className="object-cover w-full rounded-lg shadow-md"
                   />
@@ -58,23 +79,12 @@ export default function AboutComponent() {
                   <h2 className="text-lg font-semibold text-gray-900 sm:text-4xl">
                     About Us
                   </h2>
-                  <p className="mt-4 text-gray-600">
-                    At Oravent, we go beyond decoration – we craft immersive
-                    experiences that tell a story. With a passion for
-                    transforming spaces, our dedicated team brings creativity
-                    and precision to every project, turning ordinary venues into
-                    extraordinary memories. From intimate gatherings to grand
-                    celebrations, we pride ourselves on attention to detail and
-                    a commitment to excellence. Let us be the brushstrokes to
-                    your canvas, creating a tapestry of beauty for your special
-                    moments. Welcome to a world where every event becomes a
-                    masterpiece.
-                  </p>
+                  <div className="flex flex-wrap">{parse(`${about}`)}</div>
                 </div>
                 <div className="mt-12 md:mt-0">
                   <img
                     // link to a random image from unsplash source: https://source.unsplash.com/random
-                    src="https://source.unsplash.com/random"
+                    src={ aboutImageSrc }
                     alt="About Us Image"
                     className="object-cover rounded-lg shadow-md h-[60vh] lg:w-[60vw] md:w-auto w-auto"
                   />
@@ -84,7 +94,7 @@ export default function AboutComponent() {
           </section>
         )}
       </div>
-      <section className="bg-gray-100 text-gray-900">
+      {/* <section className="bg-gray-100 text-gray-900">
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
           <div className="mx-auto max-w-lg text-center">
             <h2 className="text-3xl font-bold sm:text-3xl">
@@ -298,7 +308,7 @@ export default function AboutComponent() {
             </a>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

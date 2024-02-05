@@ -8,14 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
-import Image from 'next/image'
+import Image from "next/image";
 import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
 
 function Page() {
   // router for the navigation to another page after account created successfully
 
   const router = useRouter();
-    const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
   // Define the initial loginform data
   const [logInFormData, setlogInFormData] = useState({
     email: "",
@@ -33,7 +33,6 @@ function Page() {
     password: "",
   });
 
-  
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
   };
@@ -85,7 +84,6 @@ function Page() {
   const [data, setdata] = useState([]);
   console.log("data", data);
 
-  
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
@@ -107,7 +105,7 @@ function Page() {
       const data = await Api.post("client/auth/signin", logInFormData, {
         withCredentials: true,
       });
-      
+
       const value = data.data;
       // log the response data
       console.log("errorr", value.error);
@@ -144,7 +142,6 @@ function Page() {
       console.error(error);
     }
   };
-  
 
   return (
     <div>

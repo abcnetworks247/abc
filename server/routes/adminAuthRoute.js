@@ -14,7 +14,7 @@ const {
   singleClient,
   adminDeleteClient,
   adminDeleteAdmin,
-  adminRoleUpateAdmin,
+  adminRoleUpdateAdmin,
 } = require("../controllers/adminAuthControllers");
 
 const router = require("express").Router();
@@ -54,11 +54,8 @@ router.route("/account/client").get(authChecker, allClient); // Change authCheck
 router.route("/account/client/:id").get(authChecker, singleClient); //Get Client by id
 router.route("/account/client").delete(authChecker, adminDeleteClient); // Change authChecker to adminAuthChecker
 
-
 //client routes by admin
-router.route("/account/admin").patch(authChecker, adminRoleUpateAdmin); // Change authChecker to adminAuthChecker
+router.route("/account/admin").patch(authChecker, adminRoleUpdateAdmin); // Change authChecker to adminAuthChecker
 router.route("/account/admin").delete(authChecker, adminDeleteAdmin); // Change authChecker to adminAuthChecker
-
-
 
 module.exports = router;

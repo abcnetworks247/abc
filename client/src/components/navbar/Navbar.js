@@ -193,7 +193,7 @@ export default function Navbar() {
               )}
             </Link>
             <Link
-              href="/CartContent"
+              href="/cart"
               className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
               <div className="text-2xl text-white">

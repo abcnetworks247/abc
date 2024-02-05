@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaSquareFacebook } from "react-icons/fa6";
 import { FaSquareInstagram } from "react-icons/fa6";
@@ -31,36 +32,40 @@ export default function FooterComp() {
                   </span>
                   <ul className="list-unstyled">
                     <li>
-                      <a
+                      <Link
                         className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://www.creative-tim.com/presentation?ref=njs-profile"
+                        href="/about"
+                        target="_blank"
                       >
                         About Us
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://blog.creative-tim.com?ref=njs-profile"
+                        href="/contact"
+                        target="_blank"
                       >
                         Contact Us
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://www.github.com/creativetimofficial?ref=njs-profile"
+                        href="/terms"
+                        target="_blank"
                       >
                         Terms & Conditions
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://www.creative-tim.com/bootstrap-themes/free?ref=njs-profile"
+                        href="/privacy-policy"
+                        target="_blank"
                       >
                         Privacy Policy
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -70,36 +75,32 @@ export default function FooterComp() {
                   </span>
                   <ul className="list-unstyled">
                     <li>
-                      <a
+                      <Link
                         className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://github.com/creativetimofficial/notus-js/blob/main/LICENSE.md?ref=njs-profile"
+                        href="https://www.facebook.com/ABCAmbaTelevision/"
+                        target="_blank"
                       >
                         Facebook
-                      </a>
+                      </Link>
                     </li>
                     <li>
-                      <a
+                      <Link
                         className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://creative-tim.com/terms?ref=njs-profile"
+                        href="https://twitter.com/AbcAmbaTV?t=_pw3uE46en4ZX2MGMoZUHg&s=08"
+                        target="_blank"
                       >
                         Twitter
-                      </a>
+                      </Link>
                     </li>
+
                     <li>
-                      <a
+                      <Link
                         className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://creative-tim.com/privacy?ref=njs-profile"
-                      >
-                        Instagram
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        className="text-white hover:text-white  block pb-2 text-sm"
-                        href="https://creative-tim.com/contact-us?ref=njs-profile"
+                        href="https://www.youtube.com/c/ABCAmbaTV"
+                        target="_blank"
                       >
                         Youtube
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -112,8 +113,8 @@ export default function FooterComp() {
             <div className="w-full md:w-4/12 px-4 mx-auto text-center">
               <div className="text-sm text-white font-semibold py-1">
                 Copyright © <span id="get-current-year">2023</span>
-                <a
-                  href="https://www.creative-tim.com/product/notus-js"
+                <Link
+                  href="/"
                   className="text-white hover:text-gray-800"
                   target="_blank"
                 />{" "}

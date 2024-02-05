@@ -213,7 +213,7 @@ export default function Sidebar() {
                       Wishlist
                     </li>
                   </Link>
-                  <Link href="/cartContent">
+                  <Link href="/cart">
                     <li className="menu-item">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
