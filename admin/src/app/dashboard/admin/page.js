@@ -56,10 +56,7 @@ export default function Page() {
   const { user, isError, isLoading, isSuccess } = useallAdmin();
   const { CurrentUser } = useCurrentAdmin();
   const Admins = user?.data;
-  console.log("all admins", Admins);
   const value = Admins?.data;
-
-  console.log("new value for find ", value);
  
 
   const [NewAdmin, setNewAdmin] = useState(null);
@@ -69,17 +66,6 @@ export default function Page() {
   const handleOpen = () => setOpen(!open);
   const handleOpen2 =  () => {
     setOpen2(!open2);
-
-  //   const filteredData = value?.filter((admin) => admin._id === AnAdmin);
-
-  // // Check if the filteredData array has items
-  // if (filteredData && filteredData.length > 0) {
-  //   setNewAdmin(filteredData[0]); // Assuming that you only want the first matching admin
-  //   console.log(filteredData[0], "filteredData");
-  // } else {
-  //   setNewAdmin(null);
-  //   console.log("Admin not found");
-  // }
 }
 
 

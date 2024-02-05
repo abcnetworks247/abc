@@ -101,7 +101,6 @@ function Page() {
         toast.dismiss(suberrormsg);
       }, 2000);
 
-      console.log(error);
     }
   };
 
