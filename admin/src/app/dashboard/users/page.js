@@ -1,7 +1,6 @@
 "use client";
 import { AddMember } from "@/components/User/AddUser";
 import { useQuery } from "react-query";
-import Api from "@/utils/Api";
 import {
   MagnifyingGlassIcon,
   ChevronUpDownIcon,
@@ -28,6 +27,8 @@ import {
   Tooltip,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import Api from "@/utils/Api";
 
 const TABS = [
   {
@@ -57,7 +58,7 @@ const TABS = [
   {
     label: "Titanium",
     value: "titanium",
-  }
+  },
 ];
 
 const TABLE_HEAD = ["Member", "Package", "Creation Date", ""];
@@ -65,26 +66,72 @@ const TABLE_HEAD = ["Member", "Package", "Creation Date", ""];
 export default function Page() {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const { users, isLoading, isError, isSuccess } = UseUserlist();
 
   const handleOpen = () => setOpen(!open);
   //cookies
-  const ITEMS_PER_PAGE = 10; 
+  const ITEMS_PER_PAGE = 10;
   const totalItems = users ? users.data.length : 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
-  const filteredUsers = users ? users.data.filter(user =>
-    user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  ) : [];
+  const filteredUsers = users
+    ? users.data.filter(
+        (user) =>
+          user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
 
+   function DeleteUser(_id) {
+    const id = { _id };
 
+    Swal.fire({
+      title: `Are you sure you want to delete this user?`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Delete!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+    Api.delete("account/client", {
+        id,
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token")}`,
+        },
+      }).then((res)=>{
+        if(res.status === 200){
+
+          Swal.fire({
+            title: "Acoount Deleted!",
+            text: `${res.data.message}`,
+            icon: "success",
+          });
+          window.location.reload()
+        }else{
+          Swal.fire({
+            title: "Account not Deleted!",
+            text: "Account Not Deleted. Error occurred during the request.",
+            icon: "error",
+          });
+        }
+      })
+      }
+    }).catch(function (err) {
+      Swal.fire({
+        title: "Account not Deleted!",
+        text: `${err}`,
+        icon: "error",
+      });
+    })
+  }
 
   return (
     <>
@@ -182,163 +229,177 @@ export default function Page() {
                 </tr>
               </thead>
               <tbody className="w-full">
-
                 {filteredUsers.length === 0 ? (
-                <tr>
-                  <td colSpan={TABLE_HEAD.length} className="text-center p-4">
-                    No User Found.
-                  </td>
-                </tr>
-              ) : (
+                  <tr>
+                    <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                      No User Found.
+                    </td>
+                  </tr>
+                ) : (
+                  <>
+                    {users &&
+                      currentItems.map(
+                        (
+                          {
+                            userdp,
+                            fullname,
+                            email,
+                            userpackage,
+                            createdAt,
+                            _id,
+                          },
+                          index
+                        ) => {
+                          const isLast = index === users.data.length - 1;
+                          const classes = isLast
+                            ? "p-4"
+                            : "p-4 border-b border-blue-gray-50";
 
-                <>
-                  {users &&
-                    currentItems.map(
-                      (
-                        { userdp, fullname, email, userpackage, createdAt },
-                        index
-                      ) => {
-                        const isLast = index === users.data.length - 1;
-                        const classes = isLast
-                          ? "p-4"
-                          : "p-4 border-b border-blue-gray-50";
-
-                        return (
-                          <tr key={createdAt}>
-                            <td className={classes}>
-                              <div className="flex items-center gap-3">
-                                <Avatar src={userdp} alt={fullname} size="sm" />
-                                <div className="flex flex-col">
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal"
-                                  >
-                                    {fullname}
-                                  </Typography>
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal opacity-70"
-                                  >
-                                    {email}
-                                  </Typography>
+                          return (
+                            <tr key={createdAt}>
+                              <td className={classes}>
+                                <div className="flex items-center gap-3">
+                                  <Avatar
+                                    src={userdp}
+                                    alt={fullname}
+                                    size="sm"
+                                  />
+                                  <div className="flex flex-col">
+                                    <Typography
+                                      variant="small"
+                                      color="blue-gray"
+                                      className="font-normal"
+                                    >
+                                      {fullname}
+                                    </Typography>
+                                    <Typography
+                                      variant="small"
+                                      color="blue-gray"
+                                      className="font-normal opacity-70"
+                                    >
+                                      {email}
+                                    </Typography>
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
+                              </td>
 
-                            <td className={classes}>
-                              <div className="w-max">
-                                <Chip
-                                  variant="ghost"
-                                  size="sm"
-                                  value={
-                                    userpackage === "basic"
-                                      ? "basic"
-                                      : userpackage === "silver"
-                                      ? "silver"
-                                      : userpackage === "gold"
-                                      ? "gold"
-                                      : userpackage === "diamond"
-                                      ? "diamond"
-                                      : userpackage === "titanium"
-                                      ? "titanium"
-                                      : "offline"
-                                  }
-                                  color={
-                                    userpackage === "basic"
-                                      ? "green"
-                                      : userpackage === "silver"
-                                      ? "silver"
-                                      : userpackage === "gold"
-                                      ? "gold"
-                                      : userpackage === "diamond"
-                                      ? "diamond"
-                                      : userpackage === "titanium"
-                                      ? "titanium"
-                                      : "blue-gray"
-                                  }
-                                />
-                              </div>
-                            </td>
-                            <td className={classes}>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                {createdAt.split("T")[0]}
-                              </Typography>
-                            </td>
-                            <td className={classes}>
-                            <Tooltip content="delete User">
-                                <IconButton variant="text">
-                                  <svg
-                                    width="64px"
-                                    height="64px"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
-                                    className="h-5 w-5"
+                              <td className={classes}>
+                                <div className="w-max">
+                                  <Chip
+                                    variant="ghost"
+                                    size="sm"
+                                    value={
+                                      userpackage === "basic"
+                                        ? "basic"
+                                        : userpackage === "silver"
+                                        ? "silver"
+                                        : userpackage === "gold"
+                                        ? "gold"
+                                        : userpackage === "diamond"
+                                        ? "diamond"
+                                        : userpackage === "titanium"
+                                        ? "titanium"
+                                        : "offline"
+                                    }
+                                    color={
+                                      userpackage === "basic"
+                                        ? "green"
+                                        : userpackage === "silver"
+                                        ? "silver"
+                                        : userpackage === "gold"
+                                        ? "gold"
+                                        : userpackage === "diamond"
+                                        ? "diamond"
+                                        : userpackage === "titanium"
+                                        ? "titanium"
+                                        : "blue-gray"
+                                    }
+                                  />
+                                </div>
+                              </td>
+                              <td className={classes}>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal"
+                                >
+                                  {createdAt.split("T")[0]}
+                                </Typography>
+                              </td>
+                              <td className={classes}>
+                                <Tooltip content="delete User">
+                                  <IconButton
+                                    variant="text"
+                                    onClick={() => {
+                                      DeleteUser(_id);
+                                    }}
                                   >
-                                    <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                                    <g
-                                      id="SVGRepo_tracerCarrier"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                    <g id="SVGRepo_iconCarrier">
-                                      {" "}
-                                      <path
-                                        d="M10 12V17"
-                                        stroke="#000000"
-                                        strokeWidth={2}
+                                    <svg
+                                      width="64px"
+                                      height="64px"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
+                                      className="h-5 w-5"
+                                    >
+                                      <g
+                                        id="SVGRepo_bgCarrier"
+                                        strokeWidth={0}
+                                      />
+                                      <g
+                                        id="SVGRepo_tracerCarrier"
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
-                                      />{" "}
-                                      <path
-                                        d="M14 12V17"
-                                        stroke="#000000"
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />{" "}
-                                      <path
-                                        d="M4 7H20"
-                                        stroke="#000000"
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />{" "}
-                                      <path
-                                        d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10"
-                                        stroke="#000000"
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />{" "}
-                                      <path
-                                        d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"
-                                        stroke="#000000"
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />{" "}
-                                    </g>
-                                  </svg>
-
-                                </IconButton>
-                              </Tooltip>
-                            </td>
-                          </tr>
-                        );
-                      }
-                    )}
-                </>
-              )
-
-                }
+                                      />
+                                      <g id="SVGRepo_iconCarrier">
+                                        {" "}
+                                        <path
+                                          d="M10 12V17"
+                                          stroke="#000000"
+                                          strokeWidth={2}
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />{" "}
+                                        <path
+                                          d="M14 12V17"
+                                          stroke="#000000"
+                                          strokeWidth={2}
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />{" "}
+                                        <path
+                                          d="M4 7H20"
+                                          stroke="#000000"
+                                          strokeWidth={2}
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />{" "}
+                                        <path
+                                          d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10"
+                                          stroke="#000000"
+                                          strokeWidth={2}
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />{" "}
+                                        <path
+                                          d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"
+                                          stroke="#000000"
+                                          strokeWidth={2}
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />{" "}
+                                      </g>
+                                    </svg>
+                                  </IconButton>
+                                </Tooltip>
+                              </td>
+                            </tr>
+                          );
+                        }
+                      )}
+                  </>
+                )}
               </tbody>
             </table>
           </CardBody>
@@ -348,15 +409,25 @@ export default function Page() {
               color="blue-gray"
               className="font-normal"
             >
-             Page {currentPage} of {totalPages}
+              Page {currentPage} of {totalPages}
             </Typography>
             <div className="flex gap-2">
-              <Button variant="outlined" size="sm"   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
                 Previous
               </Button>
-              <Button variant="outlined" size="sm"  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
                 Next
               </Button>
             </div>
@@ -365,7 +436,6 @@ export default function Page() {
               handleOpen={handleOpen}
               // CurrentUser={CurrentUser}
             />
-
           </CardFooter>
         </Card>
       )}

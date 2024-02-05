@@ -83,7 +83,6 @@ const Page = () => {
         })
           .then((res) => {
             if (res.status >= 200 && res.status <= 300) {
-              console.log("=====", id);
               Swal.fire({
                 title: "Post Deleted!",
                 text: `${res.data.message}`,
@@ -107,37 +106,7 @@ const Page = () => {
             });
           });
 
-        //   {
-        //     data: { id }, // Assuming you need to send the 'id' as the request payload
-        //     headers: {
-        //       Authorization: `Bearer ${String(AuthToken)}`,
-        //       'Content-Type': 'application/json',
-        //     },
-        //     // withCredentials: true, // Add this line if you need to include credentials
-        //   }
-        // )
-        //   .then((res) => {
-        //     if (res.ok) {
-        //       console.log(id);
-        //       Swal.fire({
-        //         title: "Post Deleted!",
-        //         text: "Post Deleted Succefully.",
-        //         icon: "success",
-        //       });
-        //       console.log(res, data);
-        //       router.reload();
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     console.log("cant delete", err);
-        //     console.log(id);
 
-        //     Swal.fire({
-        //       title: "Post Not Deleted!",
-        //       text: "Post Not Deleted.",
-        //       icon: "error",
-        //     });
-        //   });
       }
     });
   }
