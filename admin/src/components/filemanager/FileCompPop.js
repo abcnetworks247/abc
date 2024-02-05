@@ -15,7 +15,14 @@ import { IoAdd } from "react-icons/io5";
 import { usePathname, useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 
-const FileCompPop = ({ setThumbnail, handleOpen, setGallery, setGallery2, setImageSrc }) => {
+const FileCompPop = ({
+  setThumbnail,
+  handleOpen,
+  setGallery,
+  setGallery2,
+  setImageSrc,
+  setAboutImageSrc,
+}) => {
   const [fileData, setFileData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [checkurl, setCheckUrl] = useState([]);
@@ -70,6 +77,17 @@ const FileCompPop = ({ setThumbnail, handleOpen, setGallery, setGallery2, setIma
         if (checkurl.length === 1) {
           let newthumbnail = checkurl.slice(0, 1);
           setThumbnail(newthumbnail[0].secure_url);
+          console.log("about img", newthumbnail[0].secure_url);
+          handleOpen(null);
+        } else {
+          alert("You can only select 1 product thumbnail");
+        }
+      }
+
+      if (valueWithoutPrefix === "about") {
+        if (checkurl.length === 1) {
+          let imgabout = checkurl.slice(0, 1);
+          setAboutImageSrc(imgabout[0].secure_url);
           handleOpen(null);
         } else {
           alert("You can only select 1 product thumbnail");
@@ -98,9 +116,6 @@ const FileCompPop = ({ setThumbnail, handleOpen, setGallery, setGallery2, setIma
           alert("You can only select 3 product gallery");
         }
       }
-
-      
-     
 
       if (valueWithoutPrefix === "newsimage") {
         if (checkurl.length === 1) {
