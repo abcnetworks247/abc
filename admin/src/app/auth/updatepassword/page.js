@@ -17,7 +17,6 @@ function Page() {
   const params = useSearchParams();
 
   const reset = params.get("reset");
-  console.log(params.get("reset"));
   // initial state for form data
   const [formData, setFormData] = useState({
     password: "",
@@ -26,7 +25,6 @@ function Page() {
   });
 
   // Define state for universal error
-  const [universalError, setUniversalError] = useState("");
 
   // Define initial validation state
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -59,7 +57,6 @@ function Page() {
         [fieldName]: "",
       }));
       setIsValidData(true);
-      setUniversalError("");
     }
   }
 
@@ -76,11 +73,6 @@ function Page() {
   };
 
   const HandleSubmit = async (e) => {
-
-    console.log(
-      "this is formdata",
-      formData.password, formData.confirmPassword
-    );
     
     e.preventDefault();
     if (!isValidData) {
@@ -101,7 +93,6 @@ function Page() {
       position: toast.POSITION.TOP_LEFT,
     });
 
-    console.log(formData);
 
     try {
       const data = await Api.post(
@@ -109,7 +100,6 @@ function Page() {
         formData
       );
 
-      console.log("data status", data.status);
 
       if (data.status !== 200) {
         toast.update(id, {
@@ -118,8 +108,6 @@ function Page() {
           isLoading: false,
         });
       }
-
-      console.log("Post successful", data.data.message);
 
       setTimeout(() => {
         toast.dismiss(id);
@@ -144,8 +132,6 @@ function Page() {
       setTimeout(() => {
         toast.dismiss(subErrorMessage);
       }, 2000);
-
-      console.log(error);
     }
   };
 

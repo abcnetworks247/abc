@@ -50,22 +50,13 @@ export default function Page(){
       position: toast.POSITION.TOP_LEFT,
     });
     try {
-  
-      // Log the current form data to the console
-      console.log("formdata", formData);
+
 
       // Perform an asynchronous API post request to sign up the user
-      console.log("Before API post request");
       const data = await Api.post("admin/auth/signup", formData);
-     
-
-
-      // Log the response data to the console
-      console.log("all data", data);
 
       // Check the status of the response and log success or failure messages
       if (data.status === 201) {
-        console.log("post successful", data.data.message);
         setTimeout(() => {
           toast.dismiss(id);
         }, 1000);
@@ -98,8 +89,6 @@ export default function Page(){
         }, 1000);
       }
     } catch (error) {
-      // Log any errors that occur during the API request
-    
       const suberrormsg = toast.update(id, {
         render: `${error}`,
         type: "error",
@@ -108,8 +97,6 @@ export default function Page(){
       setTimeout(() => {
         toast.dismiss(suberrormsg);
       }, 2000);
-
-      console.error(error);
     }
   };
   return (
