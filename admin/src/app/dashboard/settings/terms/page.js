@@ -33,10 +33,9 @@ const TermsPage = () => {
       const response = await Api.get("admin/pages/terms");
       const data = await response.data;
       setTerms(data.data);
-      console.log(data.data.description);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching terms content:", error);
+      throw new Error("Error fetching terms and conditions: " + error.message);
     }
   };
 
@@ -45,13 +44,10 @@ const TermsPage = () => {
   }, []);
 
   const saveTerms = async () => {
-    console.log("this is terms", terms);
     const data = {
       id: terms._id,
       description: terms.description,
     };
-
-    console.log("this is terms", data);
 
     try {
       setLoading(true);
@@ -60,7 +56,6 @@ const TermsPage = () => {
         headers: { Authorization: `Bearer ${String(AuthToken)}` },
       });
 
-      console.log("Terms content saved successfully!", res);
 
       
       if (res.status === 200) {
@@ -76,7 +71,6 @@ const TermsPage = () => {
       }
     } catch (error) {
       setError(error.message);
-      console.error("Error saving Terms content:", error);
       setLoading(false);
       Swal.fire({
         title: error.message,

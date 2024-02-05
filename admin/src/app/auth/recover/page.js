@@ -15,7 +15,6 @@ function Page() {
     email: "",
   });
 
-  const [universalError, setUniversalError] = useState("");
 
   // Define initial validation state
   const [isValidData, setIsValidData] = useState(true);
@@ -40,8 +39,6 @@ function Page() {
         [fieldName]: "",
       }));
       setIsValidData(true);
-
-      setUniversalError("");
     }
   }
   /**
@@ -101,7 +98,6 @@ function Page() {
         toast.dismiss(suberrormsg);
       }, 2000);
 
-      console.log(error);
     }
   };
 

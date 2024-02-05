@@ -56,30 +56,14 @@ export default function Page() {
   const { user, isError, isLoading, isSuccess } = useallAdmin();
   const { CurrentUser } = useCurrentAdmin();
   const Admins = user?.data;
-  console.log("all admins", Admins);
   const value = Admins?.data;
-
-  console.log("new value for find ", value);
  
 
   const [NewAdmin, setNewAdmin] = useState(null);
 
-  console.log("NewAdmin", NewAdmin);
-
   const handleOpen = () => setOpen(!open);
   const handleOpen2 =  () => {
     setOpen2(!open2);
-
-  //   const filteredData = value?.filter((admin) => admin._id === AnAdmin);
-
-  // // Check if the filteredData array has items
-  // if (filteredData && filteredData.length > 0) {
-  //   setNewAdmin(filteredData[0]); // Assuming that you only want the first matching admin
-  //   console.log(filteredData[0], "filteredData");
-  // } else {
-  //   setNewAdmin(null);
-  //   console.log("Admin not found");
-  // }
 }
 
 
@@ -105,7 +89,8 @@ export default function Page() {
     : [];
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
-  console.log("search result", currentItems);
+
+
   function DeleteUser(role) {
     Swal.fire({
       title: `Are you sure you want to delete this ${role}`,
@@ -131,7 +116,6 @@ export default function Page() {
     });
   }
 
-  console.log("CurrentUser.data.role", CurrentUser && CurrentUser.data.olduser);
   return (
     <>
       {isLoading ? (
