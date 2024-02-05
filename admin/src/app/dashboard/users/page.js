@@ -90,7 +90,7 @@ export default function Page() {
   const token = Cookies.get("adminToken");
   function DeleteUser(_id) {
     const id = { _id };
-
+   console.log(id, "user id")
     Swal.fire({
       title: `Are you sure you want to delete this user?`,
       text: "You won't be able to revert this!",
