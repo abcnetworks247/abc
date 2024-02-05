@@ -557,7 +557,7 @@ const adminDeleteAdmin = async (req, res) => {
       user.role === "owner" &&
       ["superadmin", "admin", "editor"].includes(oldAdmin.role)
     ) {
-      console.log("owner is already");
+
       const deleteUser = await Admin.findByIdAndDelete(id);
 
       if (deleteUser) {
@@ -569,7 +569,7 @@ const adminDeleteAdmin = async (req, res) => {
       user.role === "superadmin" &&
       ["admin", "editor"].includes(oldAdmin.role)
     ) {
-      console.log("superadmin is ready");
+
       const deleteUser = await Admin.findByIdAndDelete(id);
 
       if (deleteUser) {
@@ -579,7 +579,7 @@ const adminDeleteAdmin = async (req, res) => {
           .json({ message: "Client deleted successfully" });
       }
     } else if (user.role === "admin" && ["editor"].includes(oldAdmin.role)) {
-      console.log("Admin is ready");
+  
       const deleteUser = await Admin.findByIdAndDelete(id);
 
       if (deleteUser) {
