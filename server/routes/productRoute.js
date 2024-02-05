@@ -25,5 +25,4 @@ router
   .route("/paystack/create-checkout-session")
   .post(authChecker, PaystackCheckout); // Post a checkout session with paystack
 
-
 module.exports = router;

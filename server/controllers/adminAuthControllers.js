@@ -358,15 +358,38 @@ const userSignOut = async (req, res) => {
 };
 
 const userDelete = async (req, res) => {
+  const { id } = req.body;
+
   try {
-    const { user, userRole } = req;
+    const { user } = req;
+
+    const olduser = await Admin.find(id);
 
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
+    if (user._id === id) {
+      const deleteUser = await Admin.findByIdAndDelete(user._id);
+
+      if (deleteUser) {
+        return res
+          .status(StatusCodes.OK)
+          .json({ message: "User deleted successfully" });
+      }
+    }
+
+    const deleteUser = async (id) => {};
+
+    if (
+      (user.role === "owner" && olduser.role === "superadmin") ||
+      olduser.role === "admin" ||
+      olduser.role === "editor"
+    ) {
+    }
+
     // Allow super admin to delete both admins and editors
-    if (userRole === "superadmin") {
+    if (user.role === "owner" && user.role === "superadmin") {
       const deleteUser = await Admin.findByIdAndDelete(user._id);
 
       if (deleteUser) {
@@ -476,8 +499,8 @@ const singleClient = async (req, res) => {
   }
 };
 
-const deleteClient = async (req, res) => {
-  const clientid = req.body;
+const adminDeleteClient = async (req, res) => {
+  const { id } = req.body;
 
   const user = req.user;
   try {
@@ -486,11 +509,15 @@ const deleteClient = async (req, res) => {
     }
 
     // Check user role for authorization
-    if (user.role !== "superadmin" && user.role !== "admin") {
+    if (
+      user.role !== "owner" &&
+      user.role !== "superadmin" &&
+      user.role !== "admin"
+    ) {
       throw new UnAuthorizedError("Access denied");
     }
 
-    const deleteUser = await Client.findByIdAndDelete(clientid);
+    const deleteUser = await Client.findByIdAndDelete(id);
 
     if (deleteUser) {
       res
@@ -504,6 +531,127 @@ const deleteClient = async (req, res) => {
       .json({ error: error.message });
   }
 };
+
+//Admin manipulation Controller
+const adminDeleteAdmin = async (req, res) => {
+  const { id } = req.body;
+
+  const user = req.user;
+  try {
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    // Check user role for authorization
+
+    const oldAdmin = await Admin.find({ id });
+
+    if (
+      user.role === "owner" &&
+      ["superadmin", "admin", "editor"].includes(oldAdmin.role)
+    ) {
+      const deleteUser = await Client.findByIdAndDelete(id);
+
+      if (deleteUser) {
+        return res
+          .status(StatusCodes.OK)
+          .json({ message: "Client deleted successfully" });
+      }
+    } else if (
+      user.role === "superadmin" &&
+      ["admin", "editor"].includes(oldAdmin.role)
+    ) {
+      const deleteUser = await Client.findByIdAndDelete(id);
+
+      if (deleteUser) {
+        return res
+          .status(StatusCodes.OK)
+          .json({ message: "Client deleted successfully" });
+      }
+    } else if (user.role === "admin" && ["editor"].includes(oldAdmin.role)) {
+      const deleteUser = await Client.findByIdAndDelete(id);
+
+      if (deleteUser) {
+        return res
+          .status(StatusCodes.OK)
+          .json({ message: "Client deleted successfully" });
+      }
+    } else {
+      throw new UnAuthorizedError("Access denied");
+    }
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
+
+const adminRoleUpateAdmin = async (req, res) => {
+  const { id, role } = req.body;
+
+  const user = req.user;
+  try {
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    // Check user role for authorization
+
+    const oldAdmin = await Admin.find({ id });
+
+    if (
+      user.role === "owner" &&
+      ["superadmin", "admin", "editor"].includes(oldAdmin.role)
+    ) {
+      const updateUser = await Admin.findByIdAndUpdate(
+        id,
+        { role: role },
+        { new: true }
+      );
+
+      return res.status(StatusCodes.OK).json({
+        data: updateUser,
+        message: "Account updated successfully",
+      });
+
+    } else if (
+      user.role === "superadmin" &&
+      ["admin", "editor"].includes(oldAdmin.role)
+    ) {
+
+      const updateUser = await Admin.findByIdAndUpdate(
+        id,
+        { role: role },
+        { new: true }
+      );
+
+      return res.status(StatusCodes.OK).json({
+        data: updateUser,
+        message: "Account updated successfully",
+      });
+    } else if (user.role === "admin" && ["editor"].includes(oldAdmin.role)) {
+
+      const updateUser = await Admin.findByIdAndUpdate(
+        id,
+        { role: role },
+        { new: true }
+      );
+
+      return res.status(StatusCodes.OK).json({
+        data: updateUser,
+        message: "Account updated successfully",
+      });
+
+    } else {
+      throw new UnAuthorizedError("Access denied");
+    }
+  } catch (error) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
+
 
 module.exports = {
   signUp,
@@ -519,5 +667,7 @@ module.exports = {
   allAdmin,
   allClient,
   singleClient,
-  deleteClient,
+  adminDeleteClient,
+  adminDeleteAdmin,
+  adminRoleUpateAdmin,
 };

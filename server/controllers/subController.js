@@ -12,8 +12,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 const localurl = process.env.CLIENT_URL;
 
 const createSubscription = async (req, res) => {
-  console.log("trying to create subscription");
-
   const user = req.user;
   const item = req.body;
   let customer;
@@ -27,6 +25,8 @@ const createSubscription = async (req, res) => {
       email: user.email,
       limit: 1,
     });
+
+    // console.log(existingCustomer);
 
     if (existingCustomer.data.length > 0) {
       // Customer already exists
@@ -42,14 +42,20 @@ const createSubscription = async (req, res) => {
       if (subscriptions.data.length > 0) {
         // Customer already has an active subscription, send them to biiling portal to manage subscription
 
+        console.log("old subscription");
+
         const stripeSession = await stripe.billingPortal.sessions.create({
           customer: customer.id,
-          return_url: "http://localhost:3000/",
+          return_url: `${localurl}`,
         });
+
+        console.log("yes", stripeSession);
+
         return res.status(409).json({ redirectUrl: stripeSession.url });
       }
     } else {
       // No customer found, create a new one
+
       customer = await stripe.customers.create({
         email: user.email,
         metadata: {
@@ -88,10 +94,15 @@ const createSubscription = async (req, res) => {
       customer: user._id,
     });
 
-    console.log("session created for " + session.id);
+    console.log("session created for " + session);
 
     res.status(StatusCodes.OK).json({ id: session.id });
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error:", error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
 };
 
 // Fetch all subscription plans from the database
