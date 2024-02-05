@@ -68,14 +68,8 @@ export default function Page() {
   const [searchQuery, setSearchQuery] = useState('');
   const { users, isLoading, isError, isSuccess } = UseUserlist();
 
-  console.log("tanstack users ", users);
   const handleOpen = () => setOpen(!open);
-  // defined user initial state
-
-  const time = "2023-12-16T22:59:36.860Z";
-  console.log(time.split("T")[0]);
   //cookies
-  const authToken = Cookies.get("adminToken");
   const ITEMS_PER_PAGE = 10; 
   const totalItems = users ? users.data.length : 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -90,7 +84,7 @@ export default function Page() {
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
 
-  console.log(currentItems, "search result");
+
 
   return (
     <>

@@ -61,8 +61,6 @@ export default function Page() {
 
   const [NewAdmin, setNewAdmin] = useState(null);
 
-  console.log("NewAdmin", NewAdmin);
-
   const handleOpen = () => setOpen(!open);
   const handleOpen2 =  () => {
     setOpen2(!open2);
@@ -91,7 +89,8 @@ export default function Page() {
     : [];
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
-  console.log("search result", currentItems);
+
+
   function DeleteUser(role) {
     Swal.fire({
       title: `Are you sure you want to delete this ${role}`,
@@ -117,7 +116,6 @@ export default function Page() {
     });
   }
 
-  console.log("CurrentUser.data.role", CurrentUser && CurrentUser.data.olduser);
   return (
     <>
       {isLoading ? (
