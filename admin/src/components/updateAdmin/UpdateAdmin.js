@@ -25,20 +25,12 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
 export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
-
-
   const [formData, setFormData] = useState({
     role: "",
-   // Add a field for the selected role
+    // Add a field for the selected role
   });
 
   const roles = ["editor", "admin", "superadmin"];
-  /**
-   *
-   * @param {object}e e event object
-   * @param {string} e.target - to target the event
-   * @param {string} e.value - value of the event i.e input
-   */
 
   const HandleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,9 +46,7 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     // }
   };
 
-
   // }
-
 
   //Define state for universal error
 
@@ -104,11 +94,9 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     (field) => !errorMessages[field]
   );
 
-
   const HandleSubmit = async (e) => {
-
     e.preventDefault();
-    console.log(formData);
+    console.log("this is a submit", formData, NewAdmin);
     if (!allFieldsValid) {
       toast.error("please fill in all the fields correctly", {
         position: toast.POSITION.TOP_LEFT,
@@ -130,35 +118,41 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     });
     try {
       // Log the current form data to the console
-      console.log("formdata", formData);
 
-      const token =  Cookies.get('adminToken');
+      const token = Cookies.get("adminToken");
       // Perform an asynchronous API post request to sign up the user
       console.log("Before API post request");
-      const data = await Api.patch("admin/auth/signup", formData,{
+
+      let item = {
+        role: formData?.role,
+        id: String(NewAdmin._id),
+      };
+
+      const response = await Api.patch("admin/auth/account/admin", item, {
         headers: {
           Authorization: `Bearer ${String(token)}`,
-          "Content-Type": "multipart/form-data",
-        }});
+          "Content-Type": "application/json",
+        },
+      });
 
       // Log the response data to the console
-      console.log("all data", data);
+      console.log("all data", response);
 
       // Check the status of the response and log success or failure messages
-      if (data.status === 201) {
-        console.log("patch successful", data.data.message);
+      if (response.status === 200) {
+        console.log("patch successful", response.data.message);
         setTimeout(() => {
           toast.dismiss(id);
         }, 1000);
         toast.update(id, {
-          render: `${data.data.message}`,
+          render: `${response.data.message}`,
           type: "success",
           isLoading: false,
         });
-        if(typeof window !== "undefined"){
-          window.location.reload()
+        if (typeof window !== "undefined") {
+          window.location.reload();
         }
-      } else if (data.status === 500) {
+      } else if (response.status === 500) {
         const suberrormsg = toast.update(id, {
           render: `user email or name already exist `,
           type: "error",
@@ -193,8 +187,6 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
     }
   };
 
-
-  
   return (
     <>
       <ToastContainer
@@ -235,13 +227,17 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                       <input
                         type="text"
                         name="fullname"
-                        
                         defaultValue={NewAdmin?.fullname}
                         // value={formData.fullname}
-                        disabled={NewAdmin?.role === "admin" || "editor" || "superadmin" || ""}
+                        disabled={
+                          NewAdmin?.role === "admin" ||
+                          "editor" ||
+                          "superadmin" ||
+                          ""
+                        }
                         placeholder="eg. Michaeljackson"
                         className="focus:shadow-primary-outline cursor-not-allowed dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                        />
+                      />
                       {errorMessages.fullname && formData.fullname && (
                         <span className="text-red-500 text-[13px]">
                           {errorMessages.fullname}
@@ -260,10 +256,14 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                         name="email"
                         placeholder="eg. soft@dashboard.com"
                         defaultValue={NewAdmin?.email}
-                        disabled={NewAdmin?.role === "admin" || "editor" || "superadmin" || ""}
+                        disabled={
+                          NewAdmin?.role === "admin" ||
+                          "editor" ||
+                          "superadmin" ||
+                          ""
+                        }
                         className="focus:shadow-primary-outline cursor-not-allowed dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
-                        />
-      
+                      />
                     </div>
                   </div>
                   <div className="flex flex-wrap mt-4 -mx-3">
@@ -274,16 +274,29 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                       ></label>
                       {CurrentUser &&
                       CurrentUser.data.olduser.role === "superadmin" ? (
-                         <Select variant="outlined" label="Select Role" name="role"   value={NewAdmin?.role}  onChange={(e) => { setFormData({ ...formData, role: e }); }} >
-                        {roles.map((role)=>(
-
-                        <Option  key={role} value={role} defaultValue={NewAdmin?.role}>{role}</Option>
-                        ))}
-{/*                    
+                        <Select
+                          variant="outlined"
+                          label="Select Role"
+                          name="role"
+                          value={NewAdmin?.role}
+                          onChange={(e) => {
+                            setFormData({ ...formData, role: e });
+                          }}
+                        >
+                          {roles.map((role) => (
+                            <Option
+                              key={role}
+                              value={role}
+                              defaultValue={NewAdmin?.role}
+                            >
+                              {role}
+                            </Option>
+                          ))}
+                          {/*                    
                         <option value="admin">Admin</option>
                         <option value="superadmin">Super Admin</option>
                         <option value="editor">Editor</option> */}
-                      </Select>
+                        </Select>
                       ) : CurrentUser &&
                         CurrentUser.data.olduser.role === "admin" ? (
                         <Select variant="outlined" label="Select Role">
@@ -315,8 +328,12 @@ export function UpdateAdmin({ open, handleOpen, CurrentUser, NewAdmin }) {
                         type="password"
                         name="password"
                         placeholder="******"
-                        disabled={NewAdmin?.role === "admin" || "editor" || "superadmin" || ""}
-                     
+                        disabled={
+                          NewAdmin?.role === "admin" ||
+                          "editor" ||
+                          "superadmin" ||
+                          ""
+                        }
                         className="focus:shadow-primary-outline cursor-not-allowed dark:bg-slate-850 dark:placeholder:text-white/80 dark:text-white/80 text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                       />
                     </div>
