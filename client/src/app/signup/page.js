@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
-import Image from 'next/image'
+import Image from "next/image";
 
 import {
   EMAIL_REGEX,
@@ -16,10 +16,9 @@ import {
   DOB_REGEX,
 } from "@/utils/regex";
 
-
- function Page() {
-   const router = useRouter();
-    const [passwordVisible, setPasswordVisible] = useState(false);
+function Page() {
+  const router = useRouter();
+  const [passwordVisible, setPasswordVisible] = useState(false);
   // Define initial form data state
   const [signUpFormData, setSignUpFormData] = useState({
     fullname: "",
@@ -32,9 +31,8 @@ import {
   const [universalError, setUniversalError] = useState("");
 
   // Define initial validation state
-   const [isValidData, setIsValidData] = useState(true);
-   
-   
+  const [isValidData, setIsValidData] = useState(true);
+
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
   };
@@ -104,11 +102,11 @@ import {
     e.preventDefault();
     setIsValidData(allFieldsValid);
 
-    if(!allFieldsValid){
+    if (!allFieldsValid) {
       toast.error("please fill in all the fields correctly", {
         position: toast.POSITION.TOP_LEFT,
       });
-      return
+      return;
     }
     const id = toast.loading("creating..", {
       position: toast.POSITION.TOP_LEFT,
@@ -397,5 +395,5 @@ import {
   );
 }
 
-const signup = HocsessionAuthenticated(Page)
-export default signup
+const signup = HocsessionAuthenticated(Page);
+export default signup;

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
-import Image from "next/image"
+import Image from "next/image";
 import Logo from "@/resources/assets/images/AbcstudioNo.png";
 import HocsessionAuthenticated from "@/utils/HocSessionAuthenticated";
 function Page() {
@@ -37,11 +37,8 @@ function Page() {
     });
   };
 
-  const [universalError, setUniversalError] = useState("");
 
   // Define initial validation state
-  const [isValidData, setIsValidData] = useState(true);
-
   const [errorMessages, setErrorMessages] = useState({
     email: "",
     fullname: "",
@@ -55,15 +52,11 @@ function Page() {
         ...prevErrors,
         [fieldName]: errorMessage,
       }));
-      setIsValidData(false);
     } else {
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
         [fieldName]: "",
       }));
-      setIsValidData(true);
-
-      setUniversalError("");
     }
   }
 
@@ -92,22 +85,15 @@ function Page() {
       position: toast.POSITION.TOP_LEFT,
     });
     try {
-      // Log the current form data to the console
-      console.log("formdata", formData);
 
       // Perform an asynchronous API post request to sign up the user
-      console.log("Before API post request");
       const data = await Api.post("admin/auth/signin", formData);
 
       const value = data.data;
 
-      // Log the response data to the console
-      console.log("all data", data);
 
       // Check the status of the response and log success or failure messages
       if (data.status === 200) {
-        console.log("post successful", data.data.message);
-
         // storing the user token after successful login
         Cookies.set("adminToken", value.authToken);
         setTimeout(() => {
@@ -118,10 +104,10 @@ function Page() {
           type: "success",
           isLoading: false,
         });
-         if (typeof window !== "undefined") {
-           router.push("/");
-           window.location.reload();
-         }
+        if (typeof window !== "undefined") {
+          router.push("/");
+          window.location.reload();
+        }
       } else if (data.status === 500) {
         const suberrormsg = toast.update(id, {
           render: `user email or name already exist `,
@@ -152,10 +138,9 @@ function Page() {
       setTimeout(() => {
         toast.dismiss(suberrormsg);
       }, 2000);
-
-      console.error(error);
     }
   };
+
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);

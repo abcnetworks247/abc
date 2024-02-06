@@ -26,6 +26,9 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { MdDeleteForever } from "react-icons/md";
 import useCurrentAdmin from "@/hooks/useCurrentAdmin";
+import { UpdateAdmin } from "@/components/updateAdmin/UpdateAdmin";
+import Api from "@/utils/Api";
+import Cookies from "js-cookie";
 
 const TABS = [
   {
@@ -50,57 +53,100 @@ const TABLE_HEAD = ["Member", "Roles", "Date", "Employed", ""];
 
 export default function Page() {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [open2, setOpen2] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { user, isError, isLoading, isSuccess } = useallAdmin();
   const { CurrentUser } = useCurrentAdmin();
   const Admins = user?.data;
-  console.log("all admins", Admins);
+  const value = Admins?.data;
+
+  const [NewAdmin, setNewAdmin] = useState(null);
 
   const handleOpen = () => setOpen(!open);
+  const handleOpen2 = () => {
+    setOpen2(!open2);
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const ITEMS_PER_PAGE = 10; 
+  const ITEMS_PER_PAGE = 10;
   const totalItems = Admins ? Admins.data.length : 0;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
 
-  const filteredUsers = user ? Admins.data.filter(user =>
-    user.fullname.toLowerCase().includes(searchQuery.trim().toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.trim().toLowerCase())
-  ) : [];
-  
+  const filteredUsers = user
+    ? Admins.data.filter(
+        (user) =>
+          user.fullname
+            .toLowerCase()
+            .includes(searchQuery.trim().toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.trim().toLowerCase())
+      )
+    : [];
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
-  console.log( "search result", currentItems);
-  function DeleteUser(role) {
+
+  console.log(currentItems, "current items");
+  const token = Cookies.get("adminToken");
+
+  function DeleteUser(role, _id) {
+    const id = { _id };
+
+    console.log("id: " + id._id);
+
+    let data = {
+      id: id._id,
+    };
+
+
     Swal.fire({
-      title: `Are you sure you want to delete this ${role}`,
+      title: `Are you sure you want to delete this ${role}?`,
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Delete!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Acoount Deleted!",
-          text: "Account Deleted Succefully.",
-          icon: "success",
-        });
-
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("hasReloaded");
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Api.delete("admin/auth/account/admin", {
+            data,
+            headers: {
+              Authorization: `Bearer ${String(token)}`,
+            },
+            withCredentials: true,
+          }).then((res) => {
+            console.log(res, "res from bg");
+            if (res && res.status === 200) {
+              console.log(res, "sucess");
+              Swal.fire({
+                title: "Acoount Deleted!",
+                text: `${res?.data?.message}`,
+                icon: "success",
+              });
+              window.location.reload();
+            } else if (res.status === 500) {
+              Swal.fire({
+                title: `${res.data.error}`,
+                text: "you're not eligble to make this request.",
+                icon: "error",
+              });
+            }
+          });
         }
-        // HandleLogout();
-      }
-    });
+      })
+      .catch(function (err) {
+        Swal.fire({
+          title: "Account not Deleted!",
+          text: `${err}`,
+          icon: "error",
+        });
+      });
   }
 
-  console.log("CurrentUser.data.role", CurrentUser && CurrentUser.data.olduser);
   return (
     <>
       {isLoading ? (
@@ -198,169 +244,182 @@ export default function Page() {
                 </tr>
               </thead>
               <tbody className="w-full">
-                {
-                  filteredUsers.length === 0 ? (
-                    <tr>
-                      <td colSpan={TABLE_HEAD.length} className="text-center p-4">
-                        No results found.
-                      </td>
-                    </tr>
-                  ) :
-                  (
+                {filteredUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                      No results found.
+                    </td>
+                  </tr>
+                ) : (
+                  <>
+                    {Admins &&
+                      currentItems.map(
+                        (
+                          { userdp, fullname, email, role, createdAt, _id },
+                          index
+                        ) => {
+                          const isLast = index === Admins.data.length - 1;
+                          const classes = isLast
+                            ? "p-4"
+                            : "p-4 border-b border-blue-gray-50";
 
-                <>
-                  {Admins &&
-                    currentItems.map(
-                      ({ userdp, fullname, email, role, createdAt }, index) => {
-                        const isLast = index === Admins.data.length - 1;
-                        const classes = isLast
-                          ? "p-4"
-                          : "p-4 border-b border-blue-gray-50";
-
-                        return (
-                          <tr key={createdAt}>
-                            <td className={classes}>
-                              <div className="flex items-center gap-3">
-                                <Avatar src={userdp} alt={fullname} size="sm" />
-                                <div className="flex flex-col">
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal"
-                                  >
-                                    {fullname}
-                                  </Typography>
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal opacity-70"
-                                  >
-                                    {email}
-                                  </Typography>
+                          return (
+                            <tr key={createdAt}>
+                              <td className={classes}>
+                                <div className="flex items-center gap-3">
+                                  <Avatar
+                                    src={userdp}
+                                    alt={fullname}
+                                    size="sm"
+                                  />
+                                  <div className="flex flex-col">
+                                    <Typography
+                                      variant="small"
+                                      color="blue-gray"
+                                      className="font-normal"
+                                    >
+                                      {fullname}
+                                    </Typography>
+                                    <Typography
+                                      variant="small"
+                                      color="blue-gray"
+                                      className="font-normal opacity-70"
+                                    >
+                                      {email}
+                                    </Typography>
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
+                              </td>
 
-                            <td className={classes}>
-                              <div className="w-max">
-                                <Chip
-                                  variant="ghost"
-                                  size="sm"
-                                  value={
-                                    role === "admin"
-                                      ? "admin"
-                                      : role === "superadmin"
-                                      ? "superadmin"
-                                      : role === "editor"
-                                      ? "editor"
-                                      : ""
-                                  }
-                                  color={
-                                    role === "editor"
-                                      ? "green"
-                                      : role === "admin"
-                                      ? "silver"
-                                      : role === "superadmin"
-                                      ? "gold"
-                                      : userpackage === "diamond"
-                                  }
-                                />
-                              </div>
-                            </td>
-                            <td className={classes}>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                {createdAt.split("T")[0]}
-                              </Typography>
-                            </td>
+                              <td className={classes}>
+                                <div className="w-max">
+                                  <Chip
+                                    variant="ghost"
+                                    size="sm"
+                                    value={
+                                      role === "admin"
+                                        ? "admin"
+                                        : role === "superadmin"
+                                        ? "superadmin"
+                                        : role === "editor"
+                                        ? "editor"
+                                        : ""
+                                    }
+                                    color={
+                                      role === "editor"
+                                        ? "green"
+                                        : role === "admin"
+                                        ? "silver"
+                                        : role === "superadmin"
+                                        ? "gold"
+                                        : userpackage === "diamond"
+                                    }
+                                  />
+                                </div>
+                              </td>
+                              <td className={classes}>
+                                <Typography
+                                  variant="small"
+                                  color="blue-gray"
+                                  className="font-normal"
+                                >
+                                  {createdAt.split("T")[0]}
+                                </Typography>
+                              </td>
 
-                            {CurrentUser &&
-                            CurrentUser.data.olduser.role === "superadmin" &&
-                            role !== "superadmin" ? (
-                              <td className={classes}>
-                                <Tooltip content={`Edit User ${role}`}>
-                                  <IconButton
-                                    variant="text"
-                                    onClick={() => {
-                                      DeleteUser(role);
-                                    }}
-                                  >
-                                    <PencilIcon className="h-4 w-4" />
-                                  </IconButton>
-                                </Tooltip>
-                              </td>
-                            ) : CurrentUser &&
-                              CurrentUser.data.olduser.role === "admin" &&
-                              role !== "superadmin" &&
-                              role !== "admin" ? (
-                              <td className={classes}>
-                                <Tooltip content={`Delete ${role}`}>
-                                  <IconButton
-                                    variant="text"
-                                    onClick={() => {
-                                      DeleteUser(role);
-                                    }}
-                                  >
-                                    <PencilIcon className="h-4 w-4 " />
-                                  </IconButton>
-                                </Tooltip>
-                              </td>
-                            ) : (
-                              <></>
-                            )}
-                            {CurrentUser &&
-                            CurrentUser.data.olduser.role === "superadmin" &&
-                            role !== "superadmin" ? (
-                              <td className={classes}>
-                                <Tooltip content={`Delete ${role}`}>
-                                  <IconButton
-                                    variant="text"
-                                    onClick={() => {
-                                      DeleteUser(role);
-                                    }}
-                                  >
-                                    <MdDeleteForever className="h-6 w-6 text-red-600" />
-                                  </IconButton>
-                                </Tooltip>
-                              </td>
-                            ) : CurrentUser &&
-                              CurrentUser.data.olduser.role === "admin" &&
-                              role !== "superadmin" &&
-                              role !== "admin" ? (
-                              <td className={classes}>
-                                <Tooltip content={`Delete ${role}`}>
-                                  <IconButton
-                                    variant="text"
-                                    onClick={() => {
-                                      DeleteUser(role);
-                                    }}
-                                  >
-                                    <MdDeleteForever className="h-6 w-6 text-red-600" />
-                                  </IconButton>
-                                </Tooltip>
-                              </td>
-                            ) : (
-                              <></>
-                            )}
-                          </tr>
-                        );
-                      }
-                    )}
-                </>
-                  )
-                }
+                              {CurrentUser &&
+                              CurrentUser.data.olduser.role === "superadmin" &&
+                              role !== "superadmin" ? (
+                                <td className={classes}>
+                                  <Tooltip content={`Edit User ${role}`}>
+                                    <IconButton
+                                      variant="text"
+                                      onClick={() => {
+                                        let data = {
+                                          userdp,
+                                          fullname,
+                                          email,
+                                          role,
+                                          createdAt,
+                                          _id,
+                                        };
+                                        setNewAdmin(data);
+                                        handleOpen2();
+                                      }}
+                                    >
+                                      <PencilIcon className="h-4 w-4" />
+                                    </IconButton>
+                                  </Tooltip>
+                                </td>
+                              ) : CurrentUser &&
+                                CurrentUser.data.olduser.role === "admin" &&
+                                role !== "superadmin" &&
+                                role !== "admin" ? (
+                                <td className={classes}>
+                                  <Tooltip content={`Delete ${role}`}>
+                                    <IconButton
+                                      variant="text"
+                                      onClick={() => {
+                                        DeleteUser(role, _id);
+                                      }}
+                                    >
+                                      <PencilIcon className="h-4 w-4 " />
+                                    </IconButton>
+                                  </Tooltip>
+                                </td>
+                              ) : (
+                                <></>
+                              )}
+                              {CurrentUser &&
+                              CurrentUser.data.olduser.role === "superadmin" &&
+                              role !== "superadmin" ? (
+                                <td className={classes}>
+                                  <Tooltip content={`Delete ${role}`}>
+                                    <IconButton
+                                      variant="text"
+                                      onClick={() => {
+                                        DeleteUser(role, _id);
+                                      }}
+                                    >
+                                      <MdDeleteForever className="h-6 w-6 text-red-600" />
+                                    </IconButton>
+                                  </Tooltip>
+                                </td>
+                              ) : CurrentUser &&
+                                CurrentUser.data.olduser.role === "admin" &&
+                                role !== "superadmin" &&
+                                role !== "admin" ? (
+                                <td className={classes}>
+                                  <Tooltip content={`Delete ${role}`}>
+                                    <IconButton
+                                      variant="text"
+                                      onClick={() => {
+                                        DeleteUser(role, _id);
+                                      }}
+                                    >
+                                      <MdDeleteForever className="h-6 w-6 text-red-600" />
+                                    </IconButton>
+                                  </Tooltip>
+                                </td>
+                              ) : (
+                                <></>
+                              )}
+                            </tr>
+                          );
+                        }
+                      )}
+                  </>
+                )}
 
                 {CurrentUser && CurrentUser.data.olduser.length === 0 ? (
-                    <tr>
-                      <td colSpan={TABLE_HEAD.length} className="text-center p-4">
-                        No Admin Found.
-                      </td>
-                    </tr>
-                  ) :
-                  <></>}
+                  <tr>
+                    <td colSpan={TABLE_HEAD.length} className="text-center p-4">
+                      No Admin Found.
+                    </td>
+                  </tr>
+                ) : (
+                  <></>
+                )}
               </tbody>
             </table>
           </CardBody>
@@ -370,15 +429,25 @@ export default function Page() {
               color="blue-gray"
               className="font-normal"
             >
-             Page {currentPage} of {totalPages}
+              Page {currentPage} of {totalPages}
             </Typography>
             <div className="flex gap-2">
-              <Button variant="outlined" size="sm"   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
                 Previous
               </Button>
-              <Button variant="outlined" size="sm"  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
                 Next
               </Button>
             </div>
@@ -387,11 +456,15 @@ export default function Page() {
               handleOpen={handleOpen}
               CurrentUser={CurrentUser}
             />
+            <UpdateAdmin
+              open={open2}
+              handleOpen={handleOpen2}
+              CurrentUser={CurrentUser}
+              NewAdmin={NewAdmin}
+            />
           </CardFooter>
         </Card>
       )}
-
-      
     </>
   );
 }

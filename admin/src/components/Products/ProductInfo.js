@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import { IconButton, Tooltip } from "@material-tailwind/react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
 
@@ -69,6 +70,10 @@ const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
   const handleEdit = (id) => {
     router.push(`/dashboard/eccomerce/editproduct/?id=${id}`)
   }
+
+  const handleOpen = (id) => {
+    router.push(`/dashboard/eccomerce/editproduct/?id=${id}`);
+  };
   
   return (
     <>
@@ -88,10 +93,9 @@ const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
         </td>
         <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
           <div className="text-sm font-normal text-gray-500">{title}</div>
-          
         </td>
         <td className="p-4 whitespace-nowrap text-base font-medium text-gray-900">
-        <div className="text-sm font-normal text-gray-500">{category}</div>
+          <div className="text-sm font-normal text-gray-500">{category}</div>
         </td>
         <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
           {id}
@@ -100,10 +104,54 @@ const ProductInfo = ({ title, category, id, price, handleRefresh }) => {
           {price}
         </td>
         <td className="p-4 whitespace-nowrap space-x-2">
+          <Tooltip content="View">
+            <IconButton variant="text">
+              <Link
+                href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/productdetails/?id=${id}`}
+                target="_blank"
+              >
+                <svg
+                  className="w-5 h-5 cursor-pointer"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  stroke="#737373"
+                  // onClick={() => handleOpen(id)}
+                >
+                  <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <path
+                      d="M12 5C5.63636 5 2 12 2 12C2 12 5.63636 19 12 19C18.3636 19 22 12 22 12C22 12 18.3636 5 12 5Z"
+                      stroke="#737373"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />{" "}
+                    <path
+                      d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+                      stroke="#737373"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />{" "}
+                  </g>
+                </svg>
+              </Link>
+
+              {/* <PencilIcon className="h-4 w-4" /> */}
+            </IconButton>
+          </Tooltip>
+
           <Tooltip content="Edit">
             <IconButton variant="text">
               <svg
-                onClick = {()=>handleEdit(id)}
+                onClick={() => handleEdit(id)}
                 className="h-5 w-5"
                 fill="currentColor"
                 viewBox="0 0 20 20"

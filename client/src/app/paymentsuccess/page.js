@@ -1,8 +1,17 @@
+"use client"
+
 import FooterComp from '@/components/Footer/FooterComp';
 import Navbar from '@/components/navbar/Navbar';
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const Page = () => {
+
+  const router = useRouter();
+
+  const backToHome = () => {
+    router.push("/");
+  };
   return (
     <div>
       <div className="bg-[#111827] sticky top-0 z-[10]">
@@ -31,7 +40,7 @@ const Page = () => {
               <button
                 className="mt-6 w-fit px-4 rounded-md bg-blue-500 py-2 font-medium text-blue-50 hover:bg-blue-600"
                 Name
-                // onClick={StripeCheckout}
+                onClick={backToHome}
               >
                 Switch to home
               </button>

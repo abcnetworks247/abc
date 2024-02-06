@@ -44,7 +44,6 @@ export default function Page() {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentItems = CurrentUser ? BlogValue.slice(startIndex, endIndex) : [];
-  console.log("user value", BlogValue && BlogValue);
   return (
     <>
       {isLoading && isLoading ? (

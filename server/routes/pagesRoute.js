@@ -27,7 +27,7 @@ router.route("/policy").patch(authChecker, UpdatePolicy);
 
 // Policy Routes
 router.route("/about").get(ReadAbout);
-router.route("/about").patch(authChecker, CreateAbout);
+router.route("/about").post(authChecker, CreateAbout);
 router.route("/about").patch(authChecker, UpdateAbout);
 
 

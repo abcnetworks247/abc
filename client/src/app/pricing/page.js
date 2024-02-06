@@ -100,6 +100,8 @@ export default function page() {
 
         console.log("200");
         const session = await response.data; // Use response.data instead of response.json()
+
+        console.log("this is session", session);
         stripePromise.redirectToCheckout({
           sessionId: session.id,
         });

@@ -47,7 +47,6 @@ const page = () => {
 
   const handleCreate = async () => {
     try {
-      console.log("Name:", name);
 
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/type`,
@@ -62,19 +61,18 @@ const page = () => {
         }
       );
 
-      console.log("Response Data:", response.data);
-
       setName("");
       if (response.status === 201) {
         if (typeof window !== "undefined") {
           window.location.reload();
         }
       } else {
-        console.error("Unexpected response status:", response.status);
+        alert('Unexpected response status')
         // Handle the unexpected status code appropriately
       }
     } catch (error) {
-      console.error("Error creating category:", error);
+      alert('Error: ' + error)
+      throw new Error("Error creating category:", error)
       // Handle the error or show an error message to the user
     }
   };
@@ -91,7 +89,6 @@ const page = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          console.log("ID:", newid);
 
           const response = axios.delete(
             `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/type`,
@@ -104,7 +101,6 @@ const page = () => {
             }
           );
 
-          console.log("Response Data:", response.data);
 
           if (response.status === 200) {
             Swal.fire({
@@ -124,7 +120,8 @@ const page = () => {
             });
           }
         } catch (error) {
-          console.error("Error deleting category:", error);
+          alert('Error: ' + error)
+          throw new Error("Error  deleting category:", error)
           // Handle the error or show an error message to the user
         }
       }
@@ -132,9 +129,7 @@ const page = () => {
   };
 
   const handleEdit = (newid) => {
-    console.log(newid);
     try {
-      console.log("ID:", newid);
 
       const fildata = {
         id: newid,
@@ -153,8 +148,6 @@ const page = () => {
         }
       );
 
-      console.log("Response Data:", response.data);
-
       if (response.status !== 200) {
         setUploadState("File Uploaded Successfully 🎉🎉");
         setSuccessful(true);
@@ -169,7 +162,8 @@ const page = () => {
         setUploadState("Error: Try again later");
       }
     } catch (error) {
-      console.error("Error updating category:", error);
+      alert('Error: ' + error)
+      throw new Error("Error  updating category:", error)
       // Handle the error or show an error message to the user
     }
   };

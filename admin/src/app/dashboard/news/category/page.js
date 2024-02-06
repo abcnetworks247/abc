@@ -47,7 +47,6 @@ const page = () => {
 
   const handleCreate = async () => {
     try {
-      console.log("Name:", name);
 
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/category`,
@@ -61,8 +60,7 @@ const page = () => {
           },
         }
       );
-
-      console.log("Response Data:", response.data);
+;
 
       if (response.status === 201) {
         setName("");
@@ -71,11 +69,11 @@ const page = () => {
         //   window.location.reload();
         // }
       } else {
-        console.error("Unexpected response status:", response.status);
         // Handle the unexpected status code appropriately
       }
     } catch (error) {
-      console.error("Error creating category:", error);
+      alert("Error creating category:", error);
+      throw new Error("Error creating category:", error)
       // Handle the error or show an error message to the user
     }
   };
@@ -92,7 +90,6 @@ const page = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         try {
-          console.log("ID:", newid);
 
           const response = axios.delete(
             `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/category`,
@@ -105,7 +102,6 @@ const page = () => {
             }
           );
 
-          console.log("Response Data:", response.data);
 
           if (response.status === 200) {
             Swal.fire({
@@ -125,8 +121,9 @@ const page = () => {
             });
           }
         } catch (error) {
-          console.error("Error deleting category:", error);
-          // Handle the error or show an error message to the user
+    // Handle the error or show an error message to the user
+          alert.error("Error deleting category:", error);
+          throw new Error("Error deleting category:", error)
         }
       }
     });

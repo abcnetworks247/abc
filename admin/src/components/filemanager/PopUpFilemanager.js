@@ -26,6 +26,7 @@ const PopUpFilemanager = ({
   setGallery,
   setGallery2,
   setImageSrc,
+  setAboutImageSrc,
 }) => {
   const [selectedphoto, setSelectedPhoto] = useState(null);
   const [blogimage, setBlogImage] = useState(null);
@@ -42,6 +43,7 @@ const PopUpFilemanager = ({
           handleOpen={handleOpen}
           setImageSrc={setImageSrc}
           setGallery2={setGallery2}
+          setAboutImageSrc={setAboutImageSrc}
         />
       ),
     },

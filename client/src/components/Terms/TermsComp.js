@@ -1,6 +1,33 @@
+'use client'
+
+import Api from "@/utils/Api";
 import parse from "html-react-parser";
+import React, { useState, useEffect } from "react";
+
+
 
 const Terms = () => {
+
+  const [terms, setTerms] = useState({ description: "" });
+const [error, setError] = useState(null);
+const [loading, setLoading] = useState(false);
+
+const fetchTerms = async () => {
+  try {
+    const response = await Api.get("admin/pages/terms");
+    const data = await response.data;
+    setTerms(data.data);
+    console.log(data.data.description);
+    setLoading(false);
+  } catch (error) {
+    console.error("Error fetching terms content:", error);
+  }
+};
+
+useEffect(() => {
+  fetchTerms();
+}, []);
+  
   return (
     <div>
       {/* terms and condition component */}
@@ -13,7 +40,7 @@ const Terms = () => {
             </p>
           </div>
         </div>
-        <div className="flex flex-wrap">{parse(`${"new"}`)}</div>
+        <div className="flex flex-wrap">{parse(`${terms.description}`)}</div>
       </div>
     </div>
   );
