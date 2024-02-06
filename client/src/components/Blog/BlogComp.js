@@ -16,6 +16,7 @@ import Link from "next/link";
 
 export default function () {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   // autoplay progress bar
@@ -44,16 +45,27 @@ export default function () {
         const data = res.data;
         setPosts(data);
         // update the highlight, trending, top news and popular posts
-        setHighlight(data.highlight);
-        setTrending(data.trending);
-        setTopNews(data.top);
-        setPopular(data.popular);
+        setHighlight(data["africa news update"]);
+        setTrending(data["socio cultural"]);
+        setTopNews(data["breaking news"]);
+        setPopular(data.sports);
+       
         // set the loading state to false
         setLoading(false);
-        console.log("the blog", data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setError(err.response.data.message)
+        setLoading(false);
+      });
   }, []);
+
+  if (error) {
+    return <div className="h-[50vh] m-5 flex items-center justify-center">
+      <h1 className="text-red-400 text-2xl font-semibold">
+        {error}
+      </h1> 
+    </div>;
+  }
 
   return (
     <>
@@ -96,8 +108,8 @@ export default function () {
                 {/* map throught the the fetched data.highlight */}
 
                 <div className="w-full block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
-                <h2 className="text-xl font-bold">Highlight</h2>
-                <br />
+                  <h2 className="text-xl font-bold">Africa News Update</h2>
+                  <br />
                   <Swiper
                     spaceBetween={30}
                     hashNavigation={{
@@ -115,12 +127,12 @@ export default function () {
                   >
                     {/* map through the fetched data.highlight */}
                     {highlight.map((post) => (
-                      
-                      <SwiperSlide  key={post.shortdescription}>
+
+                      <SwiperSlide key={post.shortdescription}>
                         {/* <!-- main post --> */}
                         <div
                           className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7"
-                         
+
                         >
                           <Image
                             src={post.blogimage}
@@ -153,43 +165,43 @@ export default function () {
                 {/* <!-- sub-main posts --> */}
                 <div className=" p-0">
                   {/* map through trending posts */}
-                  <h2 className="text-xl font-bold">Trending</h2>
+                  <h2 className="text-xl font-bold">Socio-Cultural</h2>
                   <br />
                   <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 space-x-0 lg:grid lg:grid-cols-1 ">
-                      {trending.map((post) => (
-                    <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <div className="flex flex-col mb-5 rounded md:flex-row m-0 p-0 lg:space-x-3 md:space-x-2 space-x-0  " >
-                        <Image
-                          src={post.blogimage}
-                          height={500}
-                          width={200}
-                          alt="img"
-                          className="block object-cover object-top lg:w-[200px] lg:h-[25vh] w-full h-52 rounded-md md:hidden lg:block md:h-[23vh] m-0 p-0 md:m-0"
-                        />
-                        <div className="px-4 sm:px-0 bg-white rounded ">
-                          <span className="hidden text-sm text-green-700 md:block">
-                            {" "}
-                            {post.category}{" "}
-                          </span>
-                          <div className="mb-2 text-base font-semibold text-gray-800 md:mt-0">
-                            {post.title}
+                    {trending.map((post) => (
+                      <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                        <div className="flex flex-col mb-5 rounded md:flex-row m-0 p-0 lg:space-x-3 md:space-x-2 space-x-0  " >
+                          <Image
+                            src={post.blogimage}
+                            height={500}
+                            width={200}
+                            alt="img"
+                            className="block object-cover object-top lg:w-[200px] lg:h-[25vh] w-full h-52 rounded-md md:hidden lg:block md:h-[23vh] m-0 p-0 md:m-0"
+                          />
+                          <div className="px-4 sm:px-0 bg-white rounded ">
+                            <span className="hidden text-sm text-green-700 md:block">
+                              {" "}
+                              {post.category}{" "}
+                            </span>
+                            <div className="mb-2 text-base font-semibold text-gray-800 md:mt-0">
+                              {post.title}
+                            </div>
+                            <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden ">
+                              {post.shortdescription}
+                            </p>
                           </div>
-                          <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden ">
-                            {post.shortdescription}
-                          </p>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
                   </div>
-                  
+
                 </div>
               </div>
               {/* <!-- end featured section --> */}
 
               {/* <!-- recent posts --> */}
               <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-                <h2 className="text-3xl font-bold">Popular news</h2>
+                <h2 className="text-3xl font-bold">Sports</h2>
                 {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
                 </a> */}
@@ -233,7 +245,7 @@ export default function () {
 
               {/* <!-- popular posts --> */}
               <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-                <h2 className="text-3xl font-bold">Top news</h2>
+                <h2 className="text-3xl font-bold">Breaking news</h2>
                 {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
                 </a> */}
@@ -273,7 +285,7 @@ export default function () {
             </main>
             {/* <!-- main ends here --> */}
           </div>
-          
+
         </div>
       )}
     </>

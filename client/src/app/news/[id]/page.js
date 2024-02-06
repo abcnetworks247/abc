@@ -29,17 +29,18 @@ function page() {
       const newdata = res.data.data;
       const type = res.data.name;
 
-      console.log("news data", data);
-
       setData(newdata);
       setNewsType(type);
 
       console.log(type);
-      console.log("res", newdata);
+      // if res is empty, setError true
+      if (res.data.data.length === 0) {
+        setError("No data found");
+      }
+
 
       setLoading(false);
     } catch (err) {
-      console.log(err);
       setError(err);
       setLoading(false);
     }
@@ -47,8 +48,7 @@ function page() {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log("data", data);
-  if (data === undefined) {
+  if (error) {
     return (
       // page not found
       <>
@@ -57,12 +57,30 @@ function page() {
         </div>
         <div className="flex flex-col items-center justify-center h-[70svh] lg:h-[100vh]">
           <h1 className="text-4xl font-bold text-center text-black">
-            Page Not Found
+            {error}
           </h1>
-          <Link className="underline text-blue-500 " href="/">
-            {" "}
-            <p>Go to home</p>{" "}
-          </Link>
+          {/* a p tag and an svg pointing back saying "go back" */}
+          <p>
+            <Link className="text-blue-500 flex flex-row w-fit " href="/">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              <p>Go back</p>
+            </Link>
+
+          </p>
         </div>
         <FooterComp />
       </>
