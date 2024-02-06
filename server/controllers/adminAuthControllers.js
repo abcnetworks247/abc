@@ -557,7 +557,6 @@ const adminDeleteAdmin = async (req, res) => {
       user.role === "owner" &&
       ["superadmin", "admin", "editor"].includes(oldAdmin.role)
     ) {
-
       const deleteUser = await Admin.findByIdAndDelete(id);
 
       if (deleteUser) {
@@ -569,7 +568,6 @@ const adminDeleteAdmin = async (req, res) => {
       user.role === "superadmin" &&
       ["admin", "editor"].includes(oldAdmin.role)
     ) {
-
       const deleteUser = await Admin.findByIdAndDelete(id);
 
       if (deleteUser) {
@@ -579,7 +577,6 @@ const adminDeleteAdmin = async (req, res) => {
           .json({ message: "Client deleted successfully" });
       }
     } else if (user.role === "admin" && ["editor"].includes(oldAdmin.role)) {
-  
       const deleteUser = await Admin.findByIdAndDelete(id);
 
       if (deleteUser) {
@@ -600,7 +597,10 @@ const adminDeleteAdmin = async (req, res) => {
 const adminRoleUpdateAdmin = async (req, res) => {
   const { id, role } = req.body;
 
+  console.log(id, role);
+
   const user = req.user;
+
   try {
     if (!user) {
       throw new NotFoundError("User not found");
@@ -608,7 +608,7 @@ const adminRoleUpdateAdmin = async (req, res) => {
 
     // Check user role for authorization
 
-    const oldAdmin = await Admin.find({ id });
+    const oldAdmin = await Admin.findById(id);
 
     if (
       user.role === "owner" &&
@@ -628,6 +628,7 @@ const adminRoleUpdateAdmin = async (req, res) => {
       user.role === "superadmin" &&
       ["admin", "editor"].includes(oldAdmin.role)
     ) {
+      console.log("superadmin role in charge");
       const updateUser = await Admin.findByIdAndUpdate(
         id,
         { role: role },
