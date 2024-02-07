@@ -12,10 +12,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="cryptomus" content="315c61b7" />
+      </head>
       <body className={inter.className}>
-
         <UserContextProvider>
-            <ProductProvider>{children}</ProductProvider>
+          <ProductProvider>{children}</ProductProvider>
         </UserContextProvider>
       </body>
     </html>
