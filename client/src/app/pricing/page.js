@@ -6,9 +6,15 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import { useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
+import { useState } from "react";
 
 export default function page() {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  const [spinner, setSpinner] = useState(false);
+  const [spinnerId, setSpinnerId] = useState(null);
+  
+
+  
   const public_stripe_key = process.env.NEXT_PUBLIC_STRIPE_PK;
 
   const router = useRouter();
@@ -68,6 +74,8 @@ export default function page() {
   ];
 
   const SubscribeNow = async (plan) => {
+    setSpinnerId(plan.id);
+    setSpinner(true)
     const stripePromise = await loadStripe(public_stripe_key);
 
     if (!Authtoken) {
@@ -94,13 +102,12 @@ export default function page() {
         );
 
         window.location.href = response.data.redirectUrl;
+        setSpinner(false);
 
         // if (response.data && response.data.redirectUrl) {
         //   window.location.href = response.data.data.redirectUrl;
         // }
-      }
-      
-      else if (response.status === 200) {
+      } else if (response.status === 200) {
         // Adjusted condition to handle successee
 
         console.log("200");
@@ -111,19 +118,15 @@ export default function page() {
           sessionId: session.id,
         });
         
-        
+        setSpinner(false);
       } else {
         console.error(`Unexpected response status: ${response.status}`);
       }
-      
     } catch (error) {
       console.error("Error in Subscribe Now:", error.response.data.redirectUrl);
       window.location.href = error.response.data.redirectUrl;
-      
     }
   };
-
-
 
   return (
     <div>
@@ -207,7 +210,17 @@ export default function page() {
                           }
                         }}
                       >
-                        Subscribe Now <span>→</span>
+                        {plan.id === spinnerId ? (
+                          <div
+                            class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+                            role="status"
+                            aria-label="loading"
+                          ></div>
+                        ) : (
+                          <div className="">
+                            Subscribe Now <span>→</span>
+                          </div>
+                        )}
                       </button>
                     </div>
                   </div>
