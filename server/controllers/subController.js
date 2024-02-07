@@ -49,9 +49,9 @@ const createSubscription = async (req, res) => {
           return_url: `${localurl}`,
         });
 
-        console.log("yes", stripeSession);
+        console.log("yes", stripeSession.url);
 
-        return res.status(409).json({ redirectUrl: stripeSession.url });
+        return res.status(StatusCodes.CONFLICT).json({ redirectUrl: stripeSession.url });
       }
     } else {
       // No customer found, create a new one
