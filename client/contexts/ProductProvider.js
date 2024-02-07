@@ -45,7 +45,7 @@ const ProductProvider = ({ children }) => {
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
-    router.push("/productDetails");
+    router.push("/productdetails");
   };
 
   // add to cart socket

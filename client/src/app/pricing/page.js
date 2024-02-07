@@ -89,14 +89,19 @@ export default function page() {
 
       if (response.status === 409) {
         console.log(
-          "User is already subscribed, redirecting to billing portal"
+          "User is already subscribed, redirecting to billing portal",
+          response.data.redirectUrl
         );
 
-        if (response.data && response.data.redirectUrl) {
-          window.location.href = response.data.redirectUrl;
-        }
-      } else if (response.status === 200) {
-        // Adjusted condition to handle success
+        window.location.href = response.data.redirectUrl;
+
+        // if (response.data && response.data.redirectUrl) {
+        //   window.location.href = response.data.data.redirectUrl;
+        // }
+      }
+      
+      else if (response.status === 200) {
+        // Adjusted condition to handle successee
 
         console.log("200");
         const session = await response.data; // Use response.data instead of response.json()
@@ -105,13 +110,20 @@ export default function page() {
         stripePromise.redirectToCheckout({
           sessionId: session.id,
         });
+        
+        
       } else {
         console.error(`Unexpected response status: ${response.status}`);
       }
+      
     } catch (error) {
-      console.error("Error in SubscribeNow:", error);
+      console.error("Error in Subscribe Now:", error.response.data.redirectUrl);
+      window.location.href = error.response.data.redirectUrl;
+      
     }
   };
+
+
 
   return (
     <div>
@@ -130,7 +142,7 @@ export default function page() {
               does.
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-8 mt-12 lg:ap-2 lg:grid-cols-3 mb-16">
+          <div className="grid grid-cols-1 gap-8 mt-12 mb-16 lg:ap-2 lg:grid-cols-3">
             {Plans.map((plan) => (
               <div className="order-first" key={plan.id}>
                 <div className="flex flex-col">

@@ -118,12 +118,12 @@ export default function FooterComp() {
                   className="text-white hover:text-gray-800"
                   target="_blank"
                 />{" "}
-                ABC Studio
+                ABC Network 24,
                 <a
                   href="https://www.creative-tim.com?ref=njs-profile"
-                  className="text-white hover:text-white"
+                  className="text-white hover:text-white ml-1"
                 >
-                  Powered by Klipto inc
+                  Powered by Klipto inc.
                 </a>
               </div>
             </div>

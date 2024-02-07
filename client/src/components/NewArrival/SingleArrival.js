@@ -29,7 +29,7 @@ const SingleArrival = ({ product }) => {
   return (
     <div
       className="mt-56 bg-white rounded shadow cursor-pointer"
-      onClick={() => router.push(`/productDetails/?id=${product._id}`)}
+      onClick={() => router.push(`/productdetails/?id=${product._id}`)}
       onMouseEnter={() => setHoverState(true)}
     >
       <div className="relative  py-6 group ">
