@@ -9,6 +9,7 @@ import Marquee from "react-fast-marquee";
 import Cookies from "js-cookie";
 import FooterComp from "@/components/Footer/FooterComp";
 import Banner from "@/components/Home/HomeBanner";
+import Newsletter from "@/components/newsletter/Newsletter";
 
 export default function Home() {
   const pathname = usePathname();
@@ -32,9 +33,10 @@ export default function Home() {
   return (
     <main>
       {/* navbar component  */}
-      <div className="bg-[#111827] sticky top-0 z-[80]">
+      <div className="bg-[#111827] sticky top-0 z-40">
         <Navbar />
       </div>
+
       <div className="relative flex flex-row items-center border bg-[#111827] shadow-md border-gray-400">
         <div className="absolute z-10 px-4 top-0 left-0 flex items-center justify-center first-line:px-3 py-1 bg-red-600 rounded-[3px] border-gray-600 shadow-md w-fit h-10">
           <span className="font-[4px] text-sm text-white w-full ">
@@ -60,7 +62,7 @@ export default function Home() {
       <BlogComp />
 
       <Sidebar />
-
+      <Newsletter />
       <div className="flex flex-row sm:gap-10"></div>
       <FooterComp />
     </main>

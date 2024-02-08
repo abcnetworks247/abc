@@ -7,10 +7,10 @@ import { IoLogoYoutube } from "react-icons/io";
 export default function FooterComp() {
   return (
     <div>
-      <footer className="relative bg-blueGray-200 pt-8 pb-6 bg-[#111827] shadow ">
+      <footer className="relative bg-blueGray-200 pt-8 pb-6 bg-[#111827] shadow lg:px-8">
         <div className="container mx-auto ">
           <div className="flex flex-wrap text-left lg:text-left">
-            <div className="w-full lg:w-6/12 lg:px-20 pl-4 md:pl-0 ">
+            <div className="w-full lg:w-6/12  pl-4 md:pl-0 ">
               <h4 className="text-2xl  fonat-semibold text-white">
                 Let's keep in touch!
               </h4>
@@ -24,8 +24,8 @@ export default function FooterComp() {
                 <IoLogoYoutube className=" text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2" />
               </div>
             </div>
-            <div className="w-full lg:w-6/12 px-4">
-              <div className="flex flex-wrap items-top mb-6">
+            <div className="w-full lg:w-6/12 ">
+              <div className="flex flex-wrap items-top mb-6 gap-8">
                 <div className="w-full lg:w-4/12 px-4 ml-auto">
                   <span className="block uppercase text-white text-[12px]  font-semibold mb-2">
                     Useful Links
@@ -108,11 +108,11 @@ export default function FooterComp() {
             </div>
           </div>
 
-          <hr className="my-6 border-blueGray-300" />
-          <div className="flex flex-wrap items-center md:justify-between justify-center">
-            <div className="w-full md:w-4/12 px-4 mx-auto text-center">
+          <hr className="my-6 border-gray-50 opacity-20" />
+          <div className="px-3 lg:px-0 flex flex-wrap items-start  justify-start">
+            <div className="w-full mx-auto text-start">
               <div className="text-sm text-white font-semibold py-1">
-                Copyright © <span id="get-current-year">2023</span>
+                Copyright ©<span id="get-current-year">2023</span>
                 <Link
                   href="/"
                   className="text-white hover:text-gray-800"

@@ -18,7 +18,7 @@ export default function Sidebar() {
 
   return (
     <div>
-      <div className="sm:w-full sm:max-w-[18rem] z-[90] ">
+      <div className="sm:w-full sm:max-w-[18rem] z-90 z-50 ">
         <input
           type="checkbox"
           id="sidebar-mobile-fixed"
