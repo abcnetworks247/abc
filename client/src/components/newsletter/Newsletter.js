@@ -47,10 +47,10 @@ export default function Newsletter() {
         className="p-4 mt-8 rounded-t-lg shadow-md sm:p-6 lg:p-8 bg-gray-800 border-gray-700 "
         aria-label="Subscribe to the Flowbite newsletter"
       >
-        <h3 className="mb-3 text-xl font-medium text-gray-900 dark:text-white">
+        <h3 className="mb-3 text-xl font-medium text-white">
           Get more updates...
         </h3>
-        <p className="mb-5 text-sm font-medium text-gray-500 dark:text-gray-300">
+        <p className="mb-5 text-sm font-medium text-gray-300">
           Sign up for our newsletter and you'll be among the first to find out
           about new features.
         </p>

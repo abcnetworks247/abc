@@ -123,7 +123,7 @@ export default function FooterComp() {
                   href="https://www.creative-tim.com?ref=njs-profile"
                   className="text-white hover:text-white ml-1"
                 >
-                  Powered by Klipto inc.
+                  Powered by Klipto Inc.
                 </a>
               </div>
             </div>
