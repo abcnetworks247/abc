@@ -62,7 +62,7 @@ export default function page() {
                 className="px-2 pt-3 bg-white text-black w-full text-sm border-b-2 focus:border-[#333] outline-none"
               ></textarea>
             </div>
-            <button className="mt-8 flex items-center justify-center text-sm w-full rounded px-4 py-2.5 font-semibold bg-[#333] text-white hover:bg-[#222]">
+            <button className="flex items-center justify-center w-full px-4 py-3 mt-8 text-sm font-semibold text-white bg-blue-500 rounded-lg">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16px"

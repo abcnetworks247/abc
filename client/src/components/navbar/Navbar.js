@@ -101,7 +101,7 @@ export default function Navbar() {
           </Link>
         </div>
         {/*  Pages  */}
-        <div className="hidden navbar-center md:block text-white">
+        <div className="hidden text-white navbar-center md:block">
           <Link
             href="/"
             className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
@@ -154,16 +154,16 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <a className="dropdown    dropdown-hover">
+          <a className="dropdown dropdown-hover">
             <label tabIndex="0">News</label>
             <div className="dropdown-menu dropdown-menu-bottom-right bg-white mt-3 text-black uppercase z-[55] rounded-sm">
-              {/* <a className="dropdown-item text-sm">Profile</a> */}
+              {/* <a className="text-sm dropdown-item">Profile</a> */}
               {type.map((item, index) => {
                 return (
                   <Link
                     key={index}
                     href={`${pathUrl}${item._id}`}
-                    className="dropdown-item text-sm hover:bg-gray-200"
+                    className="text-sm dropdown-item hover:bg-gray-200"
                   >
                     {item.name}
                   </Link>
@@ -173,7 +173,7 @@ export default function Navbar() {
           </a>
         </div>
         <div className="hidden navbar-center md:block "></div>
-        <div className="flex flex-row items-center navbar-end text-white">
+        <div className="flex flex-row items-center text-white navbar-end">
           <div className="flex flex-row items-center gap-3 mr-4 text-white">
             <Link
               href="/wish"
@@ -242,7 +242,7 @@ export default function Navbar() {
                         <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50 text-gray-900 rounded-sm">
                           <Link
                             href="/userdashboard"
-                            className="text-sm dropdown-item -z-50 hover:bg-gray-100 rounded-sm"
+                            className="text-sm rounded-sm dropdown-item -z-50 hover:bg-gray-100"
                           >
                             Profile
                           </Link>
@@ -250,20 +250,20 @@ export default function Navbar() {
                           <Link
                             href="/userdashboard/manageaccount"
                             tabIndex="-1"
-                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
+                            className="text-sm rounded-sm dropdown-item hover:bg-gray-100"
                           >
                             Account settings
                           </Link>
                           <Link
                             href="/userdashboard/subscription"
                             tabIndex="-1"
-                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
+                            className="text-sm rounded-sm dropdown-item hover:bg-gray-100"
                           >
                             Subscriptions
                           </Link>
                           <a
                             tabIndex="-1"
-                            className="text-sm dropdown-item hover:bg-gray-100 rounded-sm"
+                            className="text-sm rounded-sm dropdown-item hover:bg-gray-100"
                             onClick={Logout}
                           >
                             logout
@@ -285,16 +285,19 @@ export default function Navbar() {
           {!Authtoken || !Authtoken?.length === 0 ? (
             <div className={`hidden lg:block ${loading ? "hidden" : "block"}`}>
               <div className="flex items-center justify-center h-fit ">
-                <div className="flex m-5 border gap-2 shadow-sm w-fit item-center rounded-xl p-1 items-center">
+                <div className="flex items-center gap-1 p-1 m-5 shadow-sm w-fit item-center rounded-xl">
                   <Link href="/login" className="w-fit">
-                    <button className="mx-4 py-1 m-0 text-white transition bg-transparent text-sm">
+                    <button className="py-1 m-0 mx-4 text-sm text-white transition bg-transparent">
                       Login
                     </button>
                   </Link>
                   <Link href="/signup">
-                    <button className="px-4 py-[5px] transition rounded-md text-sm bg-white text-black hover:bg-gray-100">
+                    {/* <button className="px-4 py-[5px] transition rounded-md text-sm bg-white text-black hover:bg-gray-100">
                       Register
-                    </button>
+                    </button> */}
+                    <span className="px-5 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg cursor-pointer hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      Register
+                    </span>
                   </Link>
                 </div>
               </div>

@@ -185,16 +185,16 @@ function Page() {
         pauseOnHover
         theme="light"
       />
-      <div className="max-w-screen-xl h-screen sm:rounded-lg flex justify-center flex-1">
-        <div className="flex-1 bg-blue-900 w-fit h-screen text-center hidden md:flex">
+      <div className="flex justify-center flex-1 h-screen max-w-screen-xl sm:rounded-lg">
+        <div className="flex-1 hidden h-screen text-center bg-blue-900 w-fit md:flex">
           <div
-            className=" h-screen w-full bg-contain bg-center bg-no-repeat "
+            className="w-full h-screen bg-center bg-no-repeat bg-contain "
             style={{
               backgroundImage: `url("/signup.svg")`,
             }}
           ></div>
         </div>
-        <div className="w-full  lg:w-1/2 xl:w-5/12 p-6  lg:flex-none flex items-center flex-col justify-center h-screen sm:p-12">
+        <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
               <Image
@@ -205,16 +205,16 @@ function Page() {
                 className="object-contain h-[80px] w-full"
               />
               <div className="flex items-center text-center"></div>
-              <h1 className="text-2xl xl:text-2xl font-extrabold text-blue-900 mb-2 text-center">
+              <h1 className="mb-2 text-2xl font-extrabold text-center text-blue-900 xl:text-2xl">
                 Register
               </h1>
               <p className="text-[12px] text-gray-500">
                 Hey enter your details to create your account
               </p>
             </div>
-            <div className="w-full flex-1 mt-8 text-center">
+            <div className="flex-1 w-full mt-8 text-center">
               <form
-                className="mx-auto max-w-xs flex flex-col gap-4"
+                className="flex flex-col max-w-xs gap-4 mx-auto"
                 onSubmit={HandleSubmit}
               >
                 <input
@@ -361,11 +361,11 @@ function Page() {
                   </span>
                 )}
                 {/* <input
-                  className="w-full px-5 py-3 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+                  className="w-full px-5 py-3 text-sm font-medium placeholder-gray-500 bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="password"
                   placeholder="Confirm Password"
                 /> */}
-                <button className="mt-5 tracking-wide font-semibold bg-blue-900 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                <button className="flex items-center justify-center w-full py-3 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-700 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none">
                   <svg
                     className="w-6 h-6 -ml-2"
                     fill="none"
@@ -380,10 +380,10 @@ function Page() {
                   </svg>
                   <span className="ml-3">Sign Up</span>
                 </button>
-                <p className="mt-6 text-xs text-gray-600 text-center">
+                <p className="mt-6 text-xs text-center text-gray-600">
                   Already have an account?{" "}
                   <Link href="/login">
-                    <span className="text-blue-900 font-semibold">Login</span>
+                    <span className="font-semibold text-blue-900">Login</span>
                   </Link>
                 </p>
               </form>

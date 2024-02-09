@@ -115,9 +115,9 @@ function Page() {
         theme="light"
       />
       <div className="flex justify-center flex-1 h-screen max-w-screen-xl sm:rounded-lg">
-      <div className="flex-1 bg-blue-900 w-fit h-screen text-center hidden md:flex">
+      <div className="flex-1 hidden h-screen text-center bg-blue-900 w-fit md:flex">
           <div
-            className=" h-screen w-full bg-contain bg-center bg-no-repeat "
+            className="w-full h-screen bg-center bg-no-repeat bg-contain "
             style={{
               backgroundImage: `url("/signup.svg")`,
             }}
@@ -171,7 +171,7 @@ function Page() {
                 )}
 
                 <button
-                  className="flex items-center justify-center w-full py-4 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-900 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
+                  className="flex items-center justify-center w-full py-3 mt-2 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-700 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
                   onClick={HandleSubmit}
                 >
                   <svg

@@ -177,7 +177,7 @@ function Page() {
             </div>
             <div className="flex-1 w-full mt-8">
               <form
-                className="flex flex-col max-w-xs gap-4 mx-auto"
+                className="flex flex-col max-w-xs gap-3.5 mx-auto"
                 onSubmit={HandleSubmit}
               >
                 <input
@@ -298,7 +298,7 @@ function Page() {
                   </span>
                 )}
 
-                <button className="flex items-center justify-center w-full py-4 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-900 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none">
+                <button className="flex items-center justify-center w-full py-3 mt-5 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-700 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none">
                   <svg
                     className="w-6 h-6 -ml-2"
                     fill="none"
@@ -314,7 +314,7 @@ function Page() {
                   <span className="ml-3">Login</span>
                 </button>
                 <div className="flex items-center justify-between gap-3">
-                  <p className="mt-6 text-sm text-center text-gray-600">
+                  <p className="mt-2 text-sm text-center text-gray-600">
                     New?{" "}
                     <Link href="/signup">
                       <span className="font-semibold text-blue-900">
@@ -322,7 +322,7 @@ function Page() {
                       </span>
                     </Link>
                   </p>
-                  <p className="mt-6 text-xs text-center text-gray-600">
+                  <p className="mt-2 text-xs text-center text-gray-600">
                     <Link href="/recovery">
                       <span className="font-semibold text-blue-900">
                         Forgot Password?
@@ -336,7 +336,7 @@ function Page() {
         </div>
         <div className="flex-1 bg-gradient-to-t from-[#00045E] via-[#9D3615] to-[#00045E] w-fit h-screen text-center hidden md:flex">
           <div
-            className=" h-screen w-full bg-contain bg-center bg-no-repeat "
+            className="w-full h-screen bg-center bg-no-repeat bg-contain "
             style={{
               backgroundImage: `url("/Login.svg")`,
             }}

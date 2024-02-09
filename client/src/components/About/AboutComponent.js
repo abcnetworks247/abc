@@ -9,6 +9,7 @@ import React, { useState, useEffect } from "react";
 export default function AboutComponent() {
 
   const [about, setAbout] = useState("");
+  const [about2, setAbout2] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [aboutImageSrc, setAboutImageSrc] = useState(null);
@@ -18,6 +19,7 @@ export default function AboutComponent() {
       const response = await Api.get("admin/pages/about");
       const data = await response.data;
       setAbout(data.data.description);
+      setAbout2(data.data.description2);
       setAboutImageSrc(data.data.image);
       console.log("check", response.data.data);
       setLoading(false);
@@ -41,8 +43,8 @@ export default function AboutComponent() {
       <div>
         {pathname === "/" ? (
           <section className="bg-gray-100">
-            <div className="container mx-auto py-16 px-4 sm:px-3 lg:px-3">
-              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
+            <div className="container px-4 py-16 mx-auto sm:px-3 lg:px-3">
+              <div className="grid items-center grid-cols-1 gap-8 md:grid-cols-2">
                 <div className="max-w-lg">
                   <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
                     About Us
@@ -51,14 +53,14 @@ export default function AboutComponent() {
                   <div className="mt-8">
                     <Link
                       href="/contact"
-                      className="text-blue-500 hover:text-blue-600 font-medium"
+                      className="font-medium text-blue-500 hover:text-blue-600"
                     >
                       For more information, visit our contact us page.
                       <span className="ml-2">&#8594;</span>
                     </Link>
                   </div>
                 </div>
-                <div className="mt-12 md:mt-0 w-full">
+                <div className="w-full mt-12 md:mt-0">
                   <Image
                     // link to a random image from unsplash source: https://source.unsplash.com/random
                     height={500}
@@ -73,8 +75,8 @@ export default function AboutComponent() {
           </section>
         ) : (
           <section className="bg-gray-100">
-            <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-10">
+            <div className="container px-4 py-16 mx-auto sm:px-6 lg:px-8">
+              <div className="grid items-center grid-cols-1 gap-10 md:grid-cols-2">
                 <div className="max-w-lg">
                   <h2 className="text-lg font-semibold text-gray-900 sm:text-4xl">
                     About Us
@@ -84,19 +86,21 @@ export default function AboutComponent() {
                 <div className="mt-12 md:mt-0">
                   <img
                     // link to a random image from unsplash source: https://source.unsplash.com/random
-                    src={ aboutImageSrc }
+                    src={aboutImageSrc}
                     alt="About Us Image"
                     className="object-cover rounded-lg shadow-md h-[60vh] lg:w-[60vw] md:w-auto w-auto"
                   />
                 </div>
               </div>
+
+              <div className="flex flex-wrap mt-10">{parse(`${about2}`)}</div>
             </div>
           </section>
         )}
       </div>
-      {/* <section className="bg-gray-100 text-gray-900">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
-          <div className="mx-auto max-w-lg text-center">
+      {/* <section className="text-gray-900 bg-gray-100">
+        <div className="max-w-screen-xl px-4 py-8 mx-auto sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+          <div className="max-w-lg mx-auto text-center">
             <h2 className="text-3xl font-bold sm:text-3xl">
               Kickstart your marketing
             </h2>
@@ -108,14 +112,14 @@ export default function AboutComponent() {
             </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-2 lg:grid-cols-3">
             <a
-              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block p-8 transition border border-gray-200 shadow-xl rounded-xl hover:border-blue-500 hover:shadow-blue-500/10"
               href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-blue-500"
+                className="w-10 h-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -141,12 +145,12 @@ export default function AboutComponent() {
               </p>
             </a>
             <a
-              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block p-8 transition border border-gray-200 shadow-xl rounded-xl hover:border-blue-500 hover:shadow-blue-500/10"
               href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-blue-500"
+                className="w-10 h-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -172,12 +176,12 @@ export default function AboutComponent() {
               </p>
             </a>
             <a
-              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block p-8 transition border border-gray-200 shadow-xl rounded-xl hover:border-blue-500 hover:shadow-blue-500/10"
               href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-blue-500"
+                className="w-10 h-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -203,12 +207,12 @@ export default function AboutComponent() {
               </p>
             </a>
             <a
-              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block p-8 transition border border-gray-200 shadow-xl rounded-xl hover:border-blue-500 hover:shadow-blue-500/10"
               href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-blue-500"
+                className="w-10 h-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -234,12 +238,12 @@ export default function AboutComponent() {
               </p>
             </a>
             <a
-              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block p-8 transition border border-gray-200 shadow-xl rounded-xl hover:border-blue-500 hover:shadow-blue-500/10"
               href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-blue-500"
+                className="w-10 h-10 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -265,12 +269,12 @@ export default function AboutComponent() {
               </p>
             </a>
             <a
-              className="block rounded-xl border border-gray-200 p-8 shadow-xl transition hover:border-blue-500 hover:shadow-blue-500/10"
+              className="block p-8 transition border border-gray-200 shadow-xl rounded-xl hover:border-blue-500 hover:shadow-blue-500/10"
               href="/about#"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-blue-500"
+                className="w-8 h-8 text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -302,7 +306,7 @@ export default function AboutComponent() {
           <div className="mt-12 text-center">
             <a
               href="#"
-              className="inline-block rounded bg-gray-800 px-12 py-3 text-sm font-medium text-white transition hover:bg-gray-900 focus:outline-none focus:ring focus:ring-yellow-400"
+              className="inline-block px-12 py-3 text-sm font-medium text-white transition bg-gray-800 rounded hover:bg-gray-900 focus:outline-none focus:ring focus:ring-yellow-400"
             >
               Get Started Today
             </a>
