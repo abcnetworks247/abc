@@ -65,18 +65,25 @@ DeleteUpload(io);
 Wishlist(io);
 Cart(io);
 
-
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
 
-
-
 connectDb(server);
 
+// app.use(express.json({
+//   verify: (req, res) => {
+//     const url = req.originalUrl;
+//     if (url.startswith("/cryprowebhook")){
+//       req.rwBody = buf.toString();
+//     }
+//   }
+// }));
+
 app.use(express.json());
+
 app.use(cookieParser());
 // app.use(fileUpload({ useTempFiles: true }));
 
@@ -99,14 +106,11 @@ app.use("/api/v1/admin/commerce", productRouter);
 app.use("/api/v1/admin/blog", blogRouter);
 app.use("/api/v1/admin/file", uploadRouter);
 
-
 //category Route
 app.use("/api/v1/admin/category", categoryRouter);
 
 //pages Route
 app.use("/api/v1/admin/pages", pagesRouter);
-
-
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));

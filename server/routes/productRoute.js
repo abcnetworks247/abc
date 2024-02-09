@@ -5,7 +5,7 @@ const {
   updateProduct,
   deleteProduct,
   StripeCheckout,
-  PaystackCheckout,
+  Crypto,
 } = require("../controllers/productControllers");
 const router = require("express").Router();
 const authChecker = require("../middlewares/adminAuthChecker"); // Import your admin auth middleware
@@ -21,8 +21,7 @@ router.route("/products").delete(authChecker, deleteProduct); // Delete a produc
 router
   .route("/stripe/create-checkout-session")
   .post(authChecker2, StripeCheckout); // Post a checkout session with Stripe
-router
-  .route("/paystack/create-checkout-session")
-  .post(authChecker, PaystackCheckout); // Post a checkout session with paystack
+
+router.route("/crypto/create-checkout-session").post(authChecker2, Crypto); // Post a checkout session with Stripe
 
 module.exports = router;
