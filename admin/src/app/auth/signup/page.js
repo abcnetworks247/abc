@@ -48,7 +48,7 @@ export default function Page() {
       // Perform an asynchronous API post request to sign up the user
       const data = await Api.post("admin/auth/signup", formData);
 
-      // Check the status of the response and log success or failure messages
+
       if (data.status === 201) {
         setTimeout(() => {
           toast.dismiss(id);
