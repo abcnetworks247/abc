@@ -73,15 +73,6 @@ app.use(
 
 connectDb(server);
 
-// app.use(express.json({
-//   verify: (req, res) => {
-//     const url = req.originalUrl;
-//     if (url.startswith("/cryprowebhook")){
-//       req.rwBody = buf.toString();
-//     }
-//   }
-// }));
-
 app.use(express.json());
 
 app.use(cookieParser());
