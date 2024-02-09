@@ -8,8 +8,8 @@ const Client = coinbase.Client;
 const resources = coinbase.resources;
 
 const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
-const clientObj = Client.init(process.env.COINBASE_API_KEY);
-clientObj.setRequestTimeout(3000);
+// const clientObj = Client.init(process.env.COINBASE_API_KEY);
+// clientObj.setRequestTimeout(3000);
 
 const OnrampSessionResource = stripe.StripeResource.extend({
   create: stripe.StripeResource.method({
@@ -315,72 +315,76 @@ const StripeCheckout = async (req, res) => {
 
 
 
-const Crypto = async (req, res) => {
-  const { product } = req.body;
+// const Crypto = async (req, res) => {
+//   const { product } = req.body;
 
-  const user = req.user;
+//   const user = req.user;
 
-  try {
-    if (!user) {
-      throw new UnAuthorizedError(
-        "User must be logged in to purchase a product"
-      );
-    }
+//   try {
+//     if (!user) {
+//       throw new UnAuthorizedError(
+//         "User must be logged in to purchase a product"
+//       );
+//     }
 
-    const lineItems = product.map((product) => ({
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: product.product.title,
-          images: [product.product.thumbnail],
-        },
-        unit_amount: product.product.price * 100,
-      },
-      quantity: product.quantity,
-    }));
+//     const lineItems = product.map((product) => ({
+//       price_data: {
+//         currency: "usd",
+//         product_data: {
+//           name: product.product.title,
+//           images: [product.product.thumbnail],
+//         },
+//         unit_amount: product.product.price * 100,
+//       },
+//       quantity: product.quantity,
+//     }));
 
-    const chargeData = {
-      name: product.name,
-      description: product.description,
-      pricing_type: "fixed_price",
-      local_price: {
-        amount: product.price,
-        currency: product.currency,
-      },
-      metadata: {
-        product_id: product.id,
-        user_id: user.email,
-      },
-    };
+//     const chargeData = {
+//       name: product.name,
+//       description: product.description,
+//       pricing_type: "fixed_price",
+//       local_price: {
+//         amount: product.price,
+//         currency: product.currency,
+//       },
+//       metadata: {
+//         product_id: product.id,
+//         user_id: user.email,
+//       },
+//     };
 
-    const charge = await resources.Charge.create(chargeData);
+//     const charge = await resources.Charge.create(chargeData);
 
-    res.status(StatusCodes.OK).json({ data: charge });
-  } catch (e) {
-    res.status(500).send({ error: e });
-  }
-};
+//     res.status(StatusCodes.OK).json({ data: charge });
+//   } catch (e) {
+//     res.status(500).send({ error: e });
+//   }
+// };
 
-const CryptoWebhook = async (req, res) => {
-  try {
-    const event = Webhook.verifySigHeader(
-      req.rawBody,
-      req.headers["x-cc-webhook-signature"],
-      process.env.COINBASE_API_KEY
-    );
+// const CryptoWebhook = async (req, res) => {
+//   try {
+//     const event = Webhook.verifySigHeader(
+//       req.rawBody,
+//       req.headers["x-cc-webhook-signature"],
+//       process.env.COINBASE_API_KEY
+//     );
 
-    console.log("Successfully verified", event);
+//     console.log("Successfully verified", event);
 
-    if (event.type === "charge:confirmed") {
-      let amount = event.data.pricing.local.amount;
-      let currency = event.data.pricing.local.amount;
-      let userId = event.data.metadata.user_id;
-    }
-  } catch (error) {
-    console.log("Failed");
-    console.log(error);
-  }
-};
+//     if (event.type === "charge:confirmed") {
+//       let amount = event.data.pricing.local.amount;
+//       let currency = event.data.pricing.local.amount;
+//       let userId = event.data.metadata.user_id;
+//     }
+//   } catch (error) {
+//     console.log("Failed");
+//     console.log(error);
+//   }
+// };
+
+const Crypto = (req, res) => {
+
+}
 
 module.exports = {
   createProduct,
