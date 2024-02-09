@@ -92,12 +92,12 @@ const PrivacyPolicyPage = () => {
                 Privacy Policy
               </h2>
               <p className="mt-2 text-sm text-gray-400">
-                {` This Terms and Condition read will be visible to your users..`}
+                {` This Privacy Policy page will be visible to your users..`}
               </p>
               <Link
                 href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/privacy-policy`}
                 target="_blank"
-                className="text-blue-500 underline mb-10 "
+                className="mt-5 mb-10 text-sm text-blue-500 underline "
               >
                 click to view privacy policy page
               </Link>

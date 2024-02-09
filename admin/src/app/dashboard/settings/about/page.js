@@ -19,12 +19,14 @@ import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import Image from "next/image";
 import { useRouter, redirect } from "next/navigation";
+import Link from "next/link";
 
 //store Auth token
 const AuthToken = Cookies.get("adminToken");
 
 const About = () => {
   const [about, setAbout] = useState("");
+  const [about2, setAbout2] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [aboutImageSrc, setAboutImageSrc] = useState(null);
@@ -37,6 +39,7 @@ const About = () => {
       const response = await Api.get("admin/pages/about");
       const data = await response.data;
       setAbout(data.data.description);
+      setAbout2(data.data.description2);
       setAboutImageSrc(data.data.image);
       setAllData(data.data);
       setLoading(false);
@@ -49,6 +52,7 @@ const About = () => {
     const data = {
       id: allData._id,
       description: about,
+      description2: about2,
       image: aboutImageSrc,
     };
 
@@ -85,6 +89,10 @@ const About = () => {
   const onChange = (e) => {
     setAbout(e.target.value);
   };
+  
+  const onChange2 = (e) => {
+    setAbout2(e.target.value);
+  };
 
   const { handleOpen, size } = UseFileManager();
 
@@ -107,10 +115,17 @@ const About = () => {
                 About Us
               </h2>
               <p className="mt-2 text-sm text-gray-400">
-                Lorem ipsum is placeholder text.
+                {` This About page will be visible to your users..`}
               </p>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/about`}
+                target="_blank"
+                className="mt-5 mb-10 text-sm text-blue-500 underline "
+              >
+                click to view about us page
+              </Link>
             </div>
-            <form className="mt-8 space-y-3">
+            <form className="mt-8 space-y-20">
               <div className="flex flex-col gap-5">
                 <a href="#value=about">
                   <div className="flex items-center justify-center w-full">
@@ -145,7 +160,7 @@ const About = () => {
                 </a>
 
                 {aboutImageSrc && (
-                  <div className="w-full relative">
+                  <div className="relative w-full">
                     <Image
                       className="w-full h-[50vh] object-cover rounded-lg"
                       src={aboutImageSrc}
@@ -154,7 +169,7 @@ const About = () => {
                       alt=""
                     />
                     <div
-                      className="cursor-pointer absolute top-4 right-4 p-2 bg-gray-200 rounded-full"
+                      className="absolute p-2 bg-gray-200 rounded-full cursor-pointer top-4 right-4"
                       onClick={HandleDeleteAbout}
                     >
                       <svg
@@ -175,10 +190,35 @@ const About = () => {
               </div>
               <div className="grid grid-cols-1 space-y-2">
                 <label className="text-sm font-bold tracking-wide text-gray-500">
-                  Full Details
+                  Short Description
                 </label>
                 <EditorProvider>
                   <Editor value={about} onChange={onChange} className="h-[80vh">
+                    <Toolbar>
+                      <BtnBold />
+                      <Separator />
+                      <BtnItalic />
+                      <Separator />
+                      <BtnLink />
+                      <Separator />
+                      <BtnStrikeThrough />
+                      <Separator />
+                      <BtnStyles />
+                    </Toolbar>
+                  </Editor>
+                </EditorProvider>
+              </div>
+
+              <div className="grid grid-cols-1 space-y-2">
+                <label className="text-sm font-bold tracking-wide text-gray-500">
+                  Long Description
+                </label>
+                <EditorProvider>
+                  <Editor
+                    value={about2}
+                    onChange={onChange2}
+                    className="h-[80vh"
+                  >
                     <Toolbar>
                       <BtnBold />
                       <Separator />

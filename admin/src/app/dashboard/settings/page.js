@@ -5,25 +5,33 @@ const page = () => {
   const router = useRouter();
   return (
     <div className="p-4 md:p-10">
-      <h4 className="font-semibold text-2xl">General Settings</h4>
+      <h4 className="text-2xl font-semibold">General Settings</h4>
 
       <div className="max-w-5xl mx-auto mt-8">
         <div className="">
-          <h1 className="text-lg md:text-lg pl-2 py-2  my-6 border-l-2 bg-gray-00 w-full  font-sans font-bold border-blue-500  dark:text-gray-200">
+          <h1 className="w-full py-2 pl-2 my-6 font-sans text-lg font-bold border-l-2 border-blue-500 md:text-lg bg-gray-00 dark:text-gray-200">
             Pages section
           </h1>
-          <div className="border-l border-gray-200 pl-8 flex flex-col gap-10">
+          <div className="flex flex-col gap-10 pl-8 border-l border-gray-200">
             <div className="flex flex-col md:flex-row md:justify-between">
               <div className="mb-4 md:mb-0">
-                <p className="text-md font-semibold mb-2">
+                <p className="mb-2 font-semibold text-md">
                   Terms and Condition
                 </p>
-                <p className="text-gray-600 text-sm">
-                  You can now create or update this page
+                <p className="mt-2 text-sm text-gray-400">
+                  {` This Terms and Condition will be visible to your users..`}
                 </p>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/privacy-policy`}
+                  target="_blank"
+                  className="mb-10 text-blue-500 underline "
+                >
+                  click to view privacy policy page
+                </Link>
               </div>
 
-              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1"
+              <button
+                className="flex flex-row items-center gap-1 px-4 py-2 text-white bg-blue-500 rounded-full shadow-md h-fit"
                 onClick={() => router.push("/dashboard/settings/terms")}
               >
                 <svg
@@ -50,14 +58,17 @@ const page = () => {
             </div>
             <div className="flex flex-col md:flex-row md:justify-between">
               <div className="mb-4 md:mb-0">
-                <p className="text-md font-semibold mb-2">Privacy Policy</p>
-                <p className="text-gray-600 text-sm">
+                <p className="mb-2 font-semibold text-md">Privacy Policy</p>
+                <p className="text-sm text-gray-600">
                   You can now create or update this page
                 </p>
               </div>
 
-              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1"
-                onClick={() => router.push("/dashboard/settings/privacy-policy")}
+              <button
+                className="flex flex-row items-center gap-1 px-4 py-2 text-white bg-blue-500 rounded-full shadow-md h-fit"
+                onClick={() =>
+                  router.push("/dashboard/settings/privacy-policy")
+                }
               >
                 <svg
                   fill="#ffffff"
@@ -83,13 +94,14 @@ const page = () => {
             </div>
             <div className="flex flex-col md:flex-row md:justify-between">
               <div className="mb-4 md:mb-0">
-                <p className="text-md font-semibold mb-2">About Us</p>
-                <p className="text-gray-600 text-sm">
+                <p className="mb-2 font-semibold text-md">About Us</p>
+                <p className="text-sm text-gray-600">
                   You can now create or update this page
                 </p>
               </div>
 
-              <button className="bg-blue-500 rounded-full text-white py-2 shadow-md px-4 h-fit flex flex-row items-center gap-1"
+              <button
+                className="flex flex-row items-center gap-1 px-4 py-2 text-white bg-blue-500 rounded-full shadow-md h-fit"
                 onClick={() => router.push("/dashboard/settings/about")}
               >
                 <svg

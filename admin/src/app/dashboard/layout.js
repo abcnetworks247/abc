@@ -9,7 +9,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
     <div>
       <main className="flex flex-row w-[100%]">
         <Sidebar />
-        <div className="w-[100%] flex flex-col">
+        <div className="w-[100%] flex flex-col h-screen overflow-y-auto">
           <ComplexNavbar />
           
             {children}
