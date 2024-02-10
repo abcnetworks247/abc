@@ -60,11 +60,39 @@ export default function () {
   }, []);
 
   if (error) {
-    return <div className="h-[50vh] m-5 flex items-center justify-center">
-      <h1 className="text-red-400 text-2xl font-semibold">
-        {error}
-      </h1> 
-    </div>;
+    return (
+      <div className="h-[50vh] m-5 flex items-center justify-center">
+        <h1 className="text-2xl font-semibold text-red-400"></h1>
+        <main>
+          <div className="flex items-center justify-start h-screen max-w-screen-xl px-4 mx-auto md:px-8">
+            <div className="max-w-lg mx-auto space-y-3 text-center">
+              <h3 className="font-semibold text-indigo-600">404 Error,</h3>
+              <p className="text-4xl font-semibold text-gray-800 sm:text-5xl">
+                {error}
+              </p>
+              <p className="text-gray-600">
+                Sorry, the post you are looking for could not be found or has
+                been removed.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/store"
+                  className="block px-4 py-2 font-medium text-white duration-150 bg-blue-500 rounded-lg hover:bg-blue-600"
+                >
+                  View shop
+                </Link>
+                <Link
+                  href="/contact"
+                  className="block px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                >
+                  Contact support
+                </Link>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
   }
 
   return (
@@ -99,10 +127,10 @@ export default function () {
           ))}
         </div>
       ) : (
-        <div className="w-full flex justify-center m-0 p-2">
+        <div className="flex justify-center w-full p-2 m-0">
           {/* <!-- component --> */}
-          <div className="w-full lg:p-5 p-0 ">
-            <main className=" w-full">
+          <div className="w-full p-0 lg:p-5 ">
+            <main className="w-full ">
               {/* <!-- featured section --> */}
               <div className="flex flex-col gap-5 space-x-0 lg:flex-row md:flex-row md:space-x-6">
                 {/* map throught the the fetched data.highlight */}
@@ -163,14 +191,14 @@ export default function () {
                   </Swiper>
                 </div>
                 {/* <!-- sub-main posts --> */}
-                <div className=" p-0">
+                <div className="p-0 ">
                   {/* map through trending posts */}
                   <h2 className="text-xl font-bold">Socio-Cultural</h2>
                   <br />
-                  <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 space-x-0 lg:grid lg:grid-cols-1 ">
+                  <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1 ">
                     {trending.map((post) => (
                       <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                        <div className="flex flex-col mb-5 rounded md:flex-row m-0 p-0 lg:space-x-3 md:space-x-2 space-x-0  " >
+                        <div className="flex flex-col p-0 m-0 mb-5 space-x-0 rounded md:flex-row lg:space-x-3 md:space-x-2 " >
                           <Image
                             src={post.blogimage}
                             height={500}
@@ -178,7 +206,7 @@ export default function () {
                             alt="img"
                             className="block object-cover object-top lg:w-[200px] lg:h-[25vh] w-full h-52 rounded-md md:hidden lg:block md:h-[23vh] m-0 p-0 md:m-0"
                           />
-                          <div className="px-4 sm:px-0 bg-white rounded ">
+                          <div className="px-4 bg-white rounded sm:px-0 ">
                             <span className="hidden text-sm text-green-700 md:block">
                               {" "}
                               {post.category}{" "}
@@ -206,7 +234,7 @@ export default function () {
                   View all
                 </a> */}
               </div>
-              <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 space-x-0 lg:flex lg:space-x-6">
+              <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
                 {/* map through the fetched data.popular */}
                 {popular.map((post) => (
                   <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0 ">
@@ -239,9 +267,6 @@ export default function () {
               </div>
               {/* <!-- end recent posts --> */}
 
-              {/* <!-- subscribe --> */}
-              <Newsletter />
-              {/* <!-- ens subscribe section --> */}
 
               {/* <!-- popular posts --> */}
               <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
@@ -250,7 +275,7 @@ export default function () {
                   View all
                 </a> */}
               </div>
-              <div className="block sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 space-x-0 lg:flex lg:space-x-6">
+              <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
                 {/* map through top news */}
                 {topNews.map((post) => (
                   <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">

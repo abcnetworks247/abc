@@ -55,33 +55,49 @@ function page() {
         <div className="bg-[#111827] sticky top-0 z-[10]">
           <Navbar />
         </div>
-        <div className="flex flex-col items-center justify-center h-[70svh] lg:h-[100vh]">
-          <h1 className="text-4xl font-bold text-center text-black">
-            {error}
-          </h1>
-          {/* a p tag and an svg pointing back saying "go back" */}
-          <p>
-            <Link className="text-blue-500 flex flex-row w-fit " href="/">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
 
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              <p>Go back</p>
-            </Link>
-
-          </p>
-        </div>
+        <main>
+          <div className="flex items-center justify-start h-screen max-w-screen-xl px-4 mx-auto md:px-8">
+            <div className="max-w-lg mx-auto space-y-3 text-center">
+              <h3 className="font-semibold text-indigo-600">404 Error,</h3>
+              <p className="text-4xl font-semibold text-gray-800 sm:text-5xl">
+                {error}
+              </p>
+              <p className="text-gray-600">
+                Sorry, the post you are looking for could not be found or has
+                been removed.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/"
+                  className="flex flex-row items-center gap-2 px-4 py-2 font-medium text-white duration-150 bg-blue-500 rounded-lg item hover:bg-blue-600"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                  Go Back
+                </Link>
+                <Link
+                  href="/contact"
+                  className="block px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:bg-gray-50 active:bg-gray-100"
+                >
+                  Contact support
+                </Link>
+              </div>
+            </div>
+          </div>
+        </main>
         <FooterComp />
       </>
     );
@@ -116,16 +132,16 @@ function page() {
         </div>
       ) : (
         <div className="px-8 my-10">
-          <div className="text-xl mx-auto px-4 pt-4 font-bold">
+          <div className="px-4 pt-4 mx-auto text-xl font-bold">
             results for: {newstype}
           </div>
 
-          <section className=" flex flex-row flex-wrap mx-auto">
+          <section className="flex flex-row flex-wrap mx-auto ">
             {data &&
               data.map((item) => (
                 <div
                   key={item._id}
-                  className="transition-all duration-150 flex w-full px-4 py-6 md:w-1/2 lg:w-1/3"
+                  className="flex w-full px-4 py-6 transition-all duration-150 md:w-1/2 lg:w-1/3"
                 >
                   <div className="flex flex-col items-stretch min-h-full pb-4 mb-6 transition-all duration-150 bg-white rounded-lg shadow-md">
                     <div className="md:flex-shrink-0">
@@ -134,7 +150,7 @@ function page() {
                         height={300}
                         width={500}
                         src={item.blogimage}
-                        className="h-48 w-full rounded-lg rounded-b-none object-cover object-top"
+                        className="object-cover object-top w-full h-48 rounded-lg rounded-b-none"
                       ></Image>
                     </div>
                     <div className="flex items-center justify-between px-4 py-2 overflow-hidden">
@@ -144,12 +160,12 @@ function page() {
                       <div className="flex flex-row items-center"></div>
                     </div>
                     <hr className="border-gray-300" />
-                    <div className="flex flex-wrap items-center flex-1 px-4 py-1 text-center mx-auto">
+                    <div className="flex flex-wrap items-center flex-1 px-4 py-1 mx-auto text-center">
                       <Link
                         href={`${pathUrl}/${item._id}`}
                         className="hover:underline"
                       >
-                        <h2 className="text-lg text-left font-bold tracking-normal text-gray-800">
+                        <h2 className="text-lg font-bold tracking-normal text-left text-gray-800">
                           {item.title}
                         </h2>
                       </Link>
