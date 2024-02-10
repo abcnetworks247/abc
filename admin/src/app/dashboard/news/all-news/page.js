@@ -29,7 +29,7 @@ const Page = () => {
   useEffect(() => {
     Api.get("admin/blog")
       .then((res) => {
-        const data = res.data.allblog;
+        const data = res.data.allBlogs;
         setNews(data);
         setLoading(false);
       })
@@ -38,7 +38,6 @@ const Page = () => {
         const error = "Something went wrong, Try again later";
         setError(error);
         setLoading(false);
-        
       });
   }, []);
 
@@ -62,7 +61,6 @@ const Page = () => {
   };
 
   async function Delete(id) {
-    
     Swal.fire({
       title: `Are you sure you want to delete this `,
       text: "You won't be able to revert this!",
@@ -78,7 +76,7 @@ const Page = () => {
           data: { id },
           headers: {
             Authorization: `Bearer ${String(AuthToken)}`,
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         })
           .then((res) => {
@@ -92,21 +90,18 @@ const Page = () => {
               console.log(res.statusText, res.status, res.data);
               // reload the page
               window.location.reload();
-              
             }
           })
           .catch((err) => {
             console.log("cant delete", err);
             console.log(id);
-        
+
             Swal.fire({
               title: "Post Not Deleted!",
               text: "Post Not Deleted. Error occurred during the request.",
               icon: "error",
             });
           });
-
-
       }
     });
   }
@@ -148,13 +143,13 @@ const Page = () => {
           </svg>
         </div>
       ) : (
-        <div >
+        <div>
           {news.map((item) => (
             <article
               key={item._id}
               className="p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-8"
             >
-              <div className="grid items-start grid-cols-1 space-y-3 lg:flex md:flex lg:space-y-0 md:space-y-0 sm:gap-8 lg:flex-row md:flex-row ">
+              <div className="grid items-start grid-cols-1 space-y-3 lg:flex md:flex lg:space-y-0 md:space-y-0 gap-3 lg:flex-row md:flex-row ">
                 <div
                   className="rounded lg:h-52 md:h-48 h-60 sm:w-full"
                   aria-hidden="true"
@@ -164,7 +159,7 @@ const Page = () => {
                     <img
                       src={item.blogimage}
                       alt="random image from unsplash"
-                      className="object-cover object-center w-full h-full mb-2 rounded lg:mb-0 md:flex md:mb-0"
+                      className="object-cover object-center w-[95%] h-[45vh] mb-2 rounded lg:mb-0 md:flex md:mb-0"
                     />
                   </Link>
                 </div>
@@ -181,7 +176,7 @@ const Page = () => {
                     </button>
                     <button
                       onClick={() => {
-                        let id = item._id
+                        let id = item._id;
                         Delete(id);
                       }}
                       className="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-[10px] font-medium ml-1 sm:mt-2 text-white"
@@ -221,55 +216,42 @@ const Page = () => {
                         ></path>
                       </svg>
 
-                      <p className="text-xs font-medium">{
-                        //
-                       item.createdAt.split("T")[0]   
-                      }
-                      {" "} {" "}
-                      
-                      {
-                        // remove every other characters after the second ":" eg 12:30:00.000Z => 12:30
-                        item.createdAt.split("T")[1].split(".")[0].replace(/(.{2}:.{2}).*/, '$1')// 12:30:00.000Z => 12:30                        
-                      }
+                      <p className="text-xs font-medium">
+                        {
+                          //
+                          item.createdAt.split("T")[0]
+                        }{" "}
+                        {
+                          // remove every other characters after the second ":" eg 12:30:00.000Z => 12:30
+                          item.createdAt
+                            .split("T")[1]
+                            .split(".")[0]
+                            .replace(/(.{2}:.{2}).*/, "$1") // 12:30:00.000Z => 12:30
+                        }
                       </p>
                     </div>
-
-                    <span className="hidden sm:block" aria-hidden="true">
-                      &middot;
-                    </span>
-
-                    <p className="mt-2 text-xs font-medium text-gray-500 sm:mt-0">
-                      Featuring{" "}
-                      <a href="#" className="underline hover:text-gray-700">
-                        Barry
-                      </a>
-                      ,
-                      <a href="#" className="underline hover:text-gray-700">
-                        Sandra
-                      </a>{" "}
-                      and
-                      <a href="#" className="underline hover:text-gray-700">
-                        August
-                      </a>
-                    </p>
                   </div>
                 </div>
               </div>
             </article>
           ))}
           <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
-          <Typography variant="small" color="blue-gray" className="font-normal">
-            Page 1 of 10
-          </Typography>
-          <div className="flex gap-2">
-            <Button variant="outlined" size="sm">
-              Previous
-            </Button>
-            <Button variant="outlined" size="sm">
-              Next
-            </Button>
-          </div>
-        </CardFooter>
+            <Typography
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              Page 1 of 10
+            </Typography>
+            <div className="flex gap-2">
+              <Button variant="outlined" size="sm">
+                Previous
+              </Button>
+              <Button variant="outlined" size="sm">
+                Next
+              </Button>
+            </div>
+          </CardFooter>
         </div>
       )}
     </main>

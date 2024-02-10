@@ -190,16 +190,14 @@ function page() {
               Edit post!
             </h2>
             <p className="mt-2 text-sm text-gray-400">
-              Lorem ipsum is placeholder text.
-              {newCategory && (
-                <span className="text-green-500">{newCategory}</span>
-              )}
-              {"    "}
+              News type: 
               {
-                <span className="text-green-500">
+                <span className="text-green-500 ml-1">
                   {newType && <span>{newType}</span>}
                 </span>
-              }
+                }
+                
+             
             </p>
           </div>
           <form
@@ -394,7 +392,11 @@ function page() {
         </div>
       </div>
 
-      <PopUpFilemanager handleOpen={handleOpen} size={size} setImageSrc={setImageSrc} />
+      <PopUpFilemanager
+        handleOpen={handleOpen}
+        size={size}
+        setImageSrc={setImageSrc}
+      />
     </div>
   );
 }
