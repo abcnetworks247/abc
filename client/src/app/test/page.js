@@ -7,7 +7,7 @@ import { ProductContext } from "../../../contexts/productContext";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import parse from "html-react-parser";
-import ProductSkeleton from "./ProductSkeleton";
+import ProductSkeleton from "../productdetails/ProductSkeleton";
 import ImageGallery from "@/components/Products/ImageGallery";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useSearchParams } from "next/navigation";
