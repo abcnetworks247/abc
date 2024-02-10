@@ -299,8 +299,9 @@ const ReadAbout = async (req, res) => {
 };
 
 const UpdateAbout = async (req, res) => {
-  const { image, description, id } = req.body;
+  const { image, description, description2, id } = req.body;
 
+  console.log(description2);
 
   try {
     const { user } = req;
@@ -316,11 +317,11 @@ const UpdateAbout = async (req, res) => {
     // Assuming ProductCat is a model with a findByIdAndUpdate method
     const updatedAbout = await About.findByIdAndUpdate(
       id,
-      { image, description }, // Pass necessary fields to update
+      { image, description, description2 }, // Pass necessary fields to update
       { new: true, runValidators: true } // To get the updated document and run validators
     );
 
-    console.log("updated document with description");
+    console.log("updated document with description", updatedAbout.description2);
 
     if (!updatedAbout) {
       throw new NotFoundError("About not found");

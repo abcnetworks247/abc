@@ -232,4 +232,5 @@ const getAllSubscriptionPlans = async (req, res) => {
 module.exports = {
   createSubscription,
   getAllSubscriptionPlans,
+  SubWebhook,
 };

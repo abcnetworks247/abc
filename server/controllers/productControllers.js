@@ -11,12 +11,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
-const OnrampSessionResource = stripe.StripeResource.extend({
-  create: stripe.StripeResource.method({
-    method: "POST",
-    path: "crypto/onramp_sessions",
-  }),
-});
 
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
@@ -313,6 +307,43 @@ const StripeCheckout = async (req, res) => {
   }
 };
 
+const stripeProductWebhook = async (req, res) => {
+
+  const payload = req.body;
+
+  const sig = req.headers["stripe-signature"];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+
+  } catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === "checkout.session.completed") {
+    console.log(event);
+    const sessionDetails = await stripe.checkout.sessions.retrieve(
+      event.data.object.id,
+      {
+        expand: ["line_items", "customer"],
+      }
+    );
+    const lineItems = sessionDetails.line_items;
+    console.log("Paid for items :- \n", lineItems.data);
+
+    const customerDetails = sessionDetails.customer_details;
+
+    if (event.data.object.payment_status === "paid") {
+      console.log("Payment Success for customer:-", customerDetails.email);
+      // Store payment data and mark payment as complete in DB
+    }
+    // Delayed payment scenarios https://stripe.com/docs/payments/checkout/fulfill-orders#delayed-notification
+  }
+  res.status(200).end();
+};
+
 
 
 // const Crypto = async (req, res) => {
@@ -386,6 +417,10 @@ const Crypto = (req, res) => {
 
 }
 
+const CryptoWebhook = (req, res) => { 
+
+}
+
 module.exports = {
   createProduct,
   getSingleProduct,
@@ -393,5 +428,7 @@ module.exports = {
   updateProduct,
   deleteProduct,
   StripeCheckout,
+  stripeProductWebhook,
   Crypto,
+  CryptoWebhook,
 };

@@ -58,8 +58,9 @@ const getAllBlog = async (req, res) => {
     if (allBlogs.length === 0) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ message: "No blogs found" });
+        .json({ message: "No Post found" });
     }
+
 
     return res.status(StatusCodes.OK).json({ allBlogs, ...blogTypeResults });
   } catch (error) {
@@ -145,7 +146,6 @@ const createBlog = async (req, res) => {
 const getSingleBlog = async (req, res) => {
   const { id } = req.params;
 
-  console.log(id);
   try {
     const blogdata = await blog
       .findById(id)
@@ -158,6 +158,8 @@ const getSingleBlog = async (req, res) => {
     if (!blogdata) {
       throw new NotFoundError("Blog not found");
     }
+
+    
 
     return res.status(StatusCodes.OK).json({ blogdata });
   } catch (error) {

@@ -8,7 +8,12 @@ const About = new mongoose.Schema({
   description: {
     type: "string",
     required: true,
-    default: "Terms and Conditions",
+    default: "About 1",
+  },
+  description2: {
+    type: "string",
+    required: true,
+    default: "About 2",
   },
 });
 
