@@ -14,6 +14,7 @@ import { useSearchParams } from "next/navigation";
 import { UseUserContext } from "../../../contexts/UserContext";
 
 import axios from "axios";
+import Api from "@/utils/Api";
 const page = () => {
 
 const router = useRouter();
@@ -53,9 +54,9 @@ const handleWishClick = () => {
   useEffect(() => {
     const getSingleProduct = async () => {
       try {
-        console.log("fetching product");
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products/${productid}`
+
+        const response = await Api.get(
+          `admin/commerce/products/${productid}`
         );
 
         setLocalSelectedProduct(response.data)
