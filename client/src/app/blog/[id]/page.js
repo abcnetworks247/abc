@@ -7,6 +7,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
+import Api from "@/utils/Api";
 
 export default function page() {
   // store fetched data in state
@@ -16,17 +17,18 @@ export default function page() {
   // store loading state
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
-  const baseUrl =
-    "https://klipto-inc-abcstudio-server.onrender.com/api/v1/admin/blog";
 
   //fetch blog api
   const fetchBlog = async () => {
     try {
       
       setLoading(true);
-      const res = await axios.get(`${baseUrl}/${id}`);
+      const res = await Api.get(`admin/blog/${id}`);
+      
       const data = await res.data.blogdata;
       const author = await res.data.blogdata.author;
+
+      console.log("this is blog oo", res);
       setBlog(data);
       setAuthor(author);
       console.log("hey", res.data.blogdata.author);

@@ -37,24 +37,47 @@ export default function () {
   // store the popular posts in a state
   const [popular, setPopular] = useState([]);
 
+  const [africaNews, setAfricaNews] = useState([]);
+  const [pressReleases, setPressReleases] = useState([]);
+  const [officeOfThePresident, setOfficeOfThePresident] = useState([]);
+  const [socioCultural, setSocioCultural] = useState([]);
+  const [archivesAndAnalysis, setArchivesAndAnalysis] = useState([]);
+  const [breakingNews, setBreakingNews] = useState([]);
+  const [sportsNews, setSportsNews] = useState([]);
+  const [worldNews, setWorldNews] = useState([]);
+  const [interimGovernmentUpdates, setInterimGovernmentUpdates] = useState([]);
+  const [businessNews, setBusinessNews] = useState([]);
+
   useEffect(() => {
     // use the base url and the endpoint to fetch the blog posts
-    Api
-      .get("admin/blog")
+    Api.get("admin/blog")
       .then((res) => {
         const data = res.data;
+
+        console.log("this is data o...", data);
         setPosts(data);
         // update the highlight, trending, top news and popular posts
         setHighlight(data["africa news update"]);
         setTrending(data["socio cultural"]);
         setTopNews(data["breaking news"]);
         setPopular(data.sports);
-       
+
+        setAfricaNews(data[0]["Africa News Update"]);
+        setPressReleases(data[1]["Dr. Martin Mungwa - Press Releases"]);
+        setOfficeOfThePresident(data[2]["Office of the President"]);
+        setSocioCultural(data[3]["Socio Cultural"]);
+        setArchivesAndAnalysis(data[4]["Archives & Analysis"]);
+        setBreakingNews(data[5]["Breaking News"]);
+        setSportsNews(data[6]["Sports"]);
+        setWorldNews(data[7]["World News"]);
+        setInterimGovernmentUpdates(data[8]["Interim Government Updates"]);
+        setBusinessNews(data[9]["Business"]);
+
         // set the loading state to false
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.response.data.message)
+        setError(err.response.data.message);
         setLoading(false);
       });
   }, []);
@@ -154,14 +177,10 @@ export default function () {
                     className="mySwiper"
                   >
                     {/* map through the fetched data.highlight */}
-                    {highlight.map((post) => (
-
+                    {africaNews.map((post) => (
                       <SwiperSlide key={post.shortdescription}>
                         {/* <!-- main post --> */}
-                        <div
-                          className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7"
-
-                        >
+                        <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
                           <Image
                             src={post.blogimage}
                             height={500}
@@ -181,7 +200,7 @@ export default function () {
                           </p>
                           <Link
                             href={`${pathUrl}/${post._id}`}
-                            className="inline-block px-6 py-3 mt-2 text-white bg-blue-800 rounded-md"
+                            className="inline-block px-6 py-2.5 mt-2 text-white bg-blue-500 rounded-md"
                           >
                             Read more
                           </Link>
@@ -193,12 +212,14 @@ export default function () {
                 {/* <!-- sub-main posts --> */}
                 <div className="p-0 ">
                   {/* map through trending posts */}
-                  <h2 className="text-xl font-bold">Socio-Cultural</h2>
+                  <h2 className="text-xl font-bold">
+                    Interim Government Updates
+                  </h2>
                   <br />
                   <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1 ">
-                    {trending.map((post) => (
+                    {interimGovernmentUpdates.map((post) => (
                       <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                        <div className="flex flex-col p-0 m-0 mb-5 space-x-0 rounded md:flex-row lg:space-x-3 md:space-x-2 " >
+                        <div className="flex flex-col p-0 m-0 mb-5 space-x-0 rounded md:flex-row lg:space-x-3 md:space-x-2 ">
                           <Image
                             src={post.blogimage}
                             height={500}
@@ -222,95 +243,96 @@ export default function () {
                       </Link>
                     ))}
                   </div>
-
                 </div>
               </div>
               {/* <!-- end featured section --> */}
 
               {/* <!-- recent posts --> */}
-              <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-                <h2 className="text-3xl font-bold">Sports</h2>
-                {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+              {!worldNews && (
+                <div className="">
+                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                    <h2 className="text-xl font-bold">World News</h2>
+                    {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
                 </a> */}
-              </div>
-              <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
-                {/* map through the fetched data.popular */}
-                {popular.map((post) => (
-                  <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0 ">
-                    <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <Image
-                        src={post.blogimage}
-                        className="rounded h-[212px]"
-                        height={500}
-                        width={500}
-                        alt="img"
-                      />
-                      <div className="p-4 pl-0">
-                        <h2 className="text-base font-bold text-gray-800">
-                          {post.title}
-                        </h2>
-                        <p className="mt-2 text-sm text-gray-700">
-                          {post.shortdescription}
-                        </p>
-
-                        <span
-                          className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                        >
-                          {" "}
-                          Read more{" "}
-                        </span>
-                      </div>
-                    </Link>
                   </div>
-                ))}
-              </div>
+                  <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
+                    {/* map through the fetched data.popular */}
+                    {worldNews.map((post) => (
+                      <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0 ">
+                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                          <Image
+                            src={post.blogimage}
+                            className="rounded h-[212px]"
+                            height={500}
+                            width={500}
+                            alt="img"
+                          />
+                          <div className="p-4 pl-0">
+                            <h2 className="text-base font-bold text-gray-800">
+                              {post.title}
+                            </h2>
+                            <p className="mt-2 text-sm text-gray-700">
+                              {post.shortdescription}
+                            </p>
+
+                            <span className="inline-block py-2 mt-2 ml-auto text-blue-500 rounded">
+                              {" "}
+                              Read more{" "}
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {/* <!-- end recent posts --> */}
 
-
               {/* <!-- popular posts --> */}
-              <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-                <h2 className="text-3xl font-bold">Breaking news</h2>
-                {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+              {!breakingNews && (
+                <div className="">
+                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                    <h2 className="text-xl font-bold">Breaking news</h2>
+                    {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
                 </a> */}
-              </div>
-              <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
-                {/* map through top news */}
-                {topNews.map((post) => (
-                  <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
-                    <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <Image
-                        src={post.blogimage}
-                        className="rounded h-[212px]"
-                        height={500}
-                        width={500}
-                        alt="img"
-                      />
-                      <div className="p-4 pl-0">
-                        <h2 className="text-base font-bold text-gray-800">
-                          {post.title}
-                        </h2>
-                        <p className="mt-2 text-sm text-gray-700">
-                          {post.shortdescription}
-                        </p>
-
-                        <span
-                          className="inline-block py-2 mt-2 ml-auto text-green-900 rounded"
-                        >
-                          {" "}
-                          Read more{" "}
-                        </span>
-                      </div>
-                    </Link>
                   </div>
-                ))}
-              </div>
+                  <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
+                    {/* map through top news */}
+                    {breakingNews.map((post) => (
+                      <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
+                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                          <Image
+                            src={post.blogimage}
+                            className="rounded h-[212px]"
+                            height={500}
+                            width={500}
+                            alt="img"
+                          />
+                          <div className="p-4 pl-0">
+                            <h2 className="text-base font-bold text-gray-800">
+                              {post.title}
+                            </h2>
+                            <p className="mt-2 text-sm text-gray-700">
+                              {post.shortdescription}
+                            </p>
+
+                            <span className="inline-block py-2 mt-2 ml-auto text-blue-500 rounded">
+                              {" "}
+                              Read more{" "}
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               {/* <!-- end popular posts --> */}
             </main>
             {/* <!-- main ends here --> */}
           </div>
-
         </div>
       )}
     </>
