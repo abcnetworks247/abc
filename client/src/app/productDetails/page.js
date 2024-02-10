@@ -59,7 +59,6 @@ const handleWishClick = () => {
           `admin/commerce/products/${productid}`
         );
 
-        console.log("data o", response.data);
 
         setLocalSelectedProduct(response.data)
         setLoading(false)
