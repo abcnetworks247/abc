@@ -3,12 +3,20 @@
 import FooterComp from "@/components/Footer/FooterComp";
 import Nav1 from "@/components/navbar/Nav1";
 import Navbar from "@/components/navbar/Navbar";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
+import { UseUserContext } from "../../../contexts/UserContext";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 import Sidebar from "@/components/sidebar/Sidebar";
 import React, { useState } from "react";
 
 const page = () => {
   const [paymenttype, setPaymentType] = useState("Stripe");
   const [amount, setAmount] = useState(1);
+
+  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+
+  const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
   const Add = () => {
     setAmount((prevAmount) => prevAmount + 1);
@@ -17,6 +25,45 @@ const page = () => {
   const Remove = () => {
     if (amount > 1) {
       setAmount((prevAmount) => prevAmount - 1);
+    }
+  };
+
+
+  const Donate = async () => {
+    console.log("Ready to checkout", cartProducts);
+
+    let data = {
+      name: "Donation",
+      amount: amount,
+    };
+
+    if (paymenttype === "Stripe") {
+      try {
+        const session = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/stripe/create-checkout-session`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${Authtoken}`,
+            },
+            "Content-Type": "application/json",
+          }
+        );
+
+        if (session.status === 200) {
+          console.log("session", session);
+
+          // const result = await stripe.redirectToCheckout({
+          //   sessionId: session.data.url,
+          // });
+
+          window.location.href = session.data.url;
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.error("Error in PayWithStripe:", error);
+      }
     }
   };
 
@@ -72,7 +119,7 @@ const page = () => {
                       id="item_count"
                       type="number"
                       min={1}
-                    //   defaultValue={amount}
+                      //   defaultValue={amount}
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       className="font-bold font-mono w-[80px] py-1.5 px-2 mx-1.5 block border border-gray-300 rounded-md text-sm shadow-sm  placeholder-gray-400"
@@ -134,7 +181,10 @@ const page = () => {
                 </label>
               </div>
               <div className="flex flex-col px-8 pt-4">
-                <button className="flex items-center justify-center w-full h-10 text-sm font-medium bg-blue-600 rounded text-blue-50 hover:bg-blue-700">
+                <button
+                  className="flex items-center justify-center w-full h-10 text-sm font-medium bg-blue-600 rounded text-blue-50 hover:bg-blue-700"
+                  onClick={Donate}
+                >
                   Donate $ {amount}
                 </button>
                 <button className="mt-3 text-xs text-blue-500 underline">

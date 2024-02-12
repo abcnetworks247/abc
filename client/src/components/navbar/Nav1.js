@@ -7,7 +7,7 @@ const Nav1 = () => {
   return (
     <div className="flex flex-row items-center justify-between px-4  w-full shadow-md h-8  bg-[#141e33] py-6 lg:px-14">
       <div className="">
-        <span className="text-sm text-white">#1 CUSTOMER SERVICE 24/7,  +1(240) 486-8768</span>
+        <span className="text-xs text-white md:text-sm">#1 CUSTOMER SERVICE 24/7,  +1(240) 486-8768</span>
       </div>
 
       <div className="">
