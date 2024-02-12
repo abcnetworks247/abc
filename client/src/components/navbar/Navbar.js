@@ -171,6 +171,8 @@ export default function Navbar() {
               })}
             </div>
           </a>
+
+          
         </div>
         <div className="hidden navbar-center md:block "></div>
         <div className="flex flex-row items-center text-white navbar-end">
@@ -299,6 +301,7 @@ export default function Navbar() {
                       Register
                     </span>
                   </Link>
+                  
                 </div>
               </div>
             </div>

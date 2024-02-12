@@ -1,4 +1,5 @@
 "use client";
+
 import { IoStorefrontOutline } from "react-icons/io5";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Image from "next/image";
@@ -11,10 +12,34 @@ import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineContacts } from "react-icons/md";
-
+import { useEffect, useState } from "react";
+import Api from "@/utils/Api";
 
 export default function Sidebar() {
+  const [type, setType] = useState([]);
+  const [category, setCategory] = useState([]);
   const { loading, UserData, Authtoken } = UseUserContext();
+  const pathUrl = "/news/";
+
+  const fetchData = async () => {
+    try {
+      const response = await Api.get("admin/category/news/type");
+
+
+      if (response.status === 200) {
+
+        console.log("data2", response.data.data);
+        setType(response.data.data);
+        
+      }
+    } catch (error) {
+      // console.log(" Error------------->>", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -31,8 +56,7 @@ export default function Sidebar() {
         <aside className="justify-start h-full bg-white sidebar md:hidden lg:hidden sidebar-fixed-left sidebar-mobile max-sm:fixed max-sm:-translate-x-full">
           <div className="flex items-center justify-between pr-6">
             <section className="items-center p-4 sidebar-title">
-              
-            <Image src={Logo} alt="logo" width={100} height={100} />
+              <Image src={Logo} alt="logo" width={100} height={100} />
             </section>
             <div>
               <label htmlFor="sidebar-mobile-fixed">
@@ -51,6 +75,73 @@ export default function Sidebar() {
                       <span>Home</span>
                     </li>
                   </Link>
+                  <li>
+                    <input
+                      type="checkbox"
+                      id="menu-1"
+                      className="hidden menu-toggle"
+                    />
+                    <label
+                      className="justify-between menu-item"
+                      htmlFor="menu-1"
+                    >
+                      <div className="flex gap-2">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          className="w-[23px] h-[23px] opacity-75"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <g id="SVGRepo_iconCarrier">
+                            {" "}
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M6.15407 7.30116C7.52877 5.59304 9.63674 4.5 12 4.5C12.365 4.5 12.7238 4.52607 13.0748 4.57644L13.7126 5.85192L11.2716 8.2929L8.6466 8.6679L7.36009 9.95441L6.15407 7.30116ZM5.2011 8.82954C4.75126 9.79256 4.5 10.8669 4.5 12C4.5 15.6945 7.17133 18.7651 10.6878 19.3856L11.0989 18.7195L8.8147 15.547L10.3741 13.5256L9.63268 13.1549L6.94027 13.6036L6.41366 11.4972L5.2011 8.82954ZM7.95559 11.4802L8.05962 11.8964L9.86722 11.5951L11.3726 12.3478L14.0824 11.9714L18.9544 14.8135C19.3063 13.9447 19.5 12.995 19.5 12C19.5 8.93729 17.6642 6.30336 15.033 5.13856L15.5377 6.1481L11.9787 9.70711L9.35371 10.0821L7.95559 11.4802ZM18.2539 16.1414C16.9774 18.0652 14.8369 19.366 12.3859 19.4902L12.9011 18.6555L10.6853 15.578L12.0853 13.7632L13.7748 13.5286L18.2539 16.1414ZM12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3Z"
+                              fill="#080341"
+                            />{" "}
+                          </g>
+                        </svg>
+
+                        <span>News</span>
+                      </div>
+
+                      <span className="menu-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-5 h-5"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </span>
+                    </label>
+
+                    <div className="menu-item-collapse">
+                      <div className="min-h-0">
+                        {type && type.map((item, index) => {
+                          return (
+                            <Link key={index} href={`${pathUrl}${item._id}`}>
+                              <label className="ml-6 menu-item menu-item-disabled">
+                                {item.name}
+                              </label>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </li>
                   <Link href="/store">
                     <li className="menu-item">
                       <IoStorefrontOutline className="w-5 h-5 opacity-75" />
@@ -106,107 +197,47 @@ export default function Sidebar() {
                       Contact
                     </li>
                   </Link>
-                    {!Authtoken?
-                    <></>
-                      :
-
-                  <li>
-                    <input
-                      type="checkbox"
-                      id="menu-1"
-                      className="hidden menu-toggle"
-                    />
-                    <label
-                      className="justify-between menu-item"
-                      htmlFor="menu-1"
-                    >
-                      <div className="flex gap-2">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5 opacity-75"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                          />
-                        </svg>
-                        <span>Account</span>
-                      </div>
-
-                      <span className="menu-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-5 h-5"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                    </label>
-
-                    <div className="menu-item-collapse">
-                      <div className="min-h-0">
-                        <Link href="/userdashboard/manageaccount">
-                          <label className="ml-6 menu-item menu-item-disabled">
-                            Account Settings
-                          </label>
-                        </Link>
-                        <Link href="/userdashboard">
-                          <label className="ml-6 menu-item">Profile</label>
-                        </Link>
-                      </div>
-                    </div>
-                  </li>
-                    }
-
                 </ul>
               </section>
               <div className="my-0 divider"></div>
               <section className="px-4 menu-section">
                 <span className="menu-title">More</span>
                 <ul className="menu-items">
-                  {!Authtoken?
-                <></>  
-                :
-
-                <Link href="/userdashboard">
-                  <li className="menu-item">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="opacity-75"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M3 21l18 0"></path>
-                      <path d="M3 10l18 0"></path>
-                      <path d="M5 6l7 -3l7 3"></path>
-                      <path d="M4 10l0 11"></path>
-                      <path d="M20 10l0 11"></path>
-                      <path d="M8 14l0 3"></path>
-                      <path d="M12 14l0 3"></path>
-                      <path d="M16 14l0 3"></path>
-                    </svg>
-                    Payments
-                  </li>
-                  </Link>
-                }
+                  {!Authtoken ? (
+                    <></>
+                  ) : (
+                    <Link href="/userdashboard">
+                      <li className="menu-item">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="opacity-75"
+                          width="22"
+                          height="22"
+                          viewBox="0 0 24 24"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path
+                            stroke="none"
+                            d="M0 0h24v24H0z"
+                            fill="none"
+                          ></path>
+                          <path d="M3 21l18 0"></path>
+                          <path d="M3 10l18 0"></path>
+                          <path d="M5 6l7 -3l7 3"></path>
+                          <path d="M4 10l0 11"></path>
+                          <path d="M20 10l0 11"></path>
+                          <path d="M8 14l0 3"></path>
+                          <path d="M12 14l0 3"></path>
+                          <path d="M16 14l0 3"></path>
+                        </svg>
+                        Payments
+                      </li>
+                    </Link>
+                  )}
                   <Link href="/wish">
                     <li className="menu-item">
                       <FaRegHeart className="text-2xl" />

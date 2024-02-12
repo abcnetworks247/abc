@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar/Navbar";
 import FooterComp from "@/components/Footer/FooterComp";
 import Sidebar from "@/components/sidebar/Sidebar";
+import Nav1 from "@/components/navbar/Nav1";
 
 export default function page() {
 
@@ -8,6 +9,7 @@ export default function page() {
 
   return (
     <div>
+      <Nav1 />
       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>

@@ -84,7 +84,7 @@ const page = () => {
       <section className="pb-8 bg-white font-poppins">
         {cartProducts.length === 0 ? (
           <div className="flex items-center justify-center sm:h-[80vh]  sm:mx-12 sm:shadow-lg sm:py-7 ">
-            <div className="flex flex-col items-center  gap-2">
+            <div className="flex flex-col items-center gap-2">
               <img
                 src="/assets/images/emptycart.jpg"
                 className="w-[200px] h-[200px] object-contain"
@@ -96,7 +96,7 @@ const page = () => {
               </p>
               <Link
                 href="/store"
-                className="flex items-center justify-center p-2 bg-blue-600 shadow-md rounded-sm cursor-pointer  hover:bg-blue-700"
+                className="flex items-center justify-center p-2 bg-blue-600 rounded-sm shadow-md cursor-pointer hover:bg-blue-700"
               >
                 <p className="text-white">Explore now</p>
               </Link>
@@ -179,7 +179,6 @@ const page = () => {
                     value={paymenttype}
                   >
                     <option selected>Stripe</option>
-                    <option value="US">Paystack</option>
                     <option value="CA">Crypto</option>
                   </select>
                   <button

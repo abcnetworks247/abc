@@ -7,7 +7,7 @@ import { ProductContext } from "../../../contexts/productContext";
 import { useContext } from "react";
 import { useRouter } from "next/navigation";
 import parse from "html-react-parser";
-import ProductSkeleton from "../productdetails/ProductSkeleton";
+import ProductSkeleton from "./ProductSkeleton";
 import ImageGallery from "@/components/Products/ImageGallery";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useSearchParams } from "next/navigation";
@@ -15,6 +15,7 @@ import { UseUserContext } from "../../../contexts/UserContext";
 
 import axios from "axios";
 import Api from "@/utils/Api";
+import Nav1 from "@/components/navbar/Nav1";
 const page = () => {
 
 const router = useRouter();
@@ -97,6 +98,7 @@ const handleWishClick = () => {
 
   return (
     <div className="bg-gray-200">
+      <Nav1 />
       <div className="sticky top-0 z-50 bg-[#111827]">
         <Navbar />
       </div>
@@ -166,7 +168,7 @@ const handleWishClick = () => {
                         <div className="w-1/2 p-2 sm:w-1/4" key={index}>
                           <a
                             href="#"
-                            className="block border border-blue-100  hover:border-blue-300 "
+                            className="block border border-blue-100 hover:border-blue-300 "
                           >
                             <img
                               src={item}
@@ -194,7 +196,7 @@ const handleWishClick = () => {
                     <span className="text-lg font-medium text-rose-500 ">
                       New
                     </span>
-                    <h2 className="max-w-xl mt-2 mb-6 text-xl font-bold  ">
+                    <h2 className="max-w-xl mt-2 mb-6 text-xl font-bold ">
                       {localSelectedProduct && localSelectedProduct.title}
                     </h2>
                     <div className="flex flex-wrap items-center mb-6">
@@ -260,7 +262,7 @@ const handleWishClick = () => {
                         ></div>
                       </div>
                     </div> */}
-                    <p className="inline-block text-2xl font-semibold text-gray-700  ">
+                    <p className="inline-block text-2xl font-semibold text-gray-700 ">
                       <span>{`$ ${
                         localSelectedProduct && localSelectedProduct.price
                       }`}</span>
@@ -289,16 +291,16 @@ const handleWishClick = () => {
                   <div classNames="pb-6 mb-8 border-b border-gray-300 dark:border-gray-700">
                     {/* <h2 className="mb-2 text-xl font-bold ">Size</h2> */}
                     {/* <div className="flex flex-wrap -mb-2">
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 dark:border-gray-400 hover:text-blue-600  ">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 dark:border-gray-400 hover:text-blue-600 ">
                         XL
                       </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400  ">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 ">
                         S
                       </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400  ">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 ">
                         M
                       </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400  ">
+                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 ">
                         XS
                       </button>
                     </div> */}
@@ -329,13 +331,13 @@ const handleWishClick = () => {
                         onClick={(e) =>
                           handleCartClick(e, localSelectedProduct)
                         }
-                        className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md  text-gray-50 hover:bg-blue-600 "
+                        className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md text-gray-50 hover:bg-blue-600 "
                       >
                         Add to Cart
                       </button>
                     </div>
                     <div className="mb-4 mr-4 rounded-sm lg:mb-0">
-                      <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50  hover:bg-blue-600 hover:border-blue-600 ">
+                      <button className="flex items-center justify-center w-full h-10 p-2 text-gray-700 border border-gray-300 lg:w-11 hover:text-gray-50 hover:bg-blue-600 hover:border-blue-600 ">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
@@ -348,7 +350,7 @@ const handleWishClick = () => {
                         </svg>
                       </button>
                     </div>
-                    <div className="mb-4 rounded-sm lg:mb-0 cursor-pointer">
+                    <div className="mb-4 rounded-sm cursor-pointer lg:mb-0">
                       {wishClick ? (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -379,7 +381,10 @@ const handleWishClick = () => {
                           fill="none"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleWishAdd(localSelectedProduct._id, UserData._id);
+                            handleWishAdd(
+                              localSelectedProduct._id,
+                              UserData._id
+                            );
                             handleWishClick();
                           }}
                         >

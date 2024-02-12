@@ -4,12 +4,14 @@ import Password from '@/app/userdashboard/components/password/Password'
 import Navbar from '@/components/navbar/Navbar'
 import FooterComp from '@/components/Footer/FooterComp'
 import { useRouter } from 'next/navigation'
+import Nav1 from '@/components/navbar/Nav1'
 const page = () => {
   const router = useRouter()
   return (
     <div>
+      <Nav1 />
       <Navbar />
-      <div className="flex flex-row-reverse  mx-2 py-4 cursor-pointer">
+      <div className="flex flex-row-reverse py-4 mx-2 cursor-pointer">
         <svg
           onClick={() => router.back()}
           className="w-6 h-6"
@@ -49,7 +51,7 @@ const page = () => {
           </g>
         </svg>
       </div>
-      <div className="my-4 mx-4">
+      <div className="mx-4 my-4">
         <Password />
       </div>
 

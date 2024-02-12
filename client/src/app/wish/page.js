@@ -6,6 +6,7 @@ import Wishlistcard from '@/components/NewArrival/Wishlistcard'
 import Link from 'next/link'
 import FooterComp from '@/components/Footer/FooterComp'
 import Sidebar from '@/components/sidebar/Sidebar'
+import Nav1 from '@/components/navbar/Nav1'
 
 const page = () => {
 
@@ -13,6 +14,7 @@ const page = () => {
     
     return (
       <div>
+         <Nav1 />
         <div className="bg-[#111827] sticky top-0 z-[10]">
           <Navbar />
         </div>

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { useState } from "react";
+import Nav1 from "@/components/navbar/Nav1";
 
 export default function page() {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
@@ -130,6 +131,7 @@ export default function page() {
 
   return (
     <div>
+      <Nav1 />
       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>

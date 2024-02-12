@@ -4,14 +4,16 @@ import DeleteAccount from '../../userdashboard/components/DeleteAccount'
 import { useRouter } from 'next/navigation'
 import FooterComp from '@/components/Footer/FooterComp'
 import Navbar from '@/components/navbar/Navbar'
+import Nav1 from '@/components/navbar/Nav1'
 
 
 const page = () => {
     const router = useRouter()
   return (
     <div>
+      <Nav1 />
       <Navbar />
-      <div className="flex flex-row-reverse mx-2 py-4">
+      <div className="flex flex-row-reverse py-4 mx-2">
         <svg
           onClick={() => router.back()}
           className="w-6 h-6"
@@ -51,7 +53,7 @@ const page = () => {
           </g>
         </svg>
       </div>
-      <div className="mb-4 mt-4 mx-4">
+      <div className="mx-4 mt-4 mb-4">
         <DeleteAccount />
       </div>
 

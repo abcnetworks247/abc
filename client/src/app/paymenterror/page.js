@@ -1,7 +1,9 @@
 'use client'
 
 import FooterComp from "@/components/Footer/FooterComp";
+import Nav1 from "@/components/navbar/Nav1";
 import Navbar from "@/components/navbar/Navbar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -15,11 +17,13 @@ const Page = () => {
 
   return (
     <div>
+      <Nav1 />
       <div className="bg-[#111827] sticky top-0 z-[10]">
         <Navbar />
       </div>
-      <div className="h-screen bg-gray-100 flex items-center justify-center">
-        <div className="p-6 bg-white md:mx-auto w-fit h-fit rounded-md shadow-md my-auto text-center px-16">
+      <Sidebar />
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="p-6 px-16 my-auto text-center bg-white rounded-md shadow-md md:mx-auto w-fit h-fit">
           <svg
             width={20}
             height={20}
@@ -46,7 +50,7 @@ const Page = () => {
             <p> Try again! </p>
             <div className="py-4 text-center">
               <button
-                className="mt-6 w-fit px-4 rounded-md bg-blue-500 py-2 font-medium text-blue-50 hover:bg-blue-600"
+                className="px-4 py-2 mt-6 font-medium bg-blue-500 rounded-md w-fit text-blue-50 hover:bg-blue-600"
                 Name
                 onClick={backToPayment}
               >

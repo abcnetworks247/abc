@@ -10,6 +10,8 @@ import Image from "next/image";
 import Navbar from "@/components/navbar/Navbar";
 import FooterComp from "@/components/Footer/FooterComp";
 import Link from "next/link";
+import Sidebar from "@/components/sidebar/Sidebar";
+import Nav1 from "@/components/navbar/Nav1";
 
 function page() {
   const { id } = useParams();
@@ -52,6 +54,7 @@ function page() {
     return (
       // page not found
       <>
+        <Nav1 />
         <div className="bg-[#111827] sticky top-0 z-[10]">
           <Navbar />
         </div>
@@ -98,15 +101,18 @@ function page() {
             </div>
           </div>
         </main>
+        <Sidebar />
         <FooterComp />
       </>
     );
   }
   return (
     <>
+      <Nav1 />
       <div className="bg-[#111827] sticky top-0 z-[10]">
         <Navbar />
       </div>
+      <Sidebar />
       {loading ? (
         <div className="flex items-center justify-center h-[70svh] lg:h-[100vh]">
           <svg

@@ -53,8 +53,7 @@ export default function () {
     Api.get("admin/blog")
       .then((res) => {
         const data = res.data;
-
-        console.log("this is data o...", data);
+        
         setPosts(data);
         // update the highlight, trending, top news and popular posts
         setHighlight(data["africa news update"]);
