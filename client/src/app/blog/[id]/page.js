@@ -66,7 +66,7 @@ export default function page() {
           // else show fetched data
           <>
             <Sidebar />
-            <main className="mt-[90px] pb-16  lg:pb-24 bg-white w-auto antialiased">
+            <main className="mt-[30px] pb-16  lg:pb-24 bg-white w-auto antialiased">
               <div className="flex justify-between max-w-screen-xl px-4 mx-auto ">
                 <article className="w-full max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
                   <header className=" lg:mb-2 not-format">
