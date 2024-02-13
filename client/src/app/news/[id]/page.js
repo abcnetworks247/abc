@@ -137,7 +137,7 @@ function page() {
           </svg>
         </div>
       ) : (
-        <div className="px-8 my-10">
+        <div className="px-2 md:px-4 lg:px-8 my-10">
           <div className="px-4 pt-4 mx-auto text-xl font-bold">
             results for: {newstype}
           </div>

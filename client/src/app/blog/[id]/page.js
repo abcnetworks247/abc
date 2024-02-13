@@ -3,6 +3,7 @@ import FooterComp from "@/components/Footer/FooterComp";
 import Navbar from "@/components/navbar/Navbar";
 import RelatedArticles from "@/components/relatedArticles/RelatedArticles";
 import Sidebar from "@/components/sidebar/Sidebar";
+import Nav1 from "@/components/navbar/Nav1";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -47,6 +48,7 @@ export default function page() {
 
   return (
     <div>
+      <Nav1 />
       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
@@ -71,7 +73,7 @@ export default function page() {
                     <address className="flex items-center mb-2 not-italic">
                       {/* map through fetched data */}
                     </address>
-                    <h1 className="text-3xl font-bold leading-tight text-gray-900 my-7 lg:mb-6 lg:text-2xl">
+                    <h1 className="text-xl font-bold leading-tight text-gray-900 my-7 lg:mb-6 lg:text-2xl">
                       {blog.title}
                     </h1>
                   </header>
