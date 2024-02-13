@@ -89,7 +89,7 @@ const Donate = async (event) => {
         <div className="grid w-full gap-8 lg:grid-cols-3 md:grid-cols-2">
           <div className="lg:col-span-2">
             <h2 className="text-xl font-medium">Donation Page </h2>
-            <div className="mt-4 bg-white rounded shadow-lg">
+            <div className=" mt-2 md:mt-4 bg-white rounded shadow-lg">
               <div className="mt-12 md:mt-0">
                 <img
                   src="https://res.cloudinary.com/db2b7vgg4/image/upload/v1707751594/UserDP/plgw3iwrk1zwvtsa3keq.jpg"
