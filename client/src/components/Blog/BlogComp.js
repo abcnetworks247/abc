@@ -179,7 +179,7 @@ export default function () {
                     {africaNews.map((post) => (
                       <SwiperSlide key={post.shortdescription}>
                         {/* <!-- main post --> */}
-                        <div className="relative block w-full p-4 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+                        <div className="relative block w-full px-2 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
                           <Image
                             src={post.blogimage}
                             height={500}
