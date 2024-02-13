@@ -198,7 +198,7 @@ const Donate = async (event) => {
                     type="submit"
                   >
                     {spinner === false ? (
-                      `Donate ${amount}`
+                      `Donate $${amount}`
                     ) : (
                       <div
                         class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
