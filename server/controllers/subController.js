@@ -16,6 +16,8 @@ const createSubscription = async (req, res) => {
   const item = req.body;
   let customer;
 
+  console.log("item: " + item);
+
   try {
     if (!user) {
       throw new UnAuthorizedError("User must be logged in to subscribe");

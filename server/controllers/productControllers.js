@@ -11,7 +11,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
-
 const ProductJoi = require("../Utils/ProductJoiSchema");
 const {
   NotFoundError,
@@ -308,7 +307,6 @@ const StripeCheckout = async (req, res) => {
 };
 
 const stripeProductWebhook = async (req, res) => {
-
   const payload = req.body;
 
   const sig = req.headers["stripe-signature"];
@@ -317,7 +315,6 @@ const stripeProductWebhook = async (req, res) => {
 
   try {
     event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
-
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
@@ -343,8 +340,6 @@ const stripeProductWebhook = async (req, res) => {
   }
   res.status(200).end();
 };
-
-
 
 // const Crypto = async (req, res) => {
 //   const { product } = req.body;
@@ -413,13 +408,9 @@ const stripeProductWebhook = async (req, res) => {
 //   }
 // };
 
-const Crypto = (req, res) => {
+const Crypto = (req, res) => {};
 
-}
-
-const CryptoWebhook = (req, res) => { 
-
-}
+const CryptoWebhook = (req, res) => {};
 
 module.exports = {
   createProduct,

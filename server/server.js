@@ -11,6 +11,7 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const categoryRouter = require("./routes/categoryRoute");
 const pagesRouter = require("./routes/pagesRoute");
+const donateRouter = require("./routes/donationRoute");
 
 const path = require("path");
 const cors = require("cors");
@@ -94,6 +95,7 @@ app.use("/api/v1/client/auth", clientRouter);
 app.use("/api/v1/client/sub", subscriptionRouter);
 app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/commerce", productRouter);
+app.use("/api/v1/admin/donation", donateRouter);
 app.use("/api/v1/admin/blog", blogRouter);
 app.use("/api/v1/admin/file", uploadRouter);
 

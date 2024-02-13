@@ -16,6 +16,12 @@ const subscriptionSchema = new mongoose.Schema({
   renewalDate: { type: Date, required: true },
 });
 
+const donationSchema = new mongoose.Schema({
+  user: { type: mongoose.Types.ObjectId, ref: "Client" },
+  amount: { type: Number, required: true },
+  date: { type: Date, required: true, default: Date.now },
+});
+
 const AuthSchema = new mongoose.Schema(
   {
     fullname: {
@@ -59,9 +65,9 @@ const AuthSchema = new mongoose.Schema(
           default: 1, // Assuming default quantity is 1
         },
       },
-      
     ],
     subscriptionhistory: [subscriptionSchema],
+    donationhistory: [donationSchema],
     wishlist: [
       {
         type: mongoose.Types.ObjectId,
