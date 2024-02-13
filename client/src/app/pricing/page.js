@@ -4,19 +4,20 @@ import FooterComp from "@/components/Footer/FooterComp";
 import { UseUserContext } from "../../../contexts/UserContext";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { useRouter } from "next/navigation";
-import { loadStripe } from "@stripe/stripe-js";
+
 import axios from "axios";
 import { useState } from "react";
 import Nav1 from "@/components/navbar/Nav1";
+import PricingComp from "@/components/Pricing/PricingComp";
 
 export default function page() {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   const [spinner, setSpinner] = useState(false);
+  const [oPenNav, setOpenNav] = useState(false);
   const [spinnerId, setSpinnerId] = useState(null);
   
 
-  
-  const public_stripe_key = process.env.NEXT_PUBLIC_STRIPE_PK;
+
 
   const router = useRouter();
 
@@ -24,7 +25,9 @@ export default function page() {
     {
       name: "General - Copper Donor",
       id: "1",
-      price: 50,
+      range1: 10,
+      range2: 50,
+      price: "10 - $ 50",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: ["Live Video"],
@@ -32,7 +35,9 @@ export default function page() {
     {
       name: "Prime -Silver Donor",
       id: "2",
-      price: 100,
+      range1: 55,
+      range2: 100,
+      price: "55 - $ 100",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: ["Special Discount", "Live Video"],
@@ -40,7 +45,9 @@ export default function page() {
     {
       name: "Patrons 1 - Gold Donor",
       id: "3",
-      price: 200,
+      range1: 105,
+      range2: 200,
+      price: "105 - $ 200",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: ["Special Discount", "Live Video", "Free Shipping"],
@@ -48,7 +55,9 @@ export default function page() {
     {
       name: "Patron 2 - Diamond Donor",
       id: "4",
-      price: 500,
+      range1: 500,
+      range2: 1000,
+      price: "500",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
@@ -61,7 +70,9 @@ export default function page() {
     {
       name: "Patron 3 - Titanium Donor",
       id: "5",
-      price: 1000,
+      range1: 1000,
+      range2: 500000,
+      price: "1000",
       description:
         "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
       features: [
@@ -74,63 +85,23 @@ export default function page() {
     },
   ];
 
-  const SubscribeNow = async (plan) => {
-    setSpinnerId(plan.id);
-    setSpinner(true)
-    const stripePromise = await loadStripe(public_stripe_key);
 
-    if (!Authtoken) {
-      router.push("/login");
-      return; // Added return statement to exit function early
-    }
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}client/sub/usersubscription`,
-        plan,
-        {
-          headers: {
-            Authorization: `Bearer ${Authtoken}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 409) {
-        console.log(
-          "User is already subscribed, redirecting to billing portal",
-          response.data.redirectUrl
-        );
-
-        window.location.href = response.data.redirectUrl;
-        setSpinner(false);
-
-        // if (response.data && response.data.redirectUrl) {
-        //   window.location.href = response.data.data.redirectUrl;
-        // }
-      } else if (response.status === 200) {
-        // Adjusted condition to handle successee
-
-        console.log("200");
-        const session = await response.data; // Use response.data instead of response.json()
-
-        console.log("this is session", session);
-        stripePromise.redirectToCheckout({
-          sessionId: session.id,
-        });
-        
-        setSpinner(false);
-      } else {
-        console.error(`Unexpected response status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Error in Subscribe Now:", error.response.data.redirectUrl);
-      window.location.href = error.response.data.redirectUrl;
-    }
+ const OpenModal = (plan) => {
+   setSpinnerId(plan);
+   document.body.style.overflow = "hidden";
+   setOpenNav(true);
+  };
+  
+  const CloseModal = () => {
+    setSpinnerId(null);
+    document.body.style.overflow = "visible";
+    setOpenNav(false);
   };
 
+  
+
   return (
-    <div>
+    <div className="relative">
       <Nav1 />
       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
@@ -203,7 +174,7 @@ export default function page() {
                       {plan.description}
                     </p>
                     <div className="flex mt-6">
-                      <button
+                      {/* <button
                         className="w-full px-8 py-1.5 text-white bg-blue-600 rounded-md"
                         onClick={() => {
                           let id = plan.id;
@@ -223,6 +194,27 @@ export default function page() {
                             Subscribe Now <span>→</span>
                           </div>
                         )}
+                      </button> */}
+
+                      <button
+                        className="w-full px-8 py-1.5 text-white bg-blue-600 rounded-md"
+                        for="modal-3"
+                        onClick={() => {
+                          let id = plan.id;
+                          
+                           if (!Authtoken) {
+                             router.push("/login");
+                             return; // Added return statement to exit function early
+                           }
+                          
+                          else {
+                            OpenModal(plan);
+                          }
+                        }}
+                      >
+                        <div className="">
+                          Subscribe Now <span>→</span>
+                        </div>
                       </button>
                     </div>
                   </div>
@@ -268,6 +260,12 @@ export default function page() {
         </div>
       </section>
 
+      {oPenNav && (
+        <PricingComp
+          CloseModal={CloseModal}
+          spinnerId={spinnerId}
+        />
+      )}
       <FooterComp />
     </div>
   );
