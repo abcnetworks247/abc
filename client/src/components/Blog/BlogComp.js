@@ -158,7 +158,7 @@ export default function () {
                 {/* map throught the the fetched data.highlight */}
 
                 <div className="w-full block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
-                  <h2 className="text-xl font-bold">Africa News Update</h2>
+                  <h2 className="text-xl px-2 font-bold">Africa News Update</h2>
                   <br />
                   <Swiper
                     spaceBetween={30}
@@ -179,7 +179,7 @@ export default function () {
                     {africaNews.map((post) => (
                       <SwiperSlide key={post.shortdescription}>
                         {/* <!-- main post --> */}
-                        <div className="relative block w-full px-2 py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
+                        <div className="relative block w-full  py-4 mb-4 rounded lg:mb-0 lg:p-0 md:w-4/7">
                           <Image
                             src={post.blogimage}
                             height={500}
@@ -211,7 +211,7 @@ export default function () {
                 {/* <!-- sub-main posts --> */}
                 <div className="p-0 ">
                   {/* map through trending posts */}
-                  <h2 className="text-xl font-bold">
+                  <h2 className="text-xl px-2 font-bold">
                     Interim Government Updates
                   </h2>
                   <br />
@@ -250,7 +250,7 @@ export default function () {
               {!worldNews && (
                 <div className="">
                   <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-                    <h2 className="text-xl font-bold">World News</h2>
+                    <h2 className="text-xl px-2 font-bold">World News</h2>
                     {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
                 </a> */}
@@ -258,7 +258,7 @@ export default function () {
                   <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
                     {/* map through the fetched data.popular */}
                     {worldNews.map((post) => (
-                      <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0 ">
+                      <div className="w-full px-0 p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0 ">
                         <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                           <Image
                             src={post.blogimage}
@@ -292,7 +292,7 @@ export default function () {
               {!breakingNews && (
                 <div className="">
                   <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
-                    <h2 className="text-xl font-bold">Breaking news</h2>
+                    <h2 className="text-xl px-2 font-bold">Breaking news</h2>
                     {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
                 </a> */}
@@ -300,7 +300,7 @@ export default function () {
                   <div className="block space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-2 lg:flex lg:space-x-6">
                     {/* map through top news */}
                     {breakingNews.map((post) => (
-                      <div className="w-full p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
+                      <div className="w-full px-0 p-4 rounded lg:w-1/2 xl:w-1/3 lg:p-0">
                         <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                           <Image
                             src={post.blogimage}
