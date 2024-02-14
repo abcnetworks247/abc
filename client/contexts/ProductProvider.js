@@ -22,6 +22,7 @@ const ProductProvider = ({ children }) => {
   const [cartProducts, setCartProducts] = useState(null);
   const [wishlist, setWishlist] = useState(null);
   const [handleCartLoading, setHandleCartLoading] = useState(false);
+  const [wishListLoading, setWishListLoading]=useState(false)
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const isDesktop = useMediaQuery({
@@ -135,6 +136,7 @@ const ProductProvider = ({ children }) => {
 
   
   const handleWishAdd = (productId, userId) => {
+    setWishListLoading(true)
     const wishdata = {
       productId: productId,
       userId: userId,
@@ -144,9 +146,11 @@ const ProductProvider = ({ children }) => {
 
   //reevie the response from the server
   socket.on("wishlist", (userwishlist) => {
+    setWishListLoading(true)
     // Update the local state with the updated
     console.log(userwishlist);
     setWishlist(userwishlist);
+    setWishListLoading(false)
     console.log("returning wishlist", wishlist);
   });
 
@@ -240,6 +244,7 @@ const ProductProvider = ({ children }) => {
         handleRemoveFromCart,
         handleCartDecrease,
         handleCartLoading,
+        wishListLoading,
       }}
     >
       {children}

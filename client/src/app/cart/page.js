@@ -17,6 +17,8 @@ import { useRouter } from "next/navigation";
 const page = () => {
   
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  const { cartProducts } = UseProductProvider();
+  const [paymenttype, setPaymentType] = useState("Stripe");
   const router=useRouter()
 
   if (!UserData) {
@@ -44,19 +46,48 @@ const page = () => {
 }
 
 
+  if (!cartProducts || cartProducts.length===0) {
+    return (
+      <>
+        <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
+          <Navbar />
+        </div>
+        <Sidebar />
+        <section className="pb-8 bg-white font-poppins">
+          <div className="flex items-center justify-center sm:h-[80vh]  sm:mx-12 sm:shadow-lg sm:py-7 ">
+            <div className="flex flex-col items-center gap-2">
+              <img
+                src="/assets/images/emptycart.jpg"
+                className="w-[200px] h-[200px] object-contain"
+              />
+              <p className="text-[#575746]">Your cart is empty</p>
+              <p className="text-sm ml-3  text-center text-[#313133]  ">
+                Why not explore our latest products and discover something you
+                love
+              </p>
+              <Link
+                href="/store"
+                className="flex items-center justify-center p-2 bg-blue-600 rounded-sm shadow-md cursor-pointer hover:bg-blue-700"
+              >
+                <p className="text-white">Explore now</p>
+              </Link>
+            </div>
+          </div>
+        </section>
+        <FooterComp />
+      </>
+    );
+}
 
 
 
 
 
-
-  const [paymenttype, setPaymentType] = useState("Stripe");
-  const { cartProducts } = UseProductProvider();
+  
+  
   
 
   const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
-
-  //  console.log("cartproduct", cartProducts)
   const shippingFee = 5;
 
   const price = cartProducts.map((product) => product.price * product.quantity);
@@ -117,27 +148,7 @@ const page = () => {
       </div>
       <Sidebar />
       <section className="pb-8 bg-white font-poppins">
-        {cartProducts.length === 0 ? (
-          <div className="flex items-center justify-center sm:h-[80vh]  sm:mx-12 sm:shadow-lg sm:py-7 ">
-            <div className="flex flex-col items-center gap-2">
-              <img
-                src="/assets/images/emptycart.jpg"
-                className="w-[200px] h-[200px] object-contain"
-              />
-              <p className="text-[#575746]">Your cart is empty</p>
-              <p className="text-sm ml-3  text-center text-[#313133]  ">
-                Why not explore our latest products and discover something you
-                love
-              </p>
-              <Link
-                href="/store"
-                className="flex items-center justify-center p-2 bg-blue-600 rounded-sm shadow-md cursor-pointer hover:bg-blue-700"
-              >
-                <p className="text-white">Explore now</p>
-              </Link>
-            </div>
-          </div>
-        ) : (
+       
           <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6 lg:px-36">
             <div>
               <h2 className="mb-8 text-xl font-bold dark:text-gray-700">
@@ -227,7 +238,7 @@ const page = () => {
               </div>
             </div>
           </div>
-        )}
+       
       </section>
       <FooterComp />
     </>

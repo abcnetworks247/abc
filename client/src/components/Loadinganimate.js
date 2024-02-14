@@ -1,9 +1,9 @@
  import React from 'react'
  
- const Loadinganimate = () => {
+ const Loadinganimate = ({color}) => {
    return (
      <div
-       class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+       className="animate-spin inline-block w-4 h-4 border-[1px] border-current border-t-transparent rounded-full" style={{color:color}}
        role="status"
        aria-label="loading"
      ></div>

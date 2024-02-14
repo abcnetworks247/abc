@@ -273,7 +273,7 @@ const handleWishClick = () => {
                         }
                         className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md text-gray-50 hover:bg-blue-600 "
                       >
-                        {handleCartLoading ? <Loadinganimate /> : "Add to Cart"}
+                        {handleCartLoading ? <Loadinganimate color="white" /> : "Add to Cart"}
                       </button>
                     </div>
                     <div className="mb-4 mr-4 rounded-sm lg:mb-0">
