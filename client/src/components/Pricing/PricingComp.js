@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 
-const PricingComp = ({ CloseModal, spinnerId }) => {
+const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
   const [spinner, setSpinner] = useState(false);
   const [amount, setAmount] = useState(spinnerId.range1);
   const [paymenttype, setPaymentType] = useState("Stripe");
@@ -38,7 +38,7 @@ const PricingComp = ({ CloseModal, spinnerId }) => {
         setSpinner(true);
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_SERVER_URL}client/sub/usersubscription`,
-          plan,
+          update,
           {
             headers: {
               Authorization: `Bearer ${Authtoken}`,
@@ -46,6 +46,8 @@ const PricingComp = ({ CloseModal, spinnerId }) => {
             },
           }
         );
+
+        console.log("res1", response);
 
         if (response.status === 409) {
           console.log(
@@ -62,7 +64,7 @@ const PricingComp = ({ CloseModal, spinnerId }) => {
         } else if (response.status === 200) {
           // Adjusted condition to handle successee
 
-          console.log("200");
+          console.log("res2", response);
           const session = await response.data; // Use response.data instead of response.json()
 
           console.log("this is session", session);
@@ -72,13 +74,15 @@ const PricingComp = ({ CloseModal, spinnerId }) => {
 
           setSpinner(false);
         } else {
+          console.log("res3", response);
           console.error(`Unexpected response status: ${response.status}`);
           setSpinner(false);
         }
       } catch (error) {
         // window.location.href = error.response.data.redirectUrl;
         if (typeof window !== "undefined") {
-          window.location.href = response.data.redirectUrl;
+          // window.location.href = error.response.data.redirectUrl;
+          console.log(error);
           setSpinner(false);
         }
       }
@@ -88,9 +92,9 @@ const PricingComp = ({ CloseModal, spinnerId }) => {
   return (
     <div
       id="modelConfirm"
-      className="fixed top-0 z-50 justify-center w-full h-full px-4 overflow-hidden bg-gray-900 bg-opacity-60"
+      className="fixed top-0 z-50 flex items-center justify-center w-full h-full px-4 overflow-hidden bg-gray-900 bg-opacity-60"
     >
-      <div className="relative max-w-md mx-auto bg-white rounded-md shadow-xl top-10">
+      <div className="relative max-w-md mx-auto bg-white rounded-md shadow-xl">
         <div className="flex justify-end p-2">
           <button
             type="button"
