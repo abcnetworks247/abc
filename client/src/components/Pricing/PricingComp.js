@@ -94,7 +94,7 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
       id="modelConfirm"
       className="fixed top-0 z-50 flex items-center justify-center w-full h-full px-4 overflow-hidden bg-gray-900 bg-opacity-60"
     >
-      <div className="relative max-w-md mx-auto bg-white rounded-md shadow-xl">
+      <div className="relative mx-2 w-full md:max-w-md md:mx-auto bg-white rounded-md shadow-xl">
         <div className="flex justify-end p-2">
           <button
             type="button"
