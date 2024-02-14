@@ -53,15 +53,12 @@ const SingleArrival = ({ product }) => {
                     className={`bi bi-heart-fill}`}
                     viewBox="0 0 16 16"
                     style={{ fill: "#FF6666" }}
-                    // onClick={(e) => {
-                    //   handleWishClick();
-                    //   handleRemoveFromWishlist(e, product);
-                    // }}
-                    onClick={!UserData ?
-                      () => {
-                       console.log(UserData)
-                      router.push('/login')
-                     } : (e) => {
+          
+                    onClick={!UserData ? (e) => {
+                       e.stopPropagation();
+                       router.push('/login')
+                    }
+                     : (e) => {
                       e.stopPropagation();
                       handleWishAdd(product._id, UserData._id);
                       handleWishClick();
@@ -78,7 +75,10 @@ const SingleArrival = ({ product }) => {
                     viewBox="0 0 16 16"
                     stroke="red"
                     fill="none"
-                    onClick={!UserData ? router.push('/login') : (e) => {
+                      onClick={!UserData ? (e) => {
+                         e.stopPropagation();
+                        router.push('/login')
+                      } : (e) => {
                       e.stopPropagation();
                       handleWishAdd(product._id, UserData._id);
                       handleWishClick();
@@ -92,7 +92,10 @@ const SingleArrival = ({ product }) => {
             <a
               className="flex items-center"
               // onClick={(e) => handleCartClick(e, product)}
-              onClick={!UserData ? router.push('/login'): (e) => {
+              onClick={!UserData ? (e) => {
+                 e.stopPropagation();
+                router.push('/login')
+              } : (e) => {
                 e.stopPropagation();
                 handleAddToCart(product._id, UserData._id);
               

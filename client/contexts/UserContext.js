@@ -13,7 +13,7 @@ const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   // initial state for user incoming data
   const [UserData, setUserData] = useState(null);
-  const [dummyUser, setDummyUser] = useState([])
+ 
 
   console.log("user data", UserData)
 
@@ -26,6 +26,7 @@ export const UserContextProvider = ({ children }) => {
 
   // get user token from session
   const Authtoken = Cookies.get("authToken");
+  console.log("my auth", Authtoken)
 
   /**
    * @function (fuction) getUserData - a fuction created to retrieve user info.
@@ -43,15 +44,20 @@ export const UserContextProvider = ({ children }) => {
         setUserData(DataValue);
         setLoading(false);
         setGenload(false)
+        console.log("Data value if status is 200", DataValue)
       }
+
+        console.log("Data value outside ", DataValue);
       // setLoading(true);
-      console.log("data", data);
+   console.log("final Userdata", UserData)
     } catch (error) {
       console.error("Error fetching user data:", error);
       setGenload(false);
     }
   };
 
+
+  console.log("Another user data", UserData)
   /**
    * @function (fuction) getUserData - a fuction created to retrieve user info.
    */

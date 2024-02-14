@@ -19,8 +19,9 @@ const ProductProvider = ({ children }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [cartProducts, setCartProducts] = useState([]);
+  const [cartProducts, setCartProducts] = useState(null);
   const [wishlist, setWishlist] = useState(null);
+  const [handleCartLoading, setHandleCartLoading] = useState(false);
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const isDesktop = useMediaQuery({
@@ -50,6 +51,7 @@ const ProductProvider = ({ children }) => {
 
   // add to cart socket
   const handleAddToCart = (productId, userId) => {
+    setHandleCartLoading(true);
     console.log("emmiting value to add to cart");
     const cartdata = {
       productId: productId,
@@ -61,6 +63,7 @@ const ProductProvider = ({ children }) => {
       socket.emit("cartadd", cartdata);
     } catch (error) {
       socket.disconnect();
+      
     }
   };
 
@@ -95,14 +98,17 @@ const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     socket.on("cart", (cartItems) => {
+       setHandleCartLoading(true);
       console.log("cart sent back");
-      setCartProducts(cartItems);
+       setCartProducts(cartItems);
+       setHandleCartLoading(false);
     });
   }, [socket])
 
   console.log("cart products from socket", cartProducts);
 
   useEffect(() => {
+    if(!UserData) return
     const fetchWishlistFromServer = async () => {
       try {
         // Map through the wishlist IDs and fetch product details
@@ -233,6 +239,7 @@ const ProductProvider = ({ children }) => {
         handleAddToCart,
         handleRemoveFromCart,
         handleCartDecrease,
+        handleCartLoading,
       }}
     >
       {children}
