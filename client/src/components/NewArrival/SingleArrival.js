@@ -57,7 +57,11 @@ const SingleArrival = ({ product }) => {
                     //   handleWishClick();
                     //   handleRemoveFromWishlist(e, product);
                     // }}
-                    onClick={(e) => {
+                    onClick={!UserData ?
+                      () => {
+                       console.log(UserData)
+                      router.push('/login')
+                     } : (e) => {
                       e.stopPropagation();
                       handleWishAdd(product._id, UserData._id);
                       handleWishClick();
@@ -74,7 +78,7 @@ const SingleArrival = ({ product }) => {
                     viewBox="0 0 16 16"
                     stroke="red"
                     fill="none"
-                    onClick={(e) => {
+                    onClick={!UserData ? router.push('/login') : (e) => {
                       e.stopPropagation();
                       handleWishAdd(product._id, UserData._id);
                       handleWishClick();
@@ -88,7 +92,7 @@ const SingleArrival = ({ product }) => {
             <a
               className="flex items-center"
               // onClick={(e) => handleCartClick(e, product)}
-              onClick={(e) => {
+              onClick={!UserData ? router.push('/login'): (e) => {
                 e.stopPropagation();
                 handleAddToCart(product._id, UserData._id);
               

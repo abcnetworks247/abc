@@ -13,11 +13,46 @@ import Link from "next/link";
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
 const page = () => {
+  
+  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  const router=useRouter()
+
+  if (!UserData) {
+    return (
+      <>
+        <div className="bg-[#111827] sticky top-0 z-[10] ">
+          <Navbar />
+        </div>
+        <div
+         
+          className="flex items-center justify-center bg-center bg-gray-100 h-[90vh]"
+        >
+          <div className="max-w-lg w-full p-8 bg-white bg-opacity-75 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+            <h2 className="text-2xl font-semibold mb-4">Please Sign In</h2>
+            <p className="text-gray-600 mb-6">
+              You need to sign in to view your cart.
+            </p>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={()=>router.push('/login')}>
+              Sign In
+            </button>
+          </div>
+        </div>
+      </>
+    );
+}
+
+
+
+
+
+
+
+
   const [paymenttype, setPaymentType] = useState("Stripe");
   const { cartProducts } = UseProductProvider();
-  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  
 
   const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 

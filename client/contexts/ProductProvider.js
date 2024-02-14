@@ -87,7 +87,10 @@ const ProductProvider = ({ children }) => {
   // get the cart products back from the server
 
   useEffect(() => {
-    setCartProducts(UserData.cart)
+    if (UserData) {
+       setCartProducts(UserData.cart);
+    }
+   
   },[UserData])
 
   useEffect(() => {
