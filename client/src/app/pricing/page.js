@@ -201,13 +201,11 @@ export default function page() {
                         for="modal-3"
                         onClick={() => {
                           let id = plan.id;
-                          
-                           if (!Authtoken) {
-                             router.push("/login");
-                             return; // Added return statement to exit function early
-                           }
-                          
-                          else {
+
+                          if (!Authtoken) {
+                            router.push("/login");
+                            return; // Added return statement to exit function early
+                          } else {
                             OpenModal(plan);
                           }
                         }}
@@ -264,6 +262,7 @@ export default function page() {
         <PricingComp
           CloseModal={CloseModal}
           spinnerId={spinnerId}
+          Authtoken={Authtoken}
         />
       )}
       <FooterComp />
