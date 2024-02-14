@@ -4,8 +4,8 @@ const StaticForm = ({ handleEdit }) => {
   const { UserData } = UseUserContext();
   console.log("user static", UserData);
   return (
-    <div className="mx-auto">
-      <div className="flex flex-row-reverse cursor-pointer ">
+    <div className="mx-auto h-screen">
+      <div className="flex flex-row-reverse cursor-pointer mb-4">
         <div
           className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200"
           onClick={() => handleEdit()}
@@ -35,50 +35,85 @@ const StaticForm = ({ handleEdit }) => {
         </div>
       </div>
       {/* First and last name */}
-      <div className="grid md:grid-cols-2 md:gap-6">
-        <div className="relative z-0 w-full mb-5 group">
+
+   <div className="grid md:grid-cols-2 ">
+        {/* <div className="relative z-0 w-full mb-5 group">
           <div className="block py-2.5 px-0 w-full text-sm text-black  bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
             <div className="peer-focus:font-medium absolute text-black  duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
               First name
             </div>
             <p>{UserData && UserData.fullname}</p>
           </div>
-        </div>
-        {/* <div className="relative z-0 w-full mb-5 group">
-          <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-            <div className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
-              Last name
-            </div>
-            <p>{UserData.lastName}</p>
-          </div>
         </div> */}
       </div>
-      {/* Email address */}
-      <div className="relative z-0 w-full mb-5 group">
-        <div className="block py-2.5 px-0 w-full text-sm text-black bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-          <div className="peer-focus:font-medium absolute text-sm text-whiteduration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
-            Email address
-          </div>
-          <p>{UserData.email}</p>
-        </div>
+      <div className="relative mb-12 w-full ">
+        <input
+          type="email"
+          readOnly
+          className=" bg-white border w-full border-blue-500 rounded-md py-2 px-4 focus:outline-none focus:shadow-outline"
+          placeholder=" "
+          value={UserData.fullname}
+        />
+        <label
+          htmlFor="email"
+          className="absolute left-4 px-1 bg-white text-gray-700 text-sm"
+          style={{ top: "-0.8rem" }}
+        >
+          fullname
+        </label>
       </div>
+
+      <div className="relative mb-12 w-full">
+        <input
+          type="email"
+          readOnly
+          className=" bg-white border w-full border-blue-500 rounded-md py-2 px-4 focus:outline-none focus:shadow-outline"
+          placeholder=" "
+          value={UserData.email}
+        />
+        <label
+          htmlFor="email"
+          className="absolute left-4 px-1 bg-white text-gray-700 text-sm"
+          style={{ top: "-0.8rem" }}
+        >
+          Email address
+        </label>
+      </div>
+
+      <div className="relative mb-12 w-full">
+        <input
+          type="email"
+          readOnly
+          className="bg-white focus:bg-white border w-full  border-blue-500 rounded-md py-2 px-4 focus:outline-none focus:shadow-outline"
+          placeholder=" "
+          value={UserData.phonenumber}
+        />
+        <label
+          htmlFor="email"
+          className="absolute left-4 px-1 bg-white text-gray-700 text-sm"
+          style={{ top: "-0.8rem" }}
+        >
+          Phone Number
+        </label>
+      </div>
+
       {/* Phone number */}
-      <div className="relative z-0 w-full mb-5 group">
-        <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-          <div className="peer-focus:font-medium absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
-            Phone Number
-          </div>
-          <p>{UserData.phonenumber}</p>
-        </div>
-      </div>
-      {/* shipping Address */}
-      <div className="relative z-0 w-full mb-5 group">
-        <div className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none  dark:focus:border-blue-500 focus:outline-none focus:ring-0 peer">
-          <div className="peer-focus:font-medium absolute text-sm text-black duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0]">
-            Shipping Address
-          </div>
-          <p>{UserData.shippingaddress}</p>
-        </div>
+
+      <div className="relative mb-12 w-full">
+        <input
+          type="email"
+          readOnly
+          className="bg-white focus:bg-white border w-full border-blue-500 rounded-md py-2 px-4 focus:outline-none focus:shadow-outline"
+          placeholder=" "
+          value={UserData.shippingaddress}
+        />
+        <label
+          htmlFor="email"
+          className="absolute left-4 px-1 bg-white text-gray-700 text-sm"
+          style={{ top: "-0.8rem" }}
+        >
+          Shipping Address
+        </label>
       </div>
     </div>
   );

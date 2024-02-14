@@ -6,7 +6,7 @@ import { UseProductProvider } from '../../../../contexts/ProductProvider';
 const layout = ({ children }) => {
   const {screen}= UseProductProvider()
   return (
-    <div className={`h-full w-full  sm:basis-3/4 sm:bg-white sm:min-h-fit shadow-md sm:rounded-sm`}>
+    <div className={`h-full w-full  sm:basis-3/4 sm:bg-white sm:min-h-fit shadow-md sm:rounded-md`}>
       <p className="accountInformation px-4 py-2 text-bold ">
         Manage your account
       </p>
