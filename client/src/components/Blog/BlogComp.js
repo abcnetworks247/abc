@@ -247,7 +247,7 @@ export default function () {
               {/* <!-- end featured section --> */}
 
               {/* <!-- recent posts --> */}
-              {!worldNews && (
+              {worldNews && (
                 <div className="">
                   <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
                     <h2 className="text-xl px-2 font-bold">World News</h2>
@@ -262,7 +262,7 @@ export default function () {
                         <Link href={`${pathUrl}/${post._id}`} key={post._id}>
                           <Image
                             src={post.blogimage}
-                            className="rounded h-[212px]"
+                            className="rounded object-cover h-[212px]"
                             height={500}
                             width={500}
                             alt="img"
@@ -289,7 +289,7 @@ export default function () {
               {/* <!-- end recent posts --> */}
 
               {/* <!-- popular posts --> */}
-              {!breakingNews && (
+              {breakingNews && (
                 <div className="">
                   <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
                     <h2 className="text-xl px-2 font-bold">Breaking news</h2>
