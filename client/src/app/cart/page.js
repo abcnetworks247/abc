@@ -13,15 +13,81 @@ import Link from "next/link";
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
-
+import { useRouter } from "next/navigation";
 const page = () => {
-  const [paymenttype, setPaymentType] = useState("Stripe");
-  const { cartProducts } = UseProductProvider();
+  
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  const { cartProducts } = UseProductProvider();
+  const [paymenttype, setPaymentType] = useState("Stripe");
+  const router=useRouter()
+
+  if (!UserData) {
+    return (
+      <>
+        <div className="bg-[#111827] sticky top-0 z-[10] ">
+          <Navbar />
+        </div>
+        <div
+         
+          className="flex items-center justify-center bg-center bg-gray-100 h-[90vh]"
+        >
+          <div className="max-w-lg w-full p-8 bg-white bg-opacity-75 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
+            <h2 className="text-2xl font-semibold mb-4">Please Sign In</h2>
+            <p className="text-gray-600 mb-6">
+              You need to sign in to view your cart.
+            </p>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={()=>router.push('/login')}>
+              Sign In
+            </button>
+          </div>
+        </div>
+      </>
+    );
+}
+
+
+  if (!cartProducts || cartProducts.length===0) {
+    return (
+      <>
+        <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
+          <Navbar />
+        </div>
+        <Sidebar />
+        <section className="pb-8 bg-white font-poppins">
+          <div className="flex items-center justify-center sm:h-[80vh]  sm:mx-12 sm:shadow-lg sm:py-7 ">
+            <div className="flex flex-col items-center gap-2">
+              <img
+                src="/assets/images/emptycart.jpg"
+                className="w-[200px] h-[200px] object-contain"
+              />
+              <p className="text-[#575746]">Your cart is empty</p>
+              <p className="text-sm ml-3  text-center text-[#313133]  ">
+                Why not explore our latest products and discover something you
+                love
+              </p>
+              <Link
+                href="/store"
+                className="flex items-center justify-center p-2 bg-blue-600 rounded-sm shadow-md cursor-pointer hover:bg-blue-700"
+              >
+                <p className="text-white">Explore now</p>
+              </Link>
+            </div>
+          </div>
+        </section>
+        <FooterComp />
+      </>
+    );
+}
+
+
+
+
+
+  
+  
+  
 
   const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
-
-  //  console.log("cartproduct", cartProducts)
   const shippingFee = 5;
 
   const price = cartProducts.map((product) => product.price * product.quantity);
@@ -82,27 +148,7 @@ const page = () => {
       </div>
       <Sidebar />
       <section className="pb-8 bg-white font-poppins">
-        {cartProducts.length === 0 ? (
-          <div className="flex items-center justify-center sm:h-[80vh]  sm:mx-12 sm:shadow-lg sm:py-7 ">
-            <div className="flex flex-col items-center gap-2">
-              <img
-                src="/assets/images/emptycart.jpg"
-                className="w-[200px] h-[200px] object-contain"
-              />
-              <p className="text-[#575746]">Your cart is empty</p>
-              <p className="text-sm ml-3  text-center text-[#313133]  ">
-                Why not explore our latest products and discover something you
-                love
-              </p>
-              <Link
-                href="/store"
-                className="flex items-center justify-center p-2 bg-blue-600 rounded-sm shadow-md cursor-pointer hover:bg-blue-700"
-              >
-                <p className="text-white">Explore now</p>
-              </Link>
-            </div>
-          </div>
-        ) : (
+       
           <div className="px-4 py-6 mx-auto max-w-7xl lg:py-4 md:px-6 lg:px-36">
             <div>
               <h2 className="mb-8 text-xl font-bold dark:text-gray-700">
@@ -192,7 +238,7 @@ const page = () => {
               </div>
             </div>
           </div>
-        )}
+       
       </section>
       <FooterComp />
     </>

@@ -19,8 +19,10 @@ const ProductProvider = ({ children }) => {
   const [allProducts, setAllProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [cartProducts, setCartProducts] = useState([]);
+  const [cartProducts, setCartProducts] = useState(null);
   const [wishlist, setWishlist] = useState(null);
+  const [handleCartLoading, setHandleCartLoading] = useState(false);
+  const [wishListLoading, setWishListLoading]=useState(false)
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const isDesktop = useMediaQuery({
@@ -50,6 +52,7 @@ const ProductProvider = ({ children }) => {
 
   // add to cart socket
   const handleAddToCart = (productId, userId) => {
+    setHandleCartLoading(true);
     console.log("emmiting value to add to cart");
     const cartdata = {
       productId: productId,
@@ -61,6 +64,7 @@ const ProductProvider = ({ children }) => {
       socket.emit("cartadd", cartdata);
     } catch (error) {
       socket.disconnect();
+      
     }
   };
 
@@ -87,19 +91,25 @@ const ProductProvider = ({ children }) => {
   // get the cart products back from the server
 
   useEffect(() => {
-    setCartProducts(UserData.cart)
+    if (UserData) {
+       setCartProducts(UserData.cart);
+    }
+   
   },[UserData])
 
   useEffect(() => {
     socket.on("cart", (cartItems) => {
+       setHandleCartLoading(true);
       console.log("cart sent back");
-      setCartProducts(cartItems);
+       setCartProducts(cartItems);
+       setHandleCartLoading(false);
     });
   }, [socket])
 
   console.log("cart products from socket", cartProducts);
 
   useEffect(() => {
+    if(!UserData) return
     const fetchWishlistFromServer = async () => {
       try {
         // Map through the wishlist IDs and fetch product details
@@ -126,6 +136,7 @@ const ProductProvider = ({ children }) => {
 
   
   const handleWishAdd = (productId, userId) => {
+    setWishListLoading(true)
     const wishdata = {
       productId: productId,
       userId: userId,
@@ -135,9 +146,11 @@ const ProductProvider = ({ children }) => {
 
   //reevie the response from the server
   socket.on("wishlist", (userwishlist) => {
+    setWishListLoading(true)
     // Update the local state with the updated
     console.log(userwishlist);
     setWishlist(userwishlist);
+    setWishListLoading(false)
     console.log("returning wishlist", wishlist);
   });
 
@@ -230,6 +243,8 @@ const ProductProvider = ({ children }) => {
         handleAddToCart,
         handleRemoveFromCart,
         handleCartDecrease,
+        handleCartLoading,
+        wishListLoading,
       }}
     >
       {children}

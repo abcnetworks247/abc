@@ -12,21 +12,20 @@ import ImageGallery from "@/components/Products/ImageGallery";
 import { UseProductProvider } from "../../../contexts/ProductProvider";
 import { useSearchParams } from "next/navigation";
 import { UseUserContext } from "../../../contexts/UserContext";
-
-import axios from "axios";
+import Loadinganimate from "@/components/Loadinganimate";
 import Api from "@/utils/Api";
 import Nav1 from "@/components/navbar/Nav1";
+
 const page = () => {
 
 const router = useRouter();
 const params = useSearchParams()
-const productid = params.get("id");
- const {UserData}=UseUserContext()
+  const productid = params.get("id");
+ const { UserData } = UseUserContext()
 const {
-  handleAddToWishlist,
-  handleRemoveFromWishlist,
-  handleCartClick,
+  handleAddToCart,
   handleWishAdd,
+  handleCartLoading,
 } = UseProductProvider();
  
   const [localSelectedProduct, setLocalSelectedProduct] = useState({});
@@ -74,28 +73,7 @@ const handleWishClick = () => {
   }, [productid]);
     
 
-  // useEffect(() => {
-  //   console.log("Saving to localStorage:", selectedProduct);
-  //   if (!selectedProduct) return;
-  //   localStorage.setItem("selectedProduct", JSON.stringify(selectedProduct));
-  // }, [selectedProduct]);
-
-  // // Load selectedProduct from localStorage when the component mounts
-  // useEffect(() => {
-  //   const storedProduct = localStorage.getItem("selectedProduct");
-
-  //   const isReloading = sessionStorage.getItem("isReloading");
-
-  //   if (storedProduct && isReloading) {
-  //     const parsedProduct = JSON.parse(storedProduct);
-  //     setLocalSelectedProduct(parsedProduct);
-  //     setLoading(false); // Set loading to false once data is loaded
-  //   } else {
-  //     // Set the reloading flag for the next reload
-  //     sessionStorage.setItem("isReloading", "true");
-  //   }
-  // }, []);
-
+  
   return (
     <div className="bg-gray-200">
       <Nav1 />
@@ -196,7 +174,10 @@ const handleWishClick = () => {
                     <span className="text-lg font-medium text-rose-500 ">
                       New
                     </span>
-                    <h2 className="max-w-xl mt-2 mb-6 text-xl font-bold ">
+                    <h2
+                      className="max-w-xl mt-2 mb-6 text-xl font-bold cursor-pointer "
+                      onClick={() => console.log("My user data", UserData)}
+                    >
                       {localSelectedProduct && localSelectedProduct.title}
                     </h2>
                     <div className="flex flex-wrap items-center mb-6">
@@ -244,24 +225,7 @@ const handleWishClick = () => {
                         localSelectedProduct && localSelectedProduct.description
                       }`
                     )}
-                    {/* <div className="p-4 mb-8 border border-gray-300">
-                      <h2 className="mb-4 text-xl font-semibold">
-                        Real time{" "}
-                        <span className="px-2 bg-blue-500 rounded-full text-gray-50">
-                          26
-                        </span>{" "}
-                        visitors right now!{" "}
-                      </h2>
-                      <div className="mb-1 text-xs font-medium text-gray-700 ">
-                        Hurry up! left {localSelectedProduct.stock} in Stock
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2.5  ">
-                        <div
-                          className="bg-blue-600  h-2.5 rounded-full"
-                          style={{ width: "45%" }}
-                        ></div>
-                      </div>
-                    </div> */}
+
                     <p className="inline-block text-2xl font-semibold text-gray-700 ">
                       <span>{`$ ${
                         localSelectedProduct && localSelectedProduct.price
@@ -271,40 +235,8 @@ const handleWishClick = () => {
                       </span>
                     </p>
                   </div>
-                  {/* <div className="mb-8">
-                    <h2 className="mb-2 text-xl font-bold ">Color</h2>
-                    <div className="flex flex-wrap -mb-2">
-                      <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400 ">
-                        <div className="w-6 h-6 bg-red-600 rounded-full"></div>
-                      </button>
-                      <button className="p-1 mb-2 mr-2 border border-transparent rounded-full hover:border-gray-400">
-                        <div className="w-6 h-6 bg-green-600 rounded-full"></div>
-                      </button>
-                      <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400">
-                        <div className="w-6 h-6 bg-yellow-500 rounded-full"></div>
-                      </button>
-                      <button className="p-1 mb-2 border border-transparent rounded-full hover:border-gray-400">
-                        <div className="w-6 h-6 rounded-full bg-sky-400"></div>
-                      </button>
-                    </div>
-                  </div> */}
-                  <div classNames="pb-6 mb-8 border-b border-gray-300 dark:border-gray-700">
-                    {/* <h2 className="mb-2 text-xl font-bold ">Size</h2> */}
-                    {/* <div className="flex flex-wrap -mb-2">
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 dark:border-gray-400 hover:text-blue-600 ">
-                        XL
-                      </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 ">
-                        S
-                      </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 ">
-                        M
-                      </button>
-                      <button className="py-1 mb-2 mr-1 border w-11 hover:border-blue-400 hover:text-blue-600 dark:border-gray-400 ">
-                        XS
-                      </button>
-                    </div> */}
-                  </div>
+
+                  <div classNames="pb-6 mb-8 border-b border-gray-300 dark:border-gray-700"></div>
 
                   <div className="flex items-center mt-2 ">
                     <div className="mb-4 mr-4 lg:mb-0">
@@ -328,12 +260,20 @@ const handleWishClick = () => {
                     </div>
                     <div className="mb-4 mr-4 lg:mb-0">
                       <button
-                        onClick={(e) =>
-                          handleCartClick(e, localSelectedProduct)
+                        onClick={
+                          !UserData
+                            ? (e) => {
+                                e.stopPropagation();
+                                router.push("/login");
+                              }
+                            : (e) => {
+                                e.stopPropagation();
+                                handleAddToCart(productid, UserData._id);
+                              }
                         }
                         className="w-full h-10 p-2 mr-4 bg-blue-900 rounded-md text-gray-50 hover:bg-blue-600 "
                       >
-                        Add to Cart
+                        {handleCartLoading ? <Loadinganimate color="white" /> : "Add to Cart"}
                       </button>
                     </div>
                     <div className="mb-4 mr-4 rounded-sm lg:mb-0">

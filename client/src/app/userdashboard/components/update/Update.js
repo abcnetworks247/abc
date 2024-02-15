@@ -14,11 +14,11 @@ const Update = () => {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
   const [formData, setFormData] = useState({
-    fullname: UserData?.fullname,
-    email: UserData.email,
-    phone: UserData.phone || '',
-    shippingaddress: UserData.shippingaddress,
-    userphoto: UserData.userdp,
+    fullname: UserData.fullname || "",
+    email: UserData.email || "",
+    phone: UserData.phone || "",
+    shippingaddress: UserData.shippingaddress || "",
+    userdp: UserData.userdp,
   });
 
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -27,6 +27,7 @@ const Update = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   console.log("UserData in form", formData);
+  const [submitForm, setSubmitForm] = useState(new FormData());
   const [loading, setLoading] = useState(false)
 
   // Function to handle form input changes
@@ -45,7 +46,7 @@ const Update = () => {
     const imageUrl = URL.createObjectURL(selectedFile);
 
     setSelectedPhoto(imageUrl);
-    setFormData({ ...formData, userphoto: selectedFile });
+    submitForm.append("userphoto", selectedFile);
 
     console.log("this is formData", formData);
   };
@@ -56,8 +57,7 @@ const Update = () => {
 
     try {
       setLoading(true)
-      // Create a new FormData instance
-      const submitForm = new FormData();
+      
 
       console.log("userphoto", formData.userphoto);
       // Append form data to the FormData instance
@@ -66,7 +66,7 @@ const Update = () => {
       submitForm.append("email", formData.email);
       submitForm.append("phone", formData.phone);
       submitForm.append("shippingaddress", formData.shippingaddress);
-      submitForm.append("userphoto", formData.userdp);
+    
        console.log("my phonenumber", formData.phone);
  
       // Make a PATCH request

@@ -2,9 +2,17 @@
 import React from 'react'
 import { useContext } from 'react'
 import { ProductContext } from '../../../contexts/productContext'
+import { UseProductProvider } from '../../../contexts/ProductProvider'
+import Loadinganimate from '../Loadinganimate'
 
 const ProductDetail = () => {
-    const {selectedProduct} = useContext(ProductContext)
+ 
+   const {
+     handleWishAdd,
+     handleAddToCart,
+     handleCartLoading,
+     selectedProduct,
+   } = UseProductProvider();
     
   return (
     <div className=" relative py-20 overflow-hidden bg-white font-poppins dark:bg-gray-800 overflow-y-auto ">

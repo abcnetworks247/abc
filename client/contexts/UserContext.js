@@ -12,8 +12,8 @@ const UserContext = createContext();
  */
 export const UserContextProvider = ({ children }) => {
   // initial state for user incoming data
-  const [UserData, setUserData] = useState([]);
-  const [dummyUser, setDummyUser] = useState([])
+  const [UserData, setUserData] = useState(null);
+ 
 
   console.log("user data", UserData)
 
@@ -26,6 +26,7 @@ export const UserContextProvider = ({ children }) => {
 
   // get user token from session
   const Authtoken = Cookies.get("authToken");
+  console.log("my auth", Authtoken)
 
   /**
    * @function (fuction) getUserData - a fuction created to retrieve user info.
@@ -43,29 +44,24 @@ export const UserContextProvider = ({ children }) => {
         setUserData(DataValue);
         setLoading(false);
         setGenload(false)
+        console.log("Data value if status is 200", DataValue)
       }
+
+        console.log("Data value outside ", DataValue);
       // setLoading(true);
-      console.log("data", data);
-    } catch (error) {}
+   console.log("final Userdata", UserData)
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setGenload(false);
+    }
   };
 
+
+  console.log("Another user data", UserData)
   /**
    * @function (fuction) getUserData - a fuction created to retrieve user info.
    */
 
-  const HandleLogout = async () => {
-    try {
-      const Authtoken = Cookies.remove("authToken");
-
-      await Api.delete("client/auth/signout", {
-        headers: {
-          Authorization: "Bearer " + Authtoken,
-        },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   /**
    * @function (fuction)  functiom for password recovery
@@ -116,7 +112,6 @@ useEffect(()=>{
   return (
     <UserContext.Provider
       value={{
-        HandleLogout,
         UserData,
         loading,
         Authtoken,

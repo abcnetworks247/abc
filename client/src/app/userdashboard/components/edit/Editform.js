@@ -101,7 +101,7 @@ const Editform = ({
           htmlFor=""
           className="block mb-2 text-sm font-medium dark:text-gray-400"
         >
-          Shippping Address
+          Shipping Address
         </label>
         <textarea
           name="shippingaddress"
@@ -122,7 +122,7 @@ const Editform = ({
         </label>
         <div className="py-2 shrink-0">
           <img
-            src={selectedPhoto ? selectedPhoto : formData.userphoto}
+            src={selectedPhoto ? selectedPhoto : formData.userdp}
             alt=""
             className="object-cover rounded-full w-11 h-11"
           />

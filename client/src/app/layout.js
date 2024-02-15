@@ -18,7 +18,8 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <UserContextProvider>
           <ProductProvider>
-            {children}</ProductProvider>
+            {children}
+          </ProductProvider>
         </UserContextProvider>
       </body>
     </html>
