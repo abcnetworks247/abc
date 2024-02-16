@@ -11,55 +11,53 @@ import Nav1 from "@/components/navbar/Nav1";
 import PricingComp from "@/components/Pricing/PricingComp";
 
 export default function page() {
+  const router = useRouter();
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   const [spinner, setSpinner] = useState(false);
   const [oPenNav, setOpenNav] = useState(false);
   const [spinnerId, setSpinnerId] = useState(null);
-  
-
-
-
-  const router = useRouter();
+  const [plantype, setPlanType] = useState("monthly");
 
   const Plans = [
     {
       name: "General - Copper Donor",
       id: "1",
-      range1: 10,
-      range2: 50,
-      price: "10 - $ 50",
-      description:
-        "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
+      range1: plantype === "monthly" ? 10 : 120,
+      range2: plantype === "monthly" ? 50 : 600,
+      price: plantype === "monthly" ? "10 - $50" : "120 - $600",
+      description: "Basic plan with live video access and more.",
+      type: plantype === "monthly" ? "month" : "year",
       features: ["Live Video"],
     },
     {
-      name: "Prime -Silver Donor",
+      name: "Prime - Silver Donor",
       id: "2",
-      range1: 55,
-      range2: 100,
-      price: "55 - $ 100",
-      description:
-        "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
+      range1: plantype === "monthly" ? 55 : 660,
+      range2: plantype === "monthly" ? 100 : 1200,
+      price: plantype === "monthly" ? "55 - $100" : "660 - $1200",
+      description: "Enhanced plan with discounts and live video.",
+      type: plantype === "monthly" ? "month" : "year",
       features: ["Special Discount", "Live Video"],
     },
     {
       name: "Patrons 1 - Gold Donor",
       id: "3",
-      range1: 105,
-      range2: 200,
-      price: "105 - $ 200",
+      range1: plantype === "monthly" ? 105 : 1260,
+      range2: plantype === "monthly" ? 200 : 2400,
+      price: plantype === "monthly" ? "105 - $200" : "1260 - $2400",
       description:
-        "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
+        "Premium plan with discounts, live video, and free shipping.",
+      type: plantype === "monthly" ? "month" : "year",
       features: ["Special Discount", "Live Video", "Free Shipping"],
     },
     {
       name: "Patron 2 - Diamond Donor",
       id: "4",
-      range1: 500,
-      range2: 1000,
-      price: "500",
-      description:
-        "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
+      range1: plantype === "monthly" ? 500 : 6000,
+      range2: plantype === "monthly" ? 1000 : 12000,
+      price: plantype === "monthly" ? "$500" : "$6000",
+      description: "Exclusive plan with discounts, free shipping, and more.",
+      type: plantype === "monthly" ? "month" : "year",
       features: [
         "Special Discount",
         "Live Video",
@@ -70,11 +68,11 @@ export default function page() {
     {
       name: "Patron 3 - Titanium Donor",
       id: "5",
-      range1: 1000,
-      range2: 500000,
-      price: "1000",
-      description:
-        "This plan is ideal for individual users and hobbyists who are looking for essential functionalities to support.",
+      range1: plantype === "monthly" ? 1000 : 12000,
+      range2: plantype === "monthly" ? 500000 : 6000000,
+      price: plantype === "monthly" ? "$1000" : "$12000",
+      description: "Elite plan with discounts, live video, and premium perks.",
+      type: plantype === "monthly" ? "month" : "year",
       features: [
         "Special Discount",
         "Live Discount",
@@ -85,20 +83,25 @@ export default function page() {
     },
   ];
 
-
- const OpenModal = (plan) => {
-   setSpinnerId(plan);
-   document.body.style.overflow = "hidden";
-   setOpenNav(true);
+  const OpenModal = (plan) => {
+    setSpinnerId(plan);
+    document.body.style.overflow = "hidden";
+    setOpenNav(true);
   };
-  
+
   const CloseModal = () => {
     setSpinnerId(null);
     document.body.style.overflow = "visible";
     setOpenNav(false);
   };
 
-  
+  const MonthlyPlan = () => {
+    setPlanType("monthly");
+  };
+
+  const YearlyPlan = () => {
+    setPlanType("yearly");
+  };
 
   return (
     <div className="relative">
@@ -114,9 +117,37 @@ export default function page() {
               <span className="md:block"> Membership Packages</span>
             </p>
             <p className="max-w-xl mt-4 text-base text-gray-400">
-              Every plan includes every feature, and can scale as your team
-              does.
+              Your Prime membership now also includes 24*7 hours Customer
+              Support, fast delivery on eligible items, exclusive access to
+              deals & more.
             </p>
+
+            <div className="flex flex-row items-center justify-center">
+              <div className="w-[50%] flex flex-row gap-2 mt-14 border border-gray-300 p-1 rounded-lg">
+                <button
+                  id="submit-button"
+                  onClick={MonthlyPlan}
+                  className={
+                    plantype === "monthly"
+                      ? "w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      : "w-full px-4 py-2 text-blue-500 bg-white rounded-md hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  }
+                >
+                  Monthly
+                </button>
+                <button
+                  id="submit-button"
+                  className={
+                    plantype === "monthly"
+                      ? "w-full px-4 py-2 text-blue-500 bg-white rounded-md hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      : "w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  }
+                  onClick={YearlyPlan}
+                >
+                  Yearly
+                </button>
+              </div>
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-8 mt-12 mb-16 lg:ap-2 lg:grid-cols-3">
             {Plans.map((plan) => (
@@ -160,11 +191,11 @@ export default function page() {
                           </p>
                           <p className="ml-3">
                             <span className="text-base font-medium text-white uppercase lg:text-xl">
-                              ${plan.price}
+                              {plan.price}
                             </span>
                             <span className="text-sm font-medium text-gray-500">
                               {" "}
-                              /mo
+                              /{plan.type}
                             </span>
                           </p>
                         </span>
