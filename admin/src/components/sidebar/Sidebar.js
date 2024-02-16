@@ -37,11 +37,13 @@ import useCurrentAdmin from "@/hooks/useCurrentAdmin";
 import Image from "next/image";
 import Logo from "@/resources/assets/images/AbcstudioNo.png";
 import Link from "next/link";
+import { UseAdminContext } from "@/context/AdminContext";
 export default function Sidebar() {
   const [open, setOpen] = React.useState(0);
   const [open2, setOpen2] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
   const { CurrentUser, isLoading } = useCurrentAdmin();
+  const { state } = UseAdminContext();
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -51,7 +53,11 @@ export default function Sidebar() {
 
   const UserValue = CurrentUser && CurrentUser.data.olduser;
   return (
-    <div className="w-auto sticky top-0 z-0 h-[100vh] hidden lg:block">
+    <div
+      className={`lg:w-auto w-24 absolute lg:sticky top-0 z-40 lg:z-0 h-[100vh] ${
+        state.toggle ? "block  toggle-animation  " : "hidden"
+      }  lg:block`}
+    >
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
           <Link href="/dashboard">
@@ -297,8 +303,6 @@ export default function Sidebar() {
                 </List>
               </AccordionBody>
             </Accordion>
-
-          
 
             <li>
               <Link

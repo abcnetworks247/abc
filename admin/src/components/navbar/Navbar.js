@@ -108,7 +108,7 @@ function ProfileMenu() {
         <Button
           variant="text"
           color="blue-gray"
-          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
+          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 ml-auto"
         >
           {CurrentUserloading ? (
             <div className="w-10 h-10 animate-pulse bg-blue-gray-200 rounded-full border-2 border-blue-gray-200 border-l-transparent"></div>
@@ -121,6 +121,7 @@ function ProfileMenu() {
                 className="border border-gray-900 p-0.5"
                 src={UserInfo?.userdp}
               />
+
               <ChevronDownIcon
                 strokeWidth={2.5}
                 className={`h-3 w-3 transition-transform ${
@@ -202,7 +203,7 @@ function NavListMenu() {
 
   return (
     <React.Fragment>
-      {/* <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
+      <Menu allowHover open={isMenuOpen} handler={setIsMenuOpen}>
         <MenuHandler>
           <Typography as="a" href="#" variant="small" className="font-normal">
             <MenuItem className="hidden items-center gap-2 font-medium text-blue-gray-900 lg:flex lg:rounded-full">
@@ -237,7 +238,7 @@ function NavListMenu() {
       </MenuItem>
       <ul className="ml-6 flex w-full flex-col gap-1 lg:hidden">
         {renderItems}
-      </ul> */}
+      </ul>
     </React.Fragment>
   );
 }
@@ -284,9 +285,10 @@ function NavList() {
 
 export function ComplexNavbar() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
-
+const {state, dispatch,} = UseAdminContext()
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
+  console.log(state, "boolean")
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -295,7 +297,7 @@ export function ComplexNavbar() {
   }, []);
 
   return (
-    <Navbar className="mx-auto w-full p-2 z-30  bg-white lg:pl-6 sticky top-0  ">
+    <Navbar className="mx-auto w-full p-2 z-30  bg-white pl-6 sticky top-0  ">
       <div className="relative flex items-center justify-between text-blue-gray-900 rounded-none">
         <Link
           href={process.env.NEXT_PUBLIC_CLIENT_URL}
@@ -320,15 +322,24 @@ export function ComplexNavbar() {
             </g>
           </svg>
         </Link>
-        <div className="hidden lg:block">
-          <NavList />
-        </div>
 
         <ProfileMenu />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          onClick={()=>{dispatch({type: "TOGGLE"})}}
+          className="w-6 h-6 text-black ml-3 block lg:hidden"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          />
+        </svg>
       </div>
-      <Collapse open={isNavOpen} className="overflow-scroll">
-        <NavList />
-      </Collapse>
     </Navbar>
   );
 }
