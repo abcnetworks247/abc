@@ -53,7 +53,7 @@ export default function () {
     Api.get("admin/blog")
       .then((res) => {
         const data = res.data;
-        
+
         setPosts(data);
         // update the highlight, trending, top news and popular posts
         setHighlight(data["africa news update"]);
@@ -329,6 +329,160 @@ export default function () {
                 </div>
               )}
               {/* <!-- end popular posts --> */}
+              {businessNews && (
+
+                <div className={`${businessNews.length < 1 ? 'hidden' : 'space-x-0  sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1'}`}>
+                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                    <h2 className="text-xl px-2 font-bold">Business News</h2>
+                    {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+                  View all
+                </a> */}
+                  </div>
+                  {businessNews.map((post) => (
+                    <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                      <div className="flex flex-row py-4 m-0 mb-5 space-x-0 rounded md:flex-row lg:space-x-3 md:space-x-2 shadow-sm  ">
+                        <Image
+                          src={post.blogimage}
+                          height={500}
+                          width={200}
+                          alt="img"
+                          className="object-cover object-top w-[200px] h-[25vh] rounded-md md:h-[23vh] m-0 p-0 md:m-0"
+                        />
+                        <div className="px-4 bg-white rounded sm:px-0 ">
+                          <span className="hidden text-sm font-semibold text-green-700 md:block">
+                            {" "}
+                            {post.category}{" "}
+                          </span>
+                          <div className="mb-2 lg:text-xl font-semibold text-gray-800 md:text-sm">
+                            {post.title}
+                          </div>
+                          <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden lg:block line-clamp-2">
+                            {post.shortdescription}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+              
+              {sportsNews && (
+                <div className="">
+                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                    <h2 className="text-xl px-2 font-bold">Sport news</h2>
+                    {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+                  View all
+                </a> */}
+                  </div>
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+                    {/* map through top news */}
+                    {sportsNews.map((post) => (
+                      <div className="w-full px-0 p-4 rounded lg:p-0">
+                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                          <Image
+                            src={post.blogimage}
+                            className="rounded h-[212px]"
+                            height={500}
+                            width={500}
+                            alt="img"
+                          />
+                          <div className="p-4 pl-0">
+                            <h2 className="text-base font-bold text-gray-800 lg:truncate md:line-clamp-1">
+                              {post.title}
+                            </h2>
+                            <p className="mt-2 text-sm text-gray-700 line-clamp-2">
+                              {post.shortdescription}
+                            </p>
+
+                            <span className="inline-block py-2 mt-2 ml-auto text-blue-500 rounded">
+                              {" "}
+                              Read more{" "}
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {socioCultural && (
+                <div className="">
+                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                    <h2 className="text-xl px-2 font-bold">Socio cultural news</h2>
+                    {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+                  View all
+                </a> */}
+                  </div>
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+                    {/* map through top news */}
+                    {socioCultural.map((post) => (
+                      <div className="w-full px-0 p-4 rounded lg:p-0">
+                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                          <Image
+                            src={post.blogimage}
+                            className="rounded h-[212px]"
+                            height={500}
+                            width={500}
+                            alt="img"
+                          />
+                          <div className="p-4 pl-0">
+                            <h2 className="text-base font-bold text-gray-800 lg:truncate md:line-clamp-1">
+                              {post.title}
+                            </h2>
+                            <p className="mt-2 text-sm text-gray-700 line-clamp-2">
+                              {post.shortdescription}
+                            </p>
+
+                            <span className="inline-block py-2 mt-2 ml-auto text-blue-500 rounded">
+                              {" "}
+                              Read more{" "}
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {archivesAndAnalysis && (
+
+                <div className={`${archivesAndAnalysis.length < 1 ? 'hidden' : 'space-x-0  sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1'}`}>
+                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                    <h2 className="text-xl px-2 font-bold">Business News</h2>
+                    {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
+                  View all
+                </a> */}
+                  </div>
+                  {archivesAndAnalysis.map((post) => (
+                    <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                      <div className="flex flex-row p-0 m-0 mb-5 space-x-0 rounded md:flex-row lg:space-x-3 md:space-x-2 ">
+                        <Image
+                          src={post.blogimage}
+                          height={500}
+                          width={200}
+                          alt="img"
+                          className="object-cover object-top w-[200px] h-[25vh] rounded-md md:h-[23vh] m-0 p-0 md:m-0"
+                        />
+                        <div className="px-4 bg-white rounded sm:px-0 ">
+                          <span className="hidden text-sm font-semibold text-green-700 md:block">
+                            {" "}
+                            {post.category}{" "}
+                          </span>
+                          <div className="mb-2 text-base font-semibold text-gray-800 md:text-sm">
+                            {post.title}
+                          </div>
+                          <p className="block p-2 pt-1 pl-0 text-xs text-gray-600 md:hidden lg:block line-clamp-2">
+                            {post.shortdescription}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+              
             </main>
             {/* <!-- main ends here --> */}
           </div>
