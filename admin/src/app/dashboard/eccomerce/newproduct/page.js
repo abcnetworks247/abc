@@ -5,7 +5,8 @@ import { Button } from "@material-tailwind/react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Link from "next/link";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"
 import { useState, useEffect } from "react";
 import {
   BtnBold,
@@ -80,6 +81,9 @@ export default function page() {
   const postProduct = async (e) => {
     e.preventDefault();
     console.log("posting started");
+    const id = toast.loading("creating a new product..", {
+      position: toast.POSITION.TOP_LEFT,
+    });
 
     const secureUrls = gallery.map((image) => image.secure_url);
 
@@ -118,14 +122,57 @@ export default function page() {
         }
       );
 
+        if(response.status === 201){
+          setTimeout(() => {
+            toast.dismiss(id);
+          }, 1000);
+          toast.update(id, {
+            render: `${response.data.message}`,
+            type: "success",
+            isLoading: false,
+          });
+        }else {
+          const suberrormsg = toast.update(id, {
+            render: `error while creating product: `,
+            type: "error",
+            isLoading: false,
+          });
+          setTimeout(() => {
+            toast.dismiss(suberrormsg);
+            if(typeof window !== 'undefined'){
+              window.location.reload()
+            }
+          }, 1000);
+        }
       console.log("Response from backend", response);
     } catch (error) {
+      const suberrormsg = toast.update(id, {
+        render: `${error}`,
+        type: "error",
+        isLoading: false,
+      });
+      setTimeout(() => {
+        toast.dismiss(suberrormsg);
+      }, 2000);
       console.error("An error in posting product", error);
     }
   };
 
   return (
     <div>
+      <ToastContainer
+      position="top right"
+      autoClose={200}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+
+      />
       <div className="grid max-w-2xl mx-auto mt-8 mb-32">
         <div className="relative w-full h-full max-w-2xl px-4 mb-4 md:h-auto">
           <form
@@ -157,7 +204,7 @@ export default function page() {
                       id="title"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Apple Imac 27”"
-                      required=""
+                      required
                       onChange={(e) => setTitle(e.target.value)}
                     />
                   </div>

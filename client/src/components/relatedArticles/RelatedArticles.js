@@ -9,11 +9,13 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 //import axios
 import Api from "@/utils/Api";
+import Link from "next/link";
 export default function RelatedArticles({ id }) {
   //state for articles
   const [articles, setArticles] = useState([]);
   //state for loading
   const [loading, setLoading] = useState(false);
+  const baseUrl = '/blog';
 
   //useEffect hook to fetch data from api
   const fetchArticles = async () => {
@@ -27,17 +29,19 @@ export default function RelatedArticles({ id }) {
       const idRes = await Api.get(
         `/admin/blog/${id}`
       );
-      // if the category of the fetched blog is equal to the category of id then return the data
-      const cat = idRes.data.blogdata.category;
-      const data = blogRes && blogRes.data.allblog;
-      console.log("data", data);
+      // if the type of the fetched blog is equal to the category of id then return the data
+      const cat = idRes.data.blogdata.type;
+      const data = blogRes && blogRes.data.allBlogs;
+      // console.log("data", data);
       const filteredData = data.filter(
-        (item) => item.category === cat && item._id !== idRes.data.blogdata._id
+        (item) => item.type === cat && item._id !== idRes.data.blogdata._id
       );
       setArticles(filteredData);
+      // console.log("filteredData", filteredData);
       setLoading(false);
     } catch (err) {
       console.log(err);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -96,26 +100,27 @@ export default function RelatedArticles({ id }) {
                     return (
                       <SwiperSlide>
                         <article className="max-w-xs">
-                          <a href="#">
+                          <Link href={`${baseUrl}/${article._id}`}>
                             <img
                               src={article.blogimage}
                               className="mb-5 rounded-lg"
                               alt="Image 1"
                             />
-                          </a>
-                          <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900">
-                            <a href="#">{article.title}</a>
+                          </Link>
+                          <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900 truncate w-full">
+                            <Link href={`${baseUrl}/${article._id}`}>{article.title}</Link>
                           </h2>
-                          <p className="mb-4 text-sm text-gray-700 ">
+                          <p className="mb-4 h-22 text-sm text-gray-700 line-clamp-2">
                             {article.shortdescription}
                           </p>
-                          <a
-                            href="#"
-                            className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
+                          <Link
+                            href={`${baseUrl}/${article._id}`}
+                            className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline line-clamp-2"
                           >
                             Read in 2 minutes
-                          </a>
+                          </Link>
                         </article>
+                        
                       </SwiperSlide>
                     );
                   })

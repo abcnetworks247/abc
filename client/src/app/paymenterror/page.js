@@ -54,7 +54,7 @@ const Page = () => {
                 Name
                 onClick={backToPayment}
               >
-                Back to Checkout
+                Back to Payment
               </button>
             </div>
           </div>

@@ -4,16 +4,16 @@ import HocsessionNotAuth from "@/utils/HocsessionNotAuth";
 import { ComplexNavbar } from "@/components/navbar/Navbar";
 import Sidebar from "@/components/sidebar/Sidebar";
 
- function Layout({ children }) {
+function Layout({ children }) {
   return (
-    <div>
-      <main className="flex flex-row w-[100%]">
+    <div className="relative">
+      <main className="flex flex-col lg:flex-row w-[100%]">
         <Sidebar />
+     
         <div className="w-[100%] flex flex-col h-screen overflow-y-auto">
           <ComplexNavbar />
-          
-            {children}
-          
+
+          {children}
         </div>
       </main>
     </div>
@@ -22,4 +22,4 @@ import Sidebar from "@/components/sidebar/Sidebar";
 
 const layout = HocsessionNotAuth(Layout);
 
-export default  layout;
+export default layout;

@@ -31,6 +31,7 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
     const update = {
       ...spinnerId,
       price: amount,
+      type: spinnerId?.type,
     };
 
     if (paymenttype === "Stripe") {
@@ -69,7 +70,9 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
 
           console.log("this is session", session);
           stripePromise.redirectToCheckout({
+            
             sessionId: session.id,
+            
           });
 
           setSpinner(false);
@@ -92,9 +95,9 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
   return (
     <div
       id="modelConfirm"
-      className="fixed top-0 z-50 flex items-center justify-center w-full h-full px-4 overflow-hidden bg-gray-900 bg-opacity-60"
+      className="fixed top-0 z-50 flex items-center justify-center w-full h-full px-2 overflow-hidden bg-gray-900 bg-opacity-60"
     >
-      <div className="relative mx-2 w-full md:max-w-md md:mx-auto bg-white rounded-md shadow-xl">
+      <div className="relative w-full bg-white rounded-md shadow-xl md:max-w-md md:mx-auto">
         <div className="flex justify-end p-2">
           <button
             type="button"
@@ -116,7 +119,9 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
           </button>
         </div>
         <div>
-          <h2 className="ml-8 text-sm font-medium">{spinnerId?.name}</h2>
+          <h2 className="ml-8 text-sm font-medium">
+            {spinnerId?.name} - {spinnerId?.type} plan
+          </h2>
           <div className="py-6 mt-4 bg-white rounded shadow-lg">
             <form onSubmit={(e) => SubscribeNow(e)}>
               <div className="px-8">

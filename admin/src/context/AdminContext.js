@@ -1,10 +1,11 @@
 "use client"
-import { useContext, createContext, useState, useEffect } from "react";
+import { useContext, createContext, useState, useEffect , useReducer} from "react";
 import Cookies from "js-cookie";
 import useCurrentAdmin from "@/hooks/useCurrentAdmin";
 import Loading from "@/components/loading/Loading";
 import { redirect } from "next/navigation";
 const AdminContext = createContext();
+
 
 export const AdminProvider = ({ children }) => {
   const {
@@ -22,6 +23,22 @@ export const AdminProvider = ({ children }) => {
     const [genLoading, setGenload] = useState(true);
     const [generror, setGenerror] = useState(false);
 
+    const ToggleReducers = (state, action)=>{
+      switch (action.type) {
+        case "TOGGLE":
+          
+           return {
+            toggle:!state.toggle,
+           }
+      
+        default:
+          return state;
+      }
+    }
+    
+
+
+    const [state, dispatch] = useReducer(    ToggleReducers,{toggle: false})
 
     const HandleLogout = async () => {
       Cookies.remove("adminToken");
@@ -47,6 +64,8 @@ export const AdminProvider = ({ children }) => {
         CurrentUserloading,
         HandleLogout,
         CurrentUserisSuccess,
+    
+        state, dispatch
       }}
     >
       {children}
