@@ -285,10 +285,10 @@ function NavList() {
 
 export function ComplexNavbar() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
-const {state, dispatch,} = UseAdminContext()
+  const { state, dispatch } = UseAdminContext();
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
-  console.log(state, "boolean")
+  console.log(state, "boolean");
   React.useEffect(() => {
     window.addEventListener(
       "resize",
@@ -330,8 +330,10 @@ const {state, dispatch,} = UseAdminContext()
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          onClick={()=>{dispatch({type: "TOGGLE"})}}
-          className="w-6 h-6 text-black ml-3 block lg:hidden"
+          onClick={() => {
+            dispatch({ type: "TOGGLE" });
+          }}
+          className="w-6 h-6 text-black ml-3 block lg:hidden cursor-pointer"
         >
           <path
             strokeLinecap="round"

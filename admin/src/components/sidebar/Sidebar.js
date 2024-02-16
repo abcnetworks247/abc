@@ -43,7 +43,7 @@ export default function Sidebar() {
   const [open2, setOpen2] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
   const { CurrentUser, isLoading } = useCurrentAdmin();
-  const { state } = UseAdminContext();
+  const { state, dispatch } = UseAdminContext();
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
@@ -60,15 +60,35 @@ export default function Sidebar() {
     >
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
-          <Link href="/dashboard">
-            <Image
-              src={Logo}
-              alt="logo"
-              className="object-cover"
-              width={100}
-              height={100}
-            />
-          </Link>
+          <div className="flex items-center text-center  justify-between">
+            <Link href="/dashboard">
+              <Image
+                src={Logo}
+                alt="logo"
+                className="object-cover"
+                width={100}
+                height={100}
+              />
+            </Link>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-8 h-8 text-white lg:hidden block cursor-pointer"
+              onClick={() => {
+                dispatch({ type: "TOGGLE" });
+              }}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </div>
+
           <ul className="flex-1 my-3 space-y-1">
             <li>
               <Link
