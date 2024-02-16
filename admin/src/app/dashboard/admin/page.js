@@ -356,14 +356,23 @@ export default function Page() {
                                 role !== "superadmin" &&
                                 role !== "admin" ? (
                                 <td className={classes}>
-                                  <Tooltip content={`Delete ${role}`}>
+                                   <Tooltip content={`Edit User ${role}`}>
                                     <IconButton
                                       variant="text"
                                       onClick={() => {
-                                        DeleteUser(role, _id);
+                                        let data = {
+                                          userdp,
+                                          fullname,
+                                          email,
+                                          role,
+                                          createdAt,
+                                          _id,
+                                        };
+                                        setNewAdmin(data);
+                                        handleOpen2();
                                       }}
                                     >
-                                      <PencilIcon className="h-4 w-4 " />
+                                      <PencilIcon className="h-4 w-4" />
                                     </IconButton>
                                   </Tooltip>
                                 </td>

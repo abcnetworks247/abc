@@ -59,8 +59,12 @@ const Alltransactiondata = [
 
 export default function Page() {
   return (
-    <Card className="h-max w-auto px-3 p-0">
-      <CardHeader floated={false} shadow={false} className="rounded-none">
+    <Card className=" w-auto px-3 p-0 ">
+      <CardHeader
+        floated={false}
+        shadow={false}
+        className="rounded-none overflow-x-auto"
+      >
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <div>
             <Typography variant="h5" color="blue-gray">
@@ -83,8 +87,8 @@ export default function Page() {
           </div>
         </div>
       </CardHeader>
-      <CardBody className="">
-        <Tabs value="select" className="h-fit">
+      <CardBody className="  ">
+        <Tabs value="select" className="h-fit  overflow-x-scroll">
           <TabsHeader className="m-0 w-fit h-fit">
             {Alltransactiondata.map(({ label, value }) => (
               <Tab key={value} value={value} className="px-8 m-0 h-fit">
