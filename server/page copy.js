@@ -127,7 +127,7 @@ export default function page() {
             toast.dismiss(id);
           }, 1000);
           toast.update(id, {
-            render: `${response.data.message}`,
+            render: `${data.data.message}`,
             type: "success",
             isLoading: false,
           });
@@ -139,9 +139,6 @@ export default function page() {
           });
           setTimeout(() => {
             toast.dismiss(suberrormsg);
-            if(typeof window !== 'undefined'){
-              window.location.reload()
-            }
           }, 1000);
         }
       console.log("Response from backend", response);
@@ -204,7 +201,7 @@ export default function page() {
                       id="title"
                       className="shadow-lg-sm border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                       placeholder="Apple Imac 27”"
-                      required
+                      required=""
                       onChange={(e) => setTitle(e.target.value)}
                     />
                   </div>
