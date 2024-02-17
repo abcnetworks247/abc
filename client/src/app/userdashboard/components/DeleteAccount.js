@@ -7,19 +7,15 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
-
-
-
 const DeleteAccount = () => {
-  const router = useRouter()
-  const reload = useRouter()
-   const { Authtoken } = UseUserContext();
+  const router = useRouter();
+  const reload = useRouter();
+  const { Authtoken } = UseUserContext();
   const [passwordVisible, setPasswordVisible] = useState(false);
   // const [showModal, setShowModal] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState("");
-  const [email, setEmail] = useState("")
-  
+  const [email, setEmail] = useState("");
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
@@ -35,14 +31,11 @@ const DeleteAccount = () => {
 
   console.log(currentPassword, email);
 
- 
   const handleDeleteConfirmation = async () => {
-
     let data = {
       email: email,
       password: currentPassword,
     };
-
 
     Swal.fire({
       title: "Are you sure?",
@@ -51,15 +44,14 @@ const DeleteAccount = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Delete my account",
+      confirmButtonText: "Delete account",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(
             `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
-            data,
             {
-              
+              data: data,
               headers: {
                 Authorization: `Bearer ${String(Authtoken)}`,
                 "Content-Type": "application/json",
@@ -70,29 +62,39 @@ const DeleteAccount = () => {
 
           console.log("response is here ", response);
 
-          // Clear the user cookie
-         Cookies.remove("authToken");
+          if (response.status === 200) {
+            Swal.fire({
+              title: "Account deleted",
+              text: "Your account has been deleted successfully",
+              icon: "success",
+            });
 
-          Swal.fire({
-            title: "Account deleted",
-            text: "You've deleted your account successfully",
-            icon: "success",
-          }).then(() => {
-          
-              router.push("/");
-          });
+            Cookies.remove("authToken");
+
+            if (typeof window !== "undefined") {
+              window.location.reload();
+            }
+            
+            router.push("/");
+
+          }
         } catch (error) {
-          console.error("There is a damn error:", error.message);
+          console.error("There is an error:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `${error.response.data.error}`,
+            footer: '<a href="/privacy-policy">Read our privacy policy</a>',
+          });
         }
       }
     });
   };
 
- 
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 w-full">
-      <div className="w-full p-6 bg-white rounded-lg shadow  md:mt-0 sm:max-w-md  sm:p-8">
+    <div className="flex flex-col items-center justify-center w-full px-6">
+      <div className="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md sm:p-8">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -106,14 +108,14 @@ const DeleteAccount = () => {
             >
               Email
             </label>
-            <div className=" h-10 px-2 bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg">
+            <div className="h-10 px-2 text-gray-900 bg-white border border-gray-300 rounded-lg sm:text-sm">
               <input
                 type="email"
                 name="email"
                 id="email"
                 value={email}
                 onChange={handleEmail}
-                className="h-full w-full focus:outline-none bg-transparent"
+                className="w-full h-full bg-transparent focus:outline-none"
                 placeholder="xyz@user.com"
                 required
               />
@@ -133,11 +135,14 @@ const DeleteAccount = () => {
                 id="currentPassword"
                 value={currentPassword}
                 onChange={handlePassword}
-                className="h-full w-full bg-transparent focus:outline-none "
+                className="w-full h-full bg-transparent focus:outline-none "
                 placeholder="••••••••"
                 required
               />
-              <div onClick={togglePasswordVisibility} className="cursor-pointer">
+              <div
+                onClick={togglePasswordVisibility}
+                className="cursor-pointer"
+              >
                 {passwordVisible ? (
                   <svg
                     className="w-5 h-5"

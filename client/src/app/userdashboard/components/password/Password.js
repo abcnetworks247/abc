@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import Swal from "sweetalert2";
 import { UseUserContext } from "../../../../../contexts/UserContext";
+import { useRouter } from "next/navigation";
 
 const Password = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -12,6 +13,8 @@ const Password = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const router = useRouter();
 
   const { Authtoken } = UseUserContext();
 
@@ -67,21 +70,29 @@ const Password = () => {
 
           console.log("response is here ", response);
 
-          if (response.statusCode === 200) {
+          if (response.status === 200) {
+            // Changed statusCode to status
             Swal.fire({
               title: "Account password updated",
               text: "You've updated your password successfully",
               icon: "success",
-            }).then(() => {
-              router.push("/userdashboard");
             });
+
+            router.push("/userdashboard");
           }
         } catch (error) {
-          console.error("There is a damn error:", error.message);
+          console.error("There is an error:", error); // Changed "damn error" to "an error"
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: ` ${error.response.data.error}`,
+            footer: '<a href="/privacy-policy">Read our privacy policy</a>',
+          });
         }
       }
     });
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center px-6 mx-auto">
