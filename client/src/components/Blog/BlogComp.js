@@ -224,14 +224,14 @@ export default function () {
                             height={500}
                             width={200}
                             alt="img"
-                            className=" object-top md:w-[200px] rounded-md md:h-[23vh] m-0 p-0 md:m-0 object-cover w-20 h-20"
+                            className=" object-top md:w-[200px] rounded-md md:h-[23vh] m-0 p-0 md:m-0 object-cover w-24 h-24"
                           />
                           <div className="px-4 bg-white rounded sm:px-0 ">
                             <span className="hidden text-sm font-semibold text-green-700 md:block">
                               {" "}
                               {post.category}{" "}
                             </span>
-                            <div className="mb-2 text-base font-semibold text-gray-800 md:text-sm">
+                            <div className="mb-2 text-base font-semibold text-gray-800 md:text-sm line-clamp-1 md:line-clamp-2">
                               {post.title}
                             </div>
                             <p className="block p-2 pt-1 pl-0 text-xs text-gray-600 md:hidden lg:block line-clamp-2">
@@ -351,7 +351,7 @@ export default function () {
                           height={500}
                           width={200}
                           alt="img"
-                          className=" object-top w-auto h-36 rounded-md md:h-[45vh] md:w-[50vw] m-0 p-0 md:m-0 object-cover"
+                          className=" object-top w-auto h-20 rounded-md md:h-[45vh] md:w-[50vw] m-0 p-0 md:m-0 object-cover"
                         />
                         <div className="px-4 bg-white rounded sm:px-0 md:w-[70vw]">
                           <span className="hidden text-sm font-semibold text-green-700 md:block">
@@ -480,7 +480,7 @@ export default function () {
                           height={500}
                           width={200}
                           alt="img"
-                          className=" object-top object-cover w-[200px] h-[25vh] rounded-md md:h-[23vh] m-0 p-0 md:m-0"
+                          className=" object-top object-cover w-24 h-24 md:w-[200px] rounded-md md:h-[23vh] m-0 p-0 md:m-0"
                         />
                         <div className="px-4 bg-white rounded sm:px-0 ">
                           <span className="hidden text-sm font-semibold text-green-700 md:block">
