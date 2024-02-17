@@ -84,8 +84,8 @@ const Stats = () => {
         </div>
       </div>
 
-      <div className="flex flex-row items-center justify-center bg-white m-2 sm:m-4 sm:rounded-l  w-full h-[50vh] rounded-sm sm:rounded-lg">
-        <p className="text-center text-xl font-semibold text-gray-800 mt-4">
+      <div className=" flex flex-row items-center justify-center bg-white m-2 sm:m-4 sm:rounded-l  w-full h-[50vh] rounded-sm sm:rounded-lg bg-gradient-to-r from-fuchsia-500 to-cyan-500">
+        <p className="text-center text-xl font-semibold  mt-4 text-white">
           Welcome to your profile!
         </p>
       </div>
