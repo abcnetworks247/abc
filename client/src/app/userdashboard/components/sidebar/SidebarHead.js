@@ -8,33 +8,33 @@ const SidebarHead = () => {
 
      const { UserData, HandleGetUser } = UseUserContext();
 
-     const [userData, setUserData] = useState({});
+    //  const [userData, setUserData] = useState({});
 
-     useEffect(() => {
-       // Fetch user data when the component mounts
-       HandleGetUser();
-     }, []);
+    //  useEffect(() => {
+    //    // Fetch user data when the component mounts
+    //    HandleGetUser();
+    //  }, []);
 
-     useEffect(() => {
-       setUserData(UserData);
-     }, [UserData]);
+    //  useEffect(() => {
+    //    setUserData(UserData);
+    //  }, [UserData]);
   return (
     <div className="flex items-center gap-4 accountInformation  w-full">
       <div class="py-2 shrink-0">
         <img
           class="object-cover w-20 h-20 rounded-full"
-          src={`${userData.userdp}`}
+          src={`${UserData.userdp}`}
           alt="Current profile photo"
         />
       </div>
 
       <div className="w-full flex flex-col gap-1">
         <span className="text-sm font-semibold  w-full text-gray-600">
-          {userData.fullname}
+          {UserData.fullname}
         </span>
-        <p className="text-xs text-gray-600">{userData.email}</p>
+        <p className="text-xs text-gray-600">{UserData.email}</p>
         <div className="flex flex-row items-start gap-2">
-          <span className="text-sm text-gray-600">{userData.userpackage}</span>
+          <span className="text-sm text-gray-600">{UserData.userpackage}</span>
           <svg
             className="w-6 h-6"
             viewBox="-3.5 0 32 32"

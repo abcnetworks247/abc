@@ -52,9 +52,9 @@ const page = () => {
           </g>
         </svg>
       </div>
-      <div className="mx-2">
-        <Stats />
-      </div>
+    
+       <Stats />
+     
 
       <FooterComp />
     </div>

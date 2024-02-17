@@ -28,7 +28,7 @@ const OrderComp = () => {
       >
      
 
-        {cartProducts.length === 0 ? (
+        {!cartProducts ||cartProducts.length === 0 ? (
           <div className="flex items-center justify-center h-screen">
             <div className="flex flex-col items-center">
               <div className="w-[200p] h-[200px]">
@@ -53,7 +53,7 @@ const OrderComp = () => {
             {/* <p className="accountInformation px-4 py-2 text-bold ">Orders</p> */}
 
             <div className="mx-2 py-2">
-              {cartProducts.map((product) => (
+              {cartProducts && cartProducts.map((product) => (
                 <Ordered key={product.id} product={product} />
               ))}
             </div>
