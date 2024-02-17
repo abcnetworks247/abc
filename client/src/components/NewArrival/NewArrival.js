@@ -35,7 +35,7 @@ const NewArrival = ({ allProducts }) => {
 
   return (
     <>
-      <h2 className="text-xl lg:ml-28 font-medium text-gray-800  mb-6">
+      <h2 className="text-xl ml-6 lg:ml-28 font-medium text-gray-800  mb-6">
         Top new arrival
       </h2>
 
