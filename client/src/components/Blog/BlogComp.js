@@ -345,20 +345,20 @@ export default function () {
                   </div>
                   {businessNews.map((post) => (
                     <Link href={`${pathUrl}/${post._id}`} key={post._id}>
-                      <div className="flex flex-row gap-6 py-4 m-0 mb-5 space-x-0 rounded shadow-sm md:flex-row lg:space-x-3 md:space-x-2 md:pr-20 md:items-center">
+                      <div className="flex flex-row gap-2 py-4 m-0 mb-5 space-x-0 rounded shadow-sm md:gap-6 md:flex-row lg:space-x-3 md:space-x-2 md:pr-20 md:items-center">
                         <Image
                           src={post.blogimage}
                           height={500}
                           width={200}
                           alt="img"
-                          className=" object-top w-auto h-14 rounded-md md:h-[45vh] md:w-[50vw] m-0 p-0 md:m-0 object-cover"
+                          className=" object-top w-auto h-36 rounded-md md:h-[45vh] md:w-[50vw] m-0 p-0 md:m-0 object-cover"
                         />
                         <div className="px-4 bg-white rounded sm:px-0 md:w-[70vw]">
                           <span className="hidden text-sm font-semibold text-green-700 md:block">
                             {" "}
                             {post.category}{" "}
                           </span>
-                          <div className="mb-2 font-semibold text-gray-800 lg:text-xl md:text-sm">
+                          <div className="mb-2 font-semibold text-gray-800 lg:text-xl md:text-sm line-clamp-1 md:line-clamp-2">
                             {post.title}
                           </div>
                           <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden lg:block line-clamp-2">
