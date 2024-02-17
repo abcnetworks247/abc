@@ -37,6 +37,13 @@ const DeleteAccount = () => {
 
  
   const handleDeleteConfirmation = async () => {
+
+    let data = {
+      email: email,
+      password: currentPassword,
+    };
+
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -50,11 +57,9 @@ const DeleteAccount = () => {
         try {
           const response = await axios.delete(
             `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
+            data,
             {
-              data: {
-                email: email,
-                password: currentPassword,
-              },
+              
               headers: {
                 Authorization: `Bearer ${String(Authtoken)}`,
                 "Content-Type": "application/json",
