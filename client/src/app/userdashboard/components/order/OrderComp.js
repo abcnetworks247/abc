@@ -24,7 +24,7 @@ const OrderComp = () => {
     <>
     
       <div
-        className={`h-full w-full md:basis-3/4 bg-white md:min-h-max sm:shadow-md sm:rounded-md`}
+        className={` w-full md:basis-3/4 bg-white md:min-h-max sm:shadow-md sm:rounded-md h-[100vh]`}
       >
      
 
