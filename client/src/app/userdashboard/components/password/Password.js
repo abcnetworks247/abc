@@ -1,26 +1,29 @@
-"use client"
+"use client";
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { IoMdEyeOff, IoMdEye } from "react-icons/io";
-
+import Swal from "sweetalert2";
+import { UseUserContext } from "../../../../../contexts/UserContext";
 
 const Password = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+
+  const { Authtoken } = UseUserContext();
+
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
-   
-};
+  };
 
   const handleCurrentPasswordChange = (e) => {
     setCurrentPassword(e.target.value);
   };
 
-console.log(currentPassword, newPassword, confirmPassword)
+  console.log(currentPassword, newPassword, confirmPassword);
 
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
@@ -33,10 +36,51 @@ console.log(currentPassword, newPassword, confirmPassword)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Add your password change logic here
-    console.log("Current Password:", currentPassword);
-    console.log("New Password:", newPassword);
-    console.log("Confirm Password:", confirmPassword);
+    let data = {
+      oldPassword: currentPassword,
+      newPassword: newPassword,
+      confirmNewPassword: confirmPassword,
+    };
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Change password",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.patch(
+            `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account/activeuserupdatepassword`,
+            data,
+            {
+              headers: {
+                Authorization: `Bearer ${String(Authtoken)}`,
+                "Content-Type": "application/json",
+              },
+              withCredentials: true,
+            }
+          );
+
+          console.log("response is here ", response);
+
+          if (response.statusCode === 200) {
+            Swal.fire({
+              title: "Account password updated",
+              text: "You've updated your password successfully",
+              icon: "success",
+            }).then(() => {
+              router.push("/userdashboard");
+            });
+          }
+        } catch (error) {
+          console.error("There is a damn error:", error.message);
+        }
+      }
+    });
   };
 
   return (
@@ -127,7 +171,10 @@ console.log(currentPassword, newPassword, confirmPassword)
                 placeholder="••••••••"
                 required
               />
-              <div onClick={togglePasswordVisibility} className="cursor-pointer">
+              <div
+                onClick={togglePasswordVisibility}
+                className="cursor-pointer"
+              >
                 {passwordVisible ? (
                   <IoMdEyeOff size={24} />
                 ) : (

@@ -123,7 +123,7 @@ export default function page() {
             </p>
 
             <div className="flex flex-row items-center justify-center">
-              <div className="w-[50%] flex flex-row gap-2 mt-14 border border-gray-300 p-1 rounded-lg">
+              <div className="w-fit flex flex-row gap-2 mt-14 border border-gray-300 p-1 rounded-lg">
                 <button
                   id="submit-button"
                   onClick={MonthlyPlan}

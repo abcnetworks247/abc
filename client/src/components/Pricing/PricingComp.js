@@ -31,7 +31,7 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
     const update = {
       ...spinnerId,
       price: amount,
-      type: spinnerId?.type,
+      type: spinnerId.type,
     };
 
     if (paymenttype === "Stripe") {
