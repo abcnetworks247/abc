@@ -358,14 +358,14 @@ export default function () {
                             {" "}
                             {post.category}{" "}
                           </span>
-                          <div className="mb-2 font-semibold text-gray-800 lg:text-xl md:text-sm line-clamp-1 md:line-clamp-2">
+                          <div className="mb-2 font-semibold text-gray-800 lg:text-xl md:text-sm line-clamp-3">
                             {post.title}
                           </div>
-                          <p className="block p-2 pt-1 pl-0 text-sm text-gray-600 md:hidden lg:block line-clamp-2">
+                          <p className="hidden p-2 pt-1 pl-0 text-sm text-gray-600 md:block md:hidden lg:block line-clamp-2">
                             {post.shortdescription}
                           </p>
 
-                          <span className="inline-block py-2 mt-2 ml-auto text-blue-500 rounded">
+                          <span className="hidden py-2 ml-auto text-blue-500 rounded md:block md:mt-2 ">
                             {" "}
                             Read more{" "}
                           </span>
