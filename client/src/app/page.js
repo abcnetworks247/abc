@@ -40,16 +40,16 @@ export default function Home() {
       </div>
       <Sidebar />
 
-      <div className="relative flex flex-row items-center border bg-[#111827] shadow-md border-gray-400">
-        <div className="absolute z-10 px-4 top-0 left-0 flex items-center justify-center first-line:px-3 py-1 bg-red-600 rounded-[3px] border-gray-600 shadow-md w-fit h-10">
-          <span className="font-[4px] text-sm text-white w-full ">
+      <div className="relative flex flex-row items-center bg-white border border-gray-400 shadow-md">
+        <div className="absolute z-10 px-4 top-0 left-0 flex items-center justify-center first-line:px-3 py-1 bg-blue-600 rounded-[3px] border-gray-600 shadow-md w-fit h-10">
+          <span className="font-[7px] text-sm text-white w-full ">
             NEWS UPDATES
           </span>
         </div>
         <Marquee
           style={{
             fontSize: "14px",
-            color: "white",
+            color: "black",
           }}
           className="h-10"
         >
