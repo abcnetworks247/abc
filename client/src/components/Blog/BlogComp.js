@@ -224,7 +224,7 @@ export default function () {
                             height={500}
                             width={200}
                             alt="img"
-                            className=" object-top w-[200px] h-[25vh] rounded-md md:h-[23vh] m-0 p-0 md:m-0 object-cover"
+                            className=" object-top md:w-[200px] rounded-md md:h-[23vh] m-0 p-0 md:m-0 object-cover w-20 h-20"
                           />
                           <div className="px-4 bg-white rounded sm:px-0 ">
                             <span className="hidden text-sm font-semibold text-green-700 md:block">
@@ -351,7 +351,7 @@ export default function () {
                           height={500}
                           width={200}
                           alt="img"
-                          className=" object-top w-[200px] h-[25vh] rounded-md md:h-[45vh] md:w-[50vw] m-0 p-0 md:m-0 object-cover"
+                          className=" object-top w-auto h-14 rounded-md md:h-[45vh] md:w-[50vw] m-0 p-0 md:m-0 object-cover"
                         />
                         <div className="px-4 bg-white rounded sm:px-0 md:w-[70vw]">
                           <span className="hidden text-sm font-semibold text-green-700 md:block">
