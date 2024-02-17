@@ -24,7 +24,7 @@ const DesktopSide = () => {
   return (
     <>
       <div
-        className={`w-full px-4 py-4 sm:min-h-max sm:min-w-[28%]  md:max-w-[28%] lg:max-w-[30%]  bg-white  sm:rounded-md sm:shadow-md`}
+        className={`w-full px-4 py-4 sm:min-h-max  min-w-[100px] max-w-[300px]  bg-white  sm:rounded-md sm:shadow-md`}
       >
         <SidebarHead />
 
