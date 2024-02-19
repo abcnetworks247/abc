@@ -38,7 +38,7 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
       try {
         setSpinner(true);
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}client/sub/usersubscription`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/sub/usersubscription`,
           update,
           {
             headers: {

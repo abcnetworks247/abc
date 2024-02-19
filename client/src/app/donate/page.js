@@ -15,6 +15,7 @@ const page = () => {
   const [paymenttype, setPaymentType] = useState("Stripe");
   const [spinner, setSpinner] = useState(false);
   const [amount, setAmount] = useState(1);
+  const [note, setNote] = useState("");
 
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   const router = useRouter();
@@ -37,6 +38,7 @@ const Donate = async (event) => {
   let data = {
     name: "Donation",
     amount: amount,
+    note: note
   };
 
   if (!Authtoken) {
@@ -89,7 +91,7 @@ const Donate = async (event) => {
         <div className="grid w-full gap-8 lg:grid-cols-3 md:grid-cols-2">
           <div className="lg:col-span-2">
             <h2 className="text-xl font-medium">Donation Page </h2>
-            <div className=" mt-2 md:mt-4 bg-white rounded shadow-lg">
+            <div className="mt-2 bg-white rounded shadow-lg md:mt-4">
               <div className="mt-12 md:mt-0">
                 <img
                   src="https://res.cloudinary.com/db2b7vgg4/image/upload/v1707751594/UserDP/plgw3iwrk1zwvtsa3keq.jpg"
@@ -157,7 +159,7 @@ const Donate = async (event) => {
                     </div>
                   </div>
                 </div>
-                <div className="px-8 pt-4 mt-4 border-t">
+                <div className="px-8 pt-4 mt-2 border-t">
                   <label
                     for="payment"
                     class="block mb-2 mt-10 text-sm font-medium text-gray-900"
@@ -173,6 +175,14 @@ const Donate = async (event) => {
                     <option selected>Stripe</option>
                     <option value="CA">Crypto</option>
                   </select>
+                </div>
+                <div className="px-8 pt-4 mt-2 border-t">
+                  <textarea
+                    className="border border-gray-300 textarea"
+                    required
+                    onChange={(e) => {setNote(e.target.value)}}
+                    placeholder="Donation Note"
+                  />
                 </div>
                 <div className="px-8 pt-4 mt-4 border-t">
                   <div className="flex items-end justify-between">
