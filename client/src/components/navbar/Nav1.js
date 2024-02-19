@@ -57,7 +57,7 @@ const Nav1 = () => {
               </g>{" "}
             </g>
           </svg>
-          <span className="text-white">Donate</span>
+          <span className="text-white">Donate / Pledge</span>
         </Link>
       </div>
     </div>
