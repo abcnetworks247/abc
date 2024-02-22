@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-
 const AuthSchema = new mongoose.Schema(
   {
     fullname: {
@@ -20,6 +19,7 @@ const AuthSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      default: "user phone number",
     },
     email: {
       type: String,
@@ -28,6 +28,7 @@ const AuthSchema = new mongoose.Schema(
     },
     shippingaddress: {
       type: String,
+      default: "user shipping address",
     },
     password: {
       type: String,
@@ -99,9 +100,7 @@ AuthSchema.methods.newHashPassword = async function (password) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = bcrypt.hash(password, salt);
     return hashedPassword;
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 };
 
 module.exports = mongoose.model("Client", AuthSchema);

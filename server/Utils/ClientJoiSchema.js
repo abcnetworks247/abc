@@ -5,7 +5,7 @@ const Clientjoi = joi.object({
   email: joi.string().email().required(),
   userdp: joi.string(),
   userbio: joi.string(),
-  phone: joi.number(),
+  phone: joi.string(),
   shippingaddress: joi.string(),
   password: joi.string().required(),
   userpackage: joi.string(),
