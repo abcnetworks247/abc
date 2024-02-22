@@ -74,7 +74,19 @@ app.use(
 
 connectDb(server);
 
-app.use(express.json());
+// app.use(express.json());
+
+app.use((req, res, next) => {
+  if (req.originalUrl === "/api/v1/admin/donation/stripe/product/webhook") {
+    next(); // Do nothing with the body because I need it in a raw state.
+  } else if (req.originalUrl === "/api/v1/admin/commerce/stripe/product/webhook") {
+    next(); // Do nothing with the body because I need it in a raw state.
+  } else if (req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook") {
+    next(); // Do nothing with the body because I need it in a raw state.
+  } else {
+    express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
+  }
+});
 
 app.use(cookieParser());
 // app.use(fileUpload({ useTempFiles: true }));
@@ -92,7 +104,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use("/api/v1/client/auth", clientRouter);
-app.use("/api/v1/client/sub", subscriptionRouter);
+app.use("/api/v1/admin/sub", subscriptionRouter);
 app.use("/api/v1/admin/auth", adminRouter);
 app.use("/api/v1/admin/commerce", productRouter);
 app.use("/api/v1/admin/donation", donateRouter);

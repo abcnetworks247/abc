@@ -8,6 +8,7 @@ const Client = coinbase.Client;
 const resources = coinbase.resources;
 
 const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const stripeWebhookSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
@@ -307,38 +308,43 @@ const StripeCheckout = async (req, res) => {
 };
 
 const stripeProductWebhook = async (req, res) => {
-  const payload = req.body;
+  console.log("hit donate webhook");
 
   const sig = req.headers["stripe-signature"];
 
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
   } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
   }
 
-  if (event.type === "checkout.session.completed") {
-    console.log(event);
-    const sessionDetails = await stripe.checkout.sessions.retrieve(
-      event.data.object.id,
-      {
-        expand: ["line_items", "customer"],
-      }
-    );
-    const lineItems = sessionDetails.line_items;
-    console.log("Paid for items :- \n", lineItems.data);
-
-    const customerDetails = sessionDetails.customer_details;
-
-    if (event.data.object.payment_status === "paid") {
-      console.log("Payment Success for customer:-", customerDetails.email);
-      // Store payment data and mark payment as complete in DB
-    }
-    // Delayed payment scenarios https://stripe.com/docs/payments/checkout/fulfill-orders#delayed-notification
+  // Handle the event
+  switch (event.type) {
+    case "checkout.session.async_payment_failed":
+      const checkoutSessionAsyncPaymentFailed = event.data.object;
+      // Then define and call a function to handle the event checkout.session.async_payment_failed
+      console.log("payment failed", checkoutSessionAsyncPaymentFailed);
+      break;
+    case "checkout.session.async_payment_succeeded":
+      const checkoutSessionAsyncPaymentSucceeded = event.data.object;
+      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
+      console.log("Checkout successful", checkoutSessionAsyncPaymentSucceeded);
+      break;
+    case "checkout.session.completed":
+      const checkoutSessionCompleted = event.data.object;
+      // Then define and call a function to handle the event checkout.session.completed
+      console.log("Checkout session completed", checkoutSessionCompleted);
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
-  res.status(200).end();
+
+  // Return a 200 response to acknowledge receipt of the event
+  res.send().end();
 };
 
 // const Crypto = async (req, res) => {

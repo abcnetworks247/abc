@@ -1,3 +1,5 @@
+const express = require('express');
+
 const {
   getAllProducts,
   getSingleProduct,
@@ -23,7 +25,9 @@ router.route("/products").delete(authChecker, deleteProduct); // Delete a produc
 router
   .route("/stripe/create-checkout-session")
   .post(authChecker2, StripeCheckout); // Post a checkout session with Stripe
-router.route("/stripe/product/webhook").post(stripeProductWebhook); // Post a checkout session with Stripe
+router
+  .route("/stripe/product/webhook")
+  .post(express.raw({ type: "application/json" }), stripeProductWebhook); // Post a checkout session with Stripe
 
 router.route("/crypto/create-checkout-session").post(authChecker2, Crypto); // Post a checkout session with Crypto
 

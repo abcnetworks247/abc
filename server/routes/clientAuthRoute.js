@@ -43,6 +43,7 @@ router.route("/account").get(authChecker, currentUser);
 router
   .route("/account")
   .patch(authChecker, upload.single("userphoto"), userUpdate);
+  
 router.route("/account").delete(authChecker, userDelete);
 
 module.exports = router;

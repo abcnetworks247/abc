@@ -2,25 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-const subscriptionSchema = new mongoose.Schema({
-  user: { type: mongoose.Types.ObjectId, ref: "Client" },
-  price: { type: Number, required: true },
-  subscriptionType: {
-    type: String,
-    enum: ["monthly", " yearly"],
-    required: true,
-  },
-  paymentType: { type: String, required: true },
-  package: { type: String, required: true },
-  startDate: { type: Date, required: true, default: Date.now },
-  renewalDate: { type: Date, required: true },
-});
-
-const donationSchema = new mongoose.Schema({
-  user: { type: mongoose.Types.ObjectId, ref: "Client" },
-  amount: { type: Number, required: true },
-  date: { type: Date, required: true, default: Date.now },
-});
 
 const AuthSchema = new mongoose.Schema(
   {
@@ -66,8 +47,18 @@ const AuthSchema = new mongoose.Schema(
         },
       },
     ],
-    subscriptionhistory: [subscriptionSchema],
-    donationhistory: [donationSchema],
+    subscriptionhistory: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "SubscriptionHistory",
+      },
+    ],
+    donationhistory: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "donation",
+      },
+    ],
     wishlist: [
       {
         type: mongoose.Types.ObjectId,

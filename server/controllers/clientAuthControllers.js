@@ -225,6 +225,9 @@ const userUpdatePassword = async (req, res) => {
 
 const activeUserUpdatePassword = async (req, res) => {
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+  console.log(oldPassword, newPassword, confirmNewPassword);
+
   const { user } = req;
 
   try {
@@ -243,10 +246,11 @@ const activeUserUpdatePassword = async (req, res) => {
     const checkPassword = await checkuser.checkPassword(oldPassword);
 
     if (!checkPassword) {
+      console.log("Password check failed");
       throw new UnAuthorizedError("old password is invalid");
     }
 
-    const hashedPassword = await checkuser.newHashPassword(password);
+    const hashedPassword = await checkuser.newHashPassword(newPassword);
 
     await Client.findByIdAndUpdate(
       checkuser._id,

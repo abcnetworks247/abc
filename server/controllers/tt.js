@@ -133,6 +133,7 @@ app.post("/webhook", async (req, res) => {
     const subscription = await stripe.subscriptions.retrieve(
       event.data.object.subscription
     );
+    
     const customer = await stripe.customers.retrieve(
       event.data.object.customer
     );
@@ -202,14 +203,22 @@ app.post("/webhook", async (req, res) => {
   if (event.type === "customer.subscription.updated") {
     const subscription = event.data.object;
     // console.log(event);
+
     if (subscription.cancel_at_period_end) {
+
       console.log(`Subscription ${subscription.id} was canceled.`);
+
       // DB code to update the customer's subscription status in your database
+
     } else {
+
       console.log(`Subscription ${subscription.id} was restarted.`);
       // get subscription details and update the DB
+
     }
   }
+
+
 
   res.status(200).end();
 });

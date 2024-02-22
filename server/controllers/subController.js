@@ -1,7 +1,8 @@
-const SubscriptionPlan = require("../models/subSchema");
 const Auth = require("../models/clientAuthSchema"); // Assuming your user model is named 'Auth'
-const subscriptionJoi = require("../Utils/SubJoiSchema");
 const { StatusCodes } = require("http-status-codes");
+const SubscriptionModel = require("../models/subscriptionSchema");
+const SubscriptionJoi = require("../Utils/SubscriptionJoi");
+const Client = require("../models/clientAuthSchema");
 const {
   NotFoundError,
   UnAuthorizedError,
@@ -9,14 +10,13 @@ const {
 } = require("../errors/index");
 
 const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const stripeWebhookSecret = process.env.STRIPE_SUBSCRIPTION_WEBHOOK_SECRETE;
 const localurl = process.env.CLIENT_URL;
 
 const createSubscription = async (req, res) => {
   const user = req.user;
   const item = req.body;
   let customer;
-
-  console.log("item: " + item);
 
   try {
     if (!user) {
@@ -27,8 +27,6 @@ const createSubscription = async (req, res) => {
       email: user.email,
       limit: 1,
     });
-
-    // console.log(existingCustomer);
 
     if (existingCustomer.data.length > 0) {
       // Customer already exists
@@ -62,6 +60,7 @@ const createSubscription = async (req, res) => {
 
       customer = await stripe.customers.create({
         email: user.email,
+        name: user.fullname,
         metadata: {
           userId: user._id, // Replace with actual Auth0 user ID
         },
@@ -85,7 +84,7 @@ const createSubscription = async (req, res) => {
             },
             unit_amount: item.price * 100,
             recurring: {
-              interval: "month",
+              interval: item.type,
             },
           },
           quantity: 1,
@@ -99,8 +98,9 @@ const createSubscription = async (req, res) => {
     });
 
     console.log("session created for " + session);
+    console.log("session url", { url: session.url });
 
-    res.status(StatusCodes.OK).json({ id: session.id });
+    res.status(StatusCodes.OK).json({ url: session.url });
   } catch (error) {
     console.error("Error:", error);
     return res
@@ -109,101 +109,115 @@ const createSubscription = async (req, res) => {
   }
 };
 
-
 const SubWebhook = async (req, res) => {
+  console.log("subscriptions webhook currently active");
+
   const payload = req.body;
   const sig = req.headers["stripe-signature"];
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(payload, sig, stripeWebhookSecret);
   } catch (err) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  if (event.type === "invoice.payment_succeeded") {
-    const invoice = event.data.object;
+  console.log("new web2");
 
-    // On payment successful, get subscription and customer details
-    const subscription = await stripe.subscriptions.retrieve(
-      event.data.object.subscription
-    );
-    const customer = await stripe.customers.retrieve(
-      event.data.object.customer
-    );
+  const customer = await stripe.customers.retrieve(event.data.object.customer);
 
-    //   console.log(subscription,customer);
+  let userEmail = customer.email;
+  const olduser = await Client.findOne({ userEmail });
 
-    if (invoice.billing_reason === "subscription_create") {
-      // Handle the first successful payment
-      // DB code to update the database for first subscription payment
+  switch (event.type) {
+    case "invoice.payment_succeeded":
+      const invoicePaymentSucceeded = event.data.object;
 
-      const subscriptionDocument = {
-        userId: customer?.metadata?.userId,
-        subId: event.data.object.subscription,
-        endDate: subscription.current_period_end * 1000,
-      };
+      console.log("pay1", invoicePaymentSucceeded);
 
-      // // Insert the document into the collection
-      const result = await subscriptions.insertOne(subscriptionDocument);
-      console.log(`A document was inserted with the _id: ${result.insertedId}`);
-      console.log(
-        `First subscription payment successful for Invoice ID: ${customer.email} ${customer?.metadata?.userId}`
+      const subscription = await stripe.subscriptions.retrieve(
+        event.data.object.subscription
       );
-    } else if (
-      invoice.billing_reason === "subscription_cycle" ||
-      invoice.billing_reason === "subscription_update"
-    ) {
-      // Handle recurring subscription payments
-      // DB code to update the database for recurring subscription payments
 
-      // Define the filter to find the document with the specified userId
-      const filter = { userId: customer?.metadata?.userId };
+      const periodEndTimestamp = subscription.current_period_end;
+      const periodStartTimestamp = subscription.current_period_start;
 
-      // Define the update operation to set the new endDate
-      const updateDoc = {
-        $set: {
-          endDate: subscription.current_period_end * 1000,
-          recurringSuccessful_test: true,
-        },
+      // Convert to milliseconds (JavaScript Date object works with milliseconds)
+      const periodEndMilliseconds = periodEndTimestamp * 1000;
+      const periodStartMilliseconds = periodStartTimestamp * 1000;
+
+      // Create Date objects
+      const periodEndDate = new Date(periodEndMilliseconds);
+      const periodStartDate = new Date(periodStartMilliseconds);
+
+      // Output
+      console.log("Period Start Date:", periodStartDate);
+      console.log("Period End Date:", periodEndDate);
+      console.log(
+        "description:",
+        invoicePaymentSucceeded.lines.data[0].description
+      );
+
+      const data = {
+        email: olduser.email,
+        name: olduser.fullname,
+        stripe_customer_id: customer.id,
+        amount: subscription.plan.amount / 100,
+        currency: subscription.currency,
+        country: invoicePaymentSucceeded.customer_address.country,
+        subscription_period_start: periodStartDate,
+        subscription_period_end: periodEndDate,
+        subscription_id: subscription.id,
+        plan_id: subscription.plan.id,
+        plan_type: subscription.plan.interval,
+        quantity: subscription.quantity,
+        subscription_status: subscription.status,
+        hosted_invoice_url: invoicePaymentSucceeded.hosted_invoice_url,
+        subscription_name: invoicePaymentSucceeded.lines.data[0].description,
       };
 
-      // Update the document
-      const result = await subscriptions.updateOne(filter, updateDoc);
+      console.log("data now", data);
 
-      if (result.matchedCount === 0) {
-        console.log("No documents matched the query. Document not updated");
-      } else if (result.modifiedCount === 0) {
-        console.log(
-          "Document matched but not updated (it may have the same data)"
-        );
-      } else {
-        console.log(`Successfully updated the document`);
+      const { error, value } = SubscriptionJoi.validate(data);
+
+      if (error) {
+        throw new ValidationError("Data recieved is invalid");
       }
 
-      console.log(
-        `Recurring subscription payment successful for Invoice ID: ${invoice.id}`
-      );
-    }
+      const newData = await SubscriptionModel.create(value);
 
-    console.log(
-      new Date(subscription.current_period_end * 1000),
-      subscription.status,
-      invoice.billing_reason
-    );
-  }
+      olduser.subscriptionhistory.unshift(newData.id);
 
-  // For canceled/renewed subscription
-  if (event.type === "customer.subscription.updated") {
-    const subscription = event.data.object;
-    // console.log(event);
-    if (subscription.cancel_at_period_end) {
-      console.log(`Subscription ${subscription.id} was canceled.`);
-      // DB code to update the customer's subscription status in your database
-    } else {
-      console.log(`Subscription ${subscription.id} was restarted.`);
-      // get subscription details and update the DB
-    }
+      await olduser.save();
+
+      break;
+    // ... handle other event types
+
+    case "customer.subscription.updated":
+      const customerSubscriptionUpdated = event.data.object;
+
+      // console.log(event);
+      if (customerSubscriptionUpdated.cancel_at_period_end) {
+        console.log(
+          `Subscription ${customerSubscriptionUpdated.id} was canceled.`
+        );
+
+        // DB code to update the customer's subscription status in your database
+      } else {
+        console.log(
+          `Subscription ${customerSubscriptionUpdated.id} was restarted.`
+        );
+        // get subscription details and update the DB
+      }
+
+      break;
+    case "invoice.payment_failed":
+      const invoicePaymentFailed = event.data.object;
+
+      break;
+
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
 
   res.status(200).end();
