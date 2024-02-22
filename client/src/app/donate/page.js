@@ -15,7 +15,6 @@ const page = () => {
   const [paymenttype, setPaymentType] = useState("Stripe");
   const [spinner, setSpinner] = useState(false);
   const [amount, setAmount] = useState(1);
-  const [note, setNote] = useState("");
 
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   const router = useRouter();
@@ -32,53 +31,52 @@ const page = () => {
     }
   };
 
-const Donate = async (event) => {
-  event.preventDefault();
-  
-  let data = {
-    name: "Donation",
-    amount: amount,
-    note: note
-  };
+  const Donate = async (event) => {
+    event.preventDefault();
 
-  if (!Authtoken) {
-    router.push("/login");
-    return; // Added return statement to exit function early
-  }
+    let data = {
+      name: "Donation",
+      amount: amount,
+    };
 
-  if (paymenttype === "Stripe") {
-    try {
-      setSpinner(true);
-      const session = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/donation/stripe/create-checkout-session`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${Authtoken}`,
-          },
-          "Content-Type": "application/json",
-        }
-      );
-
-      if (session.status === 200) {
-        console.log("session", session);
-
-        // const result = await stripe.redirectToCheckout({
-        //   sessionId: session.data.url,
-        // });
-
-        window.location.href = session.data.url;
-        setTimeout(() => {
-          setSpinner(false);
-        }, 1500);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.error("Error in PayWithStripe:", error);
+    if (!Authtoken) {
+      router.push("/login");
+      return; // Added return statement to exit function early
     }
-  }
-};
+
+    if (paymenttype === "Stripe") {
+      try {
+        setSpinner(true);
+        const session = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/donation/stripe/create-checkout-session`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${Authtoken}`,
+            },
+            "Content-Type": "application/json",
+          }
+        );
+
+        if (session.status === 200) {
+          console.log("session", session);
+
+          // const result = await stripe.redirectToCheckout({
+          //   sessionId: session.data.url,
+          // });
+
+          window.location.href = session.data.url;
+          setTimeout(() => {
+            setSpinner(false);
+          }, 1500);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.error("Error in PayWithStripe:", error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -176,14 +174,7 @@ const Donate = async (event) => {
                     <option value="CA">Crypto</option>
                   </select>
                 </div>
-                <div className="px-8 pt-4 mt-2 border-t">
-                  <textarea
-                    className="border border-gray-300 textarea"
-                    required
-                    onChange={(e) => {setNote(e.target.value)}}
-                    placeholder="Donation Note"
-                  />
-                </div>
+               
                 <div className="px-8 pt-4 mt-4 border-t">
                   <div className="flex items-end justify-between">
                     <span className="font-semibold">Amount in (USD)</span>

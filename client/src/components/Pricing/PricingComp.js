@@ -64,16 +64,9 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
           // }
         } else if (response.status === 200) {
           // Adjusted condition to handle successee
+          
 
-          console.log("res2", response);
-          const session = await response.data; // Use response.data instead of response.json()
-
-          console.log("this is session", session);
-          stripePromise.redirectToCheckout({
-            
-            sessionId: session.id,
-            
-          });
+          window.location.href = response.data.url;
 
           setSpinner(false);
         } else {
@@ -84,7 +77,7 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
       } catch (error) {
         // window.location.href = error.response.data.redirectUrl;
         if (typeof window !== "undefined") {
-          // window.location.href = error.response.data.redirectUrl;
+          window.location.href = error.response.data.redirectUrl;
           console.log(error);
           setSpinner(false);
         }
