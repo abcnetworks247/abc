@@ -17,7 +17,7 @@ const Page = () => {
   return (
     <div>
       <Nav1 />
-      <div className="bg-[#111827] sticky top-0 z-[10]">
+      <div className="bg-[#111827] sticky top-0 z-[10] topnav">
         <Navbar />
       </div>
       <Sidebar />

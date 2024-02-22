@@ -81,7 +81,7 @@ const page = () => {
   return (
     <div>
       <Nav1 />
-      <div className="bg-[#111827] sticky top-0 z-40">
+      <div className="bg-[#111827] sticky top-0 z-40 topnav" id="topnav">
         <Navbar />
       </div>
       <Sidebar />

@@ -5,7 +5,7 @@ import React from "react";
 
 const Nav1 = () => {
   return (
-    <div className="flex flex-row items-center justify-end md:justify-between px-4  w-full shadow-md h-8  bg-[#141e33] py-6 lg:px-14">
+    <div id="nav1" className="flex flex-row items-center justify-end md:justify-between px-4  w-full shadow-md h-8  bg-[#141e33] py-6 lg:px-14">
       <div className="hidden md:block">
         <span className="text-xs text-white md:text-sm">#1 CUSTOMER SERVICE 24/7,  +1(240) 486-8768</span>
       </div>
