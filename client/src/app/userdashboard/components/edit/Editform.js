@@ -91,7 +91,7 @@ const Editform = ({
           type="text"
           name="phonenumber"
           placeholder="Phone"
-          value={formData?.phonenumber}
+          value={formData.phone}
           onChange={(e) => handleInputChange(e)}
         />
       </div>

@@ -64,7 +64,6 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
           // }
         } else if (response.status === 200) {
           // Adjusted condition to handle successee
-          
 
           window.location.href = response.data.url;
 
