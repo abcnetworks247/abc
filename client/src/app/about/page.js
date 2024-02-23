@@ -8,12 +8,15 @@ function About() {
   return (
     <div>
       <Sidebar />
-      <div className="bg-[#111827] sticky top-0 z-[10]">
+      <div className="bg-[#111827] sticky top-0 z-[10]" id="navbar">
         <Navbar />
       </div>
 
       <AboutComponent />
-      <FooterComp />
+      <div id='footer'>
+         <FooterComp />
+      </div>
+     
     </div>
   );
 }
