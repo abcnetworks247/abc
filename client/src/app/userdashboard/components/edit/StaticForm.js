@@ -86,7 +86,7 @@ const StaticForm = ({ handleEdit }) => {
           readOnly
           className="bg-white focus:bg-white border w-full  border-blue-500 rounded-md py-2 px-4 focus:outline-none focus:shadow-outline"
           placeholder=" "
-          value={UserData.phonenumber}
+          value={UserData.phone}
         />
         <label
           htmlFor="email"
