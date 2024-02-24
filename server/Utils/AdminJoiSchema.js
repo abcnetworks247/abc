@@ -1,4 +1,4 @@
-const joi = require('joi');
+const joi = require("joi");
 
 const Adminjoi = joi.object({
   fullname: joi.string().required(),

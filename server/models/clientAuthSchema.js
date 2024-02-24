@@ -48,6 +48,12 @@ const AuthSchema = new mongoose.Schema(
         },
       },
     ],
+    orderhistory: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "OrderHistory",
+      },
+    ],
     subscriptionhistory: [
       {
         type: mongoose.Types.ObjectId,
