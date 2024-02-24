@@ -61,7 +61,12 @@ export default function Sidebar() {
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
           <div className="flex items-center text-center  justify-between">
-            <Link href="/dashboard">
+            <Link
+              href="/dashboard"
+              onClick={() => {
+                dispatch({ type: "TOGGLE" });
+              }}
+            >
               <Image
                 src={Logo}
                 alt="logo"
@@ -142,7 +147,12 @@ export default function Sidebar() {
               </ListItem>
               <AccordionBody className="py-1">
                 <List className="p-0 text-[#FFFFFF] ">
-                  <Link href="/dashboard/eccomerce/orders">
+                  <Link
+                    href="/dashboard/eccomerce/orders"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -151,7 +161,12 @@ export default function Sidebar() {
                     </ListItem>
                   </Link>
 
-                  <Link href="/dashboard/eccomerce/product">
+                  <Link
+                    href="/dashboard/eccomerce/product"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -159,7 +174,12 @@ export default function Sidebar() {
                       Products
                     </ListItem>
                   </Link>
-                  <Link href="/dashboard/eccomerce/newproduct">
+                  <Link
+                    href="/dashboard/eccomerce/newproduct"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -167,7 +187,12 @@ export default function Sidebar() {
                       New Product
                     </ListItem>
                   </Link>
-                  <Link href="/dashboard/eccomerce/category">
+                  <Link
+                    href="/dashboard/eccomerce/category"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -182,6 +207,9 @@ export default function Sidebar() {
               <Link
                 href="/dashboard/filemanager"
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
+                onClick={() => {
+                  dispatch({ type: "TOGGLE" });
+                }}
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -225,6 +253,9 @@ export default function Sidebar() {
               <Link
                 href="/dashboard/users"
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
+                onClick={() => {
+                  dispatch({ type: "TOGGLE" });
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -248,6 +279,9 @@ export default function Sidebar() {
               <Link
                 href="/dashboard/admin"
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
+                onClick={() => {
+                  dispatch({ type: "TOGGLE" });
+                }}
               >
                 <MdAdminPanelSettings className="w-[18px] h-[18px] mr-4 text-white" />
 
@@ -287,7 +321,12 @@ export default function Sidebar() {
               </ListItem>
               <AccordionBody className="py-1">
                 <List className="p-0 text-[#FFFFFF] ">
-                  <Link href="/dashboard/news/all-news">
+                  <Link
+                    href="/dashboard/news/all-news"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 hover:text-[#fff] text-sm focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -296,7 +335,12 @@ export default function Sidebar() {
                     </ListItem>
                   </Link>
 
-                  <Link href="/dashboard/news/create-news">
+                  <Link
+                    href="/dashboard/news/create-news"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -304,7 +348,12 @@ export default function Sidebar() {
                       Create News
                     </ListItem>
                   </Link>
-                  <Link href="/dashboard/news/category">
+                  <Link
+                    href="/dashboard/news/category"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -312,7 +361,12 @@ export default function Sidebar() {
                       News Category
                     </ListItem>
                   </Link>
-                  <Link href="/dashboard/news/type">
+                  <Link
+                    href="/dashboard/news/type"
+                    onClick={() => {
+                      dispatch({ type: "TOGGLE" });
+                    }}
+                  >
                     <ListItem className="hover:bg-gray-700 text-sm hover:text-[#fff] focus:text-[#ffff] focus:bg-gray-700">
                       <ListItemPrefix>
                         <ChevronRightIcon strokeWidth={3} className="w-5 h-3" />
@@ -356,6 +410,9 @@ export default function Sidebar() {
               <Link
                 href="/dashboard/transactions"
                 className="flex items-center px-4 py-3 text-sm text-white transition-all rounded hover:bg-gray-700"
+                onClick={() => {
+                  dispatch({ type: "TOGGLE" });
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -404,7 +461,12 @@ export default function Sidebar() {
               </div>
             </div>
           ) : (
-            <Link href="/dashboard/profile">
+            <Link
+              href="/dashboard/profile"
+              onClick={() => {
+                dispatch({ type: "TOGGLE" });
+              }}
+            >
               <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
                 <Image
                   src={UserValue && UserValue.userdp}

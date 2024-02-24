@@ -36,22 +36,17 @@ const Alltransactiondata = [
     childComponent: <GenTransaction />,
   },
   {
-    label: "Crypto",
-    value: "Crypto",
-    childComponent: <Cryptotransaction />,
-  },
-  {
     label: "Product",
     value: "Product",
     childComponent: <Producttransaction />,
   },
   {
-    label: "Donor",
+    label: "Donate",
     value: "Donor",
     childComponent: <Donortransaction />,
   },
   {
-    label: "Premium",
+    label: "Subscription",
     value: "Premium",
     childComponent: <Premiumtransaction />,
   },
