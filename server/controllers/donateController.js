@@ -68,6 +68,7 @@ const StripeCheckout = async (req, res) => {
   const data = req.body;
 
   const user = req.user;
+  let customer;
 
   try {
     if (!user) {
