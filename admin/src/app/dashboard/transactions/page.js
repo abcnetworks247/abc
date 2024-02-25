@@ -1,21 +1,11 @@
 "use client";
-
-import { PencilIcon } from "@heroicons/react/24/solid";
-import {
-  ArrowDownTrayIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+import React, { useState } from "react";
 import {
   Card,
   CardHeader,
   Typography,
   Button,
   CardBody,
-  Chip,
-  CardFooter,
-  Avatar,
-  IconButton,
-  Tooltip,
   Input,
   Tabs,
   TabsHeader,
@@ -23,8 +13,8 @@ import {
   TabsBody,
   TabPanel,
 } from "@material-tailwind/react";
+import { ArrowDownTrayIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Producttransaction from "@/components/Alltransaction/Producttransaction";
-import Cryptotransaction from "@/components/Alltransaction/Cryptotransaction";
 import Donortransaction from "@/components/Alltransaction/Donortransaction";
 import Premiumtransaction from "@/components/Alltransaction/Premiumtransaction";
 import GenTransaction from "@/components/Alltransaction/GenTransaction";
@@ -36,30 +26,31 @@ const Alltransactiondata = [
     childComponent: <GenTransaction />,
   },
   {
-    label: "Crypto",
-    value: "Crypto",
-    childComponent: <Cryptotransaction />,
-  },
-  {
     label: "Product",
     value: "Product",
     childComponent: <Producttransaction />,
   },
   {
-    label: "Donor",
+    label: "Donate",
     value: "Donor",
     childComponent: <Donortransaction />,
   },
   {
-    label: "Premium",
+    label: "Subscription",
     value: "Premium",
     childComponent: <Premiumtransaction />,
   },
 ];
 
 export default function Page() {
+  const [selectedTab, setSelectedTab] = useState(Alltransactiondata[0].value);
+
+  const handleTabClick = (value) => {
+    setSelectedTab(value);
+  };
+
   return (
-    <Card className=" w-auto px-3 p-0 ">
+    <Card className="w-auto px-3 p-0">
       <CardHeader
         floated={false}
         shadow={false}
@@ -87,21 +78,26 @@ export default function Page() {
           </div>
         </div>
       </CardHeader>
-      <CardBody className="  ">
-        <Tabs value="select" className="h-fit  overflow-x-scroll">
+      <CardBody className=" ">
+        <Tabs value={selectedTab} className="h-fit overflow-x-scroll">
           <TabsHeader className="m-0 w-fit h-fit">
             {Alltransactiondata.map(({ label, value }) => (
-              <Tab key={value} value={value} className="px-8 m-0 h-fit">
+              <Tab
+                key={value}
+                value={value}
+                className="px-8 m-0 h-fit"
+                onClick={() => handleTabClick(value)}
+              >
                 <div className="flex items-center gap-2 whitespace-nowrap">
                   {label}
                 </div>
               </Tab>
             ))}
           </TabsHeader>
-          <TabsBody className="  ">
+          <TabsBody className=" ">
             {Alltransactiondata.map(({ value, childComponent }) => (
               <TabPanel key={value} value={value} className="mt-0">
-                {childComponent}
+                {selectedTab === value && childComponent}
               </TabPanel>
             ))}
           </TabsBody>

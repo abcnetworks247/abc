@@ -15,11 +15,20 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 const page = () => {
-  
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   const { cartProducts } = UseProductProvider();
   const [paymenttype, setPaymentType] = useState("Stripe");
-  const router=useRouter()
+  const router = useRouter();
+  const [phone, setPhone] = useState(UserData?.phone);
+  const [city, setCity] = useState("");
+  const [postalcode, setPostalCode] = useState("");
+  const [note, setNote] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [coupon, setCoupon] = useState("");
+  const [shippingAddress, setShippingAddress] = useState(
+    UserData?.shippingaddress
+  );
 
   if (!UserData) {
     return (
@@ -27,26 +36,25 @@ const page = () => {
         <div className="bg-[#111827] sticky top-0 z-[10] ">
           <Navbar />
         </div>
-        <div
-         
-          className="flex items-center justify-center bg-center bg-gray-100 h-[90vh]"
-        >
+        <div className="flex items-center justify-center bg-center bg-gray-100 h-[90vh]">
           <div className="max-w-lg w-full p-8 bg-white bg-opacity-75 rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105">
             <h2 className="text-2xl font-semibold mb-4">Please Sign In</h2>
             <p className="text-gray-600 mb-6">
               You need to sign in to view your cart.
             </p>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={()=>router.push('/login')}>
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={() => router.push("/login")}
+            >
               Sign In
             </button>
           </div>
         </div>
       </>
     );
-}
+  }
 
-
-  if (!cartProducts || cartProducts.length===0) {
+  if (!cartProducts || cartProducts.length === 0) {
     return (
       <>
         <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
@@ -77,15 +85,7 @@ const page = () => {
         <FooterComp />
       </>
     );
-}
-
-
-
-
-
-  
-  
-  
+  }
 
   const stripe = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
   const shippingFee = 5;
@@ -104,12 +104,21 @@ const page = () => {
 
   console.log("cart value", cartProducts);
 
-  const CheckOut = async () => {
-    console.log("Ready to checkout", cartProducts);
+  const CheckOut = async (e) => {
+    e.preventDefault();
 
     let data = {
       product: cartProducts,
+      phone,
+      shippingAddress,
+      note,
+      postalcode,
+      city,
+      state,
+      country,
+      coupon,
     };
+
 
     if (paymenttype === "Stripe") {
       try {
@@ -174,91 +183,134 @@ const page = () => {
                 ))}
               </div>
             </div>
-            <div className="flex flex-wrap justify-between">
-              <div className="w-full px-4 mb-4 lg:w-1/2 flex flex-col gap-4">
-                <div className="flex flex-wrap items-center gap-4">
-                  <span className="text-gray-700 dark:text-gray-400">
-                    Apply Coupon
-                  </span>
-                  <input
-                    type="text"
-                    className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
-                    placeholder="x304k45"
-                    required
-                  />
-                  <button className="inline-block w-full py-1.5 font-bold text-center text-gray-100 bg-blue-500 rounded-md lg:w-32 hover:bg-blue-600">
-                    Apply
-                  </button>
-                </div>
-                <div className="flex flex-wrap items-center">
-                  <input
-                    type="text"
-                    className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
-                    placeholder="Phone number"
-                    required
-                  />
-                </div>
-                <div className="flex flex-wrap items-center">
-                  <input
-                    type="text"
-                    className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
-                    placeholder="Shipping Address"
-                    required
-                  />
-                </div>
-                <div className="flex flex-wrap items-center">
-                  <textarea
-                    placeholder="Note"
-                    rows={6}
-                    className="w-full rounded-md px-4 border text-sm pt-2.5 outline-[#007bff]"
-                    defaultValue={""}
-                  />
-                </div>
-              </div>
-              <div className="w-full h-full p-6 mt-6 bg-white border rounded-lg shadow-md md:mt-0 md:w-1/3">
-                <div className="flex justify-between mb-2">
-                  <p className="text-gray-700">Subtotal</p>
-                  <p className="text-gray-700">${totalPrice.toFixed(2)}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-700">Shipping</p>
-                  <p className="text-gray-700">${shippingFee}</p>
-                </div>
-                <hr className="my-4" />
-                <div className="flex justify-between">
-                  <p className="text-lg font-bold">Total</p>
-                  <div className="" Name>
-                    <p className="mb-1 text-lg font-bold">
-                      ${grandTotal.toFixed(2)}
-                    </p>
-                    <p className="text-sm text-gray-700">including VAT</p>
+            <form onSubmit={CheckOut}>
+              <div className="flex flex-wrap justify-between">
+                <div className="w-full px-4 mb-4 lg:w-1/2 flex flex-col gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
+                    <span className="text-gray-700 dark:text-gray-400">
+                      Apply Coupon
+                    </span>
+                    <input
+                      type="text"
+                      className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
+                      placeholder="x304k45"
+                      onChange={(e) => setCoupon(e.target.value)}
+                    />
+                    <button className="inline-block w-full py-1.5 font-bold text-center text-gray-100 bg-blue-500 rounded-md lg:w-32 hover:bg-blue-600">
+                      Apply
+                    </button>
+                  </div>
+                  <div className="flex items-center flex-col md:flex-row gap-2">
+                    <input
+                      type="text"
+                      className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
+                      placeholder="Phone number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+                    <input
+                      type="text"
+                      className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
+                      placeholder="Shipping address"
+                      value={shippingAddress}
+                      onChange={(e) => setShippingAddress(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="flex items-center flex-row gap-2">
+                    <input
+                      type="text"
+                      className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
+                      placeholder="City"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      required
+                    />
+                    <input
+                      type="text"
+                      className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
+                      placeholder="Postal Code"
+                      value={postalcode}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="flex items-center flex-row gap-2">
+                    <input
+                      type="text"
+                      className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
+                      placeholder="State"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      required
+                    />
+
+                    <input
+                      type="text"
+                      className="w-full py-1.5 px-4 rounded-lg font-normal placeholder-gray-400 border lg:flex-1 border-gray-200 text-gray-400 outline-[#007bff]"
+                      placeholder="Country"
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="flex flex-wrap items-center">
+                    <textarea
+                      placeholder="Note"
+                      rows={6}
+                      onChange={(e) => setNote(e.target.value)}
+                      className="w-full rounded-md px-4 border text-sm pt-2.5 outline-[#007bff]"
+                      defaultValue={""}
+                      required
+                    />
                   </div>
                 </div>
+                <div className="w-full h-full p-6 mt-6 bg-white border rounded-lg shadow-md md:mt-0 md:w-1/3">
+                  <div className="flex justify-between mb-2">
+                    <p className="text-gray-700">Subtotal</p>
+                    <p className="text-gray-700">${totalPrice.toFixed(2)}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <p className="text-gray-700">Shipping</p>
+                    <p className="text-gray-700">${shippingFee}</p>
+                  </div>
+                  <hr className="my-4" />
+                  <div className="flex justify-between">
+                    <p className="text-lg font-bold">Total</p>
+                    <div className="" Name>
+                      <p className="mb-1 text-lg font-bold">
+                        ${grandTotal.toFixed(2)}
+                      </p>
+                      <p className="text-sm text-gray-700">including VAT</p>
+                    </div>
+                  </div>
 
-                <label
-                  for="payment"
-                  class="block mb-2 mt-10 text-sm font-medium text-gray-900"
-                >
-                  Choose a Payment Method
-                </label>
-                <select
-                  id="payment"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  onChange={(e) => setPaymentType(e.target.value)}
-                  value={paymenttype}
-                >
-                  <option selected>Stripe</option>
-                  <option value="CA">Crypto</option>
-                </select>
-                <button
-                  className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
-                  Name
-                  onClick={CheckOut}
-                >
-                  Place an order
-                </button>
+                  <label
+                    for="payment"
+                    class="block mb-2 mt-10 text-sm font-medium text-gray-900"
+                  >
+                    Choose a Payment Method
+                  </label>
+                  <select
+                    id="payment"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    onChange={(e) => setPaymentType(e.target.value)}
+                    value={paymenttype}
+                  >
+                    <option selected>Stripe</option>
+                    <option value="CA">Crypto</option>
+                  </select>
+                  <button
+                    className="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600"
+                    type="submit"
+                  >
+                    Place an order
+                  </button>
+                </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </section>

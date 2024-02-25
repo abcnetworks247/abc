@@ -9,7 +9,7 @@ function Layout({ children }) {
     <div className="relative">
       <main className="flex flex-col lg:flex-row w-[100%]">
         <Sidebar />
-     
+
         <div className="w-[100%] flex flex-col h-screen overflow-y-auto">
           <ComplexNavbar />
 
