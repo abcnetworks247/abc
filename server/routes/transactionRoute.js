@@ -29,7 +29,7 @@ router.route("/history/purchase/:id").get(authChecker, getSinglePurchaseHistory)
 
 router.route("/history/order").get(authChecker, getAllOrderHistory);
 router.route("/history/order/:id").get(authChecker, getSingleOrderHistory);
-router.route("/account/order").patch(authChecker, updateOrderHistory);
+router.route("/history/order").patch(authChecker, updateOrderHistory);
 
 
 module.exports = router;
