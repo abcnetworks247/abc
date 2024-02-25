@@ -75,7 +75,7 @@ const AuthSchema = new mongoose.Schema(
     productpurchasehistory: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "ProductPurchase",
+        ref: "PurchaseHistory",
       },
     ],
   },

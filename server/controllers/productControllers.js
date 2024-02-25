@@ -8,7 +8,8 @@ const OrderHistoryJoi = require("../Utils/OrderHistoryJoi");
 var Webhook = coinbase.Webhook;
 const dotenv = require("dotenv").config();
 
-const Client = coinbase.Client;
+const Client = require("../models/clientAuthSchema");
+const coinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
 
 const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
@@ -282,6 +283,7 @@ const StripeCheckout = async (req, res) => {
     note,
   } = req.body;
 
+
   const user = req.user;
   let customer;
 
@@ -292,11 +294,13 @@ const StripeCheckout = async (req, res) => {
       );
     }
 
-    const olduser = await Client.findOne(user.email);
-
-    olduser.phone = phone;
-
-    await olduser.save();
+    await Client.findByIdAndUpdate(
+      String(user._id),
+      {
+        phone: phone,
+      },
+      { new: true }
+    );
 
     const existingCustomer = await stripe.customers.list({
       email: user.email,
@@ -323,8 +327,6 @@ const StripeCheckout = async (req, res) => {
           state: state,
           country: country,
         },
-        cart: JSON.stringify(product),
-        note: note,
         metadata: {
           userId: user._id,
         },
@@ -337,7 +339,6 @@ const StripeCheckout = async (req, res) => {
         product_data: {
           name: product.product.title,
           images: [product.product.thumbnail],
-          description: note,
         },
         unit_amount: product.product.price * 100,
       },
@@ -352,6 +353,7 @@ const StripeCheckout = async (req, res) => {
       cancel_url: `${localurl}/paymenterror?canceled=true`,
       metadata: {
         cart: JSON.stringify(lineItems), // Include product information in metadata
+        description: note,
       },
     });
 
@@ -402,7 +404,11 @@ const stripeProductWebhook = async (req, res) => {
       // Then define and call a function to handle the event checkout.session.completed
 
       let userEmail = checkoutSessionCompleted.customer_details.email;
+
+      console.log("useremail", userEmail);
       const olduser = await Client.findOne({ userEmail });
+
+      console.log("userdata", olduser);
 
       const donationTime = new Date(); // Instantiate a new Date object for current time
       const hours = donationTime.getHours();
@@ -420,7 +426,15 @@ const stripeProductWebhook = async (req, res) => {
       // Format the date
       const formattedDate = `${year}-${month}-${day}`;
 
-      let cartdata = JSON.parse(checkoutSessionCompleted.metadata.cart);
+      let cartData = JSON.parse(checkoutSessionCompleted.metadata.cart);
+      let cartdesc = checkoutSessionCompleted.metadata.description;
+
+      const items = cartData.map((item) => ({
+        product: item.price_data.product_data.name,
+        price: item.price_data.product_data.name,
+        thumbnail: item.price_data.product_data.images[0],
+        quantity: item.quantity,
+      }));
 
       const data = {
         email: olduser.email,
@@ -429,7 +443,8 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: cartdata,
+        cart: items,
+        note: cartdesc,
         payment_status: checkoutSessionCompleted.payment_status,
         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
         transaction_Id: checkoutSessionCompleted.id,
@@ -449,7 +464,8 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: cartdata,
+        cart: items,
+        note: cartdesc,
         delivery_Status: "pending",
         payment_status: checkoutSessionCompleted.payment_status,
         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
@@ -463,28 +479,33 @@ const stripeProductWebhook = async (req, res) => {
         country: checkoutSessionCompleted.customer_details.address.country,
       };
 
-      const { error, value } = PurchaseHistoryJoi.validate(data);
-      const { error1, value1 } = OrderHistoryJoi.validate(data2);
+      // const { error, value } = PurchaseHistoryJoi.validate(data);
+      // const { error1, value1 } = OrderHistoryJoi.validate(data2);
 
-      if (error) {
-        throw new ValidationError("Data recieved is invalid");
-      }
+      // if (error) {
+      //   throw new ValidationError("Data recieved is invalid");
+      // }
 
-      if (error1) {
-        throw new ValidationError("Data recieved is invalid");
-      }
+      // if (error1) {
+      //   throw new ValidationError("Data recieved is invalid");
+      // }
 
-      const newData = await PurchaseHistoryModel.create(value);
-      const newData1 = await OrderHistoryModel.create(value1);
+      const newData = await PurchaseHistoryModel.create(data);
+      const newData1 = await OrderHistoryModel.create(data2);
 
-      olduser.donationhistory.unshift(newData.id);
-      olduser.orderhistory.unshift(newData1.id);
-
-      olduser.cart = [];
-
-      await olduser.save();
-
-      console.log("data" + newData);
+      await Client.findOneAndUpdate(
+        { email: userEmail },
+        {
+          $push: {
+            productpurchasehistory: newData._id,
+            orderhistory: newData1._id,
+          },
+          $set: {
+            cart: [], // Set cart to an empty array
+          },
+        },
+        { new: true } // To return the updated document
+      );
 
       break;
     // ... handle other event types

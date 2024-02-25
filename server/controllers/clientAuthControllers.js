@@ -348,9 +348,13 @@ const currentUser = async (req, res) => {
     if (req.user) {
       const user = await Client.findById(req.user._id);
 
-      const olduser = await Client.populate(user, {
-        path: "cart.product",
-      });
+      const olduser = await Client.populate(user, [
+        { path: "cart.product" },
+        { path: "orderhistory" },
+        { path: "subscriptionhistory" },
+        { path: "productpurchasehistory" },
+        { path: "donationhistory" },
+      ]);
 
       return res
         .status(200)
