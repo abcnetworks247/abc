@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+
+
 // Define Donation Schema
 const purchaseSchema = new mongoose.Schema({
   email: { type: String, required: true },
@@ -9,6 +11,7 @@ const purchaseSchema = new mongoose.Schema({
   payment_Date: { type: String, required: true },
   payment_Time: { type: String, required: true },
   cart: { type: Array, required: true },
+  note: { type: String },
   payment_status: { type: String },
   payment_method_types: { type: String },
   transaction_Id: { type: String },

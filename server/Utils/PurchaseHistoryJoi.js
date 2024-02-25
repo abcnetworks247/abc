@@ -1,5 +1,7 @@
 const Joi = require("joi");
 
+
+
 const purchaseJoi = Joi.object({
   email: Joi.string().email().required(),
   name: Joi.string().required(),
@@ -8,6 +10,7 @@ const purchaseJoi = Joi.object({
   payment_Date: Joi.date().required(),
   payment_Time: Joi.string().required(),
   cart: Joi.array().items(Joi.object()),
+  note: Joi.string(),
   payment_status: Joi.string(),
   payment_method_types: Joi.string(),
   transaction_Id: Joi.string(),
