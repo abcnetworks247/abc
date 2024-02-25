@@ -76,7 +76,6 @@ const TABLE_ROWS = [
 export default function Donortransaction() {
   return (
     <div>
-    
       
     <CardBody className="overflow-x-scroll px-0">
       <table className="w-full min-w-max table-auto text-left">
