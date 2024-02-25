@@ -13,13 +13,16 @@ const SingleArrival = ({ product }) => {
   const router = useRouter()
   const { UserData } = UseUserContext();
 
+
+
   const { handleCartLoading, handleWishAdd, handleAddToCart, wishListLoading } =
     UseProductProvider();
   const [hoverState, setHoverState] = useState(false)
   const [wishClick, setWishClick] = useState(false)
 
   const handleWishClick = () => {
-    setWishClick((prev)=>!prev)
+    setWishClick((prev) => !prev)
+    console.log(UserData)
   }
   
 
@@ -84,9 +87,11 @@ const SingleArrival = ({ product }) => {
                             router.push("/login");
                           }
                         : (e) => {
-                            e.stopPropagation();
+                          e.stopPropagation();
+                          
+                          console.log("User data in wishlist", UserData);
                             handleWishAdd(product._id, UserData._id);
-                            handleWishClick();
+                          handleWishClick();
                           }
                     }
                   >
@@ -106,7 +111,8 @@ const SingleArrival = ({ product }) => {
                     }
                   : (e) => {
                       e.stopPropagation();
-                      handleAddToCart(product._id, UserData._id);
+                    handleAddToCart(product._id, UserData._id);
+                       console.log("User data in add to cart", UserData);
                     }
               }
             >

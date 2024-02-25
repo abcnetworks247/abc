@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 const SidebarHead = () => {
 
   const { UserData, HandleGetUser } = UseUserContext();
+  console.log("User data in profile", UserData)
   
   if (!UserData) {
     return (
