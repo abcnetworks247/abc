@@ -93,7 +93,7 @@ const DeleteAccount = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center w-full px-6">
+    <div className="flex flex-col items-center justify-center w-full px-6 ">
       <div className="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md sm:p-8">
         <form
           onSubmit={(e) => {

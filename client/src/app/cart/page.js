@@ -106,6 +106,7 @@ const page = () => {
 
   const CheckOut = async (e) => {
     e.preventDefault();
+    
 
     let data = {
       product: cartProducts,

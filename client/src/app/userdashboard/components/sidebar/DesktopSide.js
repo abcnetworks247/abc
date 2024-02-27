@@ -1,5 +1,6 @@
 "use client"
 import React from 'react'
+import { useState } from 'react';
 import Upgrade from '../Upgrade';
 import SidebarHead from './SidebarHead';
 import Link from 'next/link';
@@ -16,10 +17,14 @@ import { MdLogout } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoPersonOutline } from "react-icons/io5";
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 
 
 const DesktopSide = () => {
+  const [loading, setLoading] = useState(null)
+  const router = useRouter()
   const pathname = usePathname()
   return (
     <>
@@ -64,8 +69,23 @@ const DesktopSide = () => {
             </div>
           </Link>
 
-          <div className="flex items-center hover:bg-gray-100 cursor-pointer gap-3  px-4 py-2 text-blue-500 border-b border-gray-300">
-            <MdLogout size={24} />
+          <div
+            onClick={() => {
+              setLoading(true);
+              Cookies.remove("authToken");
+              const authToken = Cookies.get("authToken");
+              if (!authToken) {
+                setLoading(false);
+                if (typeof window !== "undefined") {
+                  window.location.reload();
+                  router.push("/");
+                }
+              }
+            }}
+            className="flex items-center hover:bg-gray-100 cursor-pointer gap-3  px-4 py-2 text-blue-500 border-b border-gray-300"
+          >
+            {loading ? "..." : <MdLogout size={24} />}
+
             <p className="rounded-sm text-center text-sm">Logout</p>
           </div>
           <Upgrade />

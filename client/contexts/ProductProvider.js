@@ -61,6 +61,7 @@ const ProductProvider = ({ children }) => {
     };
 
     try {
+      console.log("adding to cart", UserData);
       console.log("cartdata", cartdata);
       socket.emit("cartadd", cartdata);
     } catch (error) {
