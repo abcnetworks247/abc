@@ -13,6 +13,7 @@ import { IoPersonOutline } from "react-icons/io5";
 import { IoPersonRemoveOutline } from "react-icons/io5";
 import { LiaEdit } from "react-icons/lia";
 import { MdLockReset } from "react-icons/md";
+import { PiCreditCard } from "react-icons/pi";
 
 const MobileSide = () => {
   const router = useRouter()
@@ -43,6 +44,17 @@ const MobileSide = () => {
             >
               <HiOutlineShoppingBag size={24} />
               <p className="text-sm text-gray-600">Orders</p>
+            </div>
+          </Link>
+          
+          <Link href="/Mobile/transactions">
+            <div
+              className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
+                pathname == "/Mobile/transactions" ? "sm:bg-gray-200" : ""
+              }`}
+            >
+              <PiCreditCard size={24} />
+              <p className="text-sm text-gray-600">Transactions</p>
             </div>
           </Link>
 

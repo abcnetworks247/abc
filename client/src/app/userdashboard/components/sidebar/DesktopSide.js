@@ -16,6 +16,10 @@ import { MdLogout } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoPersonOutline } from "react-icons/io5";
+import { PiCreditCard } from "react-icons/pi";
+
+
+
 
 
 
@@ -47,6 +51,17 @@ const DesktopSide = () => {
             >
               <HiOutlineShoppingBag size={24} />
               <p className="text-sm text-gray-600">Orders</p>
+            </div>
+          </Link>
+
+          <Link href="/userdashboard/transactions">
+            <div
+              className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
+                pathname == "/userdashboard/transactions" ? "sm:bg-gray-200" : ""
+              }`}
+            >
+              <PiCreditCard size={24} />
+              <p className="text-sm text-gray-600">Transactions</p>
             </div>
           </Link>
 
