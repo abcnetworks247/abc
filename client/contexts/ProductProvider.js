@@ -52,6 +52,7 @@ const ProductProvider = ({ children }) => {
 
   // add to cart socket
   const handleAddToCart = (productId, userId) => {
+    console.log("adding to cart", UserData)
     setHandleCartLoading(true);
     console.log("emmiting value to add to cart");
     const cartdata = {
@@ -60,6 +61,7 @@ const ProductProvider = ({ children }) => {
     };
 
     try {
+      console.log("adding to cart", UserData);
       console.log("cartdata", cartdata);
       socket.emit("cartadd", cartdata);
     } catch (error) {
