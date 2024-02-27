@@ -15,7 +15,7 @@ export const UserContextProvider = ({ children }) => {
   const [UserData, setUserData] = useState(null);
  
 
-  console.log("user data", UserData)
+  // console.log("user data", UserData)
 
   // loading state for user incoming data
 
@@ -44,12 +44,12 @@ export const UserContextProvider = ({ children }) => {
         setUserData(DataValue);
         setLoading(false);
         setGenload(false)
-        console.log("Data value if status is 200", DataValue)
+        // console.log("Data value if status is 200", DataValue)
       }
 
-        console.log("Data value outside ", DataValue);
+        // console.log("Data value outside ", DataValue);
       // setLoading(true);
-   console.log("final Userdata", UserData)
+  //  console.log("final Userdata", UserData)
     } catch (error) {
       console.error("Error fetching user data:", error);
       setGenload(false);
@@ -57,7 +57,7 @@ export const UserContextProvider = ({ children }) => {
   };
 
 
-  console.log("Another user data", UserData)
+  // console.log("Another user data", UserData)
   /**
    * @function (fuction) getUserData - a fuction created to retrieve user info.
    */
