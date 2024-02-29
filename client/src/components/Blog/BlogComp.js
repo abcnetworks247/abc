@@ -249,7 +249,7 @@ export default function () {
               {/* <!-- recent posts --> */}
               {worldNews && (
                 <div className="">
-                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                  <div className="flex items-center justify-between px-4 mt-10 mb-4 lg:px-0">
                     <h2 className="px-2 text-xl font-bold">World News</h2>
                     {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
@@ -291,7 +291,7 @@ export default function () {
               {/* <!-- popular posts --> */}
               {breakingNews && (
                 <div className="">
-                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                  <div className="flex items-center justify-between px-4 mt-10 mb-4 lg:px-0">
                     <h2 className="px-2 text-xl font-bold">Breaking news</h2>
                     {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
@@ -337,7 +337,7 @@ export default function () {
                       : "space-x-0  sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1"
                   }`}
                 >
-                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                  <div className="flex items-center justify-between px-4 mt-10 mb-4 lg:px-0">
                     <h2 className="px-2 text-xl font-bold">Business News</h2>
                     {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
@@ -378,7 +378,7 @@ export default function () {
 
               {sportsNews && (
                 <div className="">
-                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                  <div className="flex items-center justify-between px-4 mt-10 mb-4 lg:px-0">
                     <h2 className="px-2 text-xl font-bold">Sport news</h2>
                     {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
@@ -418,7 +418,7 @@ export default function () {
 
               {socioCultural && (
                 <div className="">
-                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                  <div className="flex items-center justify-between px-4 mt-10 mb-4 lg:px-0">
                     <h2 className="px-2 text-xl font-bold">
                       Socio cultural news
                     </h2>
@@ -466,7 +466,7 @@ export default function () {
                       : "space-x-0  sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1"
                   }`}
                 >
-                  <div className="flex items-center justify-between px-4 mt-16 mb-4 lg:px-0">
+                  <div className="flex items-center justify-between px-4 mt-10 mb-4 lg:px-0">
                     <h2 className="px-2 text-xl font-bold">Business News</h2>
                     {/* <a className="px-3 py-1 text-gray-800 bg-gray-200 rounded cursor-pointer hover:bg-green-200">
                   View all
