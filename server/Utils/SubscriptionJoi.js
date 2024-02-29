@@ -3,7 +3,6 @@ const Joi = require("joi");
 const donationJoi = Joi.object({
   email: Joi.string().email().required(),
   name: Joi.string().required(),
-  stripe_customer_id: Joi.string().required(),
   amount: Joi.number().required(),
   currency: Joi.string().required(),
   country: Joi.string().required(),

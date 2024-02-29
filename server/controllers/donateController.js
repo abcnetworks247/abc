@@ -70,6 +70,7 @@ const StripeCheckout = async (req, res) => {
   const user = req.user;
   let customer;
 
+
   try {
     if (!user) {
       throw new UnAuthorizedError(
@@ -116,7 +117,7 @@ const StripeCheckout = async (req, res) => {
       metadata: {
         userId: user._id,
       },
-      customer: user._id,
+      customer: customer.id,
       mode: "payment",
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
@@ -132,6 +133,9 @@ const StripeCheckout = async (req, res) => {
 };
 
 const stripeProductWebhook = async (req, res) => {
+
+  console.log("Stripe donate Webhook");
+
   const sig = req.headers["stripe-signature"];
 
   let event;
@@ -143,74 +147,26 @@ const stripeProductWebhook = async (req, res) => {
     return;
   }
 
-  // Check if the event type is "charge.succeeded" or "checkout.session.completed"
 
   // Handle the event
   switch (event.type) {
+
     case "checkout.session.async_payment_failed":
       const checkoutSessionAsyncPaymentFailed = event.data.object;
 
-      console.log(
-        "checkout.session.async_payment_failed",
-        checkoutSessionAsyncPaymentFailed
-      );
-      // Then define and call a function to handle the event checkout.session.async_payment_failed
-
-      let userEmail2 = checkoutSessionCompleted.customer_details.email;
-      const olduser2 = await Client.findOne({ userEmail2 });
-
-      const donationTime2 = new Date(); // Instantiate a new Date object for current time
-      const hours2 = donationTime.getHours();
-      const minutes2 = donationTime.getMinutes();
-      const seconds2 = donationTime.getSeconds();
-
-      // Format the time
-      const formattedTime2 = `${hours}:${minutes}:${seconds}`;
-
-      const currentDate2 = new Date(); // Instantiate a new Date object for current date
-      const year2 = currentDate2.getFullYear();
-      const month2 = String(currentDate2.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      const day2 = String(currentDate2.getDate()).padStart(2, "0");
-
-      // Format the date
-      const formattedDate2 = `${year2}-${month2}-${day2}`;
-
-      const data2 = {
-        email: olduser2.email,
-        name: olduser2.fullname,
-        amount: checkoutSessionAsyncPaymentFailed.amount_total / 100,
-        currency: checkoutSessionAsyncPaymentFailed.currency,
-        donation_Date: formattedDate2, // Current date
-        donation_Time: formattedTime2, // Current time
-        payment_status: checkoutSessionAsyncPaymentFailed.status,
-        payment_method_types:
-          checkoutSessionAsyncPaymentFailed.payment_method_details.type,
-        hosted_invoice_url: checkoutSessionAsyncPaymentFailed.receipt_url,
-        transaction_Id: checkoutSessionAsyncPaymentFailed.id,
-      };
-
-      const { error2, value2 } = DonationJoi.validate(data2);
-
-      if (error2) {
-        throw new ValidationError("Data recieved is invalid");
-      }
-
-      const newData2 = await DonateModel.create(value2);
-
-      olduser2.donationhistory.unshift(newData2.id);
-
-      await olduser.save();
-
       break;
 
-    case "charge.succeeded":
-      const checkoutSessionAsyncPaymentSucceeded = event.data.object;
+    
+    case "checkout.session.completed":
 
-      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
+      const checkoutSessionCompleted = event.data.object;
 
-      let userEmail =
-        checkoutSessionAsyncPaymentSucceeded.billing_details.email;
-      const olduser = await Client.findOne({ userEmail });
+      let email = checkoutSessionCompleted.customer_details.email;
+
+      try {
+
+        const olduser = await Client.findOne({email});
+
 
       const donationTime = new Date(); // Instantiate a new Date object for current time
       const hours = donationTime.getHours();
@@ -231,16 +187,15 @@ const stripeProductWebhook = async (req, res) => {
       const data = {
         email: olduser.email,
         name: olduser.fullname,
-        amount: checkoutSessionAsyncPaymentSucceeded.amount / 100,
-        currency: checkoutSessionAsyncPaymentSucceeded.currency,
+        amount: checkoutSessionCompleted.amount_total / 100,
+        currency: checkoutSessionCompleted.currency,
         donation_Date: formattedDate, // Current date
         donation_Time: formattedTime, // Current time
-        payment_status: checkoutSessionAsyncPaymentSucceeded.status,
-        payment_method_types:
-          checkoutSessionAsyncPaymentSucceeded.payment_method_details.type,
-        hosted_invoice_url: checkoutSessionAsyncPaymentSucceeded.receipt_url,
-        transaction_Id: checkoutSessionAsyncPaymentSucceeded.id,
+        payment_status: checkoutSessionCompleted.payment_status,
+        payment_method_types: checkoutSessionCompleted.payment_method_types[0],
+        transaction_Id: checkoutSessionCompleted.id,
       };
+
 
       const { error, value } = DonationJoi.validate(data);
 
@@ -250,64 +205,15 @@ const stripeProductWebhook = async (req, res) => {
 
       const newData = await DonateModel.create(value);
 
-      olduser.donationhistory.unshift(newData.id);
+      olduser.donationhistory.unshift(newData._id);
 
       await olduser.save();
 
-      break;
+      } catch (error) {
+       console.log("error", error); 
+      }
 
-    case "checkout.session.completed":
-      // const checkoutSessionCompleted = event.data.object;
-
-      // let userEmail = checkoutSessionCompleted.customer_details.email;
-      // const olduser = await Client.findOne({ userEmail });
-
-      // const donationTime = new Date(); // Instantiate a new Date object for current time
-      // const hours = donationTime.getHours();
-      // const minutes = donationTime.getMinutes();
-      // const seconds = donationTime.getSeconds();
-
-      // // Format the time
-      // const formattedTime = `${hours}:${minutes}:${seconds}`;
-
-      // const currentDate = new Date(); // Instantiate a new Date object for current date
-      // const year = currentDate.getFullYear();
-      // const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      // const day = String(currentDate.getDate()).padStart(2, "0");
-
-      // // Format the date
-      // const formattedDate = `${year}-${month}-${day}`;
-
-      // const data = {
-      //   email: olduser.email,
-      //   name: olduser.fullname,
-      //   amount: checkoutSessionCompleted.amount_total / 100,
-      //   currency: checkoutSessionCompleted.currency,
-      //   donation_Date: formattedDate, // Current date
-      //   donation_Time: formattedTime, // Current time
-      //   payment_status: checkoutSessionCompleted.payment_status,
-      //   payment_method_types: checkoutSessionCompleted.payment_method_types[0],
-      //   hosted_invoice_url: checkoutSessionCompleted.hosted_invoice_url,
-      //   transaction_Id: checkoutSessionCompleted.id,
-      // };
-
-      // console.log("checkoutSessionCompleted", checkoutSessionCompleted);
-      // console.log("data received", data);
-
-      // const { error, value } = DonationJoi.validate(data);
-
-      // if (error) {
-      //   throw new ValidationError("Data recieved is invalid");
-      // }
-
-      // const newData = await DonateModel.create(value);
-
-      // olduser.donationhistory.unshift(newData.id);
-
-      // await olduser.save();
-
-      // console.log("data" + newData);
-      break;
+    break;
 
     default:
       console.log(`Unhandled event type ${event.type}`);

@@ -3,6 +3,7 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 const ConnectDb = (server) => {
+  mongoose.set('strictQuery', false);
   mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
