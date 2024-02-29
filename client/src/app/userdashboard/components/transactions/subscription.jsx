@@ -364,7 +364,7 @@ const SubscriptionHistory = () => {
   }, []);
   return (
     <div className=" h-full bg-white flex  items-center justify-center pb-10">
-      { subscriptionData.length < 1 ?
+      { subscriptionData.length === 1 ?
       (
         <div className="flex items-center justify-center h-[80vh] w-full">
           <div className="flex flex-col items-center">

@@ -364,7 +364,7 @@ const DonationHistory = () => {
   }, []);
   return (
     <div className=" h-full bg-white flex  items-center justify-center pb-10">
-      { donationData.length < 1 ?
+      { donationData.length === 1 ?
       (
         <Empty name={"donation"} />
       ) : (

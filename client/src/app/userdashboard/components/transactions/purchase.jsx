@@ -364,7 +364,7 @@ const PurchaseHistory = () => {
   }, []);
   return (
     <div className=" h-full bg-white flex  items-center justify-center pb-10">
-      {purchaseData.length < 1 ? (
+      {purchaseData.length === 1 ? (
         <Empty name="purchase" />
       ) : (
         <div className="w-full max-w-4xl ">
