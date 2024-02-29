@@ -1,27 +1,27 @@
-const { StatusCodes } = require("http-status-codes");
-const Product = require("../models/productsSchema");
-const coinbase = require("coinbase-commerce-node");
-const Client = require("../models/clientAuthSchema");
-const DonateModel = require("../models/donationSchema");
-const DonationJoi = require("../Utils/DonationJoiSchema");
-const rawBody = require("raw-body");
+const { StatusCodes } = require('http-status-codes');
+const Product = require('../models/productsSchema');
+const coinbase = require('coinbase-commerce-node');
+const Client = require('../models/clientAuthSchema');
+const DonateModel = require('../models/donationSchema');
+const DonationJoi = require('../Utils/DonationJoiSchema');
+const rawBody = require('raw-body');
 var Webhook = coinbase.Webhook;
-const dotenv = require("dotenv").config();
+const dotenv = require('dotenv').config();
 
 const CoinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
 
-const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
-const ProductJoi = require("../Utils/ProductJoiSchema");
+const ProductJoi = require('../Utils/ProductJoiSchema');
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require("../errors/index");
+} = require('../errors/index');
 
 const localurl = process.env.CLIENT_URL;
 const stripeWebhookSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
@@ -37,7 +37,7 @@ const getAllDonation = async (req, res) => {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -52,7 +52,7 @@ const getSingleDonation = async (req, res) => {
     if (!product) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Product not found" });
+        .json({ error: 'Product not found' });
     }
 
     res.status(StatusCodes.OK).json(product);
@@ -60,7 +60,7 @@ const getSingleDonation = async (req, res) => {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -70,11 +70,10 @@ const StripeCheckout = async (req, res) => {
   const user = req.user;
   let customer;
 
-
   try {
     if (!user) {
       throw new UnAuthorizedError(
-        "User must be logged in to purchase a product"
+        'User must be logged in to purchase a product'
       );
     }
 
@@ -104,7 +103,7 @@ const StripeCheckout = async (req, res) => {
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: 'usd',
             product_data: {
               name: data.name,
             },
@@ -118,25 +117,24 @@ const StripeCheckout = async (req, res) => {
         userId: user._id,
       },
       customer: customer.id,
-      mode: "payment",
+      mode: 'payment',
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
     });
 
     res.status(StatusCodes.OK).send({ url: session.url });
   } catch (error) {
-    console.error("Error in StripeCheckout:", error);
+    console.error('Error in StripeCheckout:', error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send({ error: "Internal server error" });
+      .send({ error: 'Internal server error' });
   }
 };
 
 const stripeProductWebhook = async (req, res) => {
+  console.log('Stripe donate Webhook');
 
-  console.log("Stripe donate Webhook");
-
-  const sig = req.headers["stripe-signature"];
+  const sig = req.headers['stripe-signature'];
 
   let event;
 
@@ -147,73 +145,66 @@ const stripeProductWebhook = async (req, res) => {
     return;
   }
 
-
   // Handle the event
   switch (event.type) {
-
-    case "checkout.session.async_payment_failed":
+    case 'checkout.session.async_payment_failed':
       const checkoutSessionAsyncPaymentFailed = event.data.object;
 
       break;
 
-    
-    case "checkout.session.completed":
-
+    case 'checkout.session.completed':
       const checkoutSessionCompleted = event.data.object;
 
       let email = checkoutSessionCompleted.customer_details.email;
 
       try {
+        const olduser = await Client.findOne({ email });
 
-        const olduser = await Client.findOne({email});
+        const donationTime = new Date(); // Instantiate a new Date object for current time
+        const hours = donationTime.getHours();
+        const minutes = donationTime.getMinutes();
+        const seconds = donationTime.getSeconds();
 
+        // Format the time
+        const formattedTime = `${hours}:${minutes}:${seconds}`;
 
-      const donationTime = new Date(); // Instantiate a new Date object for current time
-      const hours = donationTime.getHours();
-      const minutes = donationTime.getMinutes();
-      const seconds = donationTime.getSeconds();
+        const currentDate = new Date(); // Instantiate a new Date object for current date
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(currentDate.getDate()).padStart(2, '0');
 
-      // Format the time
-      const formattedTime = `${hours}:${minutes}:${seconds}`;
+        // Format the date
+        const formattedDate = `${year}-${month}-${day}`;
 
-      const currentDate = new Date(); // Instantiate a new Date object for current date
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      const day = String(currentDate.getDate()).padStart(2, "0");
+        const data = {
+          email: olduser.email,
+          name: olduser.fullname,
+          amount: checkoutSessionCompleted.amount_total / 100,
+          currency: checkoutSessionCompleted.currency,
+          donation_Date: formattedDate, // Current date
+          donation_Time: formattedTime, // Current time
+          payment_status: checkoutSessionCompleted.payment_status,
+          payment_method_types:
+            checkoutSessionCompleted.payment_method_types[0],
+          transaction_Id: checkoutSessionCompleted.id,
+        };
 
-      // Format the date
-      const formattedDate = `${year}-${month}-${day}`;
+        const { error, value } = DonationJoi.validate(data);
 
-      const data = {
-        email: olduser.email,
-        name: olduser.fullname,
-        amount: checkoutSessionCompleted.amount_total / 100,
-        currency: checkoutSessionCompleted.currency,
-        donation_Date: formattedDate, // Current date
-        donation_Time: formattedTime, // Current time
-        payment_status: checkoutSessionCompleted.payment_status,
-        payment_method_types: checkoutSessionCompleted.payment_method_types[0],
-        transaction_Id: checkoutSessionCompleted.id,
-      };
+        if (error) {
+          throw new ValidationError('Data recieved is invalid');
+        }
 
+        const newData = await DonateModel.create(value);
 
-      const { error, value } = DonationJoi.validate(data);
+        olduser.donationhistory.unshift(newData._id);
 
-      if (error) {
-        throw new ValidationError("Data recieved is invalid");
-      }
-
-      const newData = await DonateModel.create(value);
-
-      olduser.donationhistory.unshift(newData._id);
-
-      await olduser.save();
-
+        await olduser.save();
       } catch (error) {
-       console.log("error", error); 
+        console.log('error', error);
       }
 
-    break;
+      break;
 
     default:
       console.log(`Unhandled event type ${event.type}`);

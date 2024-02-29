@@ -348,10 +348,11 @@ const StripeCheckout = async (req, res) => {
       line_items: lineItems,
       customer: customer.id,
       mode: 'payment',
+      // cart: JSON.stringify(lineItems),
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
       metadata: {
-        cart: JSON.stringify(lineItems), // Include product information in metadata
+        // Include product information in metadata
         description: note,
       },
     });
@@ -365,150 +366,139 @@ const StripeCheckout = async (req, res) => {
   }
 };
 
-// const stripeProductWebhook = async (req, res) => {
-//   const sig = req.headers['stripe-signature'];
+const stripeProductWebhook = async (req, res) => {
+  const sig = req.headers['stripe-signature'];
 
-//   let event;
+  let event;
 
-//   try {
-//     event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
-//   } catch (err) {
-//     res.status(400).send(`Webhook Error: ${err.message}`);
-//     return;
-//   }
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
+  } catch (err) {
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
 
-//   console.log('new');
-//   // Handle the event
-//   switch (event.type) {
-//     case 'checkout.session.async_payment_failed':
-//       const checkoutSessionAsyncPaymentFailed = event.data.object;
-//       // Then define and call a function to handle the event checkout.session.async_payment_failed
-//       console.log('payment failed', checkoutSessionAsyncPaymentFailed);
-//       break;
-//     case 'checkout.session.async_payment_succeeded':
-//       const checkoutSessionAsyncPaymentSucceeded = event.data.object;
-//       // Then define and call a function to handle the event checkout.session.async_payment_succeeded
-//       console.log('Checkout successful', checkoutSessionAsyncPaymentSucceeded);
-//       break;
-//     case 'checkout.session.completed':
-//       const checkoutSessionCompleted = event.data.object;
+  console.log('new');
+  // Handle the event
+  switch (event.type) {
+    case 'checkout.session.async_payment_failed':
+      const checkoutSessionAsyncPaymentFailed = event.data.object;
+      // Then define and call a function to handle the event checkout.session.async_payment_failed
+      console.log('payment failed', checkoutSessionAsyncPaymentFailed);
+      break;
+    case 'checkout.session.async_payment_succeeded':
+      const checkoutSessionAsyncPaymentSucceeded = event.data.object;
+      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
+      console.log('Checkout successful', checkoutSessionAsyncPaymentSucceeded);
+      break;
 
-//       let email = checkoutSessionCompleted.customer_details.email;
+    case 'checkout.session.completed':
+      const checkoutSessionCompleted = event.data.object;
+      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
 
-//       const olduser = await Client.findOne({ email });
+      let email = checkoutSessionCompleted.customer_details.email;
 
-//       const donationTime = new Date(); // Instantiate a new Date object for current time
-//       const hours = donationTime.getHours();
-//       const minutes = donationTime.getMinutes();
-//       const seconds = donationTime.getSeconds();
+      const olduser = await Client.findOne({ email });
 
-//       // Format the time
-//       const formattedTime = `${hours}:${minutes}:${seconds}`;
+      const donationTime = new Date(); // Instantiate a new Date object for current time
+      const hours = donationTime.getHours();
+      const minutes = donationTime.getMinutes();
+      const seconds = donationTime.getSeconds();
 
-//       const currentDate = new Date(); // Instantiate a new Date object for current date
-//       const year = currentDate.getFullYear();
-//       const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-//       const day = String(currentDate.getDate()).padStart(2, '0');
+      // Format the time
+      const formattedTime = `${hours}:${minutes}:${seconds}`;
 
-//       // Format the date
-//       const formattedDate = `${year}-${month}-${day}`;
+      const currentDate = new Date(); // Instantiate a new Date object for current date
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const day = String(currentDate.getDate()).padStart(2, '0');
 
-//       let cartData = JSON.parse(checkoutSessionCompleted.metadata.cart);
-//       let cartdesc = checkoutSessionCompleted.metadata.description;
+      // Format the date
+      const formattedDate = `${year}-${month}-${day}`;
 
-//       const items = cartData.map((item) => ({
-//         product: item.price_data.product_data.name,
-//         price: item.price_data.product_data.name,
-//         thumbnail: item.price_data.product_data.images[0],
-//         quantity: item.quantity,
-//       }));
+      let cartdesc = checkoutSessionCompleted.metadata.description;
 
-//       const data = {
-//         email: olduser.email,
-//         name: olduser.fullname,
-//         amount: checkoutSessionCompleted.amount_total / 100,
-//         currency: checkoutSessionCompleted.currency,
-//         payment_Date: formattedDate, // Current date
-//         payment_Time: formattedTime, // Current time
-//         cart: items,
-//         note: cartdesc,
-//         payment_status: checkoutSessionCompleted.payment_status,
-//         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
-//         transaction_Id: checkoutSessionCompleted.id,
-//         phone: olduser.phone,
-//         address: checkoutSessionCompleted.customer_details.address.line1,
-//         city: checkoutSessionCompleted.customer_details.address.city,
-//         postal_code:
-//           checkoutSessionCompleted.customer_details.address.postal_code,
-//         state: checkoutSessionCompleted.customer_details.address.state,
-//         country: checkoutSessionCompleted.customer_details.address.country,
-//       };
+      const data = {
+        email: olduser.email,
+        name: olduser.fullname,
+        amount: checkoutSessionCompleted.amount_total / 100,
+        currency: checkoutSessionCompleted.currency,
+        payment_Date: formattedDate, // Current date
+        payment_Time: formattedTime, // Current time
+        cart: olduser.cart,
+        note: cartdesc,
+        payment_status: checkoutSessionCompleted.payment_status,
+        payment_method_types: checkoutSessionCompleted.payment_method_types[0],
+        transaction_Id: checkoutSessionCompleted.id,
+        phone: olduser.phone,
+        address: checkoutSessionCompleted.customer_details.address.line1,
+        city: checkoutSessionCompleted.customer_details.address.city,
+        postal_code:
+          checkoutSessionCompleted.customer_details.address.postal_code,
+        state: checkoutSessionCompleted.customer_details.address.state,
+        country: checkoutSessionCompleted.customer_details.address.country,
+      };
 
-//       const data2 = {
-//         email: olduser.email,
-//         name: olduser.fullname,
-//         amount: checkoutSessionCompleted.amount_total / 100,
-//         currency: checkoutSessionCompleted.currency,
-//         payment_Date: formattedDate, // Current date
-//         payment_Time: formattedTime, // Current time
-//         cart: items,
-//         note: cartdesc,
-//         delivery_Status: 'pending',
-//         payment_status: checkoutSessionCompleted.payment_status,
-//         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
-//         transaction_Id: checkoutSessionCompleted.id,
-//         phone: olduser.phone,
-//         address: checkoutSessionCompleted.customer_details.address.line1,
-//         city: checkoutSessionCompleted.customer_details.address.city,
-//         postal_code:
-//           checkoutSessionCompleted.customer_details.address.postal_code,
-//         state: checkoutSessionCompleted.customer_details.address.state,
-//         country: checkoutSessionCompleted.customer_details.address.country,
-//       };
+      const data2 = {
+        email: olduser.email,
+        name: olduser.fullname,
+        amount: checkoutSessionCompleted.amount_total / 100,
+        currency: checkoutSessionCompleted.currency,
+        payment_Date: formattedDate, // Current date
+        payment_Time: formattedTime, // Current time
+        cart: olduser.cart,
+        note: cartdesc,
+        delivery_Status: 'pending',
+        payment_status: checkoutSessionCompleted.payment_status,
+        payment_method_types: checkoutSessionCompleted.payment_method_types[0],
+        transaction_Id: checkoutSessionCompleted.id,
+        phone: olduser.phone,
+        address: checkoutSessionCompleted.customer_details.address.line1,
+        city: checkoutSessionCompleted.customer_details.address.city,
+        postal_code:
+          checkoutSessionCompleted.customer_details.address.postal_code,
+        state: checkoutSessionCompleted.customer_details.address.state,
+        country: checkoutSessionCompleted.customer_details.address.country,
+      };
 
-//       // const { error, value } = PurchaseHistoryJoi.validate(data);
-//       // const { error1, value1 } = OrderHistoryJoi.validate(data2);
+      // const { error, value } = PurchaseHistoryJoi.validate(data);
+      // const { error1, value1 } = OrderHistoryJoi.validate(data2);
 
-//       // if (error) {
-//       //   throw new ValidationError("Data recieved is invalid");
-//       // }
+      // if (error) {
+      //   throw new ValidationError("Data recieved is invalid");
+      // }
 
-//       // if (error1) {
-//       //   throw new ValidationError("Data recieved is invalid");
-//       // }
+      // if (error1) {
+      //   throw new ValidationError("Data recieved is invalid");
+      // }
 
-//       const newData = await PurchaseHistoryModel.create(data);
-//       const newData1 = await OrderHistoryModel.create(data2);
+      const newData = await PurchaseHistoryModel.create(data);
+      const newData1 = await OrderHistoryModel.create(data2);
 
-//       olduser.productpurchasehistory.unshift(newData);
-//       olduser.orderhistory.unshift(newData1);
-//       olduser.cart = [];
 
-//       await olduser.save();
+        await Client.findByIdAndUpdate(olduser._id, {
+          $push: {
+            productpurchasehistory: newData._id,
+            orderhistory: newData1._id,
+          },
+          $set: {
+            cart: [], // Set cart to an empty array
+          },
+        });
 
-//       // await Client.findOneAndUpdate(
-//       //   { email: userEmail },
-//       //   {
-//       //     $push: {
-//       //       productpurchasehistory: newData._id,
-//       //       orderhistory: newData1._id,
-//       //     },
-//       //     $set: {
-//       //       cart: [], // Set cart to an empty array
-//       //     },
-//       //   },
-//       //   { new: true } // To return the updated document
-//       // );
+      console.log('Checkout successful true');
 
-//       break;
+      break;
 
-//     default:
-//       console.log(`Unhandled event type ${event.type}`);
-//   }
+ 
 
-//   // Return a 200 response to acknowledge receipt of the event
-//   res.send().end();
-// };
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  res.send().end();
+};
 
 // const Crypto = async (req, res) => {
 //   const { product } = req.body;
@@ -576,10 +566,6 @@ const StripeCheckout = async (req, res) => {
 //     console.log(error);
 //   }
 // };
-
-const stripeProductWebhook = () => {
-
-}
 
 const Crypto = (req, res) => {};
 
