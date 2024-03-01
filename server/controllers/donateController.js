@@ -10,6 +10,8 @@ const rawBody = require('raw-body');
 var Webhook = coinbase.Webhook;
 const dotenv = require('dotenv').config();
 
+const fs = require("fs");
+const ejs = require("ejs");
 const CoinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
 const adminUrl = process.env.ADMIN_URL;
@@ -221,6 +223,8 @@ const stripeProductWebhook = async (req, res) => {
           subject: "Thanks for your donation",
           html: renderHtml,
         });
+
+        //new data added to the controller
 
       } catch (error) {
         console.log('error', error);
