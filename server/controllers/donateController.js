@@ -4,12 +4,16 @@ const coinbase = require('coinbase-commerce-node');
 const Client = require('../models/clientAuthSchema');
 const DonateModel = require('../models/donationSchema');
 const DonationJoi = require('../Utils/DonationJoiSchema');
+const sendMail = require("../Utils/sendMail");
 const rawBody = require('raw-body');
 var Webhook = coinbase.Webhook;
 const dotenv = require('dotenv').config();
 
 const CoinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
+const adminUrl = process.env.ADMIN_URL;
+const serverUrl = process.env.SERVER_URL;
+const clientUrl = process.env.CLIENT_URL;
 
 const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 
@@ -135,7 +139,7 @@ const stripeProductWebhook = async (req, res) => {
   console.log('Stripe donate Webhook');
 
   const sig = req.headers['stripe-signature'];
-
+  const templatePath = path.join(__dirname, "../views/donationView.ejs");
   let event;
 
   try {
@@ -200,6 +204,23 @@ const stripeProductWebhook = async (req, res) => {
         olduser.donationhistory.unshift(newData._id);
 
         await olduser.save();
+
+        const renderHtml = await ejs.renderFile(
+          templatePath,
+          {
+            userFullname: olduser.fullname,
+            userEmail: olduser.email,
+            donation_data: data,
+          },
+          { async: true }
+        );
+    
+        await sendMail({
+          email: olduser.email,
+          subject: "Thanks for your donation",
+          html: renderHtml,
+        });
+
       } catch (error) {
         console.log('error', error);
       }

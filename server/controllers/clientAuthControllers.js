@@ -150,13 +150,12 @@ const userRecovery = async (req, res) => {
         userEmail: userexist.email,
         userRecoveryUrl: passwordUpdateUrl,
       },
-
       { async: true }
     );
 
     await sendMail({
       email: userexist.email,
-      subject: "ABCSTUDIO Password Recovery",
+      subject: "Password Recovery",
       html: renderHtml,
     });
 
