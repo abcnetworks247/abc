@@ -110,7 +110,7 @@ app.use((err, req, res, next) => {
     console.log("error");
     res.status(400).send("Multer error: " + err.message);
   } else {
-    // Handle other errors
+    // Handle other errors new
     console.log("next");
     next(err);
   }
