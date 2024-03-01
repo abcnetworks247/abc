@@ -5,6 +5,7 @@ const Client = require('../models/clientAuthSchema');
 const DonateModel = require('../models/donationSchema');
 const DonationJoi = require('../Utils/DonationJoiSchema');
 const sendMail = require("../Utils/sendMail");
+const path = require("path");
 const rawBody = require('raw-body');
 var Webhook = coinbase.Webhook;
 const dotenv = require('dotenv').config();
