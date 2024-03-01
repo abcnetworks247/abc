@@ -159,25 +159,25 @@ function page() {
                         className="object-cover object-top w-full h-48 rounded-lg rounded-b-none"
                       ></Image>
                     </div>
-                    <div className="flex items-center justify-between px-4 py-2 overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-6 overflow-hidden">
                       <span className="text-xs font-medium text-blue-600 uppercase text-ellipsis">
                         {item.category}
                       </span>
                       <div className="flex flex-row items-center"></div>
                     </div>
                     <hr className="border-gray-300" />
-                    <div className="flex flex-wrap items-center flex-1 px-4 py-1 mx-auto text-center">
+                    <div className="flex flex-wrap items-start flex-1 px-4 py-1 mx-auto text-start">
                       <Link
                         href={`${pathUrl}/${item._id}`}
                         className="hover:underline"
                       >
-                        <h2 className="text-lg font-bold tracking-normal text-left text-gray-800">
+                        <h2 className="text-lg font-bold tracking-normal text-left text-gray-800 line-clamp-1">
                           {item.title}
                         </h2>
                       </Link>
                     </div>
                     <hr className="border-gray-300" />
-                    <p className="flex flex-row flex-wrap w-full px-4 py-2 overflow-hidden text-sm text-justify text-gray-700">
+                    <p className="flex flex-row flex-wrap h-full w-full px-4 py-2 overflow-hidden text-sm text-justify text-gray-700">
                       {item.shortdescription}
                     </p>
                     <hr className="border-gray-300" />
