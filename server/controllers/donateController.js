@@ -4,14 +4,14 @@ const coinbase = require('coinbase-commerce-node');
 const Client = require('../models/clientAuthSchema');
 const DonateModel = require('../models/donationSchema');
 const DonationJoi = require('../Utils/DonationJoiSchema');
-const sendMail = require("../Utils/sendMail");
-const path = require("path");
+const sendMail = require('../Utils/sendMail');
+const path = require('path');
 const rawBody = require('raw-body');
 var Webhook = coinbase.Webhook;
 const dotenv = require('dotenv').config();
 
-const fs = require("fs");
-const ejs = require("ejs");
+const fs = require('fs');
+const ejs = require('ejs');
 const CoinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
 const adminUrl = process.env.ADMIN_URL;
@@ -29,6 +29,7 @@ const {
   UnAuthorizedError,
   ValidationError,
 } = require('../errors/index');
+const { log } = require('console');
 
 const localurl = process.env.CLIENT_URL;
 const stripeWebhookSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
@@ -142,7 +143,8 @@ const stripeProductWebhook = async (req, res) => {
   console.log('Stripe donate Webhook');
 
   const sig = req.headers['stripe-signature'];
-  const templatePath = path.join(__dirname, "../views/donationView.ejs");
+  const templatePath = path.join(__dirname, '../views/donationView.ejs');
+
   let event;
 
   try {
@@ -213,19 +215,20 @@ const stripeProductWebhook = async (req, res) => {
           {
             userFullname: olduser.fullname,
             userEmail: olduser.email,
-            donation_data: data,
+            // donation_data: data,
           },
           { async: true }
         );
-    
+
         await sendMail({
           email: olduser.email,
-          subject: "Thanks for your donation",
+          subject: 'Thank you for your donation',
           html: renderHtml,
         });
 
-        //new data added to the controller
+        console.log("sent successfully");
 
+        //new data added to the controller
       } catch (error) {
         console.log('error', error);
       }

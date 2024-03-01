@@ -418,6 +418,10 @@ const stripeProductWebhook = async (req, res) => {
 
       let cartdesc = checkoutSessionCompleted.metadata.description;
 
+      const populatedCart = await Client.populate(user, {
+        path: 'olduser.cart.product',
+      });
+
       const data = {
         email: olduser.email,
         name: olduser.fullname,
@@ -425,7 +429,7 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: olduser.cart,
+        cart: populatedCart,
         note: cartdesc,
         payment_status: checkoutSessionCompleted.payment_status,
         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
@@ -446,7 +450,7 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: olduser.cart,
+        cart: populatedCart,
         note: cartdesc,
         delivery_Status: 'pending',
         payment_status: checkoutSessionCompleted.payment_status,
@@ -475,22 +479,19 @@ const stripeProductWebhook = async (req, res) => {
       const newData = await PurchaseHistoryModel.create(data);
       const newData1 = await OrderHistoryModel.create(data2);
 
-
-        await Client.findByIdAndUpdate(olduser._id, {
-          $push: {
-            productpurchasehistory: newData._id,
-            orderhistory: newData1._id,
-          },
-          $set: {
-            cart: [], // Set cart to an empty array
-          },
-        });
+      await Client.findByIdAndUpdate(olduser._id, {
+        $push: {
+          productpurchasehistory: newData._id,
+          orderhistory: newData1._id,
+        },
+        $set: {
+          cart: [], // Set cart to an empty array
+        },
+      });
 
       console.log('Checkout successful true');
 
       break;
-
- 
 
     default:
       console.log(`Unhandled event type ${event.type}`);
