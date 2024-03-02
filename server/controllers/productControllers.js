@@ -487,7 +487,7 @@ const stripeProductWebhook = async (req, res) => {
           orderhistory: newData1._id,
         },
         $set: {
-          cart: [], // Set cart to an empty array
+          cart: [], 
         },
       });
 
