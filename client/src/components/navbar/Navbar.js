@@ -147,7 +147,7 @@ export default function Navbar() {
             Contact
           </Link>
           <Link
-            href="/contact mr-5"
+            href="/live"
             className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}

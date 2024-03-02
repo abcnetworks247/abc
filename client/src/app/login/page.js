@@ -160,7 +160,7 @@ function Page() {
         pauseOnHover
         theme="light"
       />
-      <div className="flex justify-center flex-1 h-screen max-w-screen-xl sm:rounded-lg">
+      <div className="flex justify-center flex-1 h-screen max-w-full sm:rounded-lg">
         <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
           <div className="w-[100%] flex flex-col items-center">
             <div className="text-center">
@@ -337,7 +337,7 @@ function Page() {
             </div>
           </div>
         </div>
-        <div className="flex-1 bg-gradient-to-t from-[#00045E] via-[#9D3615] to-[#00045E] w-fit h-screen text-center hidden md:flex">
+        <div className="flex-1 bg-gradient-to-t from-[#00045E] via-[#9D3615] to-[#00045E] w-full h-screen text-center hidden md:flex">
           <div
             className="w-full h-screen bg-center bg-no-repeat bg-contain "
             style={{

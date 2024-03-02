@@ -1,28 +1,28 @@
-const { StatusCodes } = require("http-status-codes");
-const Product = require("../models/productsSchema");
-const coinbase = require("coinbase-commerce-node");
-const PurchaseHistoryModel = require("../models/purchaseSchema");
-const OrderHistoryModel = require("../models/orderHistorySchema");
-const PurchaseHistoryJoi = require("../Utils/PurchaseHistoryJoi");
-const OrderHistoryJoi = require("../Utils/OrderHistoryJoi");
+const { StatusCodes } = require('http-status-codes');
+const Product = require('../models/productsSchema');
+const coinbase = require('coinbase-commerce-node');
+const PurchaseHistoryModel = require('../models/purchaseSchema');
+const OrderHistoryModel = require('../models/orderHistorySchema');
+const PurchaseHistoryJoi = require('../Utils/PurchaseHistoryJoi');
+const OrderHistoryJoi = require('../Utils/OrderHistoryJoi');
 var Webhook = coinbase.Webhook;
-const dotenv = require("dotenv").config();
+const dotenv = require('dotenv').config();
 
-const Client = require("../models/clientAuthSchema");
+const Client = require('../models/clientAuthSchema');
 const coinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
 
-const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
-const ProductJoi = require("../Utils/ProductJoiSchema");
+const ProductJoi = require('../Utils/ProductJoiSchema');
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require("../errors/index");
+} = require('../errors/index');
 
 const localurl = process.env.CLIENT_URL;
 
@@ -32,12 +32,12 @@ const createProduct = async (req, res) => {
     // Assuming you have middleware to authenticate and authorize users
 
     if (!req.user) {
-      throw new UnAuthorizedError("You must be logged in to access this page");
+      throw new UnAuthorizedError('You must be logged in to access this page');
     }
 
-    if (!["superadmin", "admin"].includes(req.user.role)) {
+    if (!['superadmin', 'admin'].includes(req.user.role)) {
       throw new UnAuthorizedError(
-        "Only super admins or admins can access this page"
+        'Only super admins or admins can access this page'
       );
     }
 
@@ -75,25 +75,25 @@ const createProduct = async (req, res) => {
       weight,
     };
 
-    console.log("Title:", title);
-    console.log("Description:", description);
-    console.log("Price:", price);
-    console.log("Discount Percentage:", discountPercentage);
-    console.log("Rating:", rating);
-    console.log("Stock:", stock);
-    console.log("Brand:", brand);
-    console.log("Category:", category);
-    console.log("Thumbnail:", thumbnail);
-    console.log("Images:", images);
-    console.log("Color:", color);
-    console.log("Warranty:", warranty);
-    console.log("Weight:", weight);
+    console.log('Title:', title);
+    console.log('Description:', description);
+    console.log('Price:', price);
+    console.log('Discount Percentage:', discountPercentage);
+    console.log('Rating:', rating);
+    console.log('Stock:', stock);
+    console.log('Brand:', brand);
+    console.log('Category:', category);
+    console.log('Thumbnail:', thumbnail);
+    console.log('Images:', images);
+    console.log('Color:', color);
+    console.log('Warranty:', warranty);
+    console.log('Weight:', weight);
 
     // Validate the request body against the Joi schema
     const { error, value } = ProductJoi.validate(productData);
 
     if (error) {
-      throw new ValidationError("Invalid data received");
+      throw new ValidationError('Invalid data received');
     }
 
     // Save the product to the database
@@ -101,12 +101,12 @@ const createProduct = async (req, res) => {
 
     res
       .status(StatusCodes.CREATED)
-      .json({ message: "Product created successfully" });
+      .json({ message: 'Product created successfully' });
   } catch (error) {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -121,7 +121,7 @@ const getAllProducts = async (req, res) => {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -131,11 +131,11 @@ const updateProduct = async (req, res) => {
     // Assuming you have middleware to authenticate and authorize users
     if (
       !req.user ||
-      (req.user.role !== "superadmin" && req.user.role !== "admin")
+      (req.user.role !== 'superadmin' && req.user.role !== 'admin')
     ) {
       return res
         .status(403)
-        .json({ error: "Unauthorized: Only admins can update products" });
+        .json({ error: 'Unauthorized: Only admins can update products' });
     }
 
     // Extract product data from the request body
@@ -161,7 +161,7 @@ const updateProduct = async (req, res) => {
     if (!existingProduct) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Product not found" });
+        .json({ error: 'Product not found' });
     }
 
     // Construct an object with the extracted data
@@ -185,11 +185,11 @@ const updateProduct = async (req, res) => {
     const { error, value } = ProductJoi.validate(productData);
 
     if (error) {
-      console.log("");
-      throw new ValidationError("Invalid data received");
+      console.log('');
+      throw new ValidationError('Invalid data received');
     }
 
-    console.log("value", value);
+    console.log('value', value);
 
     // Find the existing product by ID
 
@@ -203,7 +203,7 @@ const updateProduct = async (req, res) => {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -214,12 +214,12 @@ const deleteProduct = async (req, res) => {
     const user = req.user;
 
     if (!user) {
-      throw new UnAuthorizedError("You must be logged in to access this page.");
+      throw new UnAuthorizedError('You must be logged in to access this page.');
     }
 
-    if (!["superadmin", "admin"].includes(user.role)) {
+    if (!['superadmin', 'admin'].includes(user.role)) {
       throw new UnAuthorizedError(
-        "You are not authorized to access this page."
+        'You are not authorized to access this page.'
       );
     }
 
@@ -231,7 +231,7 @@ const deleteProduct = async (req, res) => {
     if (!existingProduct) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Product not found" });
+        .json({ error: 'Product not found' });
     }
 
     // Remove the product from the database
@@ -239,12 +239,12 @@ const deleteProduct = async (req, res) => {
 
     res
       .status(StatusCodes.NO_CONTENT)
-      .json({ message: "Product deleted successfully" });
+      .json({ message: 'Product deleted successfully' });
   } catch (error) {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -259,7 +259,7 @@ const getSingleProduct = async (req, res) => {
     if (!product) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Product not found" });
+        .json({ error: 'Product not found' });
     }
 
     res.status(StatusCodes.OK).json(product);
@@ -267,7 +267,7 @@ const getSingleProduct = async (req, res) => {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -283,14 +283,13 @@ const StripeCheckout = async (req, res) => {
     note,
   } = req.body;
 
-
   const user = req.user;
   let customer;
 
   try {
     if (!user) {
       throw new UnAuthorizedError(
-        "User must be logged in to purchase a product"
+        'User must be logged in to purchase a product'
       );
     }
 
@@ -335,7 +334,7 @@ const StripeCheckout = async (req, res) => {
 
     const lineItems = product.map((product) => ({
       price_data: {
-        currency: "usd",
+        currency: 'usd',
         product_data: {
           name: product.product.title,
           images: [product.product.thumbnail],
@@ -348,28 +347,27 @@ const StripeCheckout = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       customer: customer.id,
-      mode: "payment",
+      mode: 'payment',
+      // cart: JSON.stringify(lineItems),
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
       metadata: {
-        cart: JSON.stringify(lineItems), // Include product information in metadata
+        // Include product information in metadata
         description: note,
       },
     });
 
     res.status(StatusCodes.OK).send({ url: session.url });
   } catch (error) {
-    console.error("Error in StripeCheckout:", error);
+    console.error('Error in StripeCheckout:', error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send({ error: "Internal server error" });
+      .send({ error: 'Internal server error' });
   }
 };
 
 const stripeProductWebhook = async (req, res) => {
-  console.log("hit donate webhook");
-
-  const sig = req.headers["stripe-signature"];
+  const sig = req.headers['stripe-signature'];
 
   let event;
 
@@ -380,35 +378,27 @@ const stripeProductWebhook = async (req, res) => {
     return;
   }
 
-  console.log("new");
+  console.log('new');
   // Handle the event
   switch (event.type) {
-    case "charge.succeeded":
-      const chargesucceeded = event.data.object;
-      // console.log("payment received", chargesucceeded);
-
-      break;
-
-    case "checkout.session.async_payment_failed":
+    case 'checkout.session.async_payment_failed':
       const checkoutSessionAsyncPaymentFailed = event.data.object;
       // Then define and call a function to handle the event checkout.session.async_payment_failed
-      console.log("payment failed", checkoutSessionAsyncPaymentFailed);
+      console.log('payment failed', checkoutSessionAsyncPaymentFailed);
       break;
-    case "checkout.session.async_payment_succeeded":
+    case 'checkout.session.async_payment_succeeded':
       const checkoutSessionAsyncPaymentSucceeded = event.data.object;
       // Then define and call a function to handle the event checkout.session.async_payment_succeeded
-      console.log("Checkout successful", checkoutSessionAsyncPaymentSucceeded);
+      console.log('Checkout successful', checkoutSessionAsyncPaymentSucceeded);
       break;
-    case "checkout.session.completed":
+
+    case 'checkout.session.completed':
       const checkoutSessionCompleted = event.data.object;
-      // Then define and call a function to handle the event checkout.session.completed
+      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
 
-      let userEmail = checkoutSessionCompleted.customer_details.email;
+      let email = checkoutSessionCompleted.customer_details.email;
 
-      console.log("useremail", userEmail);
-      const olduser = await Client.findOne({ userEmail });
-
-      console.log("userdata", olduser);
+      const olduser = await Client.findOne({ email });
 
       const donationTime = new Date(); // Instantiate a new Date object for current time
       const hours = donationTime.getHours();
@@ -420,21 +410,17 @@ const stripeProductWebhook = async (req, res) => {
 
       const currentDate = new Date(); // Instantiate a new Date object for current date
       const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      const day = String(currentDate.getDate()).padStart(2, "0");
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const day = String(currentDate.getDate()).padStart(2, '0');
 
       // Format the date
       const formattedDate = `${year}-${month}-${day}`;
 
-      let cartData = JSON.parse(checkoutSessionCompleted.metadata.cart);
       let cartdesc = checkoutSessionCompleted.metadata.description;
 
-      const items = cartData.map((item) => ({
-        product: item.price_data.product_data.name,
-        price: item.price_data.product_data.name,
-        thumbnail: item.price_data.product_data.images[0],
-        quantity: item.quantity,
-      }));
+      const populatedCart = await Client.populate(olduser.cart, {
+        path: 'product',
+      });
 
       const data = {
         email: olduser.email,
@@ -443,7 +429,7 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: items,
+        cart: populatedCart,
         note: cartdesc,
         payment_status: checkoutSessionCompleted.payment_status,
         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
@@ -464,9 +450,9 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: items,
+        cart: populatedCart,
         note: cartdesc,
-        delivery_Status: "pending",
+        delivery_Status: 'pending',
         payment_status: checkoutSessionCompleted.payment_status,
         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
         transaction_Id: checkoutSessionCompleted.id,
@@ -490,25 +476,25 @@ const stripeProductWebhook = async (req, res) => {
       //   throw new ValidationError("Data recieved is invalid");
       // }
 
+      console.log('data', data);
+
       const newData = await PurchaseHistoryModel.create(data);
       const newData1 = await OrderHistoryModel.create(data2);
 
-      await Client.findOneAndUpdate(
-        { email: userEmail },
-        {
-          $push: {
-            productpurchasehistory: newData._id,
-            orderhistory: newData1._id,
-          },
-          $set: {
-            cart: [], // Set cart to an empty array
-          },
+      await Client.findByIdAndUpdate(olduser._id, {
+        $push: {
+          productpurchasehistory: newData._id,
+          orderhistory: newData1._id,
         },
-        { new: true } // To return the updated document
-      );
+        $set: {
+          cart: [], // Set cart to an empty array
+        },
+      });
+
+      console.log('Checkout successful true');
 
       break;
-    // ... handle other event types
+
     default:
       console.log(`Unhandled event type ${event.type}`);
   }

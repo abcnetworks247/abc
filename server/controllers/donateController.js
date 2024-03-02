@@ -1,27 +1,35 @@
-const { StatusCodes } = require("http-status-codes");
-const Product = require("../models/productsSchema");
-const coinbase = require("coinbase-commerce-node");
-const Client = require("../models/clientAuthSchema");
-const DonateModel = require("../models/donationSchema");
-const DonationJoi = require("../Utils/DonationJoiSchema");
-const rawBody = require("raw-body");
+const { StatusCodes } = require('http-status-codes');
+const Product = require('../models/productsSchema');
+const coinbase = require('coinbase-commerce-node');
+const Client = require('../models/clientAuthSchema');
+const DonateModel = require('../models/donationSchema');
+const DonationJoi = require('../Utils/DonationJoiSchema');
+const sendMail = require('../Utils/sendMail');
+const path = require('path');
+const rawBody = require('raw-body');
 var Webhook = coinbase.Webhook;
-const dotenv = require("dotenv").config();
+const dotenv = require('dotenv').config();
 
+const fs = require('fs');
+const ejs = require('ejs');
 const CoinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
+const adminUrl = process.env.ADMIN_URL;
+const serverUrl = process.env.SERVER_URL;
+const clientUrl = process.env.CLIENT_URL;
 
-const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
-const ProductJoi = require("../Utils/ProductJoiSchema");
+const ProductJoi = require('../Utils/ProductJoiSchema');
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require("../errors/index");
+} = require('../errors/index');
+const { log } = require('console');
 
 const localurl = process.env.CLIENT_URL;
 const stripeWebhookSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
@@ -37,7 +45,7 @@ const getAllDonation = async (req, res) => {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -52,7 +60,7 @@ const getSingleDonation = async (req, res) => {
     if (!product) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .json({ error: "Product not found" });
+        .json({ error: 'Product not found' });
     }
 
     res.status(StatusCodes.OK).json(product);
@@ -60,7 +68,7 @@ const getSingleDonation = async (req, res) => {
     console.error(error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -73,7 +81,7 @@ const StripeCheckout = async (req, res) => {
   try {
     if (!user) {
       throw new UnAuthorizedError(
-        "User must be logged in to purchase a product"
+        'User must be logged in to purchase a product'
       );
     }
 
@@ -103,7 +111,7 @@ const StripeCheckout = async (req, res) => {
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: 'usd',
             product_data: {
               name: data.name,
             },
@@ -116,23 +124,26 @@ const StripeCheckout = async (req, res) => {
       metadata: {
         userId: user._id,
       },
-      customer: user._id,
-      mode: "payment",
+      customer: customer.id,
+      mode: 'payment',
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
     });
 
     res.status(StatusCodes.OK).send({ url: session.url });
   } catch (error) {
-    console.error("Error in StripeCheckout:", error);
+    console.error('Error in StripeCheckout:', error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send({ error: "Internal server error" });
+      .send({ error: 'Internal server error' });
   }
 };
 
 const stripeProductWebhook = async (req, res) => {
-  const sig = req.headers["stripe-signature"];
+  console.log('Stripe donate Webhook');
+
+  const sig = req.headers['stripe-signature'];
+  const templatePath = path.join(__dirname, '../views/donationView.ejs');
 
   let event;
 
@@ -143,170 +154,85 @@ const stripeProductWebhook = async (req, res) => {
     return;
   }
 
-  // Check if the event type is "charge.succeeded" or "checkout.session.completed"
-
   // Handle the event
   switch (event.type) {
-    case "checkout.session.async_payment_failed":
+    case 'checkout.session.async_payment_failed':
       const checkoutSessionAsyncPaymentFailed = event.data.object;
 
-      console.log(
-        "checkout.session.async_payment_failed",
-        checkoutSessionAsyncPaymentFailed
-      );
-      // Then define and call a function to handle the event checkout.session.async_payment_failed
-
-      let userEmail2 = checkoutSessionCompleted.customer_details.email;
-      const olduser2 = await Client.findOne({ userEmail2 });
-
-      const donationTime2 = new Date(); // Instantiate a new Date object for current time
-      const hours2 = donationTime.getHours();
-      const minutes2 = donationTime.getMinutes();
-      const seconds2 = donationTime.getSeconds();
-
-      // Format the time
-      const formattedTime2 = `${hours}:${minutes}:${seconds}`;
-
-      const currentDate2 = new Date(); // Instantiate a new Date object for current date
-      const year2 = currentDate2.getFullYear();
-      const month2 = String(currentDate2.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      const day2 = String(currentDate2.getDate()).padStart(2, "0");
-
-      // Format the date
-      const formattedDate2 = `${year2}-${month2}-${day2}`;
-
-      const data2 = {
-        email: olduser2.email,
-        name: olduser2.fullname,
-        amount: checkoutSessionAsyncPaymentFailed.amount_total / 100,
-        currency: checkoutSessionAsyncPaymentFailed.currency,
-        donation_Date: formattedDate2, // Current date
-        donation_Time: formattedTime2, // Current time
-        payment_status: checkoutSessionAsyncPaymentFailed.status,
-        payment_method_types:
-          checkoutSessionAsyncPaymentFailed.payment_method_details.type,
-        hosted_invoice_url: checkoutSessionAsyncPaymentFailed.receipt_url,
-        transaction_Id: checkoutSessionAsyncPaymentFailed.id,
-      };
-
-      const { error2, value2 } = DonationJoi.validate(data2);
-
-      if (error2) {
-        throw new ValidationError("Data recieved is invalid");
-      }
-
-      const newData2 = await DonateModel.create(value2);
-
-      olduser2.donationhistory.unshift(newData2.id);
-
-      await olduser.save();
-
       break;
 
-    case "charge.succeeded":
-      const checkoutSessionAsyncPaymentSucceeded = event.data.object;
+    case 'checkout.session.completed':
+      const checkoutSessionCompleted = event.data.object;
 
-      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
+      let email = checkoutSessionCompleted.customer_details.email;
 
-      let userEmail =
-        checkoutSessionAsyncPaymentSucceeded.billing_details.email;
-      const olduser = await Client.findOne({ userEmail });
+      try {
+        const olduser = await Client.findOne({ email });
 
-      const donationTime = new Date(); // Instantiate a new Date object for current time
-      const hours = donationTime.getHours();
-      const minutes = donationTime.getMinutes();
-      const seconds = donationTime.getSeconds();
+        const donationTime = new Date(); // Instantiate a new Date object for current time
+        const hours = donationTime.getHours();
+        const minutes = donationTime.getMinutes();
+        const seconds = donationTime.getSeconds();
 
-      // Format the time
-      const formattedTime = `${hours}:${minutes}:${seconds}`;
+        // Format the time
+        const formattedTime = `${hours}:${minutes}:${seconds}`;
 
-      const currentDate = new Date(); // Instantiate a new Date object for current date
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      const day = String(currentDate.getDate()).padStart(2, "0");
+        const currentDate = new Date(); // Instantiate a new Date object for current date
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(currentDate.getDate()).padStart(2, '0');
 
-      // Format the date
-      const formattedDate = `${year}-${month}-${day}`;
+        // Format the date
+        const formattedDate = `${year}-${month}-${day}`;
 
-      const data = {
-        email: olduser.email,
-        name: olduser.fullname,
-        amount: checkoutSessionAsyncPaymentSucceeded.amount / 100,
-        currency: checkoutSessionAsyncPaymentSucceeded.currency,
-        donation_Date: formattedDate, // Current date
-        donation_Time: formattedTime, // Current time
-        payment_status: checkoutSessionAsyncPaymentSucceeded.status,
-        payment_method_types:
-          checkoutSessionAsyncPaymentSucceeded.payment_method_details.type,
-        hosted_invoice_url: checkoutSessionAsyncPaymentSucceeded.receipt_url,
-        transaction_Id: checkoutSessionAsyncPaymentSucceeded.id,
-      };
+        const data = {
+          email: olduser.email,
+          name: olduser.fullname,
+          amount: checkoutSessionCompleted.amount_total / 100,
+          currency: checkoutSessionCompleted.currency,
+          donation_Date: formattedDate, // Current date
+          donation_Time: formattedTime, // Current time
+          payment_status: checkoutSessionCompleted.payment_status,
+          payment_method_types:
+            checkoutSessionCompleted.payment_method_types[0],
+          transaction_Id: checkoutSessionCompleted.id,
+        };
 
-      const { error, value } = DonationJoi.validate(data);
+        const { error, value } = DonationJoi.validate(data);
 
-      if (error) {
-        throw new ValidationError("Data recieved is invalid");
+        if (error) {
+          throw new ValidationError('Data recieved is invalid');
+        }
+
+        const newData = await DonateModel.create(value);
+
+        olduser.donationhistory.unshift(newData._id);
+
+        await olduser.save();
+
+        const renderHtml = await ejs.renderFile(
+          templatePath,
+          {
+            userFullname: olduser.fullname,
+            userEmail: olduser.email,
+            // donation_data: data,
+          },
+          { async: true }
+        );
+
+        await sendMail({
+          email: olduser.email,
+          subject: 'Thank you for your donation',
+          html: renderHtml,
+        });
+
+        console.log("sent successfully");
+
+        //new data added to the controller
+      } catch (error) {
+        console.log('error', error);
       }
 
-      const newData = await DonateModel.create(value);
-
-      olduser.donationhistory.unshift(newData.id);
-
-      await olduser.save();
-
-      break;
-
-    case "checkout.session.completed":
-      // const checkoutSessionCompleted = event.data.object;
-
-      // let userEmail = checkoutSessionCompleted.customer_details.email;
-      // const olduser = await Client.findOne({ userEmail });
-
-      // const donationTime = new Date(); // Instantiate a new Date object for current time
-      // const hours = donationTime.getHours();
-      // const minutes = donationTime.getMinutes();
-      // const seconds = donationTime.getSeconds();
-
-      // // Format the time
-      // const formattedTime = `${hours}:${minutes}:${seconds}`;
-
-      // const currentDate = new Date(); // Instantiate a new Date object for current date
-      // const year = currentDate.getFullYear();
-      // const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-      // const day = String(currentDate.getDate()).padStart(2, "0");
-
-      // // Format the date
-      // const formattedDate = `${year}-${month}-${day}`;
-
-      // const data = {
-      //   email: olduser.email,
-      //   name: olduser.fullname,
-      //   amount: checkoutSessionCompleted.amount_total / 100,
-      //   currency: checkoutSessionCompleted.currency,
-      //   donation_Date: formattedDate, // Current date
-      //   donation_Time: formattedTime, // Current time
-      //   payment_status: checkoutSessionCompleted.payment_status,
-      //   payment_method_types: checkoutSessionCompleted.payment_method_types[0],
-      //   hosted_invoice_url: checkoutSessionCompleted.hosted_invoice_url,
-      //   transaction_Id: checkoutSessionCompleted.id,
-      // };
-
-      // console.log("checkoutSessionCompleted", checkoutSessionCompleted);
-      // console.log("data received", data);
-
-      // const { error, value } = DonationJoi.validate(data);
-
-      // if (error) {
-      //   throw new ValidationError("Data recieved is invalid");
-      // }
-
-      // const newData = await DonateModel.create(value);
-
-      // olduser.donationhistory.unshift(newData.id);
-
-      // await olduser.save();
-
-      // console.log("data" + newData);
       break;
 
     default:

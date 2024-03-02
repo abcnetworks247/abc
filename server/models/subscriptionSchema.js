@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const subscriptionSchema = new mongoose.Schema({
   email: { type: String, required: true },
   name: { type: String, required: true },
-  stripe_customer_id: { type: String, required: true },
   amount: { type: Number, required: true },
   currency: { type: String, required: true },
   country: { type: String, required: true },

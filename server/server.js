@@ -77,12 +77,24 @@ connectDb(server);
 
 // app.use(express.json());
 
+// app.use((req, res, next) => {
+//   if (req.originalUrl === "/api/v1/admin/donation/stripe/product/webhook") {
+//     next(); // Do nothing with the body because I need it in a raw state.
+//   } else if (req.originalUrl === "/api/v1/admin/commerce/stripe/product/webhook") {
+//     next(); // Do nothing with the body because I need it in a raw state.
+//   } else if (req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook") {
+//     next(); // Do nothing with the body because I need it in a raw state.
+//   } else {
+//     express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
+//   }
+// });
+
 app.use((req, res, next) => {
-  if (req.originalUrl === "/api/v1/admin/donation/stripe/product/webhook") {
-    next(); // Do nothing with the body because I need it in a raw state.
-  } else if (req.originalUrl === "/api/v1/admin/commerce/stripe/product/webhook") {
-    next(); // Do nothing with the body because I need it in a raw state.
-  } else if (req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook") {
+  if (
+    req.originalUrl === "/api/v1/admin/donation/stripe/product/webhook" ||
+    req.originalUrl === "/api/v1/admin/commerce/stripe/product/webhook" ||
+    req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook"
+  ) {
     next(); // Do nothing with the body because I need it in a raw state.
   } else {
     express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
@@ -98,7 +110,7 @@ app.use((err, req, res, next) => {
     console.log("error");
     res.status(400).send("Multer error: " + err.message);
   } else {
-    // Handle other errors
+    // Handle other errors new
     console.log("next");
     next(err);
   }
