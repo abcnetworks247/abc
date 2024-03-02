@@ -3,7 +3,6 @@ import React from 'react';
 import { useState } from 'react';
 import Upgrade from '../Upgrade';
 import SidebarHead from './SidebarHead';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -33,7 +32,7 @@ const DesktopSide = () => {
   return (
     <>
       <div
-        className={`px-4 py-4 sm:min-h-max w-[350px]  bg-white  sm:rounded-md sm:shadow-md`}
+        className={`px-4 py-4 sm:min-h-max basis-1/3  bg-white  sm:rounded-md sm:shadow-md`}
       >
         <SidebarHead />
 

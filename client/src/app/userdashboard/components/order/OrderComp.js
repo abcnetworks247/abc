@@ -24,12 +24,12 @@ const OrderComp = () => {
     <>
     
       <div
-        className={` w-full md:basis-3/4 bg-white md:min-h-max sm:shadow-md sm:rounded-md h-[100vh]`}
+        className={` w-full bg-white md:min-h-max h-[100vh] sm:rounded-md`}
       >
      
 
         {!cartProducts ||cartProducts.length === 0 ? (
-          <div className="flex items-center justify-center h-screen">
+          <div className="flex items-center justify-center min-h-full">
             <div className="flex flex-col items-center">
               <div className="w-[200p] h-[200px]">
                 <img
