@@ -18,6 +18,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoPersonOutline } from "react-icons/io5";
 import { PiCreditCard } from "react-icons/pi";
+import { useRouter } from 'next/navigation';
 
 
 
@@ -31,7 +32,7 @@ const DesktopSide = () => {
   return (
     <>
       <div
-        className={`w-full px-4 py-4 sm:min-h-max  min-w-[100px] max-w-[300px]  bg-white  sm:rounded-md sm:shadow-md`}
+        className={`px-4 py-4 sm:min-h-max w-[350px]  bg-white  sm:rounded-md sm:shadow-md`}
       >
         <SidebarHead />
 
@@ -60,7 +61,9 @@ const DesktopSide = () => {
           <Link href="/userdashboard/transactions">
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == "/userdashboard/transactions" ? "sm:bg-gray-200" : ""
+                pathname == "/userdashboard/transactions"
+                  ? "sm:bg-gray-200"
+                  : ""
               }`}
             >
               <PiCreditCard size={24} />

@@ -10,8 +10,11 @@ import { EMAIL_REGEX, PASSWORD_REGEX } from "@/utils/regex";
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import Image from "next/image";
 import HocsessionAuthenticated from "@/utils/HocsessionAuthenticated";
+import { UseUserContext } from "../../../contexts/UserContext";
 
 function Page() {
+
+  
   // router for the navigation to another page after account created successfully
 
   const router = useRouter();

@@ -131,9 +131,9 @@ useEffect(()=>{
  */
 
 export function UseUserContext() {
-  const usercontext = UserContext;
-     if(!usercontext){
-      throw new Error('useUser must be used within a UserProvider')
-     }
-  return useContext(usercontext);
+ const usercontext = UserContext;
+ if (!usercontext) {
+   throw new Error("useUser must be used within a UserProvider");
+ }
+ return useContext(usercontext);
 }

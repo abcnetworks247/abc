@@ -15,6 +15,7 @@ import Image from "next/image";
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Api from "@/utils/Api";
+import Cookies from "js-cookie";
 
 /**
  * Represents a navigation bar component.
@@ -23,12 +24,14 @@ import Api from "@/utils/Api";
 export default function Navbar() {
   const router = useRouter();
 
-  const { HandleLogout, UserData, loading, Authtoken } = UseUserContext();
+  const { HandleLogout, UserData, loading} = UseUserContext();
   const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
   const pathUrl = "/news/";
 
-  // console.log('tokk',Authtoken)
+  const Authtoken= Cookies.get('authToken')
+
+  console.log("Authtoken in nave", Authtoken)
 
   // cart value variable
   const cartvalue = cartProducts ? cartProducts.length : 0;
@@ -212,7 +215,7 @@ export default function Navbar() {
 
           {/* condition to display user profile picture on first render with token */}
           <div>
-            {Authtoken && UserData && Authtoken.length !== 0 ? (
+            {Authtoken && UserData? (
               <div className="hidden avatar avatar-ring avatar-md md:block">
                 {loading === false ? (
                   <div className="dropdown-container ">
@@ -282,7 +285,7 @@ export default function Navbar() {
               <div></div>
             )}
           </div>
-          {!Authtoken || !Authtoken?.length === 0 ? (
+          {!Authtoken ? (
             <div className={`hidden lg:block ${loading ? "hidden" : "block"}`}>
               <div className="flex items-center justify-center h-fit ">
                 <div className="items-center gap-1 p-1 m-5 shadow-sm w-fit item-center rounded-xl">
@@ -321,7 +324,7 @@ export default function Navbar() {
             <></>
           )}
           <div>
-            {Authtoken && UserData && Authtoken.length !== 0 ? (
+            {Authtoken ? (
               <div className="block avatar avatar-ring avatar-md md:hidden">
                 {loading === false ? (
                   <div className="dropdown-container ">
@@ -391,7 +394,7 @@ export default function Navbar() {
                   tabIndex="1"
                 >
                   {" "}
-                  <Link href={`${!Authtoken ? "/login" : "/userdashboard"}`}>
+                  <Link href={`${!Authtoken && !UserData ? "/login" : "/userdashboard"}`}>
                     <FaRegUser className="text-white hover:text-btn-primary transition  text-[26px] cursor-pointer block lg:hidden" />
                   </Link>
                 </label>
