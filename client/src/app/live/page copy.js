@@ -5,33 +5,6 @@ import Sidebar from '@/components/sidebar/Sidebar';
 import React from 'react';
 
 const page = () => {
-  const channels = [
-    {
-      name: 'ABC AMBA TV, English Live',
-      description: 'News in English',
-      url: 'https://iframe.viewmedia.tv?channel=158',
-      id: 1,
-    },
-    {
-      name: 'ABC AMBA TV, Portuguese Live',
-      description: 'Notícias em Português',
-      url: 'https://iframe.viewmedia.tv?channel=158',
-      id: 2,
-    },
-    {
-      name: 'ABC AMBA TV, French Live',
-      description: 'Actualités en français',
-      url: 'https://iframe.viewmedia.tv?channel=158',
-      id: 3,
-    },
-    {
-      name: 'ABC AMBA TV, Pidgin English Live',
-      description: 'News in Pidgin English',
-      url: 'https://iframe.viewmedia.tv?channel=158',
-      id: 4,
-    },
-  ];
-
   return (
     <div>
       <Nav1 />
@@ -40,7 +13,7 @@ const page = () => {
       </div>
 
       <Sidebar />
-      <div className='h-fit w-full flex flex-col items-center justify-center p-2 md:p-8 lg:p-12'>
+      <div className='h-dvh w-full flex flex-col items-center justify-center p-2 md:p-8 lg:p-12'>
         <div className=''>
           <div className='flex flex-col items-center justify-center gap-1 md:gap-3 mb-3'>
             <svg
@@ -78,8 +51,8 @@ const page = () => {
                 <circle cx={25} cy={21} r={1} />{' '}
               </g>
             </svg>
-            <h1 className='text-xl font-semibold md:text-3xl text-blue-500 mt-1 md:mt-3 text-center  leading-relaxed md:leading-snug'>
-              All ABC Networks Channel, Live 247
+            <h1 className='text-3xl font-semibold md:text-3xl text-blue-500 mt-1 md:mt-3 text-center  leading-relaxed md:leading-snug'>
+              ABC AMBA TV Live 247
             </h1>
           </div>
           <h2 className='text-center mb-8'>
@@ -88,31 +61,7 @@ const page = () => {
           </h2>
         </div>
 
-        <div className='w-full mx-auto grid h-full grid-cols-1  lg:grid-cols-2 md:grid-cols-2 justify-items-center justify-center gap-y-20 md:gap-x-14 mt-10 mb-5'>
-          {/* <div className='w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl'>
-
-          </div> */}
-
-          {channels.map((channel) => (
-            <div className='w-full h-auto' key={channel.id}>
-              <div className=''>
-                <h1 className='text-xl font-semibold md:text-xl text-gray-800 mt-1 md:mt-3 text-center  leading-relaxed md:leading-snug'>
-                  {channel.name}
-                </h1>
-                <h2 className='text-center mb-3'>{channel.description}</h2>
-              </div>
-              <iframe
-                src={channel.url}
-                frameborder='0'
-                allowfullscreen
-                webkitallowfullscreen
-                mozallowfullscreen
-                className=' w-full lg:w-[40dvw] h-[40dvh] rounded-lg'></iframe>
-            </div>
-          ))}
-        </div>
-
-        {/* <iframe
+        <iframe
           src='https://iframe.viewmedia.tv?channel=158'
           width='640'
           height='360'
@@ -120,7 +69,7 @@ const page = () => {
           autoplay='true'
           allowfullscreen
           webkitallowfullscreen
-          mozallowfullscreen></iframe> */}
+          mozallowfullscreen></iframe>
       </div>
       <FooterComp />
     </div>

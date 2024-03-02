@@ -418,8 +418,8 @@ const stripeProductWebhook = async (req, res) => {
 
       let cartdesc = checkoutSessionCompleted.metadata.description;
 
-      const populatedCart = await Client.populate(user, {
-        path: 'olduser.cart.product',
+      const populatedCart = await Client.populate(olduser.cart, {
+        path: 'product',
       });
 
       const data = {
@@ -475,6 +475,8 @@ const stripeProductWebhook = async (req, res) => {
       // if (error1) {
       //   throw new ValidationError("Data recieved is invalid");
       // }
+
+      console.log('data', data);
 
       const newData = await PurchaseHistoryModel.create(data);
       const newData1 = await OrderHistoryModel.create(data2);

@@ -352,6 +352,8 @@ const currentUser = async (req, res) => {
         { path: "orderhistory" },
         { path: "subscriptionhistory" },
         { path: "productpurchasehistory" },
+        { path: "orderhistory.cart.product" }, // Populate cart.product in orderhistory
+        { path: "productpurchasehistory.cart.product" }, // Populate cart.product in productpurchasehistory
         { path: "donationhistory" },
       ]);
 
@@ -546,6 +548,7 @@ const Cart = (io) => {
         console.error(error);
       }
     });
+    
   });
 };
 

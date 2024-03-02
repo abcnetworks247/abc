@@ -1,4 +1,4 @@
-const joi = require("joi");
+const joi = require('joi');
 
 const Clientjoi = joi.object({
   fullname: joi.string().required(),
@@ -16,6 +16,7 @@ const Clientjoi = joi.object({
   productpurchasehistory: joi
     .array()
     .items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),
+  orderhistory: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)),
   donationhistory: joi.array().items(joi.string().pattern(/^[0-9a-fA-F]{24}$/)), // Use the subscriptionSchema here
   subscriptionHistory: joi
     .array()
