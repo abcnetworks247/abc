@@ -154,13 +154,13 @@ const Page = () => {
                       <img
                         src={item.blogimage}
                         alt='random image from unsplash'
-                        className='object-cover object-center w-full h-60 md:h-48 lg:h-52'
+                        className='object-cover object-center w-full h-60 md:h-48 lg:h-[350px] '
                       />
                     </Link>
                   </div>
                 </div>
 
-                <div className='lg:col-span-1 md:col-span-1 flex flex-col justify-between'>
+                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-5'>
                   <div className='flex justify-between items-center'>
                     <div>
                       <button
