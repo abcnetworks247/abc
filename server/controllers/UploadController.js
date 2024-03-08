@@ -66,7 +66,7 @@ const UploadFile = async (req, res) => {
 const HandleUpload = (io) => {
   io.on("connection", async (socket) => {
     try {
-      const fileBatch = await FileManager.find();
+      const fileBatch = await FileManager.find().sort({ createdAt: -1 });
       socket.emit("filemanager", fileBatch);
       // socket.disconnect();
     } catch (error) {

@@ -5,12 +5,23 @@ const PurchaseHistoryModel = require('../models/purchaseSchema');
 const OrderHistoryModel = require('../models/orderHistorySchema');
 const PurchaseHistoryJoi = require('../Utils/PurchaseHistoryJoi');
 const OrderHistoryJoi = require('../Utils/OrderHistoryJoi');
+const sendMail = require('../Utils/sendMail');
+const path = require('path');
+const fs = require('fs');
+const ejs = require('ejs');
+
+
 var Webhook = coinbase.Webhook;
 const dotenv = require('dotenv').config();
 
 const Client = require('../models/clientAuthSchema');
 const coinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
+
+const adminUrl = process.env.ADMIN_URL;
+const serverUrl = process.env.SERVER_URL;
+const clientUrl = process.env.CLIENT_URL;
+
 
 const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;

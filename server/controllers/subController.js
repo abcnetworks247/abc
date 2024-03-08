@@ -2,7 +2,13 @@ const Auth = require('../models/clientAuthSchema'); // Assuming your user model 
 const { StatusCodes } = require('http-status-codes');
 const SubscriptionModel = require('../models/subscriptionSchema');
 const SubscriptionJoi = require('../Utils/SubscriptionJoi');
+const path = require('path');
 const Client = require('../models/clientAuthSchema');
+const sendMail = require('../Utils/sendMail');
+const dotenv = require('dotenv').config();
+const fs = require('fs');
+const ejs = require('ejs');
+
 const {
   NotFoundError,
   UnAuthorizedError,
@@ -12,6 +18,11 @@ const {
 const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookSecret = process.env.STRIPE_SUBSCRIPTION_WEBHOOK_SECRETE;
 const localurl = process.env.CLIENT_URL;
+
+const adminUrl = process.env.ADMIN_URL;
+const serverUrl = process.env.SERVER_URL;
+const clientUrl = process.env.CLIENT_URL;
+
 
 const createSubscription = async (req, res) => {
   console.log('Create subscription');
