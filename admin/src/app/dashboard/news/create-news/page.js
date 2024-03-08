@@ -28,6 +28,8 @@ import Api from '@/utils/Api';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
+import dynamic from "next/dynamic";
+import dynamic from "next/dynamic";
 
 function page() {
   /**
@@ -47,10 +49,9 @@ function page() {
   const [imageSrc, setImageSrc] = useState(null);
 
   const ReactQuill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
+    () => dynamic(() => import('react-quill'), { ssr: false }),
     []
   );
-
 
   const [full, setFull] = useState(true);
   const router = useRouter();
