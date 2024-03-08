@@ -189,7 +189,7 @@ const Page = () => {
                     <h3 className='mt-4 text-lg md:text-xl font-medium'>
                       <Link
                         href={`${pathUrl}/${item._id}`}
-                        className='hover:underline'>
+                        className='hover:underline line-clamp-2 text-2xl capitalize'>
                         {item.title}
                       </Link>
                     </h3>
