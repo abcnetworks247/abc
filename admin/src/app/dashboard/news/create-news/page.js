@@ -28,7 +28,7 @@ import Api from '@/utils/Api';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
 function page() {
   /**
@@ -51,6 +51,39 @@ function page() {
     () => dynamic(() => import('react-quill'), { ssr: false }),
     []
   );
+
+  const modules = {
+    toolbar: [
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ size: [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'video',
+  ];
 
   const [full, setFull] = useState(true);
   const router = useRouter();
@@ -293,6 +326,8 @@ function page() {
                 theme='snow'
                 value={html}
                 onChange={onChange}
+                modules={modules}
+                formats={formats}
                 className='min-h-[80vh'
               />
             </div>
