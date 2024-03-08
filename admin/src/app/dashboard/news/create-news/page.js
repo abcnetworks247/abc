@@ -18,6 +18,9 @@ import {
   BtnStyles,
   Separator,
 } from "react-simple-wysiwyg";
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect } from "react";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
@@ -270,7 +273,7 @@ function page() {
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Full Details
               </label>
-              <EditorProvider>
+              {/* <EditorProvider>
                 <Editor value={html} onChange={onChange} className="h-[80vh">
                   <Toolbar>
                     <BtnBold />
@@ -282,9 +285,11 @@ function page() {
                     <BtnStrikeThrough />
                     <Separator />
                     <BtnStyles />
+                    
                   </Toolbar>
                 </Editor>
-              </EditorProvider>
+              </EditorProvider> */}
+              <ReactQuill theme="snow" value={html} onChange={onChange} className="min-h-[80vh"/>
             </div>
             <div className="flex flex-col gap-5">
               <a href="#value=newsimage">
