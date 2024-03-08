@@ -146,7 +146,7 @@ const Page = () => {
           {news.map((item) => (
             <article
               key={item._id}
-              className='p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-8'>
+              className='p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-2'>
               <div className='grid grid-cols-1 gap-3 lg:grid-cols-2 md:grid-cols-2'>
                 <div className='lg:col-span-1 md:col-span-1'>
                   <div className='rounded-lg overflow-hidden'>
@@ -154,7 +154,7 @@ const Page = () => {
                       <img
                         src={item.blogimage}
                         alt='random image from unsplash'
-                        className='object-cover object-center w-full h-60 md:h-48 lg:h-[350px] '
+                        className='object-cover object-center w-full h-60 md:h-48 lg:h-[250px] '
                       />
                     </Link>
                   </div>
