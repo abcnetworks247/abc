@@ -160,8 +160,8 @@ const Page = () => {
                   </div>
                 </div>
 
-                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-5 items-start justify-center'>
-                  <div className='flex flex-col justify-between'>
+                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-8 items-start justify-center'>
+                  <div className='flex flex-col justify-between gap-6'>
                     <h3 className='mt-4 text-lg md:text-xl font-medium'>
                       <Link
                         href={`${pathUrl}/${item._id}`}
@@ -174,7 +174,7 @@ const Page = () => {
                     </p>
                   </div>
 
-                  <div className='flex justify-between items-center'>
+                  <div className='flex flex-row justify-between items-center'>
                     <div>
                       <button
                         onClick={() => {
