@@ -52,6 +52,17 @@ function page() {
     []
   );
 
+  const [full, setFull] = useState(true);
+  const router = useRouter();
+
+  // dialog open state that is recieved from filemanger context
+  const { handleOpen, size } = UseFileManager();
+
+  // function to handle the change of the html content
+  function onChange(e, delta, source, editor) {
+    setHtml(e.target.value);
+  }
+
   const modules = {
     toolbar: [
       [{ header: '1' }, { header: '2' }, { font: [] }],
@@ -85,16 +96,26 @@ function page() {
     'video',
   ];
 
-  const [full, setFull] = useState(true);
-  const router = useRouter();
+  const handleVideoButtonClick = () => {
+    const videoUrl = prompt('Enter the URL of the YouTube video:');
+    if (videoUrl) {
+      const videoId = getYouTubeId(videoUrl);
+      if (videoId) {
+        const videoEmbedCode = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        setEditorHtml(editorHtml + videoEmbedCode);
+      } else {
+        alert('Invalid YouTube video URL');
+      }
+    }
+  };
 
-  // dialog open state that is recieved from filemanger context
-  const { handleOpen, size } = UseFileManager();
-
-  // function to handle the change of the html content
-  function onChange(e) {
-    setHtml(e.target.value);
-  }
+  // Function to extract YouTube video ID from URL
+  const getYouTubeId = (url) => {
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
 
   //store Auth token
   const AuthToken = Cookies.get('adminToken');
@@ -322,14 +343,38 @@ function page() {
                   </Toolbar>
                 </Editor>
               </EditorProvider> */}
-              <ReactQuill
+              {/* <ReactQuill
                 theme='snow'
                 value={html}
                 onChange={onChange}
-                modules={modules}
-                formats={formats}
                 className='min-h-[80vh'
-              />
+              /> */}
+
+              <ReactQuill
+                theme='snow'
+                value={editorHtml}
+                onChange={handleChange}
+                modules={modules}
+                formats={formats}>
+                <div className='quill-toolbar'>
+                  <select className='ql-header'>
+                    <option value='1'>Heading 1</option>
+                    <option value='2'>Heading 2</option>
+                  </select>
+                  <button className='ql-bold' />
+                  <button className='ql-italic' />
+                  <button className='ql-underline' />
+                  <button className='ql-strike' />
+                  <button className='ql-blockquote' />
+                  <button className='ql-list' value='ordered' />
+                  <button className='ql-list' value='bullet' />
+                  <button className='ql-link' />
+                  <button className='ql-image' />
+                  <button className='ql-video' onClick={handleVideoButtonClick}>
+                    Video
+                  </button>
+                </div>
+              </ReactQuill>
             </div>
             <div className='flex flex-col gap-5'>
               <a href='#value=newsimage'>
