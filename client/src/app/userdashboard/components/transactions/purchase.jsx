@@ -363,7 +363,7 @@ const PurchaseHistory = () => {
     );
   }, []);
   return (
-    <div className=" h-full bg-white flex  items-center justify-center pb-10">
+    <div className=" h-full w-full bg-white flex  items-center justify-center pb-10">
       {purchaseData.length === 1 ? (
         <Empty name="purchase" />
       ) : (
