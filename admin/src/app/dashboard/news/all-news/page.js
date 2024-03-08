@@ -160,7 +160,7 @@ const Page = () => {
                   </div>
                 </div>
 
-                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-5'>
+                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-5 bg-red-500'>
                   <div className='flex justify-between items-center'>
                     <div>
                       <button
