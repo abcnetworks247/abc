@@ -70,42 +70,43 @@ const signIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Find the user by email
     const olduser = await Admin.findOne({ email });
 
+    // If user not found, throw a NotFoundError
     if (!olduser) {
       throw new NotFoundError('User not found');
     }
 
-    const authenticatedUser = olduser.checkPassword(password);
+    // Authenticate user by checking password
+    const authenticatedUser = await olduser.checkPassword(password);
 
-    console.log('Authenticated user', authenticatedUser);
-
+    // If password doesn't match, throw an UnAuthorizedError
     if (!authenticatedUser) {
       throw new UnAuthorizedError('Invalid login credentials');
     }
 
-    const MaxAge = 3 * 24 * 60 * 60;
-
+    // If authentication successful, create and send token
+    const MaxAge = 90 * 24 * 60 * 60; // 90 days in seconds
     const token = CreateToken(olduser._id, MaxAge);
 
-    console.log(token);
-
+    // Set token in response header and cookie
     res.setHeader('Authorization', 'Bearer ' + token);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.cookie('authtoken', token, {
-      maxAge: maxAgeInMilliseconds,
+      maxAge: MaxAge * 1000, // Convert seconds to milliseconds
       httpOnly: false,
     });
 
+    // Respond with success message and user data
     res.status(StatusCodes.OK).json({
       message: 'Account signed in successfully.',
       authToken: token,
       olduser,
     });
   } catch (error) {
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: error.message });
+    // Handle errors
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: error.message });
   }
 };
 
