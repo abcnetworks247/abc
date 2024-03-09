@@ -200,6 +200,7 @@ const Page = () => {
                 </div>
               </div>
             </article>
+            
           ))}
           <CardFooter className='flex items-center justify-between p-4 border-t border-blue-gray-50'>
             <Typography

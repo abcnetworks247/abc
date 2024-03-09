@@ -74,7 +74,7 @@ const signIn = async (req, res) => {
         .json({ error: 'User not found' });
     }
 
-    const authenticatedUser = await oldUser.checkPassword(password);
+    const authenticatedUser = oldUser.checkPassword(password);
 
     if (!authenticatedUser) {
       return res
