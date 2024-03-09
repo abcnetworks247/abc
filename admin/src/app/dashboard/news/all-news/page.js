@@ -160,8 +160,8 @@ const Page = () => {
                   </div>
                 </div>
 
-                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-5 bg-red-500'>
-                  <div className='flex justify-between items-center'>
+                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-5 lg:items-start lg:justify-center'>
+                  <div className='flex justify-between items-center w-full lg:pr-8'>
                     <div>
                       <button
                         onClick={() => {
@@ -189,7 +189,7 @@ const Page = () => {
                     <h3 className='mt-4 text-lg md:text-xl font-medium'>
                       <Link
                         href={`${pathUrl}/${item._id}`}
-                        className='hover:underline line-clamp-2 text-2xl capitalize'>
+                        className='hover:underline line-clamp-2 text-xl capitalize'>
                         {item.title}
                       </Link>
                     </h3>
