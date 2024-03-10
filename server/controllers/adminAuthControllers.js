@@ -81,6 +81,8 @@ const signIn = async (req, res) => {
     // Authenticate user by checking password
     const authenticatedUser = await olduser.checkPassword(password);
 
+    console.log("auth user: " + authenticatedUser);
+
     // If password doesn't match, throw an UnAuthorizedError
     if (!authenticatedUser) {
       throw new UnAuthorizedError('Invalid login credentials');

@@ -36,6 +36,9 @@ const stripeWebhookSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
 
 // Controller for fetching a list of products (accessible to all users)
 const getAllDonation = async (req, res) => {
+
+  console.log("donation");
+  
   try {
     // Fetch all products from the database
     const products = await Product.find();
