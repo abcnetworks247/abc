@@ -13,7 +13,7 @@ import {
   BtnStyles,
   Separator,
 } from "react-simple-wysiwyg";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { useParams } from "next/navigation";
@@ -22,7 +22,7 @@ import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import JoditEditor from 'jodit-react';
+import dynamic from "next/dynamic";
 
 function page() {
   const [html, setHtml] = useState("");
@@ -44,6 +44,11 @@ function page() {
   const [category, setCategory] = useState([]);
   const AuthToken = Cookies.get("adminToken");
   const router = useRouter();
+
+  const JoditEditor = useMemo(
+    () => dynamic(() => import('jodit-react'), { ssr: false }),
+    []
+  );
 
   const fetchData = async () => {
     try {

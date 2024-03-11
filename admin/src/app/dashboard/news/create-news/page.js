@@ -18,7 +18,6 @@ import {
   BtnStyles,
   Separator,
 } from 'react-simple-wysiwyg';
-import JoditEditor from 'jodit-react';
 
 import 'react-quill/dist/quill.snow.css';
 import { useState, useEffect, useMemo } from 'react';
@@ -50,6 +49,11 @@ function page() {
 
   const ReactQuill = useMemo(
     () => dynamic(() => import('react-quill'), { ssr: false }),
+    []
+  );
+
+  const JoditEditor = useMemo(
+    () => dynamic(() => import('jodit-react'), { ssr: false }),
     []
   );
 
