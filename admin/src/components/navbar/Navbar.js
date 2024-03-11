@@ -16,6 +16,7 @@ import {
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { IoIosLock } from 'react-icons/io';
 
 import {
   CubeTransparentIcon,

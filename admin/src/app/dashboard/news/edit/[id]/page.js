@@ -22,6 +22,7 @@ import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import JoditEditor from 'jodit-react';
 
 function page() {
   const [html, setHtml] = useState("");
@@ -148,8 +149,8 @@ function page() {
     
   };
 
-  const handleChange = (e) => {
-    setHtml(e.target.value);
+  const handleChange = (newContent) => {
+    setHtml(newContent);
   };
 
   const HandleDeleteNewsimg = () => {
@@ -279,7 +280,7 @@ function page() {
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Full Details
               </label>
-              <EditorProvider>
+              {/* <EditorProvider>
                 <Editor value={html} onChange={handleChange}>
                   <Toolbar>
                     <BtnBold />
@@ -293,7 +294,13 @@ function page() {
                     <BtnStyles />
                   </Toolbar>
                 </Editor>
-              </EditorProvider>
+              </EditorProvider> */}
+              <JoditEditor
+                value={html}
+                onChange={handleChange}
+                className='min-h-[80vh] h-full'
+                tabIndex={1}
+              />
             </div>
             <div className="flex flex-col gap-5">
               <a href="#value=newsimage">
