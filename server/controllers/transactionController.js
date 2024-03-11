@@ -68,14 +68,23 @@ const getAllSubscription = async (req, res) => {
     if (!user) {
       throw new NotFoundError('User not found');
     }
-    const result = await SubscriptionModel.find();
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    const result = await SubscriptionModel.find()
+      .skip(skip)
+      .limit(perPage);
 
     if (!result) {
       throw new NotFoundError('No result found');
     }
 
     return res.status(StatusCodes.OK).json({
-      message: 'subscription history retrieved successfully',
+      message: 'Subscription history retrieved successfully',
       data: result,
     });
   } catch (error) {
@@ -84,6 +93,7 @@ const getAllSubscription = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
 
 const getSingleSubscription = async (req, res) => {
   const { id } = req.params;
@@ -119,14 +129,23 @@ const getAllPurchaseHistory = async (req, res) => {
     if (!user) {
       throw new NotFoundError('User not found');
     }
-    const result = await PurchaseHistoryModel.find();
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    const result = await PurchaseHistoryModel.find()
+      .skip(skip)
+      .limit(perPage);
 
     if (!result) {
       throw new NotFoundError('No result found');
     }
 
     return res.status(StatusCodes.OK).json({
-      message: 'purchase history retrieved successfully',
+      message: 'Purchase history retrieved successfully',
       data: result,
     });
   } catch (error) {
@@ -135,6 +154,7 @@ const getAllPurchaseHistory = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
 
 const getSinglePurchaseHistory = async (req, res) => {
   const { id } = req.params;
@@ -170,14 +190,23 @@ const getAllOrderHistory = async (req, res) => {
     if (!user) {
       throw new NotFoundError('User not found');
     }
-    const result = await OrderHistoryModel.find();
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    const result = await OrderHistoryModel.find()
+      .skip(skip)
+      .limit(perPage);
 
     if (!result) {
       throw new NotFoundError('No result found');
     }
 
     return res.status(StatusCodes.OK).json({
-      message: 'order history retrieved successfully',
+      message: 'Order history retrieved successfully',
       data: result,
     });
   } catch (error) {
@@ -186,6 +215,7 @@ const getAllOrderHistory = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
 
 const getSingleOrderHistory = async (req, res) => {
   const { id } = req.params;

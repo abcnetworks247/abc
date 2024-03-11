@@ -424,8 +424,16 @@ const userDelete = async (req, res) => {
 
 const allAdmin = async (req, res) => {
   try {
-    // Retrieve list of admin
-    const admin = await Admin.find();
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    // Retrieve list of admin with pagination
+    const admin = await Admin.find()
+      .skip(skip)
+      .limit(perPage);
 
     // Check if user is authenticated
     const user = req.user;
@@ -439,7 +447,7 @@ const allAdmin = async (req, res) => {
       throw new UnAuthorizedError('Access denied');
     }
 
-    // Return success response with client data
+    // Return success response with admin data
     return res.status(StatusCodes.OK).json({ data: admin });
   } catch (error) {
     // Handle errors and return internal server error response
@@ -451,8 +459,16 @@ const allAdmin = async (req, res) => {
 
 const allClient = async (req, res) => {
   try {
-    // Retrieve list of clients
-    const clients = await Client.find();
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    // Retrieve list of clients with pagination
+    const clients = await Client.find()
+      .skip(skip)
+      .limit(perPage);
 
     // Check if user is authenticated
     const user = req.user;
@@ -475,6 +491,7 @@ const allClient = async (req, res) => {
       .json({ error: error.message });
   }
 };
+
 
 const singleClient = async (req, res) => {
   const id = req.params.id;

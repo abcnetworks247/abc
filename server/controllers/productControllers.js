@@ -124,8 +124,16 @@ const createProduct = async (req, res) => {
 // Controller for fetching a list of products (accessible to all users)
 const getAllProducts = async (req, res) => {
   try {
-    // Fetch all products from the database
-    const products = await Product.find();
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    // Fetch products from the database with pagination
+    const products = await Product.find()
+      .skip(skip)
+      .limit(perPage);
 
     res.status(StatusCodes.OK).json(products);
   } catch (error) {
@@ -135,6 +143,7 @@ const getAllProducts = async (req, res) => {
       .json({ error: 'Internal Server Error' });
   }
 };
+
 
 //Updating existing product data from the server
 const updateProduct = async (req, res) => {
@@ -274,6 +283,35 @@ const getSingleProduct = async (req, res) => {
     }
 
     res.status(StatusCodes.OK).json(product);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'Internal Server Error' });
+  }
+};
+
+
+const searchProduct = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    // Perform search query on the database
+    const products = await Product.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } }, // Case-insensitive search by title
+        { description: { $regex: query, $options: 'i' } }, // Case-insensitive search by description
+      ],
+    })
+      .skip(skip)
+      .limit(perPage);
+
+    res.status(StatusCodes.OK).json(products);
   } catch (error) {
     console.error(error);
     res
@@ -593,6 +631,7 @@ module.exports = {
   deleteProduct,
   StripeCheckout,
   stripeProductWebhook,
+  searchProduct,
   Crypto,
   CryptoWebhook,
 };
