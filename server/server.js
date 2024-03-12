@@ -92,8 +92,8 @@ connectDb(server);
 
 app.use((req, res, next) => {
   if (
-    req.originalUrl === "/api/v1/admin/donation/stripe/product/webhook" ||
-    req.originalUrl === "/api/v1/admin/commerce/stripe/product/webhook" ||
+    req.originalUrl === "/api/v1/admin/donation/stripe/donate/webhook" ||
+    req.originalUrl === "/api/v1/admin/commerce/stripe/purchase/webhook" ||
     req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook"
   ) {
     next(); // Do nothing with the body because I need it in a raw state.
