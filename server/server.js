@@ -78,29 +78,29 @@ connectDb(server);
 //new check
 // app.use(express.json());
 
-// app.use((req, res, next) => {
-//   if (req.originalUrl === "/api/v1/admin/donation/stripe/product/webhook") {
-//     next(); // Do nothing with the body because I need it in a raw state.
-//   } else if (req.originalUrl === "/api/v1/admin/commerce/stripe/product/webhook") {
-//     next(); // Do nothing with the body because I need it in a raw state.
-//   } else if (req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook") {
-//     next(); // Do nothing with the body because I need it in a raw state.
-//   } else {
-//     express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
-//   }
-// });
-
 app.use((req, res, next) => {
-  if (
-    req.originalUrl === "/api/v1/admin/donation/stripe/donate/webhook" ||
-    req.originalUrl === "/api/v1/admin/commerce/stripe/purchase/webhook" ||
-    req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook"
-  ) {
+  if (req.originalUrl === "/api/v1/admin/donation/stripe/donate/webhook") {
+    next(); // Do nothing with the body because I need it in a raw state.
+  } else if (req.originalUrl === "/api/v1/admin/commerce/stripe/purchase/webhook") {
+    next(); // Do nothing with the body because I need it in a raw state.
+  } else if (req.originalUrl === "/api/v1/admin/sub/stripe/plan/webhook") {
     next(); // Do nothing with the body because I need it in a raw state.
   } else {
     express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
   }
 });
+
+// app.use((req, res, next) => {
+//   if (
+//     req.originalUrl === "/api/v1/admin/donation/stripe/donate/webhook" ||
+//     req.originalUrl === "/api/v1/admin/commerce/stripe/purchase/webhook" ||
+//     req.originalUrl === "/api/v1/admin/sub/stripe/product/webhook"
+//   ) {
+//     next(); // Do nothing with the body because I need it in a raw state.
+//   } else {
+//     express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
+//   }
+// });
 
 app.use(cookieParser());
 // app.use(fileUpload({ useTempFiles: true }));
