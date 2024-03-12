@@ -10,7 +10,6 @@ const path = require('path');
 const fs = require('fs');
 const ejs = require('ejs');
 
-
 var Webhook = coinbase.Webhook;
 const dotenv = require('dotenv').config();
 
@@ -21,7 +20,6 @@ const resources = coinbase.resources;
 const adminUrl = process.env.ADMIN_URL;
 const serverUrl = process.env.SERVER_URL;
 const clientUrl = process.env.CLIENT_URL;
-
 
 const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
@@ -124,8 +122,14 @@ const createProduct = async (req, res) => {
 // Controller for fetching a list of products (accessible to all users)
 const getAllProducts = async (req, res) => {
   try {
-    // Fetch all products from the database
-    const products = await Product.find();
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    // Fetch products from the database with pagination
+    const products = await Product.find().skip(skip).limit(perPage);
 
     res.status(StatusCodes.OK).json(products);
   } catch (error) {
@@ -282,6 +286,34 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
+const searchProduct = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    // Perform search query on the database
+    const products = await Product.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } }, // Case-insensitive search by title
+        { description: { $regex: query, $options: 'i' } }, // Case-insensitive search by description
+      ],
+    })
+      .skip(skip)
+      .limit(perPage);
+
+    res.status(StatusCodes.OK).json(products);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'Internal Server Error' });
+  }
+};
+
 const StripeCheckout = async (req, res) => {
   const {
     product,
@@ -429,9 +461,29 @@ const stripeProductWebhook = async (req, res) => {
 
       let cartdesc = checkoutSessionCompleted.metadata.description;
 
-      const populatedCart = await Client.populate(olduser.cart, {
-        path: 'product',
+      // Assuming your cart contains product IDs
+
+      const productIds = olduser.cart.map((item) => item.product);
+
+      // Retrieve the full product details from MongoDB using product IDs
+      const products = await Product.find({ _id: { $in: productIds } });
+
+      // Map each item in the cart to its corresponding product information
+      const combinedCart = olduser.cart.map((item) => {
+        // Find the product object in the products array that matches the current item's product ID
+        const productInfo = products.find(
+          (product) => product._id.toString() === item.product.toString()
+        );
+
+        // Return an object containing product information, quantity, and other properties from the original cart item
+        return {
+          product: productInfo,
+          quantity: item.quantity,
+          _id: item._id,
+        };
       });
+
+      console.log(combinedCart);
 
       const data = {
         email: olduser.email,
@@ -440,7 +492,7 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: populatedCart,
+        cart: combinedCart,
         note: cartdesc,
         payment_status: checkoutSessionCompleted.payment_status,
         payment_method_types: checkoutSessionCompleted.payment_method_types[0],
@@ -461,7 +513,7 @@ const stripeProductWebhook = async (req, res) => {
         currency: checkoutSessionCompleted.currency,
         payment_Date: formattedDate, // Current date
         payment_Time: formattedTime, // Current time
-        cart: populatedCart,
+        cart: combinedCart,
         note: cartdesc,
         delivery_Status: 'pending',
         payment_status: checkoutSessionCompleted.payment_status,
@@ -476,18 +528,18 @@ const stripeProductWebhook = async (req, res) => {
         country: checkoutSessionCompleted.customer_details.address.country,
       };
 
-      // const { error, value } = PurchaseHistoryJoi.validate(data);
-      // const { error1, value1 } = OrderHistoryJoi.validate(data2);
+      // // const { error, value } = PurchaseHistoryJoi.validate(data);
+      // // const { error1, value1 } = OrderHistoryJoi.validate(data2);
 
-      // if (error) {
-      //   throw new ValidationError("Data recieved is invalid");
-      // }
+      // // if (error) {
+      // //   throw new ValidationError("Data recieved is invalid");
+      // // }
 
-      // if (error1) {
-      //   throw new ValidationError("Data recieved is invalid");
-      // }
+      // // if (error1) {
+      // //   throw new ValidationError("Data recieved is invalid");
+      // // }
 
-      console.log('data', data);
+      // console.log('data', data);
 
       const newData = await PurchaseHistoryModel.create(data);
       const newData1 = await OrderHistoryModel.create(data2);
@@ -498,7 +550,7 @@ const stripeProductWebhook = async (req, res) => {
           orderhistory: newData1._id,
         },
         $set: {
-          cart: [], 
+          cart: [],
         },
       });
 
@@ -593,6 +645,7 @@ module.exports = {
   deleteProduct,
   StripeCheckout,
   stripeProductWebhook,
+  searchProduct,
   Crypto,
   CryptoWebhook,
 };

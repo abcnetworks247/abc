@@ -19,12 +19,17 @@ const cloudinary = require('../Utils/CloudinaryFileUpload');
 
 const getAllBlog = async (req, res) => {
   try {
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
     const fetchBlogsByType = async (blogType) => {
       try {
         const result = await blog
           .find({ type: blogType })
           .populate('author', 'fullname username userdp')
-          .sort({ createdAt: -1 });
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
         return result;
       } catch (error) {
         console.error(error);
@@ -54,7 +59,10 @@ const getAllBlog = async (req, res) => {
 
     const allBlogs = await blog
       .find()
-      .populate('author', 'fullname username userdp').sort({ createdAt: -1 });
+      .populate('author', 'fullname username userdp')
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * perPage)
+      .limit(perPage);
 
     if (allBlogs.length === 0) {
       return res
@@ -69,6 +77,7 @@ const getAllBlog = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
 
 const createBlog = async (req, res) => {
   try {
@@ -336,17 +345,65 @@ const getBlogsByType = async (req, res) => {
       throw new NotFoundError('This Category is empty.');
     }
 
-    const allblogs = await blog.find().sort({ createdAt: -1 });
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
-    const newFilteredContent = allblogs.filter(
-      (blog) => blog.type === checkType.name
-    );
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    const allblogs = await blog.find({ type: checkType.name })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(perPage);
 
     res
       .status(StatusCodes.OK)
-      .send({ data: newFilteredContent, name: checkType.name });
+      .send({ data: allblogs, name: checkType.name });
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ err: error.message });
+  }
+};
+
+
+const searchBlog = async (req, res) => {
+  try {
+    // Extract query parameters from the request
+    const { query, page = 1, perPage = 10 } = req.query;
+
+    // Validate query parameter
+    if (!query) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Query parameter is required' });
+    }
+
+    // Perform the search based on the query
+    const searchResults = await blog.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } }, // Case-insensitive search in the title
+        { description: { $regex: query, $options: 'i' } }, // Case-insensitive search in the description
+      ],
+    })
+      .skip((page - 1) * perPage)
+      .limit(perPage);
+
+    // Calculate total number of search results (for pagination)
+    const totalResults = await blog.countDocuments({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+      ],
+    });
+
+    // Return the search results along with pagination metadata
+    return res.status(StatusCodes.OK).json({
+      results: searchResults,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(totalResults / perPage),
+      totalResults,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error('Error during news search:', error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -454,4 +511,5 @@ module.exports = {
   postReaction,
   handleNewComment,
   getBlogsByType,
+  searchBlog
 };

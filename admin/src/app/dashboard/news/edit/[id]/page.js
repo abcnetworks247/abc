@@ -13,7 +13,7 @@ import {
   BtnStyles,
   Separator,
 } from "react-simple-wysiwyg";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import { useParams } from "next/navigation";
@@ -22,6 +22,7 @@ import Api from "@/utils/Api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import dynamic from "next/dynamic";
 
 function page() {
   const [html, setHtml] = useState("");
@@ -43,6 +44,11 @@ function page() {
   const [category, setCategory] = useState([]);
   const AuthToken = Cookies.get("adminToken");
   const router = useRouter();
+
+  const JoditEditor = useMemo(
+    () => dynamic(() => import('jodit-react'), { ssr: false }),
+    []
+  );
 
   const fetchData = async () => {
     try {
@@ -148,8 +154,8 @@ function page() {
     
   };
 
-  const handleChange = (e) => {
-    setHtml(e.target.value);
+  const handleChange = (newContent) => {
+    setHtml(newContent);
   };
 
   const HandleDeleteNewsimg = () => {
@@ -279,7 +285,7 @@ function page() {
               <label className="text-sm font-bold tracking-wide text-gray-500">
                 Full Details
               </label>
-              <EditorProvider>
+              {/* <EditorProvider>
                 <Editor value={html} onChange={handleChange}>
                   <Toolbar>
                     <BtnBold />
@@ -293,7 +299,13 @@ function page() {
                     <BtnStyles />
                   </Toolbar>
                 </Editor>
-              </EditorProvider>
+              </EditorProvider> */}
+              <JoditEditor
+                value={html}
+                onChange={handleChange}
+                className='min-h-[80vh] h-full'
+                tabIndex={1}
+              />
             </div>
             <div className="flex flex-col gap-5">
               <a href="#value=newsimage">

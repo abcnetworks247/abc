@@ -36,12 +36,19 @@ const stripeWebhookSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
 
 // Controller for fetching a list of products (accessible to all users)
 const getAllDonation = async (req, res) => {
+  console.log('donation');
 
-  console.log("donation");
-  
   try {
-    // Fetch all products from the database
-    const products = await Product.find();
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    // Fetch products from the database with pagination
+    const products = await Product.find()
+      .skip(skip)
+      .limit(perPage);
 
     res.status(StatusCodes.OK).json(products);
   } catch (error) {
@@ -51,6 +58,7 @@ const getAllDonation = async (req, res) => {
       .json({ error: 'Internal Server Error' });
   }
 };
+
 
 //getting sinlge products based on the user parameters
 const getSingleDonation = async (req, res) => {
@@ -229,7 +237,7 @@ const stripeProductWebhook = async (req, res) => {
           html: renderHtml,
         });
 
-        console.log("sent successfully");
+        console.log('sent successfully');
 
         //new data added to the controller
       } catch (error) {

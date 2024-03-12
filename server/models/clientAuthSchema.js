@@ -88,6 +88,7 @@ AuthSchema.pre("save", async function (next) {
   next();
 });
 
+
 AuthSchema.methods.checkPassword = async function (password) {
   try {
     const checkPassword = await bcrypt.compare(password, this.password);

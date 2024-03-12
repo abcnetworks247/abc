@@ -142,7 +142,7 @@ const Page = () => {
           </svg>
         </div>
       ) : (
-        <div>
+        <div className=''>
           {news.map((item) => (
             <article
               key={item._id}

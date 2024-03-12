@@ -230,11 +230,18 @@ const SubWebhook = async (req, res) => {
 const getAllSubscriptionPlans = async (req, res) => {
   try {
     const { userRole } = req;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
     // Check if the user has the required role to access subscription plans
     if (userRole === 'superadmin' || userRole === 'admin') {
-      // Fetch all subscription plans from the database
-      const subscriptionPlans = await SubscriptionPlan.find();
+      // Calculate the number of documents to skip
+      const skip = (page - 1) * perPage;
+
+      // Fetch subscription plans from the database with pagination
+      const subscriptionPlans = await SubscriptionPlan.find()
+        .skip(skip)
+        .limit(perPage);
 
       res.status(StatusCodes.OK).json(subscriptionPlans);
     } else {

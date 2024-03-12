@@ -28,7 +28,7 @@ import Api from '@/utils/Api';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import Swal from 'sweetalert2';
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
 
 function page() {
   /**
@@ -52,6 +52,11 @@ function page() {
     []
   );
 
+  const JoditEditor = useMemo(
+    () => dynamic(() => import('jodit-react'), { ssr: false }),
+    []
+  );
+
   const [full, setFull] = useState(true);
   const router = useRouter();
 
@@ -59,8 +64,8 @@ function page() {
   const { handleOpen, size } = UseFileManager();
 
   // function to handle the change of the html content
-  function onChange(e) {
-    setHtml(e.target.value);
+  function onChange(newContent) {
+    setHtml(newContent);
   }
 
   //store Auth token
@@ -289,11 +294,17 @@ function page() {
                   </Toolbar>
                 </Editor>
               </EditorProvider> */}
-              <ReactQuill
+              {/* <ReactQuill
                 theme='snow'
                 value={html}
                 onChange={onChange}
-                className='min-h-[80vh'
+                className='min-h-[80vh]'
+              /> */}
+              <JoditEditor
+                value={html}
+                onChange={onChange}
+                className='min-h-[80vh] h-full'
+                tabIndex={1}
               />
             </div>
             <div className='flex flex-col gap-5'>

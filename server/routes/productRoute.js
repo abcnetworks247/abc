@@ -7,6 +7,7 @@ const {
   updateProduct,
   deleteProduct,
   StripeCheckout,
+  searchProduct,
   stripeProductWebhook,
   Crypto,
   CryptoWebhook,
@@ -21,13 +22,14 @@ router.route("/products/:id").get(getSingleProduct); // Fetch a single product
 router.route("/products").post(authChecker, createProduct); // Create a new product
 router.route("/products").patch(authChecker, updateProduct); // Update a product
 router.route("/products").delete(authChecker, deleteProduct); // Delete a product
+router.route('/products/search').get(searchProduct); // Search for products
 
 router
   .route("/stripe/create-checkout-session")
   .post(authChecker2, StripeCheckout); // Post a checkout session with Stripe
   
 router
-  .route("/stripe/product/webhook")
+  .route("/stripe/purchase/webhook")
   .post(express.raw({ type: "application/json" }), stripeProductWebhook); // Post a checkout session with Stripe
 
 router.route("/crypto/create-checkout-session").post(authChecker2, Crypto); // Post a checkout session with Crypto

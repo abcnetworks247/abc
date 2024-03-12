@@ -19,8 +19,9 @@ router.route("/products/:id").get(getSingleDonation); // Fetch a single product
 router
   .route("/stripe/create-checkout-session")
   .post(authChecker2, StripeCheckout); // Post a checkout session with Stripe
+
 router
-  .route("/stripe/product/webhook")
+  .route("/stripe/donate/webhook")
   .post(express.raw({ type: "application/json" }), stripeProductWebhook); // Post a checkout session with Stripe
 
 router.route("/crypto/create-checkout-session").post(authChecker2, Crypto); // Post a checkout session with Crypto
