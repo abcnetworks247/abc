@@ -264,9 +264,9 @@ export default function Donortransaction() {
                                   variant="ghost"
                                   value={payment_status}
                                   color={
-                                    payment_status === "paid"
+                                    payment_status === "succeeded"
                                       ? "green"
-                                      : payment_status === "pending"
+                                      : payment_status === "failed"
                                       ? "amber"
                                       : "red"
                                   }
