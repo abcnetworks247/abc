@@ -4,7 +4,7 @@ const {
   getSingleDonation,
   getAllDonation,
   StripeCheckout,
-  stripeProductWebhook,
+  stripeDonateWebhook,
   Crypto,
   CryptoWebhook,
 } = require("../controllers/donateController");
@@ -22,7 +22,7 @@ router
 
 router
   .route("/stripe/donate/webhook")
-  .post(express.raw({ type: "application/json" }), stripeProductWebhook); // Post a checkout session with Stripe
+  .post(express.raw({ type: "application/json" }), stripeDonateWebhook); // Post a checkout session with Stripe
 
 router.route("/crypto/create-checkout-session").post(authChecker2, Crypto); // Post a checkout session with Crypto
 router.route("/crypto/product/webhook").post(CryptoWebhook); // Post a checkout session with CryptoWebhook
