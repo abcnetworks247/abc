@@ -22,64 +22,14 @@ import CustompaymentFetch from "../Custom/CustompaymentFetch";
 const TABLE_HEAD = [
   "Username",
   "Amount",
-  "Date",
+  "Plan Type",
   "Status",
   "Transaction ID",
+  "Subscription Name",
   "View",
 ];
 
-const TABLE_ROWS = [
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
-    name: "Spotify",
-    amount: "$2,500",
-    date: "Wed 3:00pm",
-    status: "paid",
-    account: "visa",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-amazon.svg",
-    name: "Amazon",
-    amount: "$5,000",
-    date: "Wed 1:00pm",
-    status: "paid",
-    account: "master-card",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-pinterest.svg",
-    name: "Pinterest",
-    amount: "$3,400",
-    date: "Mon 7:40pm",
-    status: "pending",
-    account: "master-card",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-google.svg",
-    name: "Google",
-    amount: "$1,000",
-    date: "Wed 5:00pm",
-    status: "paid",
-    account: "visa",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-netflix.svg",
-    name: "netflix",
-    amount: "$14,000",
-    date: "Wed 3:30am",
-    status: "cancelled",
-    account: "visa",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-];
+
 
 export default function Premiumtransaction() {
   const [donorData, setDonorData] = React.useState(null);
@@ -87,8 +37,9 @@ export default function Premiumtransaction() {
   const [error, setError] = React.useState(null);
   React.useEffect(() => {
     setLoading(true);
-    CustompaymentFetch(`subscription`)
+    CustompaymentFetch(`subscribe`)
       .then((data) => {
+        console.log(data.data.data, "subscrbe data");
         setDonorData(data.data.data);
         setLoading(false);
       })
@@ -99,40 +50,10 @@ export default function Premiumtransaction() {
       });
   }, []);
 
-  const NewDateinfo = (date, time) => {
-    const Day = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-    const Dates = new Date(date);
-    const days = Day[Dates.getDay()];
 
-    return `${days} `;
-  };
+  const test = "lorem2 000"
 
-  const NewTime = (timeString) => {
-    const timeParts = timeString.split(":");
-
-    if (timeParts.length !== 3) {
-      return "Invalid time format";
-    }
-
-    const hours = parseInt(timeParts[0]);
-    const minutes = parseInt(timeParts[1]);
-    const seconds = parseInt(timeParts[2]);
-
-    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
-      return "Invalid time format";
-    }
-
-    const date = new Date();
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(seconds);
-
-    const amOrPm = hours >= 12 ? "pm" : "am";
-    const formattedHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
-    const formattedTime = `${formattedHours}:${minutes}${amOrPm}`;
-    return formattedTime;
-  };
-
+  console.log(test.slice(2,0))
   return (
     <div>
       {error && (
@@ -141,7 +62,7 @@ export default function Premiumtransaction() {
         </div>
       )}
 
-{loading ? (
+      {loading ? (
         <div className=" py-4 flex items-center justify-center h-full">
           <svg
             className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
@@ -200,22 +121,21 @@ export default function Premiumtransaction() {
                           currency,
                           payment_status,
                           status,
-                          account,
+                          plan_type,
                           accountNumber,
-                          transaction_Id,
+                          subscription_id,
                           expiry,
                           _id,
+                          subscription_status,
+                          subscription_name
                         },
                         index
                       ) => {
-                        const isLast = index === TABLE_ROWS.length - 1;
-                        const classes = isLast
-                          ? "p-4"
-                          : "p-4 border-b border-blue-gray-50";
+                       
 
                         return (
                           <tr key={name}>
-                            <td className={classes}>
+                            <td className={"p-4 border-b border-blue-gray-50"}>
                               <div className="flex items-center gap-3">
                                 {/* <Avatar
                             src={img}
@@ -232,7 +152,7 @@ export default function Premiumtransaction() {
                                 </Typography>
                               </div>
                             </td>
-                            <td className={classes}>
+                            <td className={"p-4 border-b border-blue-gray-50"}>
                               <Typography
                                 variant="small"
                                 color="blue-gray"
@@ -246,47 +166,36 @@ export default function Premiumtransaction() {
                                 {amount}
                               </Typography>
                             </td>
-                            <td className={classes}>
+                            <td className={"p-4 border-b border-blue-gray-50"}>
                               <Typography
                                 variant="small"
                                 color="blue-gray"
                                 className="font-normal"
                               >
-                                {NewDateinfo(donation_Date)}{" "}
-                                {NewTime(donation_Time)}
+                              {plan_type}
                               </Typography>
                             </td>
-                            <td className={classes}>
+                            <td className={"p-4 border-b border-blue-gray-50"}>
                               <div className="w-max">
                                 <Chip
                                   size="sm"
                                   variant="ghost"
-                                  value={payment_status}
+                                  value={subscription_status}
                                   color={
-                                    payment_status === "paid"
+                                    subscription_status === "active"
                                       ? "green"
-                                      : payment_status === "pending"
+                                      : subscription_status === "canceled"
                                       ? "amber"
                                       : "red"
                                   }
                                 />
                               </div>
                             </td>
-                            <td className={classes}>
+                            <td className={"p-4 border-b border-blue-gray-50"}>
                               <div className="flex items-center gap-3">
                                 <div className="   p-1 w-36 truncate">
-                                  {transaction_Id}
-                                  {/* <Avatar
-                              src={
-                                account === "visa"
-                                  ? "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/visa.png"
-                                  : "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/mastercard.png"
-                              }
-                              size="sm"
-                              alt={account}
-                              variant="square"
-                              className="h-full w-full object-contain p-1"
-                            /> */}
+                                  {subscription_id}
+                     
                                 </div>
                                 <div className="flex flex-col">
                                   <Typography
@@ -296,17 +205,29 @@ export default function Premiumtransaction() {
                                   >
                                     {/* {account.split("-").join(" ")} {accountNumber} */}
                                   </Typography>
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal opacity-70"
-                                  >
-                                    {expiry}
-                                  </Typography>
+                             
                                 </div>
                               </div>
                             </td>
-                            <td className={classes}>
+                            <td className={"p-4 border-b border-blue-gray-50"}>
+                              <div className="flex items-center gap-3">
+                                <div className="   p-1 w-[130px] truncate">
+                                  {subscription_name?.slice(14)}
+                     
+                                </div>
+                                <div className="flex flex-col">
+                                  <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-normal capitalize"
+                                  >
+                                    {/* {account.split("-").join(" ")} {accountNumber} */}
+                                  </Typography>
+                          
+                                </div>
+                              </div>
+                            </td>
+                            <td className={"p-4 border-b border-blue-gray-50"}>
                               <Tooltip content="View Info">
                                 <IconButton variant="text">
                                   <svg

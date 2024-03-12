@@ -87,8 +87,9 @@ export default function Producttransaction() {
   const [error, setError] = React.useState(null);
   React.useEffect(() => {
     setLoading(true);
-    CustompaymentFetch(`product`)
+    CustompaymentFetch(`purchase`)
       .then((data) => {
+        console.log(data.data.data, "purcase")
         setDonorData(data.data.data);
         setLoading(false);
       })
@@ -195,8 +196,8 @@ export default function Producttransaction() {
                           {
                             name,
                             amount,
-                            donation_Date,
-                            donation_Time,
+                            payment_Date,
+                            payment_Time,
                             currency,
                             payment_status,
                             status,
@@ -250,10 +251,9 @@ export default function Producttransaction() {
                                 <Typography
                                   variant="small"
                                   color="blue-gray"
-                                  className="font-normal"
+                                  className="font-normal truncate w-32"
                                 >
-                                  {NewDateinfo(donation_Date)}{" "}
-                                  {NewTime(donation_Time)}
+                                 {payment_Date}
                                 </Typography>
                               </td>
                               <td className={classes}>
