@@ -17,15 +17,9 @@ import { ArrowDownTrayIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outl
 import Producttransaction from "@/components/Alltransaction/Producttransaction";
 import Donortransaction from "@/components/Alltransaction/Donortransaction";
 import Premiumtransaction from "@/components/Alltransaction/Premiumtransaction";
-import GenTransaction from "@/components/Alltransaction/GenTransaction";
-import CustompaymentFetch from "@/components/Custom/CustompaymentFetch";
 
 const Alltransactiondata = [
-  {
-    label: "All Transaction",
-    value: "All Transaction",
-    childComponent: <GenTransaction />,
-  },
+
   {
     label: "Product",
     value: "Product",
