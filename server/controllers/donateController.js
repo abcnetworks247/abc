@@ -150,7 +150,7 @@ const StripeCheckout = async (req, res) => {
   }
 };
 
-const stripeProductWebhook = async (req, res) => {
+const stripeDonateWebhook = async (req, res) => {
   console.log('Stripe donate Webhook');
 
   const sig = req.headers['stripe-signature'];
@@ -172,10 +172,10 @@ const stripeProductWebhook = async (req, res) => {
 
       break;
 
-    case 'checkout.session.completed':
-      const checkoutSessionCompleted = event.data.object;
+    case 'charge.succeeded':
+      const chargeSucceeded = event.data.object;
 
-      let email = checkoutSessionCompleted.customer_details.email;
+      let email = chargeSucceeded.data.object.billing_details.email;
 
       try {
         const olduser = await Client.findOne({ email });
@@ -199,14 +199,14 @@ const stripeProductWebhook = async (req, res) => {
         const data = {
           email: olduser.email,
           name: olduser.fullname,
-          amount: checkoutSessionCompleted.amount_total / 100,
-          currency: checkoutSessionCompleted.currency,
+          amount: chargeSucceeded.data.object.amount / 100,
+          currency: chargeSucceeded.data.object.currency,
           donation_Date: formattedDate, // Current date
           donation_Time: formattedTime, // Current time
-          payment_status: checkoutSessionCompleted.payment_status,
+          payment_status: chargeSucceeded.data.object.status,
           payment_method_types:
-            checkoutSessionCompleted.payment_method_types[0],
-          transaction_Id: checkoutSessionCompleted.id,
+            chargeSucceeded.data.object.payment_method_details.type,
+          transaction_Id: chargeSucceeded.id,
         };
 
         const { error, value } = DonationJoi.validate(data);
@@ -329,7 +329,7 @@ module.exports = {
   getSingleDonation,
   getAllDonation,
   StripeCheckout,
-  stripeProductWebhook,
+  stripeDonateWebhook,
   Crypto,
   CryptoWebhook,
 };
