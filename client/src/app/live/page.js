@@ -8,7 +8,7 @@ const page = () => {
   const channels = [
     {
       name: 'ABC AMBA TV, English Live',
-      description: 'News in English',
+      description: '',
       url: 'https://iframe.viewmedia.tv?channel=158',
       id: 1,
     },
@@ -79,7 +79,7 @@ const page = () => {
               </g>
             </svg>
             <h1 className='text-xl font-semibold md:text-3xl text-blue-500 mt-1 md:mt-3 text-center  leading-relaxed md:leading-snug'>
-              All ABC Networks Channel, Live 247
+              ABC Networks Channel, Live-24/7
             </h1>
           </div>
           <h2 className='text-center mb-8'>
