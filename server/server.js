@@ -76,7 +76,7 @@ app.use(
 connectDb(server);
 
 //new check
-// app.use(express.json());
+// app.use(express.json()); commented
 
 app.use((req, res, next) => {
   if (req.originalUrl === "/api/v1/admin/donation/stripe/donate/webhook") {
