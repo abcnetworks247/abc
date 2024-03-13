@@ -23,6 +23,7 @@ router.route("/history/subscribe").get(authChecker, getAllSubscription);
 router.route("/history/subscribe/:id").get(authChecker, getSingleSubscription);
 
 
+
 router.route("/history/purchase").get(authChecker, getAllPurchaseHistory);
 router.route("/history/purchase/:id").get(authChecker, getSinglePurchaseHistory);
 

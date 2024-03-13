@@ -123,7 +123,9 @@ const SubWebhook = async (req, res) => {
   console.log('subscriptions webhook currently active');
 
   const payload = req.body;
+  const templatePath = path.join(__dirname, '../views/subscriptionView.ejs');
   const sig = req.headers['stripe-signature'];
+
   let event;
 
   try {
@@ -191,6 +193,24 @@ const SubWebhook = async (req, res) => {
       usersub.subscriptionhistory.unshift(newData._id);
 
       await usersub.save();
+
+      const renderHtml = await ejs.renderFile(
+        templatePath,
+        {
+          userFullname: usersub.fullname,
+          userEmail: usersub.email,
+          // donation_data: data,
+        },
+        { async: true }
+      );
+
+      await sendMail({
+        email: usersub.email,
+        subject: 'ABC Subscription activated successfully',
+        html: renderHtml,
+      });
+
+      console.log('sent successfully');
 
       break;
 

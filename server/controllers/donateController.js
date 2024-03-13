@@ -1,5 +1,4 @@
 const { StatusCodes } = require('http-status-codes');
-const Product = require('../models/productsSchema');
 const coinbase = require('coinbase-commerce-node');
 const Client = require('../models/clientAuthSchema');
 const DonateModel = require('../models/donationSchema');
@@ -23,7 +22,6 @@ const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
-const ProductJoi = require('../Utils/ProductJoiSchema');
 const {
   NotFoundError,
   UnAuthorizedError,
@@ -34,7 +32,7 @@ const { log } = require('console');
 const localurl = process.env.CLIENT_URL;
 const stripeWebhookSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
 
-// Controller for fetching a list of products (accessible to all users)
+
 const getAllDonation = async (req, res) => {
   console.log('donation');
 
@@ -46,9 +44,7 @@ const getAllDonation = async (req, res) => {
     const skip = (page - 1) * perPage;
 
     // Fetch products from the database with pagination
-    const products = await Product.find()
-      .skip(skip)
-      .limit(perPage);
+    const products = await Product.find().skip(skip).limit(perPage);
 
     res.status(StatusCodes.OK).json(products);
   } catch (error) {
@@ -60,7 +56,6 @@ const getAllDonation = async (req, res) => {
 };
 
 
-//getting sinlge products based on the user parameters
 const getSingleDonation = async (req, res) => {
   try {
     const productId = req.params.id;
@@ -175,7 +170,9 @@ const stripeDonateWebhook = async (req, res) => {
     case 'charge.succeeded':
       const chargeSucceeded = event.data.object;
 
-      let email = chargeSucceeded.data.object.billing_details.email;
+      let email = chargeSucceeded.billing_details.email;
+
+      console.log('email', email);
 
       try {
         const olduser = await Client.findOne({ email });
@@ -199,13 +196,12 @@ const stripeDonateWebhook = async (req, res) => {
         const data = {
           email: olduser.email,
           name: olduser.fullname,
-          amount: chargeSucceeded.data.object.amount / 100,
-          currency: chargeSucceeded.data.object.currency,
+          amount: chargeSucceeded.amount / 100,
+          currency: chargeSucceeded.currency,
           donation_Date: formattedDate, // Current date
           donation_Time: formattedTime, // Current time
-          payment_status: chargeSucceeded.data.object.status,
-          payment_method_types:
-            chargeSucceeded.data.object.payment_method_details.type,
+          payment_status: chargeSucceeded.status,
+          payment_method_types: chargeSucceeded.payment_method_details.type,
           transaction_Id: chargeSucceeded.id,
         };
 
@@ -251,7 +247,7 @@ const stripeDonateWebhook = async (req, res) => {
   }
 
   // Return a 200 response to acknowledge receipt of the event
-  res.send().end();
+  res.status(200).end();
 };
 
 // const Crypto = async (req, res) => {

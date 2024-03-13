@@ -410,6 +410,9 @@ const StripeCheckout = async (req, res) => {
 };
 
 const stripeProductWebhook = async (req, res) => {
+  console.log('stripe webhook for product');
+
+  const templatePath = path.join(__dirname, '../views/purchaseView.ejs');
   const sig = req.headers['stripe-signature'];
 
   let event;
@@ -528,18 +531,16 @@ const stripeProductWebhook = async (req, res) => {
         country: checkoutSessionCompleted.customer_details.address.country,
       };
 
-      // // const { error, value } = PurchaseHistoryJoi.validate(data);
-      // // const { error1, value1 } = OrderHistoryJoi.validate(data2);
+      // const { error, value } = PurchaseHistoryJoi.validate(data);
+      // const { error1, value1 } = OrderHistoryJoi.validate(data2);
 
-      // // if (error) {
-      // //   throw new ValidationError("Data recieved is invalid");
-      // // }
+      // if (error) {
+      //   throw new ValidationError("Data recieved is invalid");
+      // }
 
-      // // if (error1) {
-      // //   throw new ValidationError("Data recieved is invalid");
-      // // }
-
-      // console.log('data', data);
+      // if (error1) {
+      //   throw new ValidationError("Data recieved is invalid");
+      // }
 
       const newData = await PurchaseHistoryModel.create(data);
       const newData1 = await OrderHistoryModel.create(data2);
@@ -554,7 +555,23 @@ const stripeProductWebhook = async (req, res) => {
         },
       });
 
-      console.log('Checkout successful true');
+      const renderHtml = await ejs.renderFile(
+        templatePath,
+        {
+          userFullname: olduser.fullname,
+          userEmail: olduser.email,
+          // donation_data: data,
+        },
+        { async: true }
+      );
+
+      await sendMail({
+        email: olduser.email,
+        subject: 'Thank you for your order',
+        html: renderHtml,
+      });
+
+      console.log('sent successfully');
 
       break;
 
@@ -563,7 +580,7 @@ const stripeProductWebhook = async (req, res) => {
   }
 
   // Return a 200 response to acknowledge receipt of the event
-  res.send().end();
+  res.status(200).end();
 };
 
 // const Crypto = async (req, res) => {

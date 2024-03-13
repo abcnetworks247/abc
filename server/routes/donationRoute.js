@@ -17,7 +17,7 @@ router.route("/products").get(getAllDonation); // Fetch all products
 router.route("/products/:id").get(getSingleDonation); // Fetch a single product
 
 router
-  .route("/stripe/create-checkout-session")
+  .route("/stripe/create-donate-session")
   .post(authChecker2, StripeCheckout); // Post a checkout session with Stripe
 
 router
