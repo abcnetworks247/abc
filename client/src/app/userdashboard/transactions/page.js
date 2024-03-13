@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from 'react'
-import SubscriptionHistory from '../components/transactions/subscription';
-import DonationHistory from '../components/transactions/donation';
-import PurchaseHistory from '../components/transactions/purchase';
+import SubscriptionHistory from '../components/transactions/Subscription';
+import DonationHistory from '../components/transactions/Donation';
+import PurchaseHistory from '../components/transactions/Purchase';
 
 
 const Transactions = () => {

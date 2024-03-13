@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useMemo } from "react";
 import { UseUserContext } from "../../../../../contexts/UserContext";
-import Empty from "./empty";
+import Empty from "./Empty";
 const products = [
   {
     id: 1,

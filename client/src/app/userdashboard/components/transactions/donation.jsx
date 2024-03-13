@@ -1,7 +1,8 @@
 "use client";
 import { useState, useRef, useMemo } from "react";
 import { UseUserContext } from "../../../../../contexts/UserContext";
-import Empty from "./empty";
+import Empty from "./Empty";
+Empty
 const products = [
   {
     id: 1,
@@ -325,7 +326,7 @@ const DonationHistory = () => {
   const [rowsLimit, setRowsLimit] = useState(6);
   const [rowsToShow, setRowsToShow] = useState(productList.slice(0, rowsLimit));
   const [customPagination, setCustomPagination] = useState([]);
-  const {UserData} = UseUserContext();
+  const { UserData } = UseUserContext();
   const donationData = UserData?.donationhistory;
   const [totalPage, setTotalPage] = useState(
     Math.ceil(productList?.length / rowsLimit)
@@ -364,8 +365,7 @@ const DonationHistory = () => {
   }, []);
   return (
     <div className=" h-full bg-white flex  items-center justify-center pb-10">
-      { donationData.length === 1 ?
-      (
+      {donationData.length === 1 ? (
         <Empty name={"donation"} />
       ) : (
         <div className="w-full max-w-4xl ">
@@ -515,4 +515,3 @@ const DonationHistory = () => {
   );
 };
 export default DonationHistory;
-  
