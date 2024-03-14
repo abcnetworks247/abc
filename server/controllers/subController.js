@@ -1,26 +1,38 @@
-const Auth = require("../models/clientAuthSchema"); // Assuming your user model is named 'Auth'
-const { StatusCodes } = require("http-status-codes");
-const SubscriptionModel = require("../models/subscriptionSchema");
-const SubscriptionJoi = require("../Utils/SubscriptionJoi");
-const Client = require("../models/clientAuthSchema");
+const Auth = require('../models/clientAuthSchema'); // Assuming your user model is named 'Auth'
+const { StatusCodes } = require('http-status-codes');
+const SubscriptionModel = require('../models/subscriptionSchema');
+const SubscriptionJoi = require('../Utils/SubscriptionJoi');
+const path = require('path');
+const Client = require('../models/clientAuthSchema');
+const sendMail = require('../Utils/sendMail');
+const dotenv = require('dotenv').config();
+const fs = require('fs');
+const ejs = require('ejs');
+
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require("../errors/index");
+} = require('../errors/index');
 
-const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookSecret = process.env.STRIPE_SUBSCRIPTION_WEBHOOK_SECRETE;
 const localurl = process.env.CLIENT_URL;
 
+const adminUrl = process.env.ADMIN_URL;
+const serverUrl = process.env.SERVER_URL;
+const clientUrl = process.env.CLIENT_URL;
+
 const createSubscription = async (req, res) => {
+  console.log('Create subscription');
+
   const user = req.user;
   const item = req.body;
   let customer;
 
   try {
     if (!user) {
-      throw new UnAuthorizedError("User must be logged in to subscribe");
+      throw new UnAuthorizedError('User must be logged in to subscribe');
     }
 
     const existingCustomer = await stripe.customers.list({
@@ -35,21 +47,21 @@ const createSubscription = async (req, res) => {
       // Check if the customer already has an active subscription
       const subscriptions = await stripe.subscriptions.list({
         customer: customer.id,
-        status: "active",
+        status: 'active',
         limit: 1,
       });
 
       if (subscriptions.data.length > 0) {
         // Customer already has an active subscription, send them to biiling portal to manage subscription
 
-        console.log("old subscription");
+        console.log('old subscription');
 
         const stripeSession = await stripe.billingPortal.sessions.create({
           customer: customer.id,
           return_url: `${localurl}`,
         });
 
-        console.log("yes", stripeSession.url);
+        console.log('yes', stripeSession.url);
 
         return res
           .status(StatusCodes.CONFLICT)
@@ -70,14 +82,14 @@ const createSubscription = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
-      payment_method_types: ["card"],
-      mode: "subscription",
-      billing_address_collection: "auto",
+      payment_method_types: ['card'],
+      mode: 'subscription',
+      billing_address_collection: 'auto',
       customer_email: user.email,
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: 'usd',
             product_data: {
               name: item.name,
               description: `${item.description}\n \n${item.features}`,
@@ -97,12 +109,9 @@ const createSubscription = async (req, res) => {
       customer: user._id,
     });
 
-    console.log("session created for " + session);
-    console.log("session url", { url: session.url });
-
     res.status(StatusCodes.OK).json({ url: session.url });
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -110,10 +119,12 @@ const createSubscription = async (req, res) => {
 };
 
 const SubWebhook = async (req, res) => {
-  console.log("subscriptions webhook currently active");
+  console.log('subscriptions webhook currently active');
 
   const payload = req.body;
-  const sig = req.headers["stripe-signature"];
+  const templatePath = path.join(__dirname, '../views/subscriptionView.ejs');
+  const sig = req.headers['stripe-signature'];
+
   let event;
 
   try {
@@ -122,22 +133,23 @@ const SubWebhook = async (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  console.log("new web2");
-
-  const customer = await stripe.customers.retrieve(event.data.object.customer);
-
-  let userEmail = customer.email;
-  const olduser = await Client.findOne({ userEmail });
+  console.log('new web2');
 
   switch (event.type) {
-    case "invoice.payment_succeeded":
+    case 'invoice.payment_succeeded':
       const invoicePaymentSucceeded = event.data.object;
 
-      console.log("pay1", invoicePaymentSucceeded);
+      let email = invoicePaymentSucceeded.customer_email;
+
+      console.log('email of user: ' + email);
+
+      const usersub = await Client.findOne({ email });
 
       const subscription = await stripe.subscriptions.retrieve(
         event.data.object.subscription
       );
+
+      console.log('subscription of user: ' + subscription);
 
       const periodEndTimestamp = subscription.current_period_end;
       const periodStartTimestamp = subscription.current_period_start;
@@ -150,18 +162,9 @@ const SubWebhook = async (req, res) => {
       const periodEndDate = new Date(periodEndMilliseconds);
       const periodStartDate = new Date(periodStartMilliseconds);
 
-      // Output
-      console.log("Period Start Date:", periodStartDate);
-      console.log("Period End Date:", periodEndDate);
-      console.log(
-        "description:",
-        invoicePaymentSucceeded.lines.data[0].description
-      );
-
-      const data = {
-        email: olduser.email,
-        name: olduser.fullname,
-        stripe_customer_id: customer.id,
+      const subdata1 = {
+        email: usersub.email,
+        name: usersub.fullname,
         amount: subscription.plan.amount / 100,
         currency: subscription.currency,
         country: invoicePaymentSucceeded.customer_address.country,
@@ -176,24 +179,43 @@ const SubWebhook = async (req, res) => {
         subscription_name: invoicePaymentSucceeded.lines.data[0].description,
       };
 
-      console.log("data now", data);
-
-      const { error, value } = SubscriptionJoi.validate(data);
+      const { error, value } = SubscriptionJoi.validate(subdata1);
 
       if (error) {
-        throw new ValidationError("Data recieved is invalid");
+        throw new ValidationError('Data recieved is invalid');
       }
 
       const newData = await SubscriptionModel.create(value);
 
-      olduser.subscriptionhistory.unshift(newData.id);
+      console.log('data now', newData);
 
-      await olduser.save();
+      usersub.subscriptionhistory.unshift(newData._id);
+
+      await usersub.save();
+
+      const renderHtml = await ejs.renderFile(
+        templatePath,
+        {
+          userFullname: usersub.fullname,
+          userEmail: usersub.email,
+          // donation_data: data,
+        },
+        { async: true }
+      );
+
+      await sendMail({
+        email: usersub.email,
+        subject: 'ABC Subscription activated successfully',
+        html: renderHtml,
+      });
+
+      console.log('sent successfully');
 
       break;
+
     // ... handle other event types
 
-    case "customer.subscription.updated":
+    case 'customer.subscription.updated':
       const customerSubscriptionUpdated = event.data.object;
 
       // console.log(event);
@@ -211,7 +233,7 @@ const SubWebhook = async (req, res) => {
       }
 
       break;
-    case "invoice.payment_failed":
+    case 'invoice.payment_failed':
       const invoicePaymentFailed = event.data.object;
 
       break;
@@ -227,15 +249,22 @@ const SubWebhook = async (req, res) => {
 const getAllSubscriptionPlans = async (req, res) => {
   try {
     const { userRole } = req;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
     // Check if the user has the required role to access subscription plans
-    if (userRole === "superadmin" || userRole === "admin") {
-      // Fetch all subscription plans from the database
-      const subscriptionPlans = await SubscriptionPlan.find();
+    if (userRole === 'superadmin' || userRole === 'admin') {
+      // Calculate the number of documents to skip
+      const skip = (page - 1) * perPage;
+
+      // Fetch subscription plans from the database with pagination
+      const subscriptionPlans = await SubscriptionPlan.find()
+        .skip(skip)
+        .limit(perPage);
 
       res.status(StatusCodes.OK).json(subscriptionPlans);
     } else {
-      throw new UnAuthorizedError("Unauthorized to access subscription plans");
+      throw new UnAuthorizedError('Unauthorized to access subscription plans');
     }
   } catch (error) {
     console.error(error);

@@ -26,7 +26,6 @@ const PricingComp = ({ CloseModal, spinnerId, Authtoken }) => {
 
   const SubscribeNow = async (event) => {
     event.preventDefault();
-    const stripePromise = await loadStripe(public_stripe_key);
 
     const update = {
       ...spinnerId,

@@ -11,7 +11,6 @@ const donationSchema = new mongoose.Schema({
   payment_status: { type: String, required: true },
   payment_method_types: { type: String, required: true },
   transaction_Id: { type: String, required: true },
-  hosted_invoice_url: { type: String, required: true },
 });
 
 // Create Donation model

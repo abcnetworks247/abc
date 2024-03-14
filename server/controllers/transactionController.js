@@ -1,29 +1,30 @@
-const DonateModel = require("../models/donationSchema");
-const SubscriptionModel = require("../models/subscriptionSchema");
-const PurchaseHistoryModel = require("../models/purchaseSchema");
-const OrderHistoryModel = require("../models/orderHistorySchema");
+const DonateModel = require('../models/donationSchema');
+const SubscriptionModel = require('../models/subscriptionSchema');
+const PurchaseHistoryModel = require('../models/purchaseSchema');
+const OrderHistoryModel = require('../models/orderHistorySchema');
 
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require("../errors/index");
+} = require('../errors/index');
+const { StatusCodes } = require('http-status-codes');
 
 const getAllDonate = async (req, res) => {
   const { user } = req;
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
     const result = await DonateModel.find();
 
     if (!result) {
-      throw new NotFoundError("No result found");
+      throw new NotFoundError('No result found');
     }
 
     return res.status(StatusCodes.OK).json({
-      message: "donation history retrieved successfully",
+      message: 'donation history retrieved successfully',
       data: result,
     });
   } catch (error) {
@@ -40,23 +41,23 @@ const getSingleDonate = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     const result = await blog.findById(id);
 
     if (!result) {
-      throw new NotFoundError("Donate dat not found");
+      throw new NotFoundError('Donate dat not found');
     }
 
     return res
       .status(StatusCodes.OK)
-      .json({ message: "data retrieved successfully", data: result });
+      .json({ message: 'data retrieved successfully', data: result });
   } catch (error) {
-    console.error("Error in getSingleBlog:", error); // Log the error for debugging
+    console.error('Error in getSingleBlog:', error); // Log the error for debugging
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
+      .json({ message: 'Internal Server Error' });
   }
 };
 
@@ -65,16 +66,25 @@ const getAllSubscription = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
-    const result = await SubscriptionModel.find();
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    const result = await SubscriptionModel.find()
+      .skip(skip)
+      .limit(perPage);
 
     if (!result) {
-      throw new NotFoundError("No result found");
+      throw new NotFoundError('No result found');
     }
 
     return res.status(StatusCodes.OK).json({
-      message: "subscription history retrieved successfully",
+      message: 'Subscription history retrieved successfully',
       data: result,
     });
   } catch (error) {
@@ -83,6 +93,7 @@ const getAllSubscription = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
 
 const getSingleSubscription = async (req, res) => {
   const { id } = req.params;
@@ -91,23 +102,23 @@ const getSingleSubscription = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     const result = await SubscriptionModel.findById(id);
 
     if (!result) {
-      throw new NotFoundError("Subscription data not found");
+      throw new NotFoundError('Subscription data not found');
     }
 
     return res
       .status(StatusCodes.OK)
-      .json({ message: "data retrieved successfully", data: result });
+      .json({ message: 'data retrieved successfully', data: result });
   } catch (error) {
-    console.error("Error in getSingleBlog:", error); // Log the error for debugging
+    console.error('Error in getSingleBlog:', error); // Log the error for debugging
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
+      .json({ message: 'Internal Server Error' });
   }
 };
 
@@ -116,16 +127,25 @@ const getAllPurchaseHistory = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
-    const result = await PurchaseHistoryModel.find();
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    const result = await PurchaseHistoryModel.find()
+      .skip(skip)
+      .limit(perPage);
 
     if (!result) {
-      throw new NotFoundError("No result found");
+      throw new NotFoundError('No result found');
     }
 
     return res.status(StatusCodes.OK).json({
-      message: "purchase history retrieved successfully",
+      message: 'Purchase history retrieved successfully',
       data: result,
     });
   } catch (error) {
@@ -134,6 +154,7 @@ const getAllPurchaseHistory = async (req, res) => {
       .json({ message: error.message });
   }
 };
+
 
 const getSinglePurchaseHistory = async (req, res) => {
   const { id } = req.params;
@@ -142,23 +163,23 @@ const getSinglePurchaseHistory = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     const result = await PurchaseHistoryModel.findById(id);
 
     if (!resullt) {
-      throw new NotFoundError("Purchase HIstory data not found");
+      throw new NotFoundError('Purchase HIstory data not found');
     }
 
     return res
       .status(StatusCodes.OK)
-      .json({ message: "data retrieved successfully", data: result });
+      .json({ message: 'data retrieved successfully', data: result });
   } catch (error) {
-    console.error("Error in getSingleBlog:", error); // Log the error for debugging
+    console.error('Error in getSingleBlog:', error); // Log the error for debugging
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
+      .json({ message: 'Internal Server Error' });
   }
 };
 
@@ -167,16 +188,25 @@ const getAllOrderHistory = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
-    const result = await OrderHistoryModel.find();
+
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * perPage;
+
+    const result = await OrderHistoryModel.find()
+      .skip(skip)
+      .limit(perPage);
 
     if (!result) {
-      throw new NotFoundError("No result found");
+      throw new NotFoundError('No result found');
     }
 
     return res.status(StatusCodes.OK).json({
-      message: "order history retrieved successfully",
+      message: 'Order history retrieved successfully',
       data: result,
     });
   } catch (error) {
@@ -186,6 +216,7 @@ const getAllOrderHistory = async (req, res) => {
   }
 };
 
+
 const getSingleOrderHistory = async (req, res) => {
   const { id } = req.params;
 
@@ -193,23 +224,23 @@ const getSingleOrderHistory = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     const result = await OrderHistoryModel.findById(id);
 
     if (!result) {
-      throw new NotFoundError("order history data not found");
+      throw new NotFoundError('order history data not found');
     }
 
     return res
       .status(StatusCodes.OK)
-      .json({ message: "data retrieved successfully", data: result });
+      .json({ message: 'data retrieved successfully', data: result });
   } catch (error) {
-    console.error("Error in getting data:", error); // Log the error for debugging
+    console.error('Error in getting data:', error); // Log the error for debugging
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
+      .json({ message: 'Internal Server Error' });
   }
 };
 
@@ -220,13 +251,13 @@ const updateOrderHistory = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     const result = await OrderHistoryModel.findById(id);
 
     if (!result) {
-      throw new NotFoundError("order history data not found");
+      throw new NotFoundError('order history data not found');
     }
 
     await OrderHistoryModel.findByIdAndUpdate(
@@ -237,12 +268,12 @@ const updateOrderHistory = async (req, res) => {
 
     return res
       .status(StatusCodes.OK)
-      .json({ message: "data updated successfully" });
+      .json({ message: 'data updated successfully' });
   } catch (error) {
-    console.error("Error in getting data:", error); // Log the error for debugging
+    console.error('Error in getting data:', error); // Log the error for debugging
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
+      .json({ message: 'Internal Server Error' });
   }
 };
 

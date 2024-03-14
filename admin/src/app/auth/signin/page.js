@@ -160,7 +160,7 @@ function Page() {
         pauseOnHover
         theme="light"
       />
-      <section className="flex gap-4 m-8">
+      <section className="flex gap-4 m-8 items-center">
         <div className="w-full mt-5 lg:w-3/5">
           <div className="text-center">
             <Image

@@ -60,7 +60,7 @@ export default function Sidebar() {
     >
       <div className="bg-[#121e31] h-screen left-0 min-w-[250px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="relative flex flex-col h-full">
-          <div className="flex items-center text-center  justify-between">
+          <div className="flex items-center text-centerjustify-between">
             <Link
               href="/dashboard"
               onClick={() => {
@@ -94,7 +94,7 @@ export default function Sidebar() {
             </svg>
           </div>
 
-          <ul className="flex-1 my-3 space-y-1">
+          <ul className="flex flex-col justify-center items-start flex-1 my-3 space-y-1">
             <li>
               <Link
                 href="/dashboard"
@@ -452,6 +452,7 @@ export default function Sidebar() {
               </Link>
             </li>
           </ul>
+          
           {isLoading ? (
             <div className="flex flex-wrap items-center px-2 py-1 border border-gray-500 rounded-full cursor-pointer">
               <div className="w-10 h-10 border-2 rounded-full animate-pulse bg-blue-gray-200 border-blue-gray-200 border-l-transparent"></div>

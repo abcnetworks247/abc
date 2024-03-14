@@ -8,7 +8,7 @@ const page = () => {
     <div
       className={` ${
         screen ? "hidden" : ""
-      }  h-full w-full md:hidden absolute sm:static sm:block top-0 z-30 p-8 px-4 bg-white `}
+      }  h-full w-full md:hidden absolute sm:static sm:block top-0 z-30 p-8 px-4 bg-white flex-1 `}
       
     >
       <DeleteAccount />

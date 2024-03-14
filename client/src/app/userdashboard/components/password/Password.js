@@ -95,8 +95,8 @@ const Password = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center px-6 mx-auto">
-      <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+    <div className="flex flex-col flex-grow">
+      <div className="w-full flex-grow sm:p-8">
         <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           Change Password
         </h2>
@@ -167,7 +167,7 @@ const Password = () => {
           <div>
             <label
               htmlFor="confirm-password"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              className="block mb-2 text-sm font-medium text-gray-900"
             >
               Confirm Password
             </label>
@@ -197,7 +197,7 @@ const Password = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            className="w-full bg-blue-600 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Reset passwod
           </button>

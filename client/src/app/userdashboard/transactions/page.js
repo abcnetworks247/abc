@@ -13,10 +13,10 @@ const Transactions = () => {
 
     return (
         <div
-        className={` w-full md:basis-3/4 bg-white md:min-h-max sm:shadow-md sm:rounded-md h-[100vh] p-4 flex flex-col gap-10`}
+        className={` w-full bg-white sm:rounded-md h-[100vh] p-4 flex flex-col gap-10`}
         >
             
-            <div className="flex flex-row gap-1">
+          <div className="flex flex-row gap-1">
             <button
               onClick={() => handleTabClick(1)}
               className={` h-8 px-3  text-lg rounded-lg  ${

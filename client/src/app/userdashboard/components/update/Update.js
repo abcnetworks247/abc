@@ -14,11 +14,11 @@ const Update = () => {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
 
   const [formData, setFormData] = useState({
-    fullname: UserData.fullname || "",
-    email: UserData.email || "",
-    phone: UserData.phone || "",
-    shippingaddress: UserData.shippingaddress || "",
-    userdp: UserData.userdp,
+    fullname: UserData && UserData.fullname || "",
+    email:UserData && UserData.email || "",
+    phone: UserData && UserData.phone || "",
+    shippingaddress: UserData && UserData.shippingaddress || "",
+    userdp:UserData && UserData.userdp,
   });
 
   const [selectedPhoto, setSelectedPhoto] = useState(null);

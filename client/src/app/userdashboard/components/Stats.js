@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 const Stats = () => {
     const router = useRouter()
   return (
-    <div className={` basis-3/4 `}>
-      <div className="mx-2 sm:mx-4 relative bg-white shadow-md rounded-sm sm:rounded-lg  w-full p-2 ">
+    <div className={` w-full flex flex-col h-full rounded-md`}>
+      <div className="relative bg-white  shadow-md rounded-sm sm:rounded-lg p-4 ">
         <div className="flex flex-col md:flex-col lg:flex-row  items-center gap-3">
           <div className="w-full">
             <div className="flex items-center px-5 py-6 shadow-sm rounded-md bg-slate-100">
@@ -84,7 +84,7 @@ const Stats = () => {
         </div>
       </div>
 
-      <div className=" flex flex-row items-center justify-center bg-white m-2 sm:m-4 sm:rounded-l  w-full h-[50vh] rounded-sm sm:rounded-lg bg-gradient-to-r from-fuchsia-500 to-cyan-500">
+      <div className=" flex fle items-center justify-center mt-4 bg-white  sm:rounded-l flex-grow rounded-sm sm:rounded-lg bg-gradient-to-r from-fuchsia-500 to-cyan-500">
         <p className="text-center text-xl font-semibold  mt-4 text-white">
           Welcome to your profile!
         </p>

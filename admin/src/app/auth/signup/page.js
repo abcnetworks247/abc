@@ -107,7 +107,7 @@ export default function Page() {
         pauseOnHover
         theme="light"
       />
-      <section className="flex m-8">
+      <section className="flex m-8 items-center">
         <div className="hidden w-2/5 h-full lg:block">
           <Image
             height={200}

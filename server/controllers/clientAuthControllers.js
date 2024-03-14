@@ -1,29 +1,29 @@
-const Client = require("../models/clientAuthSchema");
-const Product = require("../models/productsSchema");
-const Admin = require("../models/adminAuthSchema");
-const Blog = require("../models/blogSchema");
-const { StatusCodes } = require("http-status-codes");
-require("dotenv").config();
-const cookie = require("cookie-parser");
-const sendMail = require("../Utils/sendMail");
-const path = require("path");
-const fs = require("fs");
-const ejs = require("ejs");
-const { CreateToken, VerifyToken } = require("../Helper/authToken");
-const multer = require("multer");
-const cloudinary = require("../Utils/CloudinaryFileUpload");
+const Client = require('../models/clientAuthSchema');
+const Product = require('../models/productsSchema');
+const Admin = require('../models/adminAuthSchema');
+const Blog = require('../models/blogSchema');
+const { StatusCodes } = require('http-status-codes');
+require('dotenv').config();
+const cookie = require('cookie-parser');
+const sendMail = require('../Utils/sendMail');
+const path = require('path');
+const fs = require('fs');
+const ejs = require('ejs');
+const { CreateToken, VerifyToken } = require('../Helper/authToken');
+const multer = require('multer');
+const cloudinary = require('../Utils/CloudinaryFileUpload');
 
-const upload = multer({ dest: "public/tmp" });
+const upload = multer({ dest: 'public/tmp' });
 const adminUrl = process.env.ADMIN_URL;
 const serverUrl = process.env.SERVER_URL;
 const clientUrl = process.env.CLIENT_URL;
 
-const Clientjoi = require("../Utils/ClientJoiSchema");
+const Clientjoi = require('../Utils/ClientJoiSchema');
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require("../errors/index");
+} = require('../errors/index');
 
 const maxAgeInMilliseconds = 7 * 24 * 60 * 60 * 1000;
 
@@ -34,7 +34,7 @@ const signUp = async (req, res) => {
     const findUser = await Client.findOne({ email });
 
     if (findUser) {
-      throw new UnAuthorizedError("Email already exists");
+      throw new UnAuthorizedError('Email already exists');
     }
 
     const { error, value } = Clientjoi.validate({
@@ -44,14 +44,14 @@ const signUp = async (req, res) => {
     });
 
     if (error) {
-      throw new ValidationError("error");
+      throw new ValidationError('error');
     }
 
     const newUser = await Client.create(value);
 
     res.status(StatusCodes.CREATED).json({
       data: newUser,
-      message: "Account created successfully",
+      message: 'Account created successfully',
     });
   } catch (error) {
     res
@@ -66,42 +66,42 @@ const signIn = async (req, res) => {
   console.log(email, password);
 
   try {
-    const olduser = await Client.findOne({ email });
+    const oldUser = await Client.findOne({ email });
 
-    if (!olduser) {
-      throw new NotFoundError("User not found");
+    if (!oldUser) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: 'User not found' });
     }
 
-    const authenticatedUser = await olduser.checkPassword(password);
-
-    console.log("found user", authenticatedUser);
+    const authenticatedUser = oldUser.checkPassword(password);
 
     if (!authenticatedUser) {
-      throw new UnAuthorizedError("Invalid email or password");
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ error: 'Invalid email or password' });
     }
 
-    console.log("yes", authenticatedUser);
+    const maxAgeInMilliseconds = 90 * 24 * 60 * 60 * 1000; // 90 days
+    const token = CreateToken(oldUser._id, maxAgeInMilliseconds);
 
-    const MaxAge = 3 * 24 * 60 * 60;
-
-    const token = CreateToken(olduser._id, MaxAge);
-
-    res.setHeader("Authorization", "Bearer " + token);
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.cookie("authtoken", token, {
+    res.setHeader('Authorization', 'Bearer ' + token);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.cookie('authtoken', token, {
       maxAge: maxAgeInMilliseconds,
       httpOnly: false,
     });
 
     res.status(StatusCodes.OK).json({
-      message: "Account signed in successfully.",
+      message: 'Account signed in successfully.',
       authToken: token,
-      olduser,
+      oldUser,
     });
   } catch (error) {
+    console.error('Error signing in:', error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: error.message });
+      .json({ error: 'Internal server error' });
   }
 };
 
@@ -113,11 +113,11 @@ const singleUser = async (req, res) => {
     const userblog = await Blog.find({ author: id });
 
     if (!olduser) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     if (!userblog) {
-      throw new NotFoundError("No Blog found");
+      throw new NotFoundError('No Blog found');
     }
 
     res.status(StatusCodes.OK).json({ olduser, userblog });
@@ -135,14 +135,14 @@ const userRecovery = async (req, res) => {
     const userexist = await Client.findOne({ email });
 
     if (!userexist) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     const MaxAge = 5 * 60;
     const token = CreateToken(userexist._id, MaxAge);
 
     const passwordUpdateUrl = `${serverUrl}/api/v1/client/auth/account/updatepassword/${token}`;
-    const templatePath = path.join(__dirname, "../views/passwordRecovery.ejs");
+    const templatePath = path.join(__dirname, '../views/passwordRecovery.ejs');
     const renderHtml = await ejs.renderFile(
       templatePath,
       {
@@ -150,13 +150,12 @@ const userRecovery = async (req, res) => {
         userEmail: userexist.email,
         userRecoveryUrl: passwordUpdateUrl,
       },
-
       { async: true }
     );
 
     await sendMail({
       email: userexist.email,
-      subject: "ABCSTUDIO Password Recovery",
+      subject: 'Password Recovery',
       html: renderHtml,
     });
 
@@ -178,7 +177,7 @@ const userVerifyPasswordReset = async (req, res) => {
 
     if (!decodedId) {
       res.redirect(`${clientUrl}/recovery`);
-      throw new UnAuthorizedError("Invalid token");
+      throw new UnAuthorizedError('Invalid token');
     }
 
     res.redirect(`${clientUrl}/updatepassword?verified=true&reset=${token}`);
@@ -194,15 +193,15 @@ const userUpdatePassword = async (req, res) => {
 
   try {
     if (password !== confirmPassword) {
-      throw new ValidationError("Passwords do not match");
+      throw new ValidationError('Passwords do not match');
     }
 
     const decodedId = VerifyToken(reset);
 
-    const checkuser = await Client.findById(decodedId["id"]);
+    const checkuser = await Client.findById(decodedId['id']);
 
     if (!checkuser) {
-      throw new UnAuthorizedError("User not found");
+      throw new UnAuthorizedError('User not found');
     }
 
     const hashedPassword = await checkuser.newHashPassword(password);
@@ -215,7 +214,7 @@ const userUpdatePassword = async (req, res) => {
 
     return res
       .status(StatusCodes.OK)
-      .json({ message: "password updated successfully" });
+      .json({ message: 'password updated successfully' });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -232,7 +231,7 @@ const activeUserUpdatePassword = async (req, res) => {
 
   try {
     if (newPassword !== confirmNewPassword) {
-      throw new ValidationError("Passwords do not match");
+      throw new ValidationError('Passwords do not match');
     }
 
     let userid = String(user._id);
@@ -240,14 +239,14 @@ const activeUserUpdatePassword = async (req, res) => {
     const checkuser = await Client.findById(userid);
 
     if (!checkuser) {
-      throw new UnAuthorizedError("User not found");
+      throw new UnAuthorizedError('User not found');
     }
 
     const checkPassword = await checkuser.checkPassword(oldPassword);
 
     if (!checkPassword) {
-      console.log("Password check failed");
-      throw new UnAuthorizedError("old password is invalid");
+      console.log('Password check failed');
+      throw new UnAuthorizedError('old password is invalid');
     }
 
     const hashedPassword = await checkuser.newHashPassword(newPassword);
@@ -260,7 +259,7 @@ const activeUserUpdatePassword = async (req, res) => {
 
     return res
       .status(StatusCodes.OK)
-      .json({ message: "password updated successfully" });
+      .json({ message: 'password updated successfully' });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -273,7 +272,7 @@ const userUpdate = async (req, res) => {
 
   try {
     if (!req.user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     if (!req.file) {
@@ -295,7 +294,7 @@ const userUpdate = async (req, res) => {
 
       res
         .status(StatusCodes.OK)
-        .json({ data: mainuser, message: "Account updated successfully" });
+        .json({ data: mainuser, message: 'Account updated successfully' });
     } else {
       const { path } = req.file;
 
@@ -304,7 +303,7 @@ const userUpdate = async (req, res) => {
       try {
         const userphoto = await cloudinary.uploader.upload(path, {
           use_filename: true,
-          folder: "UserDP",
+          folder: 'UserDP',
         });
 
         console.log(userphoto.secure_url);
@@ -327,13 +326,13 @@ const userUpdate = async (req, res) => {
         );
 
         res.status(StatusCodes.OK).json({
-          message: "Account updated successfully",
+          message: 'Account updated successfully',
           user: updatedUser,
         });
       } catch (uploadError) {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ error: "Error uploading file to Cloudinary" });
+          .json({ error: 'Error uploading file to Cloudinary' });
       }
     }
   } catch (error) {
@@ -349,19 +348,21 @@ const currentUser = async (req, res) => {
       const user = await Client.findById(req.user._id);
 
       const olduser = await Client.populate(user, [
-        { path: "cart.product" },
-        { path: "orderhistory" },
-        { path: "subscriptionhistory" },
-        { path: "productpurchasehistory" },
-        { path: "donationhistory" },
+        { path: 'cart.product' },
+        { path: 'orderhistory' },
+        { path: 'subscriptionhistory' },
+        { path: 'productpurchasehistory' },
+        { path: 'orderhistory.cart.product' }, // Populate cart.product in orderhistory
+        { path: 'productpurchasehistory.cart.product' }, // Populate cart.product in productpurchasehistory
+        { path: 'donationhistory' },
       ]);
 
       return res
         .status(200)
-        .json({ olduser, message: "data recieved successfully" });
+        .json({ olduser, message: 'data recieved successfully' });
     }
 
-    throw new NotFoundError("User not found");
+    throw new NotFoundError('User not found');
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -372,12 +373,12 @@ const currentUser = async (req, res) => {
 const userSignOut = async (req, res) => {
   try {
     if (!req.user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
-    res.setHeader("Authorization", "Bearer " + "");
+    res.setHeader('Authorization', 'Bearer ' + '');
 
-    res.status(StatusCodes.OK).json({ message: "Signout successfully" });
+    res.status(StatusCodes.OK).json({ message: 'Signout successfully' });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -392,11 +393,11 @@ const userDelete = async (req, res) => {
 
   try {
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
 
     if (email !== user.email) {
-      throw new UnAuthorizedError("you are not authorized to delete this user");
+      throw new UnAuthorizedError('you are not authorized to delete this user');
     }
 
     let userid = String(user._id);
@@ -406,13 +407,13 @@ const userDelete = async (req, res) => {
     const authenticatedUser = await olduser.checkPassword(password);
 
     if (!authenticatedUser) {
-      throw new UnAuthorizedError("you are not authorized to delete this user");
+      throw new UnAuthorizedError('you are not authorized to delete this user');
     }
 
     const deleteUser = await Client.findByIdAndDelete(userid);
 
     if (deleteUser) {
-      res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
+      res.status(StatusCodes.OK).json({ message: 'User deleted successfully' });
     }
   } catch (error) {
     res
@@ -422,19 +423,19 @@ const userDelete = async (req, res) => {
 };
 
 const Wishlist = (io) => {
-  io.on("connection", (socket) => {
-    socket.on("wishadd", async (wish) => {
+  io.on('connection', (socket) => {
+    socket.on('wishadd', async (wish) => {
       try {
         const user = await Client.findById(wish.userId);
 
         if (!user) {
-          throw new NotFoundError("User not found");
+          throw new NotFoundError('User not found');
         }
 
         const product = await Product.findById(wish.productId);
 
         if (!product) {
-          throw new NotFoundError("Product not found");
+          throw new NotFoundError('Product not found');
         } else if (user.wishlist.includes(wish.productId)) {
           const index = user.wishlist.indexOf(wish.productId);
           user.wishlist.splice(index, 1);
@@ -443,17 +444,17 @@ const Wishlist = (io) => {
 
           // const currentuser = Client.findById(wish.userId).populate("wishlist", )
 
-          const userwish = await user.populate("wishlist");
+          const userwish = await user.populate('wishlist');
 
-          socket.emit("wishlist", userwish.wishlist);
+          socket.emit('wishlist', userwish.wishlist);
         } else {
           user.wishlist.unshift(wish.productId);
 
           user.save();
 
-          const userwish = await user.populate("wishlist");
+          const userwish = await user.populate('wishlist');
 
-          socket.emit("wishlist", userwish.wishlist);
+          socket.emit('wishlist', userwish.wishlist);
         }
       } catch (error) {}
     });
@@ -461,19 +462,19 @@ const Wishlist = (io) => {
 };
 
 const Cart = (io) => {
-  io.on("connection", (socket) => {
-    socket.on("cartadd", async (cart) => {
+  io.on('connection', (socket) => {
+    socket.on('cartadd', async (cart) => {
       try {
         const user = await Client.findById(cart.userId);
 
         if (!user) {
-          throw new NotFoundError("User not found");
+          throw new NotFoundError('User not found');
         }
 
         const product = await Product.findById(cart.productId);
 
         if (!product) {
-          throw new NotFoundError("Product not found");
+          throw new NotFoundError('Product not found');
         }
 
         const existingProduct = user.cart.find(
@@ -489,21 +490,21 @@ const Cart = (io) => {
         await user.save();
 
         const populatedCart = await Client.populate(user, {
-          path: "cart.product",
+          path: 'cart.product',
         });
 
-        socket.emit("cart", populatedCart.cart);
+        socket.emit('cart', populatedCart.cart);
       } catch (error) {
         console.error(error);
       }
     });
 
-    socket.on("cartminus", async (cart) => {
+    socket.on('cartminus', async (cart) => {
       try {
         const user = await Client.findById(cart.userId);
 
         if (!user) {
-          throw new NotFoundError("User not found");
+          throw new NotFoundError('User not found');
         }
 
         const existingProduct = user.cart.find((p) =>
@@ -517,21 +518,21 @@ const Cart = (io) => {
         await user.save();
 
         const populatedCart = await Client.populate(user, {
-          path: "cart.product",
+          path: 'cart.product',
         });
 
-        socket.emit("cart", populatedCart.cart);
+        socket.emit('cart', populatedCart.cart);
       } catch (error) {
         console.error(error);
       }
     });
 
-    socket.on("cartremove", async (cart) => {
+    socket.on('cartremove', async (cart) => {
       try {
         const user = await Client.findById(cart.userId);
 
         if (!user) {
-          throw new NotFoundError("User not found");
+          throw new NotFoundError('User not found');
         }
 
         user.cart.pull({ product: cart.productId });
@@ -539,10 +540,10 @@ const Cart = (io) => {
         await user.save();
 
         const populatedCart = await Client.populate(user, {
-          path: "cart.product",
+          path: 'cart.product',
         });
 
-        socket.emit("cart", populatedCart.cart);
+        socket.emit('cart', populatedCart.cart);
       } catch (error) {
         console.error(error);
       }

@@ -39,16 +39,19 @@ const page = () => {
       amount: amount,
     };
 
+    //token check 
+    
     if (!Authtoken) {
       router.push("/login");
-      return; // Added return statement to exit function early
+      return; 
     }
+
 
     if (paymenttype === "Stripe") {
       try {
         setSpinner(true);
         const session = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/donation/stripe/create-checkout-session`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/donation/stripe/create-donate-session`,
           data,
           {
             headers: {

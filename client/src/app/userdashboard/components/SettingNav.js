@@ -16,7 +16,7 @@ const SettingNav = () => {
     setIsDown((prev) => !prev);
   };
   return (
-    <div className="flex flex-col basis-1/3">
+    <div className="flex flex-col sm:w-[40%] ">
       <Link
         href="/userdashboard/manageaccount"
         className={`flex items-center px-4 py-2 gap-4 rounded-sm  hover:bg-gray-100 accountInformation sidebarInfo  ${

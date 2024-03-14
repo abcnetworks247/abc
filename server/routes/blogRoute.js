@@ -19,6 +19,7 @@ const {
   deleteBlog,
   getUserBlog,
   postReaction,
+  searchBlog,
   getBlogsByType,
 } = require("../controllers/blogControllers");
 
@@ -33,6 +34,7 @@ router.route("/like").post(authChecker, postReaction);
 
 router.route("/update").patch(authChecker, updateBlog);
 router.route("/delete").delete(authChecker, deleteBlog);
+router.route("/search").get(searchBlog);
 
 router.route("/news/:id").get(getBlogsByType);
 

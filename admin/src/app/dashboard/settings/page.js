@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+
 const page = () => {
   const router = useRouter();
   return (
@@ -26,7 +29,7 @@ const page = () => {
                   target="_blank"
                   className="mb-10 text-blue-500 underline "
                 >
-                  click to view privacy policy page
+                  click to view our terms and conditions page
                 </Link>
               </div>
 
@@ -62,6 +65,13 @@ const page = () => {
                 <p className="text-sm text-gray-600">
                   You can now create or update this page
                 </p>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/privacy-policy`}
+                  target="_blank"
+                  className="mb-10 text-blue-500 underline "
+                >
+                  click to view our privacy policy page
+                </Link>
               </div>
 
               <button
@@ -98,6 +108,13 @@ const page = () => {
                 <p className="text-sm text-gray-600">
                   You can now create or update this page
                 </p>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_CLIENT_URL}/about`}
+                  target="_blank"
+                  className="mb-10 text-blue-500 underline "
+                >
+                  click to view our about us page
+                </Link>
               </div>
 
               <button

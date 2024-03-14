@@ -32,7 +32,7 @@ const Editform = ({
       <div className="flex items-center justify-between mb-2 cursor-pointer lg:flex-row-reverse ">
         {/* edit */}
         <div
-          className="flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full hover:bg-gray-200"
+          className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-200"
           onClick={() => handleEdit()}
         >
           <svg
