@@ -27,6 +27,8 @@ export default function Navbar() {
   const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
   const pathUrl = "/news/";
+  const access = UserData.userpackage;
+  console.log(access);
 
   // console.log('tokk',Authtoken)
 
@@ -104,50 +106,46 @@ export default function Navbar() {
         <div className="hidden text-white navbar-center md:block lg:ml-20">
           <Link
             href="/"
-            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
-              pathname === "/" ? "border-b-[2px] border-[#0e1b2b] " : ""
-            }`}
+            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${pathname === "/" ? "border-b-[2px] border-[#0e1b2b] " : ""
+              }`}
           >
             Home
           </Link>
           <Link
             href="/store"
-            className={`navbar-item text-[15px] rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${
-              pathname === "/store" ? "border-b-[2px] border-[#0e1b2b]" : ""
-            }`}
+            className={`navbar-item text-[15px] rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/store" ? "border-b-[2px] border-[#0e1b2b]" : ""
+              }`}
           >
             Store
           </Link>
           <Link
             href="/pricing"
-            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1 whitespace-nowrap  border-[#0e1b2b] transition-all ${
-              pathname === "/pricing" ? "border-b-[2px] border-[#0e1b2b]" : ""
-            }`}
+            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1 whitespace-nowrap  border-[#0e1b2b] transition-all ${pathname === "/pricing" ? "border-b-[2px] border-[#0e1b2b]" : ""
+              }`}
           >
             Club Membership
           </Link>
 
           <Link
             href="/about"
-            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
-              pathname === "/about" ? "border-b-[2px] border-[#0e1b2b]" : ""
-            }`}
+            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/about" ? "border-b-[2px] border-[#0e1b2b]" : ""
+              }`}
           >
             About
           </Link>
           <Link
             href="/contact"
-            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
-              pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
-            }`}
+            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
+              }`}
           >
             Contact
           </Link>
           <Link
-            href="/contact mr-5"
-            className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
-              pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
-            }`}
+            //if access === basic redirect to home. else go to contact
+            href={access === "basic" ? '/' : '/contact'}
+
+            className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
+              }`}
           >
             <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-[3px]">
               Live
@@ -231,10 +229,10 @@ export default function Navbar() {
                               loading="lazy"
                               className="object-cover rounded-full cursor-pointer"
                               alt="avatar"
-                              // style={{
-                              //   width: '100%',
-                              //   height: 'auto',
-                              // }}
+                            // style={{
+                            //   width: '100%',
+                            //   height: 'auto',
+                            // }}
                             />
                           </div>
                         </label>
@@ -337,10 +335,10 @@ export default function Navbar() {
                               loading="lazy"
                               className="object-cover rounded-full cursor-pointer"
                               alt="avatar"
-                              // style={{
-                              //   width: '100%',
-                              //   height: 'auto',
-                              // }}
+                            // style={{
+                            //   width: '100%',
+                            //   height: 'auto',
+                            // }}
                             />
                           </Link>
                         </div>
