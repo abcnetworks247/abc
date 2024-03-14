@@ -22,7 +22,7 @@ const serverUrl = process.env.SERVER_URL;
 const clientUrl = process.env.CLIENT_URL;
 
 const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
-const stripeWebhookSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
+const stripeWebhookPurchaseSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
 
@@ -289,11 +289,13 @@ const getSingleProduct = async (req, res) => {
 const searchProduct = async (req, res) => {
   try {
     const { query } = req.query;
-    const page = req.query.page ? parseInt(req.query.page) : 1;
-    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
-    // Calculate the number of documents to skip
-    const skip = (page - 1) * perPage;
+    if (!query) {
+      // Return a bad request response if query parameter is missing
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Missing query parameter' });
+    }
 
     // Perform search query on the database
     const products = await Product.find({
@@ -301,13 +303,20 @@ const searchProduct = async (req, res) => {
         { title: { $regex: query, $options: 'i' } }, // Case-insensitive search by title
         { description: { $regex: query, $options: 'i' } }, // Case-insensitive search by description
       ],
-    })
-      .skip(skip)
-      .limit(perPage);
+    });
 
+    if (products.length === 0) {
+      // Return a not found response if no products match the query
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: 'No products found matching the query' });
+    }
+
+    // Return the found products as JSON with a success status code
     res.status(StatusCodes.OK).json(products);
   } catch (error) {
     console.error(error);
+    // Return an internal server error response if an unexpected error occurs
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: 'Internal Server Error' });
@@ -418,7 +427,7 @@ const stripeProductWebhook = async (req, res) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
+    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookPurchaseSecret);
   } catch (err) {
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;

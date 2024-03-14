@@ -30,7 +30,7 @@ const {
 const { log } = require('console');
 
 const localurl = process.env.CLIENT_URL;
-const stripeWebhookSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
+const stripeWebhookDonateSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
 
 
 const getAllDonation = async (req, res) => {
@@ -159,7 +159,7 @@ const stripeDonateWebhook = async (req, res) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookSecret);
+    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookDonateSecret);
   } catch (err) {
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
