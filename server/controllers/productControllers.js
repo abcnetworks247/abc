@@ -571,7 +571,7 @@ const stripeProductWebhook = async (req, res) => {
         html: renderHtml,
       });
 
-      console.log('sent successfully');
+      console.log('sent email product successfully');
 
       break;
 

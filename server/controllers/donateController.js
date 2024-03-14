@@ -79,7 +79,12 @@ const getSingleDonation = async (req, res) => {
 };
 
 const StripeCheckout = async (req, res) => {
+
+  console.log("check")
+  
   const data = req.body;
+
+  console.log(data);
 
   const user = req.user;
   let customer;
@@ -233,7 +238,7 @@ const stripeDonateWebhook = async (req, res) => {
           html: renderHtml,
         });
 
-        console.log('sent successfully');
+        console.log('sent email donate successfully');
 
         //new data added to the controller
       } catch (error) {

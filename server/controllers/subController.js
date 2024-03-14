@@ -23,7 +23,6 @@ const adminUrl = process.env.ADMIN_URL;
 const serverUrl = process.env.SERVER_URL;
 const clientUrl = process.env.CLIENT_URL;
 
-
 const createSubscription = async (req, res) => {
   console.log('Create subscription');
 

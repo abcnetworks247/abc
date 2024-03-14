@@ -25,7 +25,8 @@ router
 
 router
   .route("/stripe/donate/webhook")
-  .post(express.raw({ type: "application/json" }), stripeDonateWebhook); // Post a checkout session with Stripe
+  .post(express.raw({ type: "application/json" }), stripeDonateWebhook); 
+  // Post a checkout session with Stripe
 
   
 
