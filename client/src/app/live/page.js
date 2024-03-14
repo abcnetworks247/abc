@@ -2,6 +2,7 @@ import FooterComp from '@/components/Footer/FooterComp';
 import Nav1 from '@/components/navbar/Nav1';
 import Navbar from '@/components/navbar/Navbar';
 import Sidebar from '@/components/sidebar/Sidebar';
+
 import React from 'react';
 
 const page = () => {
