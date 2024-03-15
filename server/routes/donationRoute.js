@@ -11,11 +11,14 @@ const {
 const router = require("express").Router();
 const authChecker = require("../middlewares/adminAuthChecker"); // Import your admin auth middleware
 const authChecker2 = require("../middlewares/clientAuthChecker"); // Import your admin auth middleware
+const { checkUrl } = require("../middlewares/urlChecker2");
 
+
+const checkDonationUrl = checkUrl('/api/v1/admin/donation', "/stripe/donate/webhook");
 
 // Product Routes
-router.route("/products").get(getAllDonation); // Fetch all products
-router.route("/products/:id").get(getSingleDonation); // Fetch a single product
+router.route("/donation").get(getAllDonation); // Fetch all products
+router.route("/donation/:id").get(getSingleDonation); // Fetch a single product
 
 
 router
@@ -25,7 +28,7 @@ router
 
 router
   .route("/stripe/donate/webhook")
-  .post(express.raw({ type: "application/json" }), stripeDonateWebhook); 
+  .post(express.raw({ type: "application/json" }), checkDonationUrl,  stripeDonateWebhook); 
   // Post a checkout session with Stripe
 
   

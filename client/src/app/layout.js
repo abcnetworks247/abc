@@ -7,23 +7,21 @@ import { UseUserContext, UserContextProvider } from "../../contexts/UserContext"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Abc studio",
-  description: "Informing the world",
+  title: 'Abc studio',
+  description: 'Informing the world',
 };
 
 // const { UserData } = UseUserContext();
 export default function RootLayout({ children }) {
   // if userData.subscriptionPackage === "basic" user cannot access a particular url {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
-        <meta name="cryptomus" content="315c61b7" />
+        <meta name='cryptomus' content='315c61b7' />
       </head>
       <body className={inter.className}>
         <UserContextProvider>
-          <ProductProvider>
-            {children}
-          </ProductProvider>
+          <ProductProvider>{children}</ProductProvider>
         </UserContextProvider>
       </body>
     </html>
