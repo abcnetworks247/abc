@@ -28,7 +28,7 @@ export default function Navbar() {
   const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
   const pathUrl = "/news/";
-  const access = UserData.userpackage;
+  const access = UserData && UserData.userpackage;
   console.log(access && access);
 
   const Authtoken= Cookies.get('authToken')

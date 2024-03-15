@@ -1,13 +1,13 @@
-"use client";
-import React from "react";
-import { ProductContext } from "./productContext";
-import { useEffect, useState, useContext } from "react";
-import { useMediaQuery } from "react-responsive";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import io from "socket.io-client";
-import { BiSolidRocket } from "react-icons/bi";
-import { UseUserContext } from "./UserContext";
+'use client';
+import React from 'react';
+import { ProductContext } from './productContext';
+import { useEffect, useState, useContext } from 'react';
+import { useMediaQuery } from 'react-responsive';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import io from 'socket.io-client';
+import { BiSolidRocket } from 'react-icons/bi';
+import { UseUserContext } from './UserContext';
 
 const ProductProvider = ({ children }) => {
   const { UserData } = UseUserContext();
@@ -22,12 +22,12 @@ const ProductProvider = ({ children }) => {
   const [cartProducts, setCartProducts] = useState(null);
   const [wishlist, setWishlist] = useState(null);
   const [handleCartLoading, setHandleCartLoading] = useState(false);
-  const [wishListLoading, setWishListLoading] = useState(false)
-  const [query, setQuery] = useState("");
+  const [wishListLoading, setWishListLoading] = useState(false);
+  const [query, setQuery] = useState('');
 
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 600px)' });
   const isDesktop = useMediaQuery({
-    query: "(min-width: 600px)",
+    query: '(min-width: 600px)',
   });
   const [clickState, setClickState] = useState(false);
   const [screen, setScreen] = useState(!isTabletOrMobile);
@@ -48,13 +48,11 @@ const ProductProvider = ({ children }) => {
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
-    router.push("/productdetails");
+    router.push('/productdetails');
   };
 
   // add to cart socket
   const handleAddToCart = (productId, userId) => {
-   
-
     const existingCartItem = cartProducts.find(
       (item) => item.product._id === productId
     );
@@ -87,40 +85,34 @@ const ProductProvider = ({ children }) => {
       }
     }
 
-
     // Emit a signal to notify the server about the cart update
     const cartdata = {
       productId: productId,
       userId: userId,
     };
 
-    socket.emit("cartadd", cartdata);
+    socket.emit('cartadd', cartdata);
   };
 
   // remove item from cart
   const handleRemoveFromCart = (productId, userId) => {
-    console.log("my cart Products", cartProducts);
-   
+    console.log('my cart Products', cartProducts);
 
     const cartdata = {
       productId: productId,
       userId: userId,
     };
 
-    socket.emit("cartremove", cartdata);
+    socket.emit('cartremove', cartdata);
 
     const updatedCart = cartProducts.filter(
       (item) => item.product._id !== productId
     );
     setCartProducts(updatedCart);
-
- 
   };
 
   // minus cart quantity
   const handleCartDecrease = (productId, userId) => {
-   
-
     const updatedCart = cartProducts.map((item) => {
       if (item.product._id === productId) {
         // If quantity is already 1, don't decrement further
@@ -136,39 +128,36 @@ const ProductProvider = ({ children }) => {
     });
 
     setCartProducts(updatedCart);
-   
 
     const cartdata = {
       productId: productId,
       userId: userId,
     };
 
-    socket.emit("cartminus", cartdata);
+    socket.emit('cartminus', cartdata);
   };
-
 
   // get the cart products back from the server
 
   useEffect(() => {
     if (UserData) {
-       setCartProducts(UserData.cart);
+      setCartProducts(UserData.cart);
     }
-   
-  },[UserData])
+  }, [UserData]);
 
   useEffect(() => {
-    socket.on("cart", (cartItems) => {
-       setHandleCartLoading(true);
-      console.log("cart sent back");
-       setCartProducts(cartItems);
-       setHandleCartLoading(false);
+    socket.on('cart', (cartItems) => {
+      setHandleCartLoading(true);
+      console.log('cart sent back');
+      setCartProducts(cartItems);
+      setHandleCartLoading(false);
     });
-  }, [socket])
+  }, [socket]);
 
-  console.log("cart products from socket", cartProducts);
+  console.log('cart products from socket', cartProducts);
 
   useEffect(() => {
-    if(!UserData) return
+    if (!UserData) return;
     const fetchWishlistFromServer = async () => {
       try {
         // Map through the wishlist IDs and fetch product details
@@ -183,7 +172,7 @@ const ProductProvider = ({ children }) => {
 
         setWishlist(products);
       } catch (error) {
-        console.error("Error fetching wishlist from the server:", error);
+        console.error('Error fetching wishlist from the server:', error);
       }
     };
 
@@ -191,26 +180,23 @@ const ProductProvider = ({ children }) => {
     fetchWishlistFromServer();
   }, []);
 
-  
-
-  
   const handleWishAdd = (productId, userId) => {
-    setWishListLoading(true)
+    setWishListLoading(true);
     const wishdata = {
       productId: productId,
       userId: userId,
     };
-    socket.emit("wishadd", wishdata);
+    socket.emit('wishadd', wishdata);
   };
 
   //reevie the response from the server
-  socket.on("wishlist", (userwishlist) => {
-    setWishListLoading(true)
+  socket.on('wishlist', (userwishlist) => {
+    setWishListLoading(true);
     // Update the local state with the updated
     console.log(userwishlist);
     setWishlist(userwishlist);
-    setWishListLoading(false)
-    console.log("returning wishlist", wishlist);
+    setWishListLoading(false);
+    console.log('returning wishlist', wishlist);
   });
 
   const handleAddToWishlist = (e, product) => {
@@ -233,7 +219,7 @@ const ProductProvider = ({ children }) => {
       );
 
       if (response.status !== 200) {
-        throw new Error("Failed to fetch products");
+        throw new Error('Failed to fetch products');
       }
 
       const products = response.data;
@@ -247,36 +233,38 @@ const ProductProvider = ({ children }) => {
     fetchData();
   }, []);
 
-  // live search
-  const handleSearch = async(searchQuery) => {
+  const handleSearch = async (searchQuery) => {
     try {
-    setLoading(true);
+      setLoading(true);
 
-    const response = await axios.get(
-      `https://abc-server-nazd.onrender.com/api/v1/admin/commerce/products/search?query=${searchQuery}`
-    );
-    if (response.status === 200) {
-      const data = response.data;
-      console.log("my seacrh result", data)
-     setSearchResults(data);
-       setLoading(false);
-    } else {
-      console.log("error fectching specifif product")
-   }
-    
-  } catch (error) {
-    console.error(error);
-    setLoading(false);
-  }
+      const response = await axios.get(
+        `localhost:8000/api/v1/admin/commerce/search?query=${searchQuery}`
+      );
+
+      console.log('req', searchQuery);
+      console.log('log', response);
+
+      if (response.status === 200) {
+        const searchData = response.data;
+        console.log('Search Results:', searchData);
+        setSearchResults(searchData);
+        setLoading(false);
+      } else {
+        console.error('Error fetching search results');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setLoading(false);
+    }
   };
 
-   useEffect(() => {
-     if (query) {
-       handleSearch(query);
-     }
-   }, [query]);
+  useEffect(() => {
+    if (query) {
+      handleSearch(query);
+    }
+  }, [query]);
 
-  console.log("provider search results", searchResults);
+  console.log('provider search results', searchResults);
 
   const handleResultClick = (searchTerm, e) => {
     e.preventDefault();
@@ -320,9 +308,8 @@ const ProductProvider = ({ children }) => {
         handleCartLoading,
         wishListLoading,
         query,
-        setQuery
-      }}
-    >
+        setQuery,
+      }}>
       {children}
     </ProductContext.Provider>
   );
@@ -331,8 +318,5 @@ const ProductProvider = ({ children }) => {
 export default ProductProvider;
 
 export function UseProductProvider() {
-
   return useContext(ProductContext);
-  
-
 }

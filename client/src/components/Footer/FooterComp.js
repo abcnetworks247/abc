@@ -20,16 +20,25 @@ export default function FooterComp() {
                 Find us on any of these platforms, we respond 1-2 business days.
               </h5>
               <div className='mt-6 lg:mb-0 mb-6 flex flex-wrap'>
-                <a href='https://web.facebook.com/ABCAmbaTelevision/?_rdc=1&_rdr' target='_blank' rel='noopener noreferrer'>
+                <a
+                  href='https://web.facebook.com/ABCAmbaTelevision/?_rdc=1&_rdr'
+                  target='_blank'
+                  rel='noopener noreferrer'>
                   <FaSquareFacebook className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
                 </a>
-                <a href='https://twitter.com/AbcAmbaTV?t=_pw3uE46en4ZX2MGMoZUHg&s=08' target='_blank' rel='noopener noreferrer'>
+                <a
+                  href='https://twitter.com/AbcAmbaTV?t=_pw3uE46en4ZX2MGMoZUHg&s=08'
+                  target='_blank'
+                  rel='noopener noreferrer'>
                   <FaSquareXTwitter className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
                 </a>
                 <a href='#' target='_blank' rel='noopener noreferrer'>
                   <FaSquareInstagram className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
                 </a>
-                <a href='https://www.youtube.com/c/ABCAmbaTV' target='_blank' rel='noopener noreferrer'>
+                <a
+                  href='https://www.youtube.com/c/ABCAmbaTV'
+                  target='_blank'
+                  rel='noopener noreferrer'>
                   <IoLogoYoutube className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
                 </a>
               </div>
@@ -115,7 +124,7 @@ export default function FooterComp() {
           <div className='px-3 lg:px-0 flex flex-wrap items-start  justify-start'>
             <div className='w-full mx-auto text-start'>
               <div className='text-sm text-white font-semibold py-1'>
-                Copyright ©<span id='get-current-year'>2023</span>
+                Copyright ©<span id='get-current-year'>2024</span>
                 <Link
                   href='/'
                   className='text-white hover:text-gray-800'
@@ -125,7 +134,7 @@ export default function FooterComp() {
                 <a
                   href='https://www.creative-tim.com?ref=njs-profile'
                   className='text-white hover:text-white ml-1'>
-                  Powered by Klipto Inc.
+                  Powered by - Klipto Inc.
                 </a>
               </div>
             </div>

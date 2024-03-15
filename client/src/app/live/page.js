@@ -9,7 +9,7 @@ const page = () => {
   const channels = [
     {
       name: 'ABC AMBA TV, English Live',
-      description: '',
+      description: '-',
       url: 'https://iframe.viewmedia.tv?channel=158',
       id: 1,
     },

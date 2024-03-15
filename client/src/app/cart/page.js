@@ -124,7 +124,7 @@ const page = () => {
     if (paymenttype === "Stripe") {
       try {
         const session = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/stripe/create-checkout-session`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/buy/stripe/create-checkout-session`,
           data,
           {
             headers: {
