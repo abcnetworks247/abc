@@ -1,15 +1,19 @@
-import { Inter } from 'next/font/google';
-import './globals.css';
-import ProductProvider from '../../contexts/ProductProvider';
-import { UserContextProvider } from '../../contexts/UserContext';
-const inter = Inter({ subsets: ['latin'] });
+import { Inter } from "next/font/google";
+import "./globals.css";
+import ProductProvider from "../../contexts/ProductProvider";
+import { UseUserContext, UserContextProvider } from "../../contexts/UserContext";
+
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: 'Abc studio',
   description: 'Informing the world',
 };
 
+// const { UserData } = UseUserContext();
 export default function RootLayout({ children }) {
+  // if userData.subscriptionPackage === "basic" user cannot access a particular url {
   return (
     <html lang='en'>
       <head>

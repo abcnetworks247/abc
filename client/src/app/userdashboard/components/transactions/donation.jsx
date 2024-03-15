@@ -1,7 +1,8 @@
 "use client";
 import { useState, useRef, useMemo } from "react";
 import { UseUserContext } from "../../../../../contexts/UserContext";
-import Empty from "./empty";
+import Empty from "./Empty";
+Empty;
 const products = [
   {
     id: 1,
@@ -321,12 +322,12 @@ const products = [
   },
 ];
 const DonationHistory = () => {
-  const [productList, setProductList] = useState(products);
+  const { UserData } = UseUserContext();
+  const donationData = UserData?.donationhistory;
+  const [productList, setProductList] = useState(donationData);
   const [rowsLimit, setRowsLimit] = useState(6);
   const [rowsToShow, setRowsToShow] = useState(productList.slice(0, rowsLimit));
   const [customPagination, setCustomPagination] = useState([]);
-  const {UserData} = UseUserContext();
-  const donationData = UserData?.donationhistory;
   const [totalPage, setTotalPage] = useState(
     Math.ceil(productList?.length / rowsLimit)
   );
@@ -364,8 +365,7 @@ const DonationHistory = () => {
   }, []);
   return (
     <div className=" h-full bg-white flex  items-center justify-center pb-10">
-      { donationData.length === 1 ?
-      (
+      {donationData.length === 0 ? (
         <Empty name={"donation"} />
       ) : (
         <div className="w-full max-w-4xl ">
@@ -383,10 +383,10 @@ const DonationHistory = () => {
                     Product
                   </th>
                   <th className="py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap">
-                    Description
+                    Status
                   </th>
                   <th className="flex items-center py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap gap-1">
-                    Price
+                    Amount
                   </th>
                 </tr>
               </thead>
@@ -407,7 +407,7 @@ const DonationHistory = () => {
                           : "border-t"
                       } whitespace-nowrap`}
                     >
-                      {data?.id}
+                      {data?.donation_Date}
                     </td>
                     <td
                       className={`py-2 px-3 font-normal text-base ${
@@ -418,7 +418,7 @@ const DonationHistory = () => {
                           : "border-t"
                       } whitespace-nowrap`}
                     >
-                      {data?.Category}
+                      {data?.transaction_Id}
                     </td>
                     <td
                       className={`py-2 px-3 font-normal text-base ${
@@ -429,7 +429,7 @@ const DonationHistory = () => {
                           : "border-t"
                       } whitespace-nowrap`}
                     >
-                      {data?.Company}
+                      {"Donation"}
                     </td>
                     <td
                       className={`py-2 px-3 text-base  font-normal ${
@@ -438,9 +438,17 @@ const DonationHistory = () => {
                           : index == rowsToShow?.length
                           ? "border-y"
                           : "border-t"
-                      } min-w-[250px]`}
+                      }  whitespace-nowrap`}
                     >
-                      {data?.Description}
+                      <p
+                        className={`${
+                          data?.payment_status === "succeeded"
+                            ? "bg-green-300 p-1 px-2 rounded-full"
+                            : " bg-red-400 p-1 px-2 rounded"
+                        } flex items-center justify-center`}
+                      >
+                        {data?.payment_status}
+                      </p>
                     </td>
                     <td
                       className={`py-5 px-4 text-base  font-normal ${
@@ -451,7 +459,7 @@ const DonationHistory = () => {
                           : "border-t"
                       }`}
                     >
-                      {"$" + data?.Price}
+                      {"$" + data?.amount}
                     </td>
                   </tr>
                 ))}
@@ -515,4 +523,3 @@ const DonationHistory = () => {
   );
 };
 export default DonationHistory;
-  

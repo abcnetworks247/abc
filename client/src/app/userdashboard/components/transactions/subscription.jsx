@@ -321,12 +321,12 @@ const products = [
   },
 ];
 const SubscriptionHistory = () => {
+  const { UserData } = UseUserContext();
+  const subscriptionData = UserData.subscriptionhistory;
   const [productList, setProductList] = useState(products);
   const [rowsLimit, setRowsLimit] = useState(6);
   const [rowsToShow, setRowsToShow] = useState(productList.slice(0, rowsLimit));
   const [customPagination, setCustomPagination] = useState([]);
-  const { UserData } = UseUserContext();
-  const subscriptionData = UserData.subscriptionhistory;
   const [totalPage, setTotalPage] = useState(
     Math.ceil(productList?.length / rowsLimit)
   );
@@ -364,7 +364,7 @@ const SubscriptionHistory = () => {
   }, []);
   return (
     <div className=" h-full bg-white flex  items-center justify-center pb-10">
-      { subscriptionData.length === 1 ?
+      { subscriptionData.length === 0 ?
       (
         <div className="flex items-center justify-center h-[80vh] w-full">
           <div className="flex flex-col items-center">
