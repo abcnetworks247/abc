@@ -39,6 +39,7 @@ const AuthSchema = new mongoose.Schema(
       enum: ["basic", "coper", "silver", "gold", "diamond", "titanium"],
       default: "basic",
     },
+    
     cart: [
       {
         product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },

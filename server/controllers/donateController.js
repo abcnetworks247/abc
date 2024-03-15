@@ -32,7 +32,6 @@ const { log } = require('console');
 const localurl = process.env.CLIENT_URL;
 const stripeWebhookDonateSecret = process.env.STRIPE_DONATION_WEBHOOK_SECRETE;
 
-
 const getAllDonation = async (req, res) => {
   console.log('donation');
 
@@ -54,7 +53,6 @@ const getAllDonation = async (req, res) => {
       .json({ error: 'Internal Server Error' });
   }
 };
-
 
 const getSingleDonation = async (req, res) => {
   try {
@@ -79,9 +77,8 @@ const getSingleDonation = async (req, res) => {
 };
 
 const StripeCheckout = async (req, res) => {
+  console.log('check');
 
-  console.log("check")
-  
   const data = req.body;
 
   console.log(data);
@@ -159,7 +156,11 @@ const stripeDonateWebhook = async (req, res) => {
   let event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, stripeWebhookDonateSecret);
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      stripeWebhookDonateSecret
+    );
   } catch (err) {
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
@@ -179,71 +180,70 @@ const stripeDonateWebhook = async (req, res) => {
 
       console.log('email', email);
 
-      try {
-        const olduser = await Client.findOne({ email });
+      const oldclient = await Client.findOne({ email });
 
-        const donationTime = new Date(); // Instantiate a new Date object for current time
-        const hours = donationTime.getHours();
-        const minutes = donationTime.getMinutes();
-        const seconds = donationTime.getSeconds();
+      const donationTime = new Date(); // Instantiate a new Date object for current time
 
-        // Format the time
-        const formattedTime = `${hours}:${minutes}:${seconds}`;
+      const hours = donationTime.getHours();
+      const minutes = donationTime.getMinutes();
+      const seconds = donationTime.getSeconds();
 
-        const currentDate = new Date(); // Instantiate a new Date object for current date
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const day = String(currentDate.getDate()).padStart(2, '0');
+      // Format the time
+      const formattedTime = `${hours}:${minutes}:${seconds}`;
 
-        // Format the date
-        const formattedDate = `${year}-${month}-${day}`;
+      const currentDate = new Date(); // Instantiate a new Date object for current date
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const day = String(currentDate.getDate()).padStart(2, '0');
 
-        const data = {
-          email: olduser.email,
-          name: olduser.fullname,
-          amount: chargeSucceeded.amount / 100,
-          currency: chargeSucceeded.currency,
-          donation_Date: formattedDate, // Current date
-          donation_Time: formattedTime, // Current time
-          payment_status: chargeSucceeded.status,
-          payment_method_types: chargeSucceeded.payment_method_details.type,
-          transaction_Id: chargeSucceeded.id,
-        };
+      // Format the date
+      const formattedDate = `${year}-${month}-${day}`;
 
-        const { error, value } = DonationJoi.validate(data);
+      const data = {
+        email: oldclient.email,
+        name: oldclient.fullname,
+        amount: chargeSucceeded.amount / 100,
+        currency: chargeSucceeded.currency,
+        donation_Date: formattedDate, // Current date
+        donation_Time: formattedTime, // Current time
+        payment_status: chargeSucceeded.status,
+        payment_method_types: chargeSucceeded.payment_method_details.type,
+        transaction_Id: chargeSucceeded.id,
+      };
 
-        if (error) {
-          throw new ValidationError('Data recieved is invalid');
-        }
+      console.log('---------check1----------');
 
-        const newData = await DonateModel.create(value);
+      const { error, value } = DonationJoi.validate(data);
 
-        olduser.donationhistory.unshift(newData._id);
-
-        await olduser.save();
-
-        const renderHtml = await ejs.renderFile(
-          templatePath,
-          {
-            userFullname: olduser.fullname,
-            userEmail: olduser.email,
-            // donation_data: data,
-          },
-          { async: true }
-        );
-
-        await sendMail({
-          email: olduser.email,
-          subject: 'Thank you for your donation',
-          html: renderHtml,
-        });
-
-        console.log('sent email donate successfully');
-
-        //new data added to the controller
-      } catch (error) {
-        console.log('error', error);
+      if (error) {
+        throw new ValidationError('Data recieved is invalid');
       }
+
+      const newData = await DonateModel.create(value);
+
+      oldclient.donationhistory.unshift(newData._id);
+
+      await oldclient.save();
+
+      const renderHtml = await ejs.renderFile(
+        templatePath,
+        {
+          userFullname: oldclient.fullname,
+          userEmail: oldclient.email,
+          // donation_data: data,
+        },
+        { async: true }
+      );
+
+      await sendMail({
+        email: oldclient.email,
+        subject: 'Thank you for your donation',
+        html: renderHtml,
+      });
+
+      console.log('sent email donate successfully');
+
+      //new data added to the controller
 
       break;
 
@@ -252,6 +252,7 @@ const stripeDonateWebhook = async (req, res) => {
   }
 
   // Return a 200 response to acknowledge receipt of the event
+
   res.status(200).end();
 };
 

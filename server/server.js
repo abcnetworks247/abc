@@ -5,6 +5,7 @@ const blogRouter = require('./routes/blogRoute');
 const clientRouter = require('./routes/clientAuthRoute');
 const adminRouter = require('./routes/adminAuthRoute');
 const productRouter = require('./routes/productRoute');
+const purchaseRouter = require('./routes/purchaseRoute');
 const transactRouter = require('./routes/transactionRoute');
 const uploadRouter = require('./routes/uploadRoute');
 const subscriptionRouter = require('./routes/subscriptionRoute');
@@ -76,13 +77,11 @@ app.use(
 connectDb(server);
 
 app.use((req, res, next) => {
-  if (req.originalUrl === '/api/v1/admin/donation/stripe/donate/webhook') {
-    next(); // Do nothing with the body because I need it in a raw state.
-  } else if (
-    req.originalUrl === '/api/v1/admin/commerce/stripe/purchase/webhook'
+  if (
+    req.originalUrl === '/api/v1/admin/donation/stripe/donate/webhook' ||
+    req.originalUrl === '/api/v1/admin/sub/stripe/plan/webhook' ||
+    req.originalUrl === '/api/v1/admin/buy/stripe/purchase/webhook'
   ) {
-    next(); // Do nothing with the body because I need it in a raw state.
-  } else if (req.originalUrl === '/api/v1/admin/sub/stripe/plan/webhook') {
     next(); // Do nothing with the body because I need it in a raw state.
   } else {
     express.json()(req, res, next); // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
@@ -118,6 +117,7 @@ app.use((err, req, res, next) => {
 
 app.use('/api/v1/client/auth', clientRouter);
 app.use('/api/v1/admin/sub', subscriptionRouter);
+app.use('/api/v1/admin/buy', purchaseRouter);
 app.use('/api/v1/admin/auth', adminRouter);
 app.use('/api/v1/admin/commerce', productRouter);
 app.use('/api/v1/admin/donation', donateRouter);
