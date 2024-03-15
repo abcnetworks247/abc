@@ -29,7 +29,11 @@ export default function Navbar() {
   const pathname = usePathname();
   const pathUrl = "/news/";
   const access = UserData.userpackage;
-  console.log(access);
+  console.log(access && access);
+
+  const Authtoken= Cookies.get('authToken')
+
+  console.log("Authtoken in nave", Authtoken)
 
   // console.log('tokk',Authtoken)
 
@@ -143,7 +147,7 @@ export default function Navbar() {
           </Link>
           <Link
             //if access === basic redirect to home. else go to contact
-            href={access === "basic" ? '/' : '/contact'}
+            href={ access === undefined || access === null  || access === "basic" ? '/pricing' : '/Live'}
 
             className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
               }`}

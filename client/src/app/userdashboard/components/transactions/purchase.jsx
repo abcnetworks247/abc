@@ -321,12 +321,12 @@ const products = [
   },
 ];
 const PurchaseHistory = () => {
-  const [productList, setProductList] = useState(products);
+  const { UserData } = UseUserContext();
+  const purchaseData = UserData?.productpurchasehistory;
+  const [productList, setProductList] = useState(purchaseData);
   const [rowsLimit, setRowsLimit] = useState(6);
   const [rowsToShow, setRowsToShow] = useState(productList.slice(0, rowsLimit));
   const [customPagination, setCustomPagination] = useState([]);
-  const { UserData } = UseUserContext();
-  const purchaseData = UserData?.productpurchasehistory;
   const [totalPage, setTotalPage] = useState(
     Math.ceil(productList?.length / rowsLimit)
   );
@@ -364,7 +364,7 @@ const PurchaseHistory = () => {
   }, []);
   return (
     <div className=" h-full w-full bg-white flex  items-center justify-center pb-10">
-      {purchaseData.length === 1 ? (
+      {purchaseData.length === 0 ? (
         <Empty name="purchase" />
       ) : (
         <div className="w-full max-w-4xl ">
@@ -372,23 +372,23 @@ const PurchaseHistory = () => {
             <table className="table-auto overflow-scroll md:overflow-auto w-full text-left font-inter border ">
               <thead className="rounded-lg text-base text-white font-semibold w-full">
                 <tr className="bg-[#222E3A]/[6%]">
+                  <th className="py-3 px-3 text-[#3c3d3d] sm:text-base font-bold whitespace-nowrap">
+                    Date
+                  </th>
                   <th className="py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap">
                     ID
                   </th>
-                  <th className="py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap">
-                    Category
-                  </th>
                   <th className="py-3 px-3  justify-center gap-1 text-[#212B36] sm:text-base font-bold whitespace-nowrap">
-                    Company
-                  </th>
-                  <th className="py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap">
                     Product
                   </th>
                   <th className="py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap">
-                    Description
+                    Status
+                  </th>
+                  <th className="py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap">
+                    Method
                   </th>
                   <th className="flex items-center py-3 px-3 text-[#212B36] sm:text-base font-bold whitespace-nowrap gap-1">
-                    Price
+                    Amount
                   </th>
                 </tr>
               </thead>
@@ -409,8 +409,20 @@ const PurchaseHistory = () => {
                           : "border-t"
                       } whitespace-nowrap`}
                     >
-                      {data?.id}
+                      {data?.payment_Date}
                     </td>
+                   <td
+                   className={`py-2 px-3 font-normal text-base ${
+                     index === 0
+                       ? "border-t-2 border-black"
+                       : index === rowsToShow?.length
+                       ? "border-y"
+                       : "border-t"
+                   } whitespace-normal`}
+                 >
+                   {data?.transaction_Id}
+                 </td>
+                 
                     <td
                       className={`py-2 px-3 font-normal text-base ${
                         index == 0
@@ -420,18 +432,7 @@ const PurchaseHistory = () => {
                           : "border-t"
                       } whitespace-nowrap`}
                     >
-                      {data?.Category}
-                    </td>
-                    <td
-                      className={`py-2 px-3 font-normal text-base ${
-                        index == 0
-                          ? "border-t-2 border-black"
-                          : index == rowsToShow?.length
-                          ? "border-y"
-                          : "border-t"
-                      } whitespace-nowrap`}
-                    >
-                      {data?.Company}
+                      {"Purchase"}
                     </td>
                     <td
                       className={`py-2 px-3 text-base  font-normal ${
@@ -442,7 +443,7 @@ const PurchaseHistory = () => {
                           : "border-t"
                       } whitespace-nowrap`}
                     >
-                      {data?.Product}
+                      {data?.payment_status}
                     </td>
                     <td
                       className={`py-2 px-3 text-base  font-normal ${
@@ -451,9 +452,9 @@ const PurchaseHistory = () => {
                           : index == rowsToShow?.length
                           ? "border-y"
                           : "border-t"
-                      } min-w-[250px]`}
+                      } whitespace-nowrap`}
                     >
-                      {data?.Description}
+                      {data?.payment_method_types}
                     </td>
                     <td
                       className={`py-5 px-4 text-base  font-normal ${
@@ -464,7 +465,7 @@ const PurchaseHistory = () => {
                           : "border-t"
                       }`}
                     >
-                      {"$" + data?.Price}
+                      {"$" + data?.amount}
                     </td>
                   </tr>
                 ))}
