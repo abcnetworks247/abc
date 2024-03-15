@@ -9,11 +9,11 @@ import Link from "next/link";
 const SearchBar = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const { searchResults, handleSearch, allProducts, handleResultClick } = UseProductProvider()
+ 
+  const { searchResults, allProducts, handleResultClick, query, setQuery } = UseProductProvider()
   
-  console.log("searchbar", searchResults)
-  console.log("handleSearch", handleSearch)
+  // console.log("searchbar", searchResults)
+  // console.log("handleSearch", handleSearch)
   const dropDownRef = useRef(null);
 
   const handleDropdownRef = () => {
@@ -113,14 +113,13 @@ const SearchBar = () => {
               className="outline-none grow text-sm bg-transparent text-gray-900  placeholder-gray-400  "
               placeholder="Search here..."
               onFocus={handleFocus}
-              value={searchTerm}
+              value={query}
               onChange={(e) => {
-                setSearchTerm(e.target.value);
-                handleSearch(searchTerm);
+                setQuery(e.target.value);
               }}
             />{" "}
             <button
-              onClick={(e) => handleResultClick(searchTerm, e)}
+              onClick={(e) => handleResultClick(query, e)}
               className="bg-red-600 h-full w-8 flex items-center justify-center rounded-r-md shrink-0"
             >
               <svg
@@ -141,12 +140,12 @@ const SearchBar = () => {
             </button>
           </div>
         </div>
-        {isFocused && hasSearchResults && searchTerm && (
+        {isFocused && hasSearchResults && query && (
           <AllResults
             hasSearchResults={hasSearchResults}
             isFocused={isFocused}
             handleFocus={handleFocus}
-            searchTerm={searchTerm}
+            searchTerm={query}
           />
         )}
       </form>

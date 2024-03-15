@@ -22,7 +22,8 @@ const ProductProvider = ({ children }) => {
   const [cartProducts, setCartProducts] = useState(null);
   const [wishlist, setWishlist] = useState(null);
   const [handleCartLoading, setHandleCartLoading] = useState(false);
-  const [wishListLoading, setWishListLoading]=useState(false)
+  const [wishListLoading, setWishListLoading] = useState(false)
+  const [query, setQuery] = useState("");
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 600px)" });
   const isDesktop = useMediaQuery({
@@ -52,36 +53,91 @@ const ProductProvider = ({ children }) => {
 
   // add to cart socket
   const handleAddToCart = (productId, userId) => {
-    console.log("adding to cart", UserData)
-    setHandleCartLoading(true);
-    console.log("emmiting value to add to cart");
+   
+
+    const existingCartItem = cartProducts.find(
+      (item) => item.product._id === productId
+    );
+
+    if (existingCartItem) {
+      // If the product is already in cart, increment quantity by 1
+      const updatedCart = cartProducts.map((item) => {
+        if (item.product._id === productId) {
+          return {
+            ...item,
+            quantity: item.quantity + 1,
+          };
+        }
+        return item;
+      });
+
+      setCartProducts(updatedCart);
+    } else {
+      // If the product is not in cart, add it with quantity 1
+      const productToAdd = allProducts.find(
+        (product) => product._id === productId
+      );
+      if (productToAdd) {
+        const newCartItem = {
+          _id: productToAdd._id,
+          product: productToAdd,
+          quantity: 1,
+        };
+        setCartProducts([...cartProducts, newCartItem]);
+      }
+    }
+
+
+    // Emit a signal to notify the server about the cart update
     const cartdata = {
       productId: productId,
       userId: userId,
     };
 
-    try {
-      console.log("adding to cart", UserData);
-      console.log("cartdata", cartdata);
-      socket.emit("cartadd", cartdata);
-    } catch (error) {
-      socket.disconnect();
-      
-    }
+    socket.emit("cartadd", cartdata);
   };
 
   // remove item from cart
   const handleRemoveFromCart = (productId, userId) => {
+    console.log("my cart Products", cartProducts);
+   
+
     const cartdata = {
       productId: productId,
       userId: userId,
     };
 
     socket.emit("cartremove", cartdata);
+
+    const updatedCart = cartProducts.filter(
+      (item) => item.product._id !== productId
+    );
+    setCartProducts(updatedCart);
+
+ 
   };
 
   // minus cart quantity
   const handleCartDecrease = (productId, userId) => {
+   
+
+    const updatedCart = cartProducts.map((item) => {
+      if (item.product._id === productId) {
+        // If quantity is already 1, don't decrement further
+        if (item.quantity === 1) {
+          return item;
+        }
+        return {
+          ...item,
+          quantity: item.quantity - 1,
+        };
+      }
+      return item;
+    });
+
+    setCartProducts(updatedCart);
+   
+
     const cartdata = {
       productId: productId,
       userId: userId,
@@ -89,6 +145,7 @@ const ProductProvider = ({ children }) => {
 
     socket.emit("cartminus", cartdata);
   };
+
 
   // get the cart products back from the server
 
@@ -190,19 +247,34 @@ const ProductProvider = ({ children }) => {
     fetchData();
   }, []);
 
-  const handleSearch = (searchTerm) => {
-    console.log("hit", searchTerm);
-    // Filter products based on the search term
-    const filteredProducts = allProducts.filter(
-      (product) =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // live search
+  const handleSearch = async(searchQuery) => {
+    try {
+    setLoading(true);
 
-    setSearchResults(filteredProducts);
-    console.log("filtered", filteredProducts);
-    console.log("allProduct in provider", allProducts);
+    const response = await axios.get(
+      `https://abc-server-nazd.onrender.com/api/v1/admin/commerce/products/search?query=${searchQuery}`
+    );
+    if (response.status === 200) {
+      const data = response.data;
+      console.log("my seacrh result", data)
+     setSearchResults(data);
+       setLoading(false);
+    } else {
+      console.log("error fectching specifif product")
+   }
+    
+  } catch (error) {
+    console.error(error);
+    setLoading(false);
+  }
   };
+
+   useEffect(() => {
+     if (query) {
+       handleSearch(query);
+     }
+   }, [query]);
 
   console.log("provider search results", searchResults);
 
@@ -247,6 +319,8 @@ const ProductProvider = ({ children }) => {
         handleCartDecrease,
         handleCartLoading,
         wishListLoading,
+        query,
+        setQuery
       }}
     >
       {children}
