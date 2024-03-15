@@ -215,7 +215,7 @@ const ProductProvider = ({ children }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
+        `http://localhost:8000/admin/commerce/products`
       );
 
       if (response.status !== 200) {
