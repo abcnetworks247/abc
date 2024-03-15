@@ -40,7 +40,7 @@ const NewArrival = ({ allProducts }) => {
       </h2>
 
       <div className=" py-10  px-2  lg:px-28 bg-gray-50">
-        {currentProducts.length > 0 ? (
+        {allProducts.length > 0 ? (
           <div className="grid  px-2 sm:px-4  grid-cols-2 gap-4 lg:gap-4 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {currentProducts.map((product) => (
               <SingleArrival key={product._id} product={product} />
@@ -50,7 +50,7 @@ const NewArrival = ({ allProducts }) => {
           <LoadingSkeleton numberOfSkeletons={numberOfSkeletons} />
         )}
 
-        <div className="sm:flex items-center w-full sm:justify-between p-4">
+        {/* <div className="sm:flex items-center w-full sm:justify-between p-4">
           <div className="flex items-center mb-4 sm:mb-0">
             <div
               className="text-gray-500 hover:text-gray-900 cursor-pointer p-1 hover:bg-gray-100 rounded inline-flex justify-center"
@@ -134,7 +134,7 @@ const NewArrival = ({ allProducts }) => {
               </svg>
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
