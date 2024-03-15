@@ -1,37 +1,54 @@
 "use client"
+import { useEffect, useState } from 'react'
 import React from 'react'
 import SingleArrival from './SingleArrival'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { ProductContext } from '../../../contexts/productContext'
 import LoadingSkeleton from './Loadingskeleton'
 
 
 
-const NewArrival = ({ allProducts }) => {
+const NewArrival = () => {
   // const { products } = useContext(ProductContext);
   const numberOfSkeletons = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 10;
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const perPage = 10; // Number of products per page
 
-  
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = allProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const fetchProducts = async (pageNum) => {
+    try {
+      const response = await fetch(
+         `http://localhost:5000/admin/commerce/products?page=${pageNum}&perPage=${perPage}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const data = await response.json();
+      return data.products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return [];
+    }
+  };
+
+  const loadProducts = async () => {
+    const newProducts = await fetchProducts(page);
+    setProducts((prevProducts) => [...prevProducts, ...newProducts]);
+  };
 
   const handleNextPage = () => {
-    if (indexOfLastProduct < allProducts.length) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
+    setPage(page + 1);
   };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
-    }
-  };
+  useEffect(() => {
+    // Load initial products on mount
+    loadProducts();
+  }, []); // Run once on mount
+
+  useEffect(() => {
+    // Load more products when page changes
+    loadProducts();
+  }, [page]); // Run when page changes
 
   return (
     <>
@@ -40,9 +57,9 @@ const NewArrival = ({ allProducts }) => {
       </h2>
 
       <div className=" py-10  px-2  lg:px-28 bg-gray-50">
-        {allProducts.length > 0 ? (
+        {products.length > 0 ? (
           <div className="grid  px-2 sm:px-4  grid-cols-2 gap-4 lg:gap-4 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {currentProducts.map((product) => (
+            {products.map((product) => (
               <SingleArrival key={product._id} product={product} />
             ))}
           </div>
@@ -135,6 +152,9 @@ const NewArrival = ({ allProducts }) => {
             </button>
           </div>
         </div> */}
+        {products.length % perPage === 0 && (
+          <button onClick={handleNextPage}>Load More</button>
+        )}
       </div>
     </>
   );
