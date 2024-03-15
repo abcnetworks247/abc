@@ -14,7 +14,7 @@ const authChecker2 = require("../middlewares/clientAuthChecker"); // Import your
 const { checkUrl } = require("../middlewares/urlChecker2");
 
 
-const checkDonationUrl = checkUrl('/api/v1/admin/donation', "/stripe/donate/webhook");
+// const checkDonationUrl = checkUrl('/api/v1/admin/donation', "/stripe/donate/webhook");
 
 // Product Routes
 router.route("/donation").get(getAllDonation); // Fetch all products
@@ -28,7 +28,7 @@ router
 
 router
   .route("/stripe/donate/webhook")
-  .post(express.raw({ type: "application/json" }), checkDonationUrl,  stripeDonateWebhook); 
+  .post(express.raw({ type: "application/json" }), stripeDonateWebhook); 
   // Post a checkout session with Stripe
 
   
