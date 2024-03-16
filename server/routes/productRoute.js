@@ -11,13 +11,6 @@ const {
 const router = require('express').Router();
 const authChecker = require('../middlewares/adminAuthChecker'); // Import your admin auth middleware
 const authChecker2 = require('../middlewares/clientAuthChecker'); // Import your admin auth middleware
-const { checkUrl } = require('../middlewares/urlChecker');
-const { checkUrl2 } = require('../middlewares/urlChecker2');
-
-// const checkPurchaseUrl = checkUrl(
-//   '/api/v1/admin/commerce',
-//   '/stripe/purchase/webhook'
-// );
 
 // Product Routes
 router.route('/products').get(getAllProducts); // Fetch all products
@@ -26,8 +19,6 @@ router.route('/products').post(authChecker, createProduct); // Create a new prod
 router.route('/products').patch(authChecker, updateProduct); // Update a product
 router.route('/products').delete(authChecker, deleteProduct); // Delete a product
 
-router.route('/search').get(HandleSearch)
-
-
+router.route('/search').get(HandleSearch);
 
 module.exports = router;

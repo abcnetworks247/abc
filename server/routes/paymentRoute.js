@@ -9,7 +9,6 @@ const {
 const router = require("express").Router();
 const authChecker = require("../middlewares/adminAuthChecker"); // Import your admin auth middleware
 const authChecker2 = require("../middlewares/clientAuthChecker"); // Import your admin auth middleware
-const { checkUrl } = require("../middlewares/urlChecker2");
 
 
 router
