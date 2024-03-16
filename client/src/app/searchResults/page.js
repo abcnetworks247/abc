@@ -19,40 +19,37 @@ import Nav1 from '@/components/navbar/Nav1'
 
 const page = () => {
    
-  const { searchResults, handleSearch, setSearchResults, fetchData, setAllProducts } = UseProductProvider()
+  const {  fetchData, setAllProducts } = UseProductProvider()
   
   const params = useSearchParams()
 
-  
-  
-  console.log("search result on result page", searchResults)
-  const searchTerm = params.get("term")
-
+ const searchTerm = params.get("query")
+ const [searchResults, setSearchResults] = useState([])
 useEffect(() => {
-  const fetchDataAndSearch = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/commerce/products`
-      );
+ const handleSearch = async (searchQuery) => {
+   try {
+     const response = await axios.get(
+       `http://localhost:5001/api/v1/admin/commerce/search?query=${searchQuery}`
+     );
 
-      if (response.status !== 200) {
-        throw new Error("Failed to fetch products");
-      }
+     console.log("req", searchQuery);
+     console.log("log", response);
 
-      const products = response.data;
-      setAllProducts(products);
-    } catch (error) {
-      console.error(error.message);
-    }
+     if (response.status === 200) {
+       const searchData = response.data;
+       console.log("Search Results:", searchData);
+       setSearchResults(searchData);
+     } else {
+       console.error("Error fetching search results");
+     }
+   } catch (error) {
+     console.error("Error:", error);
+   }
   };
+  
+  handleSearch(searchTerm)
 
-  // Check if searchResults is not available
-  if (searchResults.length === 0) {
-    // Call fetchDataAndSearch
-    fetchDataAndSearch();
-    handleSearch(searchTerm)
-  }
-}, [searchResults]);
+}, []);
 
   
   
@@ -71,7 +68,7 @@ useEffect(() => {
       <div className="bg-[#111827] sticky top-0 z-[20] ">
         <Navbar />
       </div>
-      <ProductNav />
+      {/* <ProductNav /> */}
       <div className="p-4 mx-6 mb-2 bg-white">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">

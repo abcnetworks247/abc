@@ -215,7 +215,7 @@ const ProductProvider = ({ children }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/admin/commerce/products`
+        `http://localhost:5001/admin/commerce/products`
       );
 
       if (response.status !== 200) {
@@ -233,36 +233,8 @@ const ProductProvider = ({ children }) => {
     fetchData();
   }, []);
 
-  const handleSearch = async (searchQuery) => {
-    try {
-      setLoading(true);
+  
 
-      const response = await axios.get(
-        `localhost:8000/api/v1/admin/commerce/search?query=${searchQuery}`
-      );
-
-      console.log('req', searchQuery);
-      console.log('log', response);
-
-      if (response.status === 200) {
-        const searchData = response.data;
-        console.log('Search Results:', searchData);
-        setSearchResults(searchData);
-        setLoading(false);
-      } else {
-        console.error('Error fetching search results');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (query) {
-      handleSearch(query);
-    }
-  }, [query]);
 
   console.log('provider search results', searchResults);
 
@@ -295,7 +267,6 @@ const ProductProvider = ({ children }) => {
         clickState,
         category,
         allProducts,
-        handleSearch,
         handleResultClick,
         searchResults,
         setSearchResults,

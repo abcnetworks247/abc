@@ -4,9 +4,9 @@ import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { UseProductProvider } from '../../../contexts/ProductProvider';
 
-const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
+const AllResults = ({ isFocused,  handleFocus, searchResults, query}) => {
   const modalRef = useRef(null);
-   const {handleResultClick, searchResults} = UseProductProvider()
+   const {handleResultClick} = UseProductProvider()
   console.log("all results", searchResults)
   
   
@@ -23,7 +23,7 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
           {searchResults.map((product) => (
             <div
               className="flex items-center cursor-pointer p-2 hover:bg-gray-100"
-              onClick={(e) => handleResultClick(searchTerm, e)}
+              onClick={(e) => handleResultClick(query, e)}
               key={product._id}
             >
               <svg
@@ -41,7 +41,17 @@ const AllResults = ({ isFocused,  handleFocus, searchTerm}) => {
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                 />
               </svg>
-              <span className='text-sm line-clamp-1'>{product.title}</span>
+              <span className="text-sm line-clamp-1">
+                {query !== "" &&
+                product.title.toLowerCase().includes(query.toLowerCase()) ? (
+                  <>
+                    <span className="font-bold">{query}</span>
+                    {product.title.substring(query.length)}
+                  </>
+                ) : (
+                  product.title
+                )}
+              </span>
             </div>
           ))}
         </div>
