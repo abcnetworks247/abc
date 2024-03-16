@@ -15,7 +15,7 @@ const SearchBar = () => {
   const handleSearch = async (searchQuery) => {
     try {
       const response = await axios.get(
-        `http://localhost:5001/api/v1/admin/commerce/search?query=${searchQuery}`
+        `https://abc-server-nazd.onrender.com/api/v1/admin/commerce/search?query=${searchQuery}`
       );
 
       if (response.status === 200) {

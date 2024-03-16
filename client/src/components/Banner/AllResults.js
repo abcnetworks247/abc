@@ -4,11 +4,19 @@ import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { UseProductProvider } from '../../../contexts/ProductProvider';
 
-const AllResults = ({ isFocused,  handleFocus, searchResults, query}) => {
+
+const AllResults = ({ isFocused, handleFocus, searchResults, query }) => {
+  const router=useRouter()
   const modalRef = useRef(null);
    const {handleResultClick} = UseProductProvider()
   console.log("all results", searchResults)
   
+
+    const handleNavigate = (e) => {
+      e.preventDefault();
+      router.push(`/searchResults?query=${query}`);
+    };
+
   
 
    const handleModalRef = () => {
@@ -22,8 +30,8 @@ const AllResults = ({ isFocused,  handleFocus, searchResults, query}) => {
         <div className="absolute top-[40px] z-20 right-0 left-0 mt-2 bg-white border shadow-md ">
           {searchResults.map((product) => (
             <div
-              className="flex items-center cursor-pointer p-2 hover:bg-gray-100"
-              onClick={(e) => handleResultClick(query, e)}
+              className="flex items-center cursor-pointer p-2 hover:bg-gray-100 relative z-[1000]"
+              onClick={handleNavigate}
               key={product._id}
             >
               <svg

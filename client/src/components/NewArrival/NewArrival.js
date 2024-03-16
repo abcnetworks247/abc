@@ -19,7 +19,7 @@ const NewArrival = () => {
    const fetchProducts = async (page, perPage) => {
      try {
        const response = await axios.get(
-         `http://localhost:5001/api/v1/admin/commerce/products?page=${page}&perPage=${perPage}`
+         `https://abc-server-nazd.onrender.com/api/v1/admin/commerce/products?page=${page}&perPage=${perPage}`
        );
 
        if (response.status == 200) {
