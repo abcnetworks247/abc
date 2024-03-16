@@ -85,8 +85,8 @@ export default function Navbar() {
           text: "You've been logged out succesfully.",
           icon: "success",
         });
+        Cookies.remove("authToken")
         router.push("/login");
-        HandleLogout();
       }
     });
   }
