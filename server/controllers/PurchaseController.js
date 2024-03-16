@@ -25,8 +25,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookPurchaseSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
-
-
+const localurl = process.env.CLIENT_URL;
 
 const StripeCheckout = async (req, res) => {
   const {
@@ -371,7 +370,6 @@ const stripeProductWebhook = async (req, res) => {
 const Crypto = (req, res) => {};
 
 const CryptoWebhook = (req, res) => {};
-
 
 module.exports = {
   StripeCheckout,

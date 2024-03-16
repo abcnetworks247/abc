@@ -14,10 +14,10 @@ const authChecker2 = require('../middlewares/clientAuthChecker'); // Import your
 const { checkUrl } = require('../middlewares/urlChecker');
 const { checkUrl2 } = require('../middlewares/urlChecker2');
 
-const checkPurchaseUrl = checkUrl(
-  '/api/v1/admin/commerce',
-  '/stripe/purchase/webhook'
-);
+// const checkPurchaseUrl = checkUrl(
+//   '/api/v1/admin/commerce',
+//   '/stripe/purchase/webhook'
+// );
 
 // Product Routes
 router.route('/products').get(getAllProducts); // Fetch all products

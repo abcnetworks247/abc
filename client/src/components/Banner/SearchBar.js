@@ -37,7 +37,7 @@ const SearchBar = () => {
  const hasSearchResults = searchResults && searchResults.length > 0;
 
 
-   
+   console.log("query", query)
 
 
 
