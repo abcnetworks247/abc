@@ -37,6 +37,7 @@ const page = () => {
     let data = {
       name: "Donation",
       amount: amount,
+      note: "ABCDonatiom",
     };
 
     //token check 
@@ -51,7 +52,7 @@ const page = () => {
       try {
         setSpinner(true);
         const session = await axios.post(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/donation/stripe/create-donate-session`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/pay/stripe/create-checkout-session`,
           data,
           {
             headers: {
