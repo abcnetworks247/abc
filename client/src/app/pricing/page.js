@@ -22,6 +22,7 @@ export default function page() {
     {
       name: "General - Copper Donor",
       id: "1",
+      leve: "coper",
       range1: plantype === "monthly" ? 10 : 120,
       range2: plantype === "monthly" ? 50 : 600,
       price: plantype === "monthly" ? "10 - $50" : "120 - $600",
@@ -32,6 +33,7 @@ export default function page() {
     {
       name: "Prime - Silver Donor",
       id: "2",
+      level: "silver",
       range1: plantype === "monthly" ? 55 : 660,
       range2: plantype === "monthly" ? 100 : 1200,
       price: plantype === "monthly" ? "55 - $100" : "660 - $1200",
@@ -42,6 +44,7 @@ export default function page() {
     {
       name: "Patrons 1 - Gold Donor",
       id: "3",
+      level: "gold",
       range1: plantype === "monthly" ? 105 : 1260,
       range2: plantype === "monthly" ? 200 : 2400,
       price: plantype === "monthly" ? "105 - $200" : "1260 - $2400",
@@ -53,6 +56,7 @@ export default function page() {
     {
       name: "Patron 2 - Diamond Donor",
       id: "4",
+      level: "diamond",
       range1: plantype === "monthly" ? 500 : 6000,
       range2: plantype === "monthly" ? 1000 : 12000,
       price: plantype === "monthly" ? "$500" : "$6000",
@@ -68,6 +72,7 @@ export default function page() {
     {
       name: "Patron 3 - Titanium Donor",
       id: "5",
+      level: "titanium",
       range1: plantype === "monthly" ? 1000 : 12000,
       range2: plantype === "monthly" ? 500000 : 6000000,
       price: plantype === "monthly" ? "$1000" : "$12000",

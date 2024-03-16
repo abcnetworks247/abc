@@ -118,6 +118,7 @@ const page = () => {
       state,
       country,
       coupon,
+      paytype: "Buy"
     };
 
 
