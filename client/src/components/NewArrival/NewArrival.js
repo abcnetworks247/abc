@@ -5,50 +5,48 @@ import SingleArrival from './SingleArrival'
 import { useContext } from 'react'
 import { ProductContext } from '../../../contexts/productContext'
 import LoadingSkeleton from './Loadingskeleton'
+import axios from 'axios'
 
 
 
 const NewArrival = () => {
   // const { products } = useContext(ProductContext);
   const numberOfSkeletons = 10;
-  const [products, setProducts] = useState([]);
-  const [page, setPage] = useState(1);
-  const perPage = 10; // Number of products per page
+   const [products, setProducts] = useState([]);
+   const [totalPages, setTotalPages] = useState(0);
+   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchProducts = async (pageNum) => {
-    try {
-      const response = await fetch(
-         `http://localhost:5000/admin/commerce/products?page=${pageNum}&perPage=${perPage}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch products");
-      }
-      const data = await response.json();
-      return data.products;
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      return [];
-    }
-  };
+   const fetchProducts = async (page, perPage) => {
+     try {
+       const response = await axios.get(
+         `http://localhost:5001/api/v1/admin/commerce/products?page=${page}&perPage=${perPage}`
+       );
 
-  const loadProducts = async () => {
-    const newProducts = await fetchProducts(page);
-    setProducts((prevProducts) => [...prevProducts, ...newProducts]);
-  };
+       if (response.status == 200) {
+          const { products, totalPages, page: currentPage } = response.data;
 
-  const handleNextPage = () => {
-    setPage(page + 1);
-  };
+          setProducts(products);
+          setTotalPages(totalPages);
+          setCurrentPage(currentPage);
+       } else {
+         console.log("Error fetching product")
+       }
 
-  useEffect(() => {
-    // Load initial products on mount
-    loadProducts();
-  }, []); // Run once on mount
+      
+     } catch (error) {
+       console.error(error);
+        
+     }
+   };
 
-  useEffect(() => {
-    // Load more products when page changes
-    loadProducts();
-  }, [page]); // Run when page changes
+   useEffect(() => {
+     fetchProducts(currentPage, 10); // Fetch products on mount with initial page and perPage
+   }, []); // Empty dependency array means this effect runs only once on mount
+
+   const handlePageClick = (page) => {
+     setCurrentPage(page);
+     fetchProducts(page, 10); // Fetch products for the selected page
+   };
 
   return (
     <>
@@ -152,9 +150,23 @@ const NewArrival = () => {
             </button>
           </div>
         </div> */}
-        {products.length % perPage === 0 && (
-          <button onClick={handleNextPage}>Load More</button>
-        )}
+        <div className="flex justify-center mt-8">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+            (pageNum) => (
+              <button
+                key={pageNum}
+                className={`px-4 py-2 mx-1 rounded ${
+                  currentPage === pageNum
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-gray-800"
+                }`}
+                onClick={() => handlePageClick(pageNum)}
+              >
+                {pageNum}
+              </button>
+            )
+          )}
+        </div>
       </div>
     </>
   );

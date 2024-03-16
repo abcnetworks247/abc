@@ -1,57 +1,79 @@
-"use client";
-import React from "react";
-import { useState, useRef, useEffect } from "react";
+"use client"
+import React, { useState, useRef, useEffect } from "react";
 import AllResults from "./AllResults";
 import { useRouter } from "next/navigation";
-import { UseProductProvider } from "../../../contexts/ProductProvider";
-import Link from "next/link";
+import axios from "axios";
 
 const SearchBar = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
- 
-  const { searchResults, allProducts, handleResultClick, query, setQuery } = UseProductProvider()
-  
-  // console.log("searchbar", searchResults)
-  // console.log("handleSearch", handleSearch)
+  const [searchResults, setSearchResults] = useState([]);
+  const [query, setQuery] = useState("");
+  const [isDropdown, setIsDropdown] = useState(false);
   const dropDownRef = useRef(null);
 
-  const handleDropdownRef = () => {
-    dropDownRef.current.style.display = "none";
-    handleDropdown();
-  }; 
+  const handleSearch = async (searchQuery) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5001/api/v1/admin/commerce/search?query=${searchQuery}`
+      );
+
+      if (response.status === 200) {
+        const searchData = response.data;
+        setSearchResults(searchData);
+      } else {
+        console.error("Error fetching search results");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // const handleInputChange = (e) => {
+  //   const newQuery = e.target.value;
+  //   setQuery(newQuery);
+
+  //   // Fetch suggestions only if query is not empty
+  //   if (newQuery.trim() !== "") {
+  //     handleSearch(newQuery);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (query !== '') {
+        handleSearch(query)
+    }
+  
+  },[query])
+
+  const handleNavigate = (e) => {
+    e.preventDefault();
+    router.push(`/searchResults?query=${query}`);
+  };
 
   const handleFocus = () => {
-    setIsFocused((prev) => !prev);
+    setIsFocused(true);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
   };
 
-  const [isDropdown, setIsDropdown] = useState(false);
   const handleDropdown = () => {
     setIsDropdown((prev) => !prev);
   };
 
- const hasSearchResults = searchResults && searchResults.length > 0;
+  const handleDropdownRef = () => {
+    dropDownRef.current.style.display = "none";
+    handleDropdown();
+  };
 
-
-   console.log("query", query)
-
-
+  const hasSearchResults = searchResults && searchResults.length > 0;
 
   return (
     <>
-      {/* <form
-        className={`${isFocused && "z-40"}  ${
-          isDropdown && "z-[]"
-        } hidden sm:block transition-all duration-300 relative`}
-      > */}
       <form
-        className={`${
-          isFocused && "z-40"
-        }  transition-all duration-300 relative border w-[90%] lg:w-[70%] h-10 bg-white gap-6 mx-auto border-gray-200 rounded-md`}
+        className={`transition-all duration-300 relative border w-[90%] lg:w-[70%] h-10 bg-white gap-6 mx-auto border-gray-200 rounded-md`}
       >
         <div className="flex items-center relative h-full w-full cursor-pointer">
           <div
@@ -59,9 +81,8 @@ const SearchBar = () => {
             className="flex flex-row items-center h-full gap-4 text-sm font-medium text-gray-900 bg-gray-200 px-2 rounded-l-md"
           >
             <span>All</span>
-
             <svg
-              className="w-2.5 h-2.5 "
+              className="w-2.5 h-2.5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -69,18 +90,18 @@ const SearchBar = () => {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
+                strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
                 d="m1 1 4 4 4-4"
               />
             </svg>
-          </div>{" "}
+          </div>
           {isDropdown && (
             <>
               <div
                 id="dropdown"
-                className={` absolute top-10 left-0 bg-white divide-y divide-gray-100  shadow w-44 border`}
+                className={`absolute top-10 left-0 bg-white divide-y divide-gray-100 shadow w-44 border`}
               >
                 <ul
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
@@ -103,27 +124,24 @@ const SearchBar = () => {
             </>
           )}
           <div
-            className={`relative grow flex flex-row justify-between h-full rounded-r-lg w-fit pl-2 ${
-              isFocused && "z-40"
-            }`}
+            className={`relative grow flex flex-row justify-between h-full rounded-r-lg w-fit pl-2`}
           >
             <input
               type="search"
               id="search-dropdown"
-              className="outline-none grow text-sm bg-transparent text-gray-900  placeholder-gray-400  "
+              className="outline-none grow text-sm bg-transparent text-gray-900 placeholder-gray-400"
               placeholder="Search here..."
               onFocus={handleFocus}
+              onBlur={handleBlur}
               value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-              }}
-            />{" "}
+              onChange={(e)=>setQuery(e.target.value)}
+            />
             <button
-              onClick={(e) => handleResultClick(query, e)}
+              onClick={handleNavigate}
               className="bg-red-600 h-full w-8 flex items-center justify-center rounded-r-md shrink-0"
             >
               <svg
-                className="w-4 h-full "
+                className="w-4 h-full"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -131,7 +149,7 @@ const SearchBar = () => {
               >
                 <path
                   stroke="white"
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
@@ -145,17 +163,11 @@ const SearchBar = () => {
             hasSearchResults={hasSearchResults}
             isFocused={isFocused}
             handleFocus={handleFocus}
-            searchTerm={query}
+            query={query}
+            searchResults={searchResults}
           />
         )}
       </form>
-
-      {/* {isFocused &&  (
-        <div
-          className="fixed inset-0 z-10 bg-black bg-opacity-30"
-          onClick={handleModalRef}
-        ></div>
-      )} */}
       {isDropdown && (
         <div
           className="fixed top-12 z-10 bg-black bg-opacity-30"

@@ -121,17 +121,27 @@ const createProduct = async (req, res) => {
 
 // Controller for fetching a list of products (accessible to all users)
 const getAllProducts = async (req, res) => {
+  console.log("hitting products")
+  const page = req.query.page ? parseInt(req.query.page) : 1;
+  const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+console.log("hitting server the second time")
   try {
-    const page = req.query.page ? parseInt(req.query.page) : 1;
-    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+   
 
+    // Fetch total count of products from the database
+    const totalCount = await Product.countDocuments();
+
+    // Calculate total number of pages
+    const totalPages = Math.ceil(totalCount / perPage);
     // Calculate the number of documents to skip
     const skip = (page - 1) * perPage;
 
     // Fetch products from the database with pagination
     const products = await Product.find().skip(skip).limit(perPage);
 
-    res.status(StatusCodes.OK).json(products);
+     res
+       .status(StatusCodes.OK)
+       .json({ products, totalPages,totalCount,page});
   } catch (error) {
     console.error(error);
     res
