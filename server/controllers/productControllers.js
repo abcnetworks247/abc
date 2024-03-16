@@ -302,38 +302,54 @@ const HandleSearch = async (req, res) => {
 
   const { query } = req.query;
 
-  console.log("my quarry", query);
+  console.log("my query", query);
 
   try {
+    // Perform text search query using Mongoose $text operator
+    const products = await Product.find(
+      { $text: { $search: query } },
+      { score: { $meta: "textScore" } }
+    ).sort({ score: { $meta: "textScore" } });
 
-    // Perform search query on the database
-    const products = await Product.find({
-      $or: [
-        { title: { $regex: query, $options: 'i' } }, // Case-insensitive search by title
-        { description: { $regex: query, $options: 'i' } }, // Case-insensitive search by description
-      ],
-    });
-
-    if (products.length === 0) {
-      // Return a not found response if no products match the query
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ error: 'No products found matching the query' });
-    }
+    // if (products.length === 0) {
+    //   // Return a not found response if no products match the query
+    //   return res
+    //     .status(StatusCodes.NOT_FOUND)
+    //     .json({ error: "No products found matching the query" });
+    // }
 
     // Return the found products as JSON with a success status code
-    console.log();
-    // res.status(StatusCodes.OK).json(products);
     res.send(products);
   } catch (error) {
     console.error(error);
     // Return an internal server error response if an unexpected error occurs
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: 'Internal Server Error' });
+      .json({ error: "Internal Server Error" });
   }
+};
 
-}
+const getProductsByCategory = async (req, res) => {
+  try {
+    const category = req.query.category;
+
+    if (!category) {
+      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Category parameter is required' });
+    }
+
+    // Fetch products from the database based on the provided category
+    const products = await Product.find({ category });
+
+    if (products.length === 0) {
+      return res.status(StatusCodes.NOT_FOUND).json({ error: 'No products found for the provided category' });
+    }
+
+    res.status(StatusCodes.OK).json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
+  }
+};
 
 
 
@@ -344,5 +360,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   HandleSearch,
-  
+  getProductsByCategory
 };

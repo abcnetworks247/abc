@@ -7,6 +7,7 @@ const {
   updateProduct,
   deleteProduct,
   HandleSearch,
+  getProductsByCategory
 } = require('../controllers/productControllers');
 const router = require('express').Router();
 const authChecker = require('../middlewares/adminAuthChecker'); // Import your admin auth middleware
@@ -20,5 +21,6 @@ router.route('/products').patch(authChecker, updateProduct); // Update a product
 router.route('/products').delete(authChecker, deleteProduct); // Delete a product
 
 router.route('/search').get(HandleSearch);
+router.route('/productcategory').get(getProductsByCategory);
 
 module.exports = router;

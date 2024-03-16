@@ -87,7 +87,7 @@ const signIn = async (req, res) => {
 
     res.setHeader('Authorization', 'Bearer ' + token);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.cookie('authtoken', token, {
+    res.cookie('authToken', token, {
       maxAge: maxAgeInMilliseconds,
       httpOnly: false,
     });

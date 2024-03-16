@@ -30,6 +30,8 @@ const createSubscription = async (req, res) => {
   const item = req.body;
   let customer;
 
+  console.log('item leve', item.level);
+
   try {
     if (!user) {
       throw new UnAuthorizedError('User must be logged in to subscribe');
@@ -75,6 +77,7 @@ const createSubscription = async (req, res) => {
         name: user.fullname,
         metadata: {
           userId: user._id, // Replace with actual Auth0 user ID
+          description: item.level,
         },
       });
     }
@@ -92,7 +95,7 @@ const createSubscription = async (req, res) => {
             currency: 'usd',
             product_data: {
               name: item.name,
-              description: `${item.description}\n \n${item.features}`,
+              description: `As a ${item.level} subscriber, ${item.description}. you will be eligible for ${item.features}`,
             },
             unit_amount: item.price * 100,
             recurring: {
@@ -104,6 +107,7 @@ const createSubscription = async (req, res) => {
       ],
       metadata: {
         userId: user._id,
+        description: 'testing level',
       },
 
       customer: user._id,
@@ -140,76 +144,138 @@ const SubWebhook = async (req, res) => {
       const invoicePaymentSucceeded = event.data.object;
 
       let email = invoicePaymentSucceeded.customer_email;
+     
 
-      console.log('email of user: ' + email);
 
-      const usersub = await Client.findOne({ email });
+      // Define level ranges and corresponding levels for monthly subscriptions
+      const monthlyLevelRanges = [
+        { minAmount: 10, maxAmount: 50, level: 'copper' },
+        { minAmount: 55, maxAmount: 100, level: 'silver' },
+        { minAmount: 105, maxAmount: 200, level: 'gold' },
+        { minAmount: 500, maxAmount: Infinity, level: 'diamond' }, // No upper bound for diamond level in monthly subscription
+      ];
+
+      // Define level ranges and corresponding levels for yearly subscriptions
+      const yearlyLevelRanges = [
+        { minAmount: 120, maxAmount: 600, level: 'copper' },
+        { minAmount: 660, maxAmount: 1200, level: 'silver' },
+        { minAmount: 1260, maxAmount: 2400, level: 'gold' },
+        { minAmount: 6000, maxAmount: 12000, level: 'diamond' },
+        { minAmount: 12000, maxAmount: Infinity, level: 'titanium' }, // No upper bound for titanium level in yearly subscription
+      ];
+
+      // Function to determine level based on amount for monthly subscription
+      function determineMonthlyLevel(amount) {
+        // Find the level range that includes the given amount
+        const range = monthlyLevelRanges.find(
+          (range) => amount >= range.minAmount && amount <= range.maxAmount
+        );
+
+        // Return the level corresponding to the range
+        return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
+      }
+
+      // Function to determine level based on amount for yearly subscription
+      function determineYearlyLevel(amount) {
+        // Find the level range that includes the given amount
+        const range = yearlyLevelRanges.find(
+          (range) => amount >= range.minAmount && amount <= range.maxAmount
+        );
+
+        // Return the level corresponding to the range
+        return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
+      }
 
       const subscription = await stripe.subscriptions.retrieve(
         event.data.object.subscription
       );
 
-      console.log('subscription of user: ' + subscription);
+      let plantype = subscription.plan.interval;
 
-      const periodEndTimestamp = subscription.current_period_end;
-      const periodStartTimestamp = subscription.current_period_start;
+      // Example usage:
+      const amount = subscription.plan.amount / 100; // Example amount
+      const level = plantype === "month"?  determineMonthlyLevel(amount) : plantype === "year" ? determineYearlyLevel(amount) : "" ;
 
-      // Convert to milliseconds (JavaScript Date object works with milliseconds)
-      const periodEndMilliseconds = periodEndTimestamp * 1000;
-      const periodStartMilliseconds = periodStartTimestamp * 1000;
+      console.log('item level 2', level);
 
-      // Create Date objects
-      const periodEndDate = new Date(periodEndMilliseconds);
-      const periodStartDate = new Date(periodStartMilliseconds);
+      if (level) {
+        console.log('email of user: ' + email);
 
-      const subdata1 = {
-        email: usersub.email,
-        name: usersub.fullname,
-        amount: subscription.plan.amount / 100,
-        currency: subscription.currency,
-        country: invoicePaymentSucceeded.customer_address.country,
-        subscription_period_start: periodStartDate,
-        subscription_period_end: periodEndDate,
-        subscription_id: subscription.id,
-        plan_id: subscription.plan.id,
-        plan_type: subscription.plan.interval,
-        quantity: subscription.quantity,
-        subscription_status: subscription.status,
-        hosted_invoice_url: invoicePaymentSucceeded.hosted_invoice_url,
-        subscription_name: invoicePaymentSucceeded.lines.data[0].description,
-      };
+        const usersub = await Client.findOne({ email });
 
-      const { error, value } = SubscriptionJoi.validate(subdata1);
+        
 
-      if (error) {
-        throw new ValidationError('Data recieved is invalid');
+        console.log('subscription of user: ' + subscription);
+
+        const periodEndTimestamp = subscription.current_period_end;
+        const periodStartTimestamp = subscription.current_period_start;
+
+        // Convert to milliseconds (JavaScript Date object works with milliseconds)
+        const periodEndMilliseconds = periodEndTimestamp * 1000;
+        const periodStartMilliseconds = periodStartTimestamp * 1000;
+
+        // Create Date objects
+        const periodEndDate = new Date(periodEndMilliseconds);
+        const periodStartDate = new Date(periodStartMilliseconds);
+
+        const subdata1 = {
+          email: usersub.email,
+          name: usersub.fullname,
+          amount: subscription.plan.amount / 100,
+          currency: subscription.currency,
+          country: invoicePaymentSucceeded.customer_address.country,
+          subscription_period_start: periodStartDate,
+          subscription_period_end: periodEndDate,
+          subscription_id: subscription.id,
+          plan_id: subscription.plan.id,
+          plan_type: subscription.plan.interval,
+          quantity: subscription.quantity,
+          subscription_status: subscription.status,
+          hosted_invoice_url: invoicePaymentSucceeded.hosted_invoice_url,
+          subscription_name: invoicePaymentSucceeded.lines.data[0].description,
+        };
+
+        const { error, value } = SubscriptionJoi.validate(subdata1);
+
+        if (error) {
+          throw new ValidationError('Data recieved is invalid');
+        }
+
+        const newData = await SubscriptionModel.create(value);
+
+        console.log('data now', newData);
+
+        usersub.subscriptionhistory.unshift(newData._id);
+        await usersub.save();
+
+        const renderHtml = await ejs.renderFile(
+          templatePath,
+          {
+            userFullname: usersub.fullname,
+            userEmail: usersub.email,
+            // donation_data: data,
+          },
+          { async: true }
+        );
+
+        await sendMail({
+          email: usersub.email,
+          subject: 'ABC Subscription activated successfully',
+          html: renderHtml,
+        });
+
+        console.log('item level 3', level);
+
+        await Client.findByIdAndUpdate(
+          usersub._id,
+          { userpackage: level },
+          {
+            new: true,
+          }
+        );
+
+        console.log('sent successfully');
       }
-
-      const newData = await SubscriptionModel.create(value);
-
-      console.log('data now', newData);
-
-      usersub.subscriptionhistory.unshift(newData._id);
-
-      await usersub.save();
-
-      const renderHtml = await ejs.renderFile(
-        templatePath,
-        {
-          userFullname: usersub.fullname,
-          userEmail: usersub.email,
-          // donation_data: data,
-        },
-        { async: true }
-      );
-
-      await sendMail({
-        email: usersub.email,
-        subject: 'ABC Subscription activated successfully',
-        html: renderHtml,
-      });
-
-      console.log('sent successfully');
 
       break;
 

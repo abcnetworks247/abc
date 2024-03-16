@@ -30,16 +30,7 @@ const stripeWebhookPurchaseSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
 const localurl = process.env.CLIENT_URL;
 
 const StripeCheckout = async (req, res) => {
-  // const {
-  //   product,
-  //   phone,
-  //   shippingAddress,
-  //   postalcode,
-  //   city,
-  //   state,
-  //   country,
-  //   note,
-  // } = req.body;
+
 
   const data = req.body;
 
@@ -115,6 +106,7 @@ const StripeCheckout = async (req, res) => {
         metadata: {
           // Include product information in metadata
           description: data.note,
+          description2: data.paytype,
         },
       });
 
@@ -159,6 +151,7 @@ const StripeCheckout = async (req, res) => {
         metadata: {
           userId: user._id,
           description: data.note,
+          description2: "donate",
         },
         customer: customer.id,
         mode: 'payment',
@@ -195,7 +188,6 @@ const stripeProductWebhook = async (req, res) => {
     return;
   }
 
-  console.log('new');
   // Handle the event
   switch (event.type) {
     case 'checkout.session.async_payment_failed':
@@ -218,6 +210,7 @@ const stripeProductWebhook = async (req, res) => {
       const olduser = await Client.findOne({ email });
 
       let cartdesc = checkoutSessionCompleted.metadata.description;
+      let cartdesc2 = checkoutSessionCompleted.metadata.description;
 
       const donationTime = new Date(); // Instantiate a new Date object for current time
       const hours = donationTime.getHours();
@@ -235,7 +228,7 @@ const stripeProductWebhook = async (req, res) => {
       // Format the date
       const formattedDate = `${year}-${month}-${day}`;
 
-      if (cartdesc !== 'ABCDonatiom') {
+      if (cartdesc2 === "Buy") {
         // Assuming your cart contains product IDs
 
         const productIds = olduser.cart.map((item) => item.product);

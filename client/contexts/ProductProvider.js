@@ -215,7 +215,7 @@ const ProductProvider = ({ children }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5001/admin/commerce/products`
+        `https://abc-server-nazd.onrender.com/admin/commerce/products`
       );
 
       if (response.status !== 200) {

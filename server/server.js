@@ -13,7 +13,6 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const categoryRouter = require('./routes/categoryRoute');
 const pagesRouter = require('./routes/pagesRoute');
-const donateRouter = require('./routes/donationRoute');
 
 const path = require('path');
 const cors = require('cors');
