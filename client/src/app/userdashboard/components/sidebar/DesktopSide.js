@@ -56,10 +56,10 @@ const DesktopSide = () => {
             </div>
           </Link>
 
-          <Link href='/userdashboard/transactions'>
+          <Link href='/userdashboard/'>
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == '/userdashboard/transactions'
+                pathname == '/userdashboard/'
                   ? 'sm:bg-gray-200'
                   : ''
               }`}>
