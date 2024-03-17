@@ -236,7 +236,8 @@ const SubWebhook = async (req, res) => {
           plan_id: subscription.plan.id,
           plan_type: subscription.plan.interval,
           quantity: subscription.quantity,
-          subscription_status: subscription.status,
+          // subscription_status: subscription.status,
+          subscription_status: "Paid",
           hosted_invoice_url: invoicePaymentSucceeded.hosted_invoice_url,
           subscription_name: invoicePaymentSucceeded.lines.data[0].description,
         };

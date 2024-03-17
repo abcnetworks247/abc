@@ -10,7 +10,6 @@ const donationJoi = Joi.object({
   payment_status: Joi.string().required(),
   payment_method_types: Joi.string().required(),
   transaction_Id: Joi.string().required(),
-  
 });
 
 module.exports = donationJoi;
