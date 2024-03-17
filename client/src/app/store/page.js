@@ -20,13 +20,13 @@ import ProductNav from '@/components/Products/ProductNav'
 
 const page = () => {
 
- const {allProducts}= UseProductProvider()
+ const {products}= UseProductProvider()
   
    const [currentPage, setCurrentPage] = useState(1);
    const productsPerPage = 5;
 
   
-  console.log("store", allProducts)
+  console.log("store", products)
 
 
 
@@ -36,14 +36,14 @@ const page = () => {
         <Navbar />
       </div>
       <ProductNav />
-      <Banner allProducts={allProducts} />
+      <Banner products={products} />
       <Sidebar />
 
       <Features />
 
-      <NewArrival allProducts={allProducts} />
+      <NewArrival/>
       <Ads />
-      <Recommended allProducts={allProducts} />
+      <Recommended />
       <FooterComp />
       <ProductModal />
       {/* <SearchModal/> */}
