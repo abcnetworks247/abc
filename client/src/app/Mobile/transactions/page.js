@@ -3,7 +3,6 @@ import React from 'react'
 import FooterComp from '@/components/Footer/FooterComp'
 import { useRouter } from 'next/navigation'
 import Nav1 from '@/components/navbar/Nav1'
-import Transactions from '@/app/userdashboard/transactions/page'
 import Navbar from '@/components/navbar/Navbar'
 
 const page = () => {
