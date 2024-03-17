@@ -44,7 +44,7 @@ const StripeCheckout = async (req, res) => {
       );
     }
 
-    if (!data.name && data.name !== 'Donation' && data.paytype === "Buy") {
+    if (!data.name && data.name !== 'Donation') {
       await Client.findByIdAndUpdate(
         String(user._id),
         {
