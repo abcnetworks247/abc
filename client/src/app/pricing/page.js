@@ -22,7 +22,7 @@ export default function page() {
     {
       name: "General - Copper Donor",
       id: "1",
-      leve: "coper",
+      level: "coper",
       range1: plantype === "monthly" ? 10 : 120,
       range2: plantype === "monthly" ? 50 : 600,
       price: plantype === "monthly" ? "10 - $50" : "120 - $600",
