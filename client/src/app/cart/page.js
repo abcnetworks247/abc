@@ -109,7 +109,7 @@ const page = () => {
       product: cartProducts,
       phone,
       shippingAddress,
-      note,
+      note: note === "" ? "note" : note,
       postalcode,
       city,
       state,
@@ -261,7 +261,6 @@ const page = () => {
                       onChange={(e) => setNote(e.target.value)}
                       className='w-full rounded-md px-4 border text-sm pt-2.5 outline-[#007bff]'
                       defaultValue={''}
-                      required
                     />
                   </div>
                 </div>

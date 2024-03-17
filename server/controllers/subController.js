@@ -30,7 +30,7 @@ const createSubscription = async (req, res) => {
   const item = req.body;
   let customer;
 
-  console.log('item leve', item.level);
+  console.log('item level', item.level);
 
   try {
     if (!user) {
@@ -166,16 +166,21 @@ const SubWebhook = async (req, res) => {
 
       // Function to determine level based on amount for monthly subscription
       function determineMonthlyLevel(amount) {
+
         // Find the level range that includes the given amount
+        
         const range = monthlyLevelRanges.find(
           (range) => amount >= range.minAmount && amount <= range.maxAmount
         );
 
         // Return the level corresponding to the range
+        
         return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
+      
       }
 
       // Function to determine level based on amount for yearly subscription
+      
       function determineYearlyLevel(amount) {
         // Find the level range that includes the given amount
         const range = yearlyLevelRanges.find(
@@ -184,6 +189,7 @@ const SubWebhook = async (req, res) => {
 
         // Return the level corresponding to the range
         return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
+      
       }
 
       const subscription = await stripe.subscriptions.retrieve(
@@ -230,7 +236,8 @@ const SubWebhook = async (req, res) => {
           plan_id: subscription.plan.id,
           plan_type: subscription.plan.interval,
           quantity: subscription.quantity,
-          subscription_status: subscription.status,
+          // subscription_status: subscription.status,
+          subscription_status: "Paid",
           hosted_invoice_url: invoicePaymentSucceeded.hosted_invoice_url,
           subscription_name: invoicePaymentSucceeded.lines.data[0].description,
         };

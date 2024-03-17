@@ -249,7 +249,7 @@ const ProductProvider = ({ children }) => {
         handleResultClick,
         searchResults,
         setSearchResults,
-        fetchData,
+        // fetchData,
         handleWishAdd,
         handleAddToCart,
         handleRemoveFromCart,

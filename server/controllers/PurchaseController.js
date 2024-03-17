@@ -30,8 +30,6 @@ const stripeWebhookPurchaseSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
 const localurl = process.env.CLIENT_URL;
 
 const StripeCheckout = async (req, res) => {
-
-
   const data = req.body;
 
   const user = req.user;
@@ -151,7 +149,7 @@ const StripeCheckout = async (req, res) => {
         metadata: {
           userId: user._id,
           description: data.note,
-          description2: "donate",
+          description2: 'donate',
         },
         customer: customer.id,
         mode: 'payment',
@@ -210,7 +208,7 @@ const stripeProductWebhook = async (req, res) => {
       const olduser = await Client.findOne({ email });
 
       let cartdesc = checkoutSessionCompleted.metadata.description;
-      let cartdesc2 = checkoutSessionCompleted.metadata.description;
+      let cartdesc2 = checkoutSessionCompleted.metadata.description2;
 
       const donationTime = new Date(); // Instantiate a new Date object for current time
       const hours = donationTime.getHours();
@@ -228,7 +226,10 @@ const stripeProductWebhook = async (req, res) => {
       // Format the date
       const formattedDate = `${year}-${month}-${day}`;
 
-      if (cartdesc2 === "Buy") {
+      console.log('2 stripe webhook for product');
+      console.log("cartdesc2", cartdesc2);
+
+      if (cartdesc2 === 'Buy') {
         // Assuming your cart contains product IDs
 
         const productIds = olduser.cart.map((item) => item.product);
