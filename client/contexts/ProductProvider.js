@@ -16,7 +16,6 @@ const ProductProvider = ({ children }) => {
 
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [allProducts, setAllProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartProducts, setCartProducts] = useState(null);
@@ -24,6 +23,7 @@ const ProductProvider = ({ children }) => {
   const [handleCartLoading, setHandleCartLoading] = useState(false);
   const [wishListLoading, setWishListLoading] = useState(false);
   const [query, setQuery] = useState('');
+   const [products, setProducts] = useState([]);
 
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 600px)' });
   const isDesktop = useMediaQuery({
@@ -72,7 +72,7 @@ const ProductProvider = ({ children }) => {
       setCartProducts(updatedCart);
     } else {
       // If the product is not in cart, add it with quantity 1
-      const productToAdd = allProducts.find(
+      const productToAdd = products.find(
         (product) => product._id === productId
       );
       if (productToAdd) {
@@ -212,27 +212,7 @@ const ProductProvider = ({ children }) => {
     setIsModalOpen(false);
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        `https://abc-server-nazd.onrender.com/admin/commerce/products`
-      );
-
-      if (response.status !== 200) {
-        throw new Error('Failed to fetch products');
-      }
-
-      const products = response.data;
-      setAllProducts(products);
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+ 
   
 
 
@@ -266,12 +246,10 @@ const ProductProvider = ({ children }) => {
         handleUser,
         clickState,
         category,
-        allProducts,
         handleResultClick,
         searchResults,
         setSearchResults,
         fetchData,
-        setAllProducts,
         handleWishAdd,
         handleAddToCart,
         handleRemoveFromCart,
@@ -280,7 +258,10 @@ const ProductProvider = ({ children }) => {
         wishListLoading,
         query,
         setQuery,
-      }}>
+        products,
+        setProducts,
+      }}
+    >
       {children}
     </ProductContext.Provider>
   );

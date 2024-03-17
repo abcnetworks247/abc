@@ -6,13 +6,15 @@ import { useContext } from 'react'
 import { ProductContext } from '../../../contexts/productContext'
 import LoadingSkeleton from './Loadingskeleton'
 import axios from 'axios'
+import { UseProductProvider } from '../../../contexts/ProductProvider'
 
 
 
 const NewArrival = () => {
   // const { products } = useContext(ProductContext);
+  const {products, setProducts}= UseProductProvider()
   const numberOfSkeletons = 10;
-   const [products, setProducts] = useState([]);
+  
    const [totalPages, setTotalPages] = useState(0);
    const [currentPage, setCurrentPage] = useState(1);
 
