@@ -22,7 +22,7 @@ const page = () => {
   const [phone, setPhone] = useState(UserData?.phone);
   const [city, setCity] = useState('');
   const [postalcode, setPostalCode] = useState('');
-  const [note, setNote] = useState('');
+  const [usernote, setUserNote] = useState('');
   const [state, setState] = useState('');
   const [country, setCountry] = useState('');
   const [coupon, setCoupon] = useState('');
@@ -104,6 +104,8 @@ const page = () => {
 
   const CheckOut = async (e) => {
     e.preventDefault();
+
+    let note = usernote === "" ? "note" : note
 
     let data = {
       product: cartProducts,
@@ -258,7 +260,7 @@ const page = () => {
                     <textarea
                       placeholder='Note'
                       rows={6}
-                      onChange={(e) => setNote(e.target.value)}
+                      onChange={(e) => setUserNote(e.target.value)}
                       className='w-full rounded-md px-4 border text-sm pt-2.5 outline-[#007bff]'
                       defaultValue={''}
                       required
