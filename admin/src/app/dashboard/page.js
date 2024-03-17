@@ -5,6 +5,7 @@ import FlowChart from "@/components/ApexChart/flowChart";
 import { MembersTable } from "@/components/Dashboard/MembersTable";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Page() {
 
@@ -92,6 +93,7 @@ export default function Page() {
           <MembersTable />
         </div>
       </main>
+      <Toaster position='top-right' reverseOrder={false} />
     </>
   );
 }
