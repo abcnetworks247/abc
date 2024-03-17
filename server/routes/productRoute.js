@@ -7,7 +7,7 @@ const {
   updateProduct,
   deleteProduct,
   HandleSearch,
-  getProductsByCategory
+  getProductsByCategory,
 } = require('../controllers/productControllers');
 const router = require('express').Router();
 const authChecker = require('../middlewares/adminAuthChecker'); // Import your admin auth middleware

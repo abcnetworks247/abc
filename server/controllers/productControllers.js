@@ -341,7 +341,7 @@ const getProductsByCategory = async (req, res) => {
     const products = await Product.find({ category });
 
     if (products.length === 0) {
-      return res.status(StatusCodes.NOT_FOUND).json({ error: 'No products found for the provided category' });
+      throw new NotFoundError('No products found for the provided category');
     }
 
     res.status(StatusCodes.OK).json(products);
