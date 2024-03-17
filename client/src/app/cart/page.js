@@ -263,7 +263,6 @@ const page = () => {
                       onChange={(e) => setUserNote(e.target.value)}
                       className='w-full rounded-md px-4 border text-sm pt-2.5 outline-[#007bff]'
                       defaultValue={''}
-                      required
                     />
                   </div>
                 </div>
