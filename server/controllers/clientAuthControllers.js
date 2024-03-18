@@ -535,7 +535,7 @@ const Cart = (io) => {
           throw new NotFoundError('User not found');
         }
 
-        user.cart.pull({ product: cart.productId });
+        user.cart.pop({ product: cart.productId });
 
         await user.save();
 
