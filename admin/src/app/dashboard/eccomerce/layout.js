@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import useCurrentAdmin from '@/hooks/useCurrentAdmin';
+import { UseAdminContext } from '@/context/AdminContext';
 
 
 const Layout = ({ children }) => {
@@ -12,12 +13,16 @@ const Layout = ({ children }) => {
   const userRole = ['owner', 'superadmin', ];
   const { CurrentUser, isLoading } = useCurrentAdmin();
 
+  console.log("Curr", CurrentUser);
 
-  const UserValue = CurrentUser && CurrentUser.data.olduser;
+
+  const UserValue = CurrentUser && CurrentUser;
+
+  console.log("uservalue", UserValue);
 
   useEffect(() => {
     const routeValidator = (role) => {
-      if (!role.includes(UserValue.role)) {
+      if (!role.includes("superadmin")) {
         toast.error('Role Access Denied!');
         router.push('/dashboard');
         setOpenNavItem(true);
@@ -27,6 +32,7 @@ const Layout = ({ children }) => {
     };
 
     routeValidator(userRole);
+
   }, [router]);
 
   return (

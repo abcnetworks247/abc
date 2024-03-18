@@ -14,6 +14,7 @@ export const AdminProvider = ({ children }) => {
     CurrentUserloading,
     CurrentUserisSuccess,
   } = useCurrentAdmin();
+
   const Users = CurrentUser?.data;
   const UserInfo = Users?.olduser;
 
@@ -62,9 +63,9 @@ export const AdminProvider = ({ children }) => {
         UserInfo,
         CurrentUsererror,
         CurrentUserloading,
+        Users,
         HandleLogout,
         CurrentUserisSuccess,
-    
         state, dispatch
       }}
     >

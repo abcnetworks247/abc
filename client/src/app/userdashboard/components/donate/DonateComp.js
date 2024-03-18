@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useMediaQuery } from 'react-responsive';
 import { UseUserContext } from '../../../../../contexts/UserContext';
 
-const OrderComp = () => {
+const DonateComp = () => {
   const pathname = usePathname();
   const {
     handleLinkClick,
@@ -54,7 +54,7 @@ const OrderComp = () => {
           <div className='mx-4 my-6'>
             <div className='px-4 mb-4'>
               <h1 className='text-lg font-semibold text-gray-900'>
-                Order history
+                Donation history
               </h1>
               <p className='text-sm mt-2'>
                 Check the status of recent transactions, view and access them in
@@ -63,7 +63,7 @@ const OrderComp = () => {
             </div>
             <div className='py-4 bg-gray-100 px-2'>
               <div className='mt-4'>
-                {UserData.orderhistory.map((order) => (
+                {UserData.donationhistory.map((order) => (
                   <div className='flex flex-col items-start px-2'>
                     <div className='border-b border-gray-200 py-2 bg-gray-100 w-full'>
                       <dl className='flex flex-col w-full sm:flex-row sm:items-start justify-between '>
@@ -71,7 +71,7 @@ const OrderComp = () => {
                           <div className='flex flex-row justify-between sm:flex-col items-start w-full'>
                             <dt className='text-sm'>Date Placed</dt>
                             <dd className='text-gray-500 text-sm'>
-                              {order.payment_Date}
+                              {order.donation_Date}
                             </dd>
                           </div>
                           <div className='flex flex-row justify-between sm:flex-col items-start w-full'>
@@ -81,18 +81,14 @@ const OrderComp = () => {
                             </dd>
                           </div>
                           <div className='flex flex-row justify-between sm:flex-col items-start w-full'>
-                            <dt className='text-sm'>Delivery Status</dt>
+                            <dt className='text-sm'> Status</dt>
                             <span
                               className={`text-sm ${
-                                order.delivery_Status === 'completed'
+                                order.payment_status === 'paid'
                                   ? 'text-green-500'
-                                  : order.delivery_Status === 'inprogress'
-                                  ? 'text-yellow-500'
-                                  : order.delivery_Status === 'failed'
-                                  ? 'text-red-500'
                                   : 'text-orange-500'
                               }`}>
-                              {order.delivery_Status}
+                              {order.payment_status}
                             </span>
                           </div>
                           <div className='flex flex-row justify-between sm:flex-col items-start w-full'>
@@ -112,39 +108,30 @@ const OrderComp = () => {
                       </dl>
                     </div>
 
-                    {isVisible &&
-                      order.cart.map((product) => (
-                        <div
-                          className='mt-4 w-full bg-white px-2 rounded-md'
-                          key={product.id}>
-                          <div className='border-b border-b-gray-800 border-opacity-10 py-2 px-2 lg:px-4 flex flex-row items-center gap-4'>
-                            <img
-                              src={product.product.thumbnail}
-                              alt='Product 1'
-                              className='w-16 h-16 rounded'
-                            />
-
-                            <div className=' py-2 px-2 lg:px-4'>
-                              <div className='py-2 text-sm text-gray-500  flex flex-row items-start'>
-                                {product.product.title}
-                              </div>
-
-                              <div className='text-gray-500 text-sm'>
-                                ${product.product.price}
-                              </div>
+                    {isVisible && (
+                      <div className='mt-4 w-full bg-white px-2 rounded-md'>
+                        <div className='border-b border-b-gray-800 border-opacity-10 py-2 px-2 lg:px-4 flex flex-row items-center gap-4'>
+                          <div className=' py-2 px-2 lg:px-4'>
+                            <div className='py-2 text-sm text-gray-500  flex flex-row items-start'>
+                              Name: {order.name}
                             </div>
 
-                            <div className=' py-2 px-2 lg:px-4'>
-                              <div className='py-2 text-sm text-gray-500  flex flex-row items-start'>
-                                Quantity
-                              </div>
-                              <div className='text-gray-500 text-sm'>
-                                {product.quantity} X
-                              </div>
+                            <div className='text-gray-500 text-sm'>
+                              Payment type: {order.payment_method_types}
+                            </div>
+                          </div>
+
+                          <div className=' py-2 px-2 lg:px-4'>
+                            <div className='py-2 text-sm text-gray-500  flex flex-row items-start'>
+                              Time
+                            </div>
+                            <div className='text-gray-500 text-sm'>
+                              {order.donation_Time} 
                             </div>
                           </div>
                         </div>
-                      ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -156,4 +143,4 @@ const OrderComp = () => {
   );
 };
 
-export default OrderComp;
+export default DonateComp;

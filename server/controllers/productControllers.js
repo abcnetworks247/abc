@@ -124,7 +124,8 @@ const getAllProducts = async (req, res) => {
   console.log("hitting products")
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
-console.log("hitting server the second time")
+  console.log("hitting server the second time")
+  
   try {
    
 

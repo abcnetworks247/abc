@@ -264,11 +264,11 @@ export default function Donortransaction() {
                                   variant="ghost"
                                   value={payment_status}
                                   color={
-                                    payment_status === "succeeded"
+                                    payment_status === "paid"
                                       ? "green"
                                       : payment_status === "failed"
-                                      ? "amber"
-                                      : "red"
+                                      ? "red"
+                                      : "amber"
                                   }
                                 />
                               </div>
