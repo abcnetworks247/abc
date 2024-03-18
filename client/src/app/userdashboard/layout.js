@@ -33,7 +33,7 @@ function Layout({ children }) {
         <Navbar />
       </div>
       <div className="sm:bg-gray-200">
-        <div class="pt-[10px]  relative sm:flex sm:flew-row sm:pb-[12px] md:px-4 sm:mx-4  lg:mx-10 sm:pt-[12px] sm:gap-4 h-fit mb-16">
+        <div class="pt-[10px]  relative sm:flex sm:flew-row sm:pb-[12px] md:px-2 sm:mx-4  lg:mx-10 sm:pt-[12px] sm:gap-4 h-fit mb-16">
           {isTabletOrMobile ? <MobileSide /> : <DesktopSide />}
 
           <div className="bg-white flex-grow rounded-md">

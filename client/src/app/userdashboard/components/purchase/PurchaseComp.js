@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useMediaQuery } from 'react-responsive';
 import { UseUserContext } from '../../../../../contexts/UserContext';
 
-const OrderComp = () => {
+const PurchaseComp = () => {
   const pathname = usePathname();
   const {
     handleLinkClick,
@@ -54,7 +54,7 @@ const OrderComp = () => {
           <div className='mx-4 my-6'>
             <div className='px-4 mb-4'>
               <h1 className='text-lg font-semibold text-gray-900'>
-                Order history
+                Purchase history
               </h1>
               <p className='text-sm mt-2'>
                 Check the status of recent transactions, view and access them in
@@ -63,8 +63,9 @@ const OrderComp = () => {
             </div>
             <div className='py-4 bg-gray-100 px-2'>
               <div className='mt-4'>
-                {UserData.orderhistory.map((order) => (
+                {UserData.productpurchasehistory.map((order) => (
                   <div className='flex flex-col items-start px-2'>
+                    
                     <div className='border-b border-gray-200 py-2 bg-gray-100 w-full'>
                       <dl className='flex flex-col w-full sm:flex-row sm:items-start justify-between '>
                         <div className='flex flex-col sm:flex-row justify-start sm:items-center gap-4 w-full'>
@@ -81,18 +82,14 @@ const OrderComp = () => {
                             </dd>
                           </div>
                           <div className='flex flex-row justify-between sm:flex-col items-start w-full'>
-                            <dt className='text-sm'>Delivery Status</dt>
+                            <dt className='text-sm'> Status</dt>
                             <span
                               className={`text-sm ${
-                                order.delivery_Status === 'completed'
+                                order.payment_status === 'paid'
                                   ? 'text-green-500'
-                                  : order.delivery_Status === 'inprogress'
-                                  ? 'text-yellow-500'
-                                  : order.delivery_Status === 'failed'
-                                  ? 'text-red-500'
                                   : 'text-orange-500'
                               }`}>
-                              {order.delivery_Status}
+                              {order.payment_status}
                             </span>
                           </div>
                           <div className='flex flex-row justify-between sm:flex-col items-start w-full'>
@@ -156,4 +153,4 @@ const OrderComp = () => {
   );
 };
 
-export default OrderComp;
+export default PurchaseComp;
