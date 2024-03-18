@@ -144,8 +144,6 @@ const SubWebhook = async (req, res) => {
       const invoicePaymentSucceeded = event.data.object;
 
       let email = invoicePaymentSucceeded.customer_email;
-     
-
 
       // Define level ranges and corresponding levels for monthly subscriptions
       const monthlyLevelRanges = [
@@ -166,21 +164,19 @@ const SubWebhook = async (req, res) => {
 
       // Function to determine level based on amount for monthly subscription
       function determineMonthlyLevel(amount) {
-
         // Find the level range that includes the given amount
-        
+
         const range = monthlyLevelRanges.find(
           (range) => amount >= range.minAmount && amount <= range.maxAmount
         );
 
         // Return the level corresponding to the range
-        
+
         return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
-      
       }
 
       // Function to determine level based on amount for yearly subscription
-      
+
       function determineYearlyLevel(amount) {
         // Find the level range that includes the given amount
         const range = yearlyLevelRanges.find(
@@ -189,7 +185,6 @@ const SubWebhook = async (req, res) => {
 
         // Return the level corresponding to the range
         return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
-      
       }
 
       const subscription = await stripe.subscriptions.retrieve(
@@ -200,7 +195,12 @@ const SubWebhook = async (req, res) => {
 
       // Example usage:
       const amount = subscription.plan.amount / 100; // Example amount
-      const level = plantype === "month"?  determineMonthlyLevel(amount) : plantype === "year" ? determineYearlyLevel(amount) : "" ;
+      const level =
+        plantype === 'month'
+          ? determineMonthlyLevel(amount)
+          : plantype === 'year'
+          ? determineYearlyLevel(amount)
+          : '';
 
       console.log('item level 2', level);
 
@@ -208,8 +208,6 @@ const SubWebhook = async (req, res) => {
         console.log('email of user: ' + email);
 
         const usersub = await Client.findOne({ email });
-
-        
 
         console.log('subscription of user: ' + subscription);
 
@@ -237,7 +235,7 @@ const SubWebhook = async (req, res) => {
           plan_type: subscription.plan.interval,
           quantity: subscription.quantity,
           // subscription_status: subscription.status,
-          subscription_status: "Paid",
+          subscription_status: 'Paid',
           hosted_invoice_url: invoicePaymentSucceeded.hosted_invoice_url,
           subscription_name: invoicePaymentSucceeded.lines.data[0].description,
         };

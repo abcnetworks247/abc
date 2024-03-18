@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     const routeValidator = (role) => {
-      if (!role.includes(UserValue.role)) {
+      if (!role.includes("superadmin")) {
         toast.error('Role Access Denied!');
         router.push('/dashboard');
         setOpenNavItem(true);

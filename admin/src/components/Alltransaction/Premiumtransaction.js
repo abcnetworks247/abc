@@ -182,7 +182,7 @@ export default function Premiumtransaction() {
                                   variant="ghost"
                                   value={subscription_status}
                                   color={
-                                    subscription_status === "active"
+                                    subscription_status === "paid"
                                       ? "green"
                                       : subscription_status === "canceled"
                                       ? "amber"
