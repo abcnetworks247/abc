@@ -117,7 +117,7 @@ const SubscribeComp = () => {
                             </div>
 
                             <div className='text-gray-500 text-sm'>
-                              Payment type: {order.payment_method_types}
+                              Plan type: {order.plan_type}
                             </div>
                           </div>
 
