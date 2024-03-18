@@ -3,12 +3,16 @@ import React, { useState, useRef, useEffect } from "react";
 import AllResults from "./AllResults";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Link from "next/link";
 
 const SearchBar = () => {
   const router = useRouter();
   const [isFocused, setIsFocused] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState("");
+
+  const [categories, setCategories] = useState([]);
+ 
   const [isDropdown, setIsDropdown] = useState(false);
   const dropDownRef = useRef(null);
 
@@ -29,15 +33,27 @@ const SearchBar = () => {
     }
   };
 
-  // const handleInputChange = (e) => {
-  //   const newQuery = e.target.value;
-  //   setQuery(newQuery);
+  
+  
+   
+  useEffect(() => {
+    const HandleFetch = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/product/category`
+        );
 
-  //   // Fetch suggestions only if query is not empty
-  //   if (newQuery.trim() !== "") {
-  //     handleSearch(newQuery);
-  //   }
-  // };
+        if (response.status === 200) {
+          setCategories(response.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    HandleFetch();
+  }, []);
+ 
 
   useEffect(() => {
     if (query !== '') {
@@ -107,15 +123,14 @@ const SearchBar = () => {
                   className="py-2 text-sm text-gray-700 dark:text-gray-200"
                   aria-labelledby="dropdown-button"
                 >
-                  {Array.from(
-                    new Set(allProducts.map((product) => product.category))
-                  ).map((category) => (
-                    <li key={category}>
+              
+               {categories.map((category, index) => (
+                    <li key={index}>
                       <Link
-                        href={`/store/category/${category}`}
+                        href={`/store/category?cat=${category.name}`}
                         className="inline-flex w-full px-4 py-2 hover:bg-gray-100 text-gray-800"
                       >
-                        {category}
+                        {category.name}
                       </Link>
                     </li>
                   ))}
