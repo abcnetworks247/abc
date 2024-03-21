@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: 'ABC Networks 24',
-  description: 'The Voice Of The Voiceless - The Voice Of Ambazonia - "We The People"',
+  description: 'The Voice Of The Voiceless - The Voice Of Ambazonia - We The People',
 };
 
 // const { UserData } = UseUserContext();
