@@ -19,6 +19,7 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoPersonOutline } from "react-icons/io5";
 import { PiCreditCard } from "react-icons/pi";
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 
 
@@ -86,11 +87,12 @@ const DesktopSide = () => {
               setLoading(true);
               Cookies.remove('authToken');
               const authToken = Cookies.get('authToken');
+              console.log("my current authToken", authToken)
               if (!authToken) {
                 setLoading(false);
                 if (typeof window !== 'undefined') {
+                  router.push("/");
                   window.location.reload();
-                  router.push('/');
                 }
               }
             }}

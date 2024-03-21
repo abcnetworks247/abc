@@ -1,8 +1,15 @@
 "use client"
 import React from 'react'
 import { useRouter } from 'next/navigation';
+import { UseUserContext } from '../../../../contexts/UserContext';
 
 const Stats = () => {
+  const { UserData } = UseUserContext()
+  
+  const orders =UserData && UserData.productpurchasehistory.length
+  const donations = UserData && UserData.donationhistory.length
+
+  console.log("my orders", orders)
     const router = useRouter()
   return (
     <div className={` w-full flex flex-col h-full rounded-md`}>
@@ -45,8 +52,8 @@ const Stats = () => {
               </div>
 
               <div className="mx-5">
-                <h4 className="text-2xl font-semibold text-gray-700">4644</h4>
-                <div className="text-gray-500">New Users</div>
+                <h4 className="text-2xl font-semibold text-gray-700">{`${donations == 0 ? 0 : donations}`}</h4>
+                <div className="text-gray-500">Donations</div>
               </div>
             </div>
           </div>
@@ -76,7 +83,7 @@ const Stats = () => {
               </div>
 
               <div className="mx-5">
-                <h4 className="text-2xl font-semibold text-gray-700">3453</h4>
+                <h4 className="text-2xl font-semibold text-gray-700">{`${orders=== 0 ? '0': orders}`}</h4>
                 <div className="text-gray-500">Total Orders</div>
               </div>
             </div>
