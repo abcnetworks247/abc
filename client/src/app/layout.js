@@ -7,8 +7,8 @@ import { UseUserContext, UserContextProvider } from "../../contexts/UserContext"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Abc studio',
-  description: 'Informing the world',
+  title: 'ABC Networks 24',
+  description: 'The Voice Of The Voiceless - The Voice Of Ambazonia - "We The People"',
 };
 
 // const { UserData } = UseUserContext();

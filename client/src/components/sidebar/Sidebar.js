@@ -25,10 +25,9 @@ export default function Sidebar() {
     try {
       const response = await Api.get("admin/category/news/type");
 
-
       if (response.status === 200) {
 
-        console.log("data2", response.data.data);
+        console.log("data2", response.data.data);j
         setType(response.data.data);
         
       }
