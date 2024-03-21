@@ -548,8 +548,10 @@ const Cart = (io) => {
         console.error(error);
       }
     });
+
   });
 };
+
 
 module.exports = {
   signUp,
