@@ -12,8 +12,10 @@ export const metadata = {
 };
 
 // const { UserData } = UseUserContext();
+
+
 export default function RootLayout({ children }) {
-  // if userData.subscriptionPackage === "basic" user cannot access a particular url {
+
   return (
     <html lang='en'>
       <head>
