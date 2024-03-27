@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import Api from '@/utils/Api';
 
 export default function Sidebar() {
-  const [type, setType] = useState([]);
+  const [type, setType] = useState(null);
   const [category, setCategory] = useState([]);
   const { loading, UserData, Authtoken } = UseUserContext();
   const pathUrl = '/news/';
