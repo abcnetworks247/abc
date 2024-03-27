@@ -26,8 +26,7 @@ export default function Sidebar() {
       const response = await Api.get('admin/category/news/type');
 
       if (response.status === 200) {
-        console.log('data2', response.data.data);
-        j;
+        console.log('data file 2', response.data.data);
         setType(response.data.data);
       }
     } catch (error) {
@@ -144,7 +143,7 @@ export default function Sidebar() {
                       <p>Store</p>
                     </li>
                   </Link>
-                  {Authtoken && UserData.userpackage !== "basic" ? (
+                  {Authtoken && UserData.userpackage !== 'basic' ? (
                     <Link href='/live'>
                       <li className='menu-item'>
                         <CgLivePhoto className='w-5 h-5 text-red-600 opacity-75' />
