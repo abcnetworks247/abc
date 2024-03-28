@@ -104,14 +104,14 @@ const getAllBlog = async (req, res) => {
 
     const blogTypes = [
       'Africa News Update',
-      'Dr. Martin Mungwa - Press Releases',
+      'Secretary of State for Communications',
       'Office of the President',
       'Socio Cultural',
       'Archives & Analysis',
       'Breaking News',
       'Sports',
       'World News',
-      'Interim Government Updates',
+      'Government Updates',
       'Business',
     ];
 
