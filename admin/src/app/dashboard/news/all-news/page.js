@@ -25,20 +25,26 @@ const Page = () => {
   const editUrl = '/dashboard/news/edit';
   const router = useRouter();
   const AuthToken = Cookies.get('adminToken');
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    Api.get('admin/blog')
-      .then((res) => {
-        const data = res.data.allBlogs;
-        setNews(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log('error==', err);
-        const error = 'Something went wrong, Try again later';
-        setError(error);
-        setLoading(false);
-      });
+    const fetchProducts = async (page, perPage) => {
+      Api.get(`admin/blog?page=${page}&perPage=${perPage}`)
+        .then((res) => {
+          const data = res.data.allBlogs;
+          setNews(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log('error==', err);
+          const error = 'Something went wrong, Try again later';
+          setError(error);
+          setLoading(false);
+        });
+    };
+
+    fetchProducts(currentPage, 10);
   }, []);
 
   const deleteBlog = (id) => {
@@ -200,7 +206,6 @@ const Page = () => {
                 </div>
               </div>
             </article>
-            
           ))}
           <CardFooter className='flex items-center justify-between p-4 border-t border-blue-gray-50'>
             <Typography
