@@ -17,10 +17,75 @@ const {
 } = require('../errors');
 const cloudinary = require('../Utils/CloudinaryFileUpload');
 
+// const getAllBlog = async (req, res) => {
+//   try {
+//     const page = req.query.page ? parseInt(req.query.page) : 1;
+//     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+//     const fetchBlogsByType = async (blogType) => {
+//       try {
+//         const result = await blog
+//           .find({ type: blogType })
+//           .populate('author', 'fullname username userdp')
+//           .sort({ createdAt: -1 })
+//           .skip((page - 1) * perPage)
+//           .limit(perPage);
+//         return result;
+//       } catch (error) {
+//         console.error(error);
+//         throw error;
+//       }
+//     };
+
+//     const blogTypes = [
+//       'Africa News Update',
+//       'Dr. Martin Mungwa - Press Releases',
+//       'Office of the President',
+//       'Socio Cultural',
+//       'Archives & Analysis',
+//       'Breaking News',
+//       'Sports',
+//       'World News',
+//       'Interim Government Updates',
+//       'Business',
+//     ];
+
+//     const blogTypePromises = blogTypes.map(async (type) => {
+//       const blogs = await fetchBlogsByType(type);
+//       return { [type]: blogs };
+//     });
+
+//     const blogTypeResults = await Promise.all(blogTypePromises);
+
+//     const allBlogs = await blog
+//       .find()
+//       .populate('author', 'fullname username userdp')
+//       .sort({ createdAt: -1 })
+//       .skip((page - 1) * perPage)
+//       .limit(perPage);
+
+//     if (allBlogs.length === 0) {
+//       return res
+//         .status(StatusCodes.NOT_FOUND)
+//         .json({ message: 'No Post found' });
+//     }
+
+//     return res.status(StatusCodes.OK).json({ allBlogs, ...blogTypeResults });
+//   } catch (error) {
+//     return res
+//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
+//       .json({ message: error.message });
+//   }
+// };
+
 const getAllBlog = async (req, res) => {
   try {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+
+    const totalCount = await blog.countDocuments();
+    const totalPages = Math.ceil(totalCount / perPage);
+    const skip = (page - 1) * perPage;
 
     const fetchBlogsByType = async (blogType) => {
       try {
@@ -28,7 +93,7 @@ const getAllBlog = async (req, res) => {
           .find({ type: blogType })
           .populate('author', 'fullname username userdp')
           .sort({ createdAt: -1 })
-          .skip((page - 1) * perPage)
+          .skip(skip)
           .limit(perPage);
         return result;
       } catch (error) {
@@ -61,7 +126,7 @@ const getAllBlog = async (req, res) => {
       .find()
       .populate('author', 'fullname username userdp')
       .sort({ createdAt: -1 })
-      .skip((page - 1) * perPage)
+      .skip(skip)
       .limit(perPage);
 
     if (allBlogs.length === 0) {
@@ -70,14 +135,15 @@ const getAllBlog = async (req, res) => {
         .json({ message: 'No Post found' });
     }
 
-    return res.status(StatusCodes.OK).json({ allBlogs, ...blogTypeResults });
+    return res
+      .status(StatusCodes.OK)
+      .json({ allBlogs, totalPages, totalCount, page, ...blogTypeResults });
   } catch (error) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });
   }
 };
-
 
 const createBlog = async (req, res) => {
   try {
@@ -351,19 +417,17 @@ const getBlogsByType = async (req, res) => {
     // Calculate the number of documents to skip
     const skip = (page - 1) * perPage;
 
-    const allblogs = await blog.find({ type: checkType.name })
+    const allblogs = await blog
+      .find({ type: checkType.name })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(perPage);
 
-    res
-      .status(StatusCodes.OK)
-      .send({ data: allblogs, name: checkType.name });
+    res.status(StatusCodes.OK).send({ data: allblogs, name: checkType.name });
   } catch (error) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ err: error.message });
   }
 };
-
 
 const searchBlog = async (req, res) => {
   try {
@@ -372,16 +436,19 @@ const searchBlog = async (req, res) => {
 
     // Validate query parameter
     if (!query) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Query parameter is required' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: 'Query parameter is required' });
     }
 
     // Perform the search based on the query
-    const searchResults = await blog.find({
-      $or: [
-        { title: { $regex: query, $options: 'i' } }, // Case-insensitive search in the title
-        { description: { $regex: query, $options: 'i' } }, // Case-insensitive search in the description
-      ],
-    })
+    const searchResults = await blog
+      .find({
+        $or: [
+          { title: { $regex: query, $options: 'i' } }, // Case-insensitive search in the title
+          { description: { $regex: query, $options: 'i' } }, // Case-insensitive search in the description
+        ],
+      })
       .skip((page - 1) * perPage)
       .limit(perPage);
 
@@ -403,7 +470,9 @@ const searchBlog = async (req, res) => {
   } catch (error) {
     // Handle errors
     console.error('Error during news search:', error);
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: 'Internal Server Error' });
   }
 };
 
@@ -511,5 +580,5 @@ module.exports = {
   postReaction,
   handleNewComment,
   getBlogsByType,
-  searchBlog
+  searchBlog,
 };
