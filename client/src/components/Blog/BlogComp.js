@@ -62,14 +62,14 @@ export default function () {
         setPopular(data.sports);
 
         setAfricaNews(data[0]["Africa News Update"]);
-        setPressReleases(data[1]["Dr. Martin Mungwa - Press Releases"]);
+        setPressReleases(data[1]["Secretary of State for Communications"]);
         setOfficeOfThePresident(data[2]["Office of the President"]);
         setSocioCultural(data[3]["Socio Cultural"]);
         setArchivesAndAnalysis(data[4]["Archives & Analysis"]);
         setBreakingNews(data[5]["Breaking News"]);
         setSportsNews(data[6]["Sports"]);
         setWorldNews(data[7]["World News"]);
-        setInterimGovernmentUpdates(data[8]["Interim Government Updates"]);
+        setInterimGovernmentUpdates(data[8]["Government Updates"]);
         setBusinessNews(data[9]["Business"]);
 
         // set the loading state to false
@@ -212,7 +212,7 @@ export default function () {
                 <div className="p-0 ">
                   {/* map through trending posts */}
                   <h2 className="px-2 text-xl font-bold">
-                    Interim Government Updates
+                    Government Updates
                   </h2>
                   <br />
                   <div className="space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1">

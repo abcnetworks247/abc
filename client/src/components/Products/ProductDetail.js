@@ -153,12 +153,12 @@ const ProductDetail = () => {
                       </a>
                     </li>
                   </ul>
-                  <a
+                  {/* <a
                     className="mb-4 text-xs underline dark:text-gray-400 dark:hover:text-gray-300 lg:mb-0"
                     href="#"
                   >
                     Be the first to review the product
-                  </a>
+                  </a> */}
                 </div>
                 <p className="max-w-md mb-8 text-gray-700 dark:text-gray-400">
                   {selectedProduct.description}
