@@ -28,54 +28,42 @@ const Page = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const fetchBlogs = async (page, perPage) => {
-      Api.get(`admin/blog?page=${page}&perPage=${perPage}`)
-        .then((res) => {
-          const data = res.data.allBlogs;
-          const totalPages = res.data.totalPages;
-          const page = res.data.page
-          setNews(data);
-          setTotalPages(totalPages)
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log('error==', err);
-          const error = 'Something went wrong, Try again later';
-          setError(error);
-          setLoading(false);
-        });
-    };
-
-    fetchBlogs(currentPage, 10);
-  }, []);
 
 
-   const fetchBlogsByPage = async (page, perPage) => {
-     Api.get(`admin/blog?page=${page}&perPage=${perPage}`)
-       .then((res) => {
-         const data = res.data.allBlogs;
-         const totalPages = res.data.totalPages;
-         const page = res.data.page;
-         setNews(data);
-         setCurrentPage(page);
-         setLoading(false);
-       })
-       .catch((err) => {
-         console.log("error==", err);
-         const error = "Something went wrong, Try again later";
-         setError(error);
-         setLoading(false);
-       });
+  const fetchBlogs = async (page, perPage) => {
+    Api.get(`admin/blog?page=${page}&perPage=${perPage}`)
+      .then((res) => {
+        const data = res.data.allBlogs;
+        const totalPages = res.data.totalPages;
+        const page = res.data.page;
+        setNews(data);
+        setTotalPages(totalPages);
+        setCurrentPage(page)
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("error==", err);
+        const error = "Something went wrong, Try again later";
+        setError(error);
+        setLoading(false);
+      });
   };
 
- useEffect(() => {
-  fetchBlogsByPage()
-},[currentPage])
+  useEffect(() => {
+     fetchBlogs(currentPage, 10);
+  }, []);
+
+  useEffect(() => {
+     fetchBlogs(currentPage, 10);
+  }, [currentPage]);
+
   
 
   const handlePageIncrement = () => {
-    setCurrentPage((prev)=>prev + 1)
+    if (currentPage < totalPages) {
+        setCurrentPage((prev) => prev + 1);
+    }
+  
   }
 
   const handlePageDecrement = () => {
@@ -261,14 +249,14 @@ const Page = () => {
               <Button
                 variant="outlined"
                 size="sm"
-                onClick={() =>handlePageDecrement()}
+                onClick={()=>handlePageDecrement()}
               >
                 Previous
               </Button>
               <Button
                 variant="outlined"
                 size="sm"
-                onClick={() => handlePageIncrement()}
+                onClick={() =>handlePageIncrement()}
               >
                 Next
               </Button>
