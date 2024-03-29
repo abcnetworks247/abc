@@ -29,11 +29,14 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    const fetchProducts = async (page, perPage) => {
+    const fetchBlogs = async (page, perPage) => {
       Api.get(`admin/blog?page=${page}&perPage=${perPage}`)
         .then((res) => {
           const data = res.data.allBlogs;
+          const totalPages = res.data.totalPages;
+          const page = res.data.page
           setNews(data);
+          setTotalPages(totalPages)
           setLoading(false);
         })
         .catch((err) => {
@@ -44,8 +47,42 @@ const Page = () => {
         });
     };
 
-    fetchProducts(currentPage, 10);
+    fetchBlogs(currentPage, 10);
   }, []);
+
+
+   const fetchBlogsByPage = async (page, perPage) => {
+     Api.get(`admin/blog?page=${page}&perPage=${perPage}`)
+       .then((res) => {
+         const data = res.data.allBlogs;
+         const totalPages = res.data.totalPages;
+         const page = res.data.page;
+         setNews(data);
+         setCurrentPage(page);
+         setLoading(false);
+       })
+       .catch((err) => {
+         console.log("error==", err);
+         const error = "Something went wrong, Try again later";
+         setError(error);
+         setLoading(false);
+       });
+  };
+
+ useEffect(() => {
+  fetchBlogsByPage()
+},[currentPage])
+  
+
+  const handlePageIncrement = () => {
+    setCurrentPage((prev)=>prev + 1)
+  }
+
+  const handlePageDecrement = () => {
+    if (currentPage > 1) {
+       setCurrentPage((prev) => prev - 1);
+    }
+   }
 
   const deleteBlog = (id) => {
     Api.delete(`admin/blog/delete`, {
@@ -122,58 +159,61 @@ const Page = () => {
   }
 
   return (
-    <main className='px-5 mt-10'>
-      <h1 className='ml-10 text-3xl font-bold'>All News</h1>
+    <main className="px-5 mt-10">
+      <h1 className="ml-10 text-3xl font-bold">All News</h1>
       <br />
       {loading ? (
-        <div className='flex items-center justify-center h-[70svh] lg:h-full'>
+        <div className="flex items-center justify-center h-[70svh] lg:h-full">
           <svg
-            className='w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin'
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'>
+            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
             <circle
-              className='opacity-25'
-              cx='12'
-              cy='12'
-              r='10'
-              stroke='currentColor'
-              strokeWidth='4'
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
             />
             <path
-              className='opacity-75'
-              fill='currentColor'
-              d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z'
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
             />
           </svg>
         </div>
       ) : (
-        <div className=''>
+        <div className="">
           {news.map((item) => (
             <article
               key={item._id}
-              className='p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-2'>
-              <div className='grid grid-cols-1 gap-3 lg:grid-cols-2 md:grid-cols-2'>
-                <div className='lg:col-span-1 md:col-span-1'>
-                  <div className='rounded-lg overflow-hidden'>
+              className="p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-2"
+            >
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 md:grid-cols-2">
+                <div className="lg:col-span-1 md:col-span-1">
+                  <div className="rounded-lg overflow-hidden">
                     <Link href={`${pathUrl}/${item._id}`}>
                       <img
                         src={item.blogimage}
-                        alt='random image from unsplash'
-                        className='object-cover object-center w-full h-60 md:h-48 lg:h-[250px] '
+                        alt="random image from unsplash"
+                        className="object-cover object-center w-full h-60 md:h-48 lg:h-[250px] "
                       />
                     </Link>
                   </div>
                 </div>
 
-                <div className='lg:col-span-1 md:col-span-1 flex flex-col gap-5 lg:items-start lg:justify-center'>
-                  <div className='flex justify-between items-center w-full lg:pr-8'>
+                <div className="lg:col-span-1 md:col-span-1 flex flex-col gap-5 lg:items-start lg:justify-center">
+                  <div className="flex justify-between items-center w-full lg:pr-8">
                     <div>
                       <button
                         onClick={() => {
                           router.push(`${editUrl}/${item._id}`);
                         }}
-                        className='rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-xs md:text-sm font-medium mr-1 text-white'>
+                        className="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-xs md:text-sm font-medium mr-1 text-white"
+                      >
                         Edit
                       </button>
                       <button
@@ -181,25 +221,27 @@ const Page = () => {
                           let id = item._id;
                           Delete(id);
                         }}
-                        className='rounded border border-red-500 bg-red-500 px-3 py-1.5 text-xs md:text-sm font-medium ml-1 text-white'>
+                        className="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-xs md:text-sm font-medium ml-1 text-white"
+                      >
                         Delete
                       </button>
                     </div>
-                    <p className='text-xs md:text-sm text-gray-500'>
-                      {item.createdAt.split('T')[0]}{' '}
-                      {item.createdAt.split('T')[1].split('.')[0].slice(0, 5)}
+                    <p className="text-xs md:text-sm text-gray-500">
+                      {item.createdAt.split("T")[0]}{" "}
+                      {item.createdAt.split("T")[1].split(".")[0].slice(0, 5)}
                     </p>
                   </div>
 
-                  <div className='flex flex-col justify-between'>
-                    <h3 className='mt-4 text-lg md:text-xl font-medium'>
+                  <div className="flex flex-col justify-between">
+                    <h3 className="mt-4 text-lg md:text-xl font-medium">
                       <Link
                         href={`${pathUrl}/${item._id}`}
-                        className='hover:underline line-clamp-2 text-xl capitalize'>
+                        className="hover:underline line-clamp-2 text-xl capitalize"
+                      >
                         {item.title}
                       </Link>
                     </h3>
-                    <p className='mt-1 text-sm text-gray-700'>
+                    <p className="mt-1 text-sm text-gray-700">
                       {item.shortdescription}
                     </p>
                   </div>
@@ -207,18 +249,27 @@ const Page = () => {
               </div>
             </article>
           ))}
-          <CardFooter className='flex items-center justify-between p-4 border-t border-blue-gray-50'>
+          <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
             <Typography
-              variant='small'
-              color='blue-gray'
-              className='font-normal'>
-              Page 1 of 10
+              variant="small"
+              color="blue-gray"
+              className="font-normal"
+            >
+              {`Page ${currentPage} of ${totalPages}`}
             </Typography>
-            <div className='flex gap-2'>
-              <Button variant='outlined' size='sm'>
+            <div className="flex gap-2">
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() =>handlePageDecrement()}
+              >
                 Previous
               </Button>
-              <Button variant='outlined' size='sm'>
+              <Button
+                variant="outlined"
+                size="sm"
+                onClick={() => handlePageIncrement()}
+              >
                 Next
               </Button>
             </div>
