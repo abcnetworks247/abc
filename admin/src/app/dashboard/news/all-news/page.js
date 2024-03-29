@@ -25,7 +25,7 @@ const Page = () => {
   const editUrl = '/dashboard/news/edit';
   const router = useRouter();
   const AuthToken = Cookies.get('adminToken');
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
