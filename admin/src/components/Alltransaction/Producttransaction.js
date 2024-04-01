@@ -102,7 +102,7 @@ export default function Producttransaction() {
     setLoading(true);
     CustompaymentFetch(`purchase`)
       .then((data) => {
-        console.log(data.data.data)
+        console.log(data.data.data);
         setDonorData(data.data.data);
         setLoading(false);
       })
@@ -188,6 +188,7 @@ export default function Producttransaction() {
                           country,
                           expiry,
                           _id,
+                          cart,
                         },
                         index
                       ) => {
@@ -208,6 +209,7 @@ export default function Producttransaction() {
                           transaction_Id,
                           expiry,
                           _id,
+                          cart,
                         };
                         const classes = isLast
                           ? "p-4"
@@ -305,11 +307,26 @@ export default function Producttransaction() {
                                 </div>
                               </div>
                             </td>
-                            <td className={classes}>
-                              <Tooltip content="View Info">
+                            <td
+                              className={classes}
+                              onClick={() => {
+                                openModal();
+                                settransactionData(transactionData);
+                              }}
+                            >
+                              <Tooltip
+                                content="View Info"
+                                onClick={() => {
+                                  openModal();
+                                  settransactionData(transactionData);
+                                }}
+                              >
                                 <IconButton
                                   variant="text"
-                                  onClick={() => {openModal(); settransactionData(transactionData)}}
+                                  onClick={() => {
+                                    openModal();
+                                    settransactionData(transactionData);
+                                  }}
                                 >
                                   <svg
                                     viewBox="0 0 24 24"

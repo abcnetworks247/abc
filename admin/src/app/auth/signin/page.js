@@ -188,12 +188,12 @@ function Page() {
                       placeholder="name@mail.com"
                       onChange={(e) => {
                         HandleInputChange(e);
-                        signUpValidate(
-                          "email",
-                          EMAIL_REGEX,
-                          e.target.value,
-                          "Please enter a valid email address."
-                        );
+                        // signUpValidate(
+                        //   "email",
+                        //   EMAIL_REGEX,
+                        //   e.target.value,
+                        //   "Please enter a valid email address."
+                        // );
                       }}
                       required
                       name="email"
@@ -216,12 +216,12 @@ function Page() {
                       name="password"
                       onChange={(e) => {
                         HandleInputChange(e);
-                        signUpValidate(
-                          "password",
-                          PASSWORD_REGEX,
-                          e.target.value,
-                          "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
-                        );
+                        // signUpValidate(
+                        //   "password",
+                        //   PASSWORD_REGEX,
+                        //   e.target.value,
+                        //   "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
+                        // );
                       }}
                       required
                       className={`w-full h-full font-medium bg-transparent placeholder-gray-500 border-none text-sm outline-none border-0 border-transparent focus:outline-none focus:ring-0`}
