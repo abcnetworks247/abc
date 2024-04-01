@@ -88,18 +88,21 @@ export default function Producttransaction() {
   const [error, setError] = React.useState(null);
   const [Toogle, setToggle] = React.useState(false);
 
-    function closeModal() {
-      setToggle(false)
-    }
+  const [transactionData, settransactionData] = React.useState(null);
 
-    function openModal() {
-      setToggle(true)
-    }
+  function closeModal() {
+    setToggle(false);
+  }
+
+  function openModal() {
+    setToggle(true);
+  }
 
   React.useEffect(() => {
     setLoading(true);
     CustompaymentFetch(`purchase`)
       .then((data) => {
+        console.log(data.data.data)
         setDonorData(data.data.data);
         setLoading(false);
       })
@@ -109,40 +112,6 @@ export default function Producttransaction() {
         console.error(error);
       });
   }, []);
-
-  const NewDateinfo = (date, time) => {
-    const Day = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-    const Dates = new Date(date);
-    const days = Day[Dates.getDay()];
-
-    return `${days} `;
-  };
-
-  const NewTime = (timeString) => {
-    const timeParts = timeString.split(":");
-
-    if (timeParts.length !== 3) {
-      return "Invalid time format";
-    }
-
-    const hours = parseInt(timeParts[0]);
-    const minutes = parseInt(timeParts[1]);
-    const seconds = parseInt(timeParts[2]);
-
-    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
-      return "Invalid time format";
-    }
-
-    const date = new Date();
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(seconds);
-
-    const amOrPm = hours >= 12 ? "pm" : "am";
-    const formattedHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
-    const formattedTime = `${formattedHours}:${minutes}${amOrPm}`;
-    return formattedTime;
-  };
 
   return (
     <div>
@@ -207,35 +176,40 @@ export default function Producttransaction() {
                           name,
                           amount,
                           payment_Date,
+                          email,
                           payment_Time,
                           currency,
                           payment_status,
                           status,
                           account,
+                          phone,
                           accountNumber,
                           transaction_Id,
+                          country,
                           expiry,
                           _id,
                         },
                         index
                       ) => {
                         const isLast = index === TABLE_ROWS.length - 1;
-                        const transactionData =  {
+                        const transactionData = {
                           name,
                           amount,
                           payment_Date,
                           payment_Time,
+                          email,
                           currency,
                           payment_status,
                           status,
                           account,
+                          phone,
                           accountNumber,
+                          country,
                           transaction_Id,
                           expiry,
                           _id,
-                        }
+                        };
                         const classes = isLast
-                      
                           ? "p-4"
                           : "p-4 border-b border-blue-gray-50";
 
@@ -331,11 +305,11 @@ export default function Producttransaction() {
                                 </div>
                               </div>
                             </td>
-                            <td className={classes}  >
-                              <Tooltip content="View Info" >
+                            <td className={classes}>
+                              <Tooltip content="View Info">
                                 <IconButton
                                   variant="text"
-                                  onClick={openModal}
+                                  onClick={() => {openModal(); settransactionData(transactionData)}}
                                 >
                                   <svg
                                     viewBox="0 0 24 24"
@@ -355,12 +329,18 @@ export default function Producttransaction() {
                                 </IconButton>
                               </Tooltip>
                             </td>
-                             <TransactionModal isOpen={Toogle} transactionData={transactionData} openModal={openModal} closeModal={closeModal} />
                           </tr>
                         );
                       }
                     )}
                 </tbody>
+
+                <TransactionModal
+                  isOpen={Toogle}
+                  transactionData={transactionData}
+                  openModal={openModal}
+                  closeModal={closeModal}
+                />
               </>
             </table>
           </CardBody>

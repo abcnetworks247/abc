@@ -8,19 +8,12 @@ export default function TransactionModal({
   transactionData,
   openModal,
 }) {
-  //   let [isOpen, setIsOpen] = useState(true)
-
-  //   function closeModal() {
-  //     setIsOpen(false)
-  //   }
-
-  //   function openModal() {
-  //     setIsOpen(true)
-  //   }
-
   const modalref = useRef(null);
   const closeRef = useRef(null);
 
+  /**
+   * Function to handle closing modal.
+   */
   useEffect(() => {
     const HandleCloseModal = () => {
       if (closeRef.current) {
@@ -78,13 +71,47 @@ export default function TransactionModal({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Payment successful
+                    {transactionData && transactionData?.name} Transaction
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Your payment has been successfully submitted. We’ve sent
-                      you an email with all of the details of your order.
-                    </p>
+                    <ul className=" flex flex-col gap-3">
+                      <li className="text-sm text-gray-500">
+                        <span className="font-bold text-black text-md">
+                          Amount:
+                        </span>{" "}
+                        ${transactionData?.amount}{" "}
+                      </li>
+                      <li className="text-sm text-gray-500 w-80 truncate">
+                        <span className="font-bold text-black text-md">
+                          Transaction ID:{" "}
+                        </span>{" "}
+                        {transactionData?.transaction_Id}
+                      </li>
+                      <li className="text-sm text-gray-500">
+                        <span className="font-bold text-black text-md">
+                          Status:
+                        </span>{" "}
+                        {transactionData?.payment_status}
+                      </li>
+                      <li className="text-sm text-gray-500">
+                        <span className="font-bold text-black text-md">
+                          Email:
+                        </span>{" "}
+                        {transactionData?.email}
+                      </li>
+                      <li className="text-sm text-gray-500">
+                        <span className="font-bold text-black text-md">
+                          Phone:
+                        </span>{" "}
+                        {transactionData?.phone}
+                      </li>
+                      <li className="text-sm text-gray-500">
+                        <span className="font-bold text-black text-md">
+                          Country:
+                        </span>{" "}
+                        {transactionData?.country}
+                      </li>
+                    </ul>
                   </div>
 
                   <div className="mt-4">
