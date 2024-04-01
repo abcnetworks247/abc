@@ -37,7 +37,6 @@ function Page() {
     });
   };
 
-
   // Define initial validation state
   const [errorMessages, setErrorMessages] = useState({
     email: "",
@@ -47,7 +46,6 @@ function Page() {
 
   function signUpValidate(fieldName, regex, value, errorMessage) {
     if (!regex.test(value)) {
-      setUniversalError("");
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
         [fieldName]: errorMessage,
@@ -85,12 +83,10 @@ function Page() {
       position: toast.POSITION.TOP_LEFT,
     });
     try {
-
       // Perform an asynchronous API post request to sign up the user
       const data = await Api.post("admin/auth/signin", formData);
 
       const value = data.data;
-
 
       // Check the status of the response and log success or failure messages
       if (data.status === 200) {
@@ -140,7 +136,6 @@ function Page() {
       }, 2000);
     }
   };
-
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
