@@ -220,7 +220,22 @@ export default function Producttransaction() {
                         index
                       ) => {
                         const isLast = index === TABLE_ROWS.length - 1;
+                        const transactionData =  {
+                          name,
+                          amount,
+                          payment_Date,
+                          payment_Time,
+                          currency,
+                          payment_status,
+                          status,
+                          account,
+                          accountNumber,
+                          transaction_Id,
+                          expiry,
+                          _id,
+                        }
                         const classes = isLast
+                      
                           ? "p-4"
                           : "p-4 border-b border-blue-gray-50";
 
@@ -316,8 +331,8 @@ export default function Producttransaction() {
                                 </div>
                               </div>
                             </td>
-                            <td className={classes}>
-                              <Tooltip content="View Info">
+                            <td className={classes}  >
+                              <Tooltip content="View Info" >
                                 <IconButton
                                   variant="text"
                                   onClick={openModal}
@@ -340,7 +355,7 @@ export default function Producttransaction() {
                                 </IconButton>
                               </Tooltip>
                             </td>
-                             <TransactionModal isOpen={Toogle} openModal={openModal} closeModal={closeModal} />
+                             <TransactionModal isOpen={Toogle} transactionData={transactionData} openModal={openModal} closeModal={closeModal} />
                           </tr>
                         );
                       }

@@ -2,7 +2,12 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useRef, useEffect } from "react";
 
-export default function TransactionModal({ isOpen, closeModal, openModal }) {
+export default function TransactionModal({
+  isOpen,
+  closeModal,
+  transactionData,
+  openModal,
+}) {
   //   let [isOpen, setIsOpen] = useState(true)
 
   //   function closeModal() {
@@ -51,7 +56,7 @@ export default function TransactionModal({ isOpen, closeModal, openModal }) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black/25" onClick={closeModal} />
+            <div className="fixed inset-0  backdrop-blur-sm   bg-black bg-opacity-40  " />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
