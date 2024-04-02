@@ -6,14 +6,14 @@ export default function SubscribeModal({ isOpen, PremuiumData, HandleOpen }) {
   const modalref = useRef(null);
   const closeRef = useRef(null);
 
-  console.log( "invoice link ", )
+  console.log("invoice link ");
   const NewTime = (timeString) => {
     const timeParts = timeString?.split(":");
 
     if (timeParts?.length !== 3) {
       return "Invalid time format";
     }
- 
+
     const hours = parseInt(timeParts[0]);
     const minutes = parseInt(timeParts[1]);
     const seconds = parseInt(timeParts[2]);
@@ -163,32 +163,44 @@ export default function SubscribeModal({ isOpen, PremuiumData, HandleOpen }) {
                                 </div>
                               </div>
                               <div className="flex flex-row flex-wrap items-center gap-4">
-
-                              <div className=" py-2 px-2 lg:px-4">
-                                <div className="py-2 text-sm text-gray-500  flex flex-row items-start">
-                                  Plan Description
+                                <div className=" py-2 px-2 lg:px-4">
+                                  <div className="py-2 text-sm text-gray-500  flex flex-row items-start">
+                                    Plan Description
+                                  </div>
+                                  <div className="text-gray-500 text-sm">
+                                    {PremuiumData &&
+                                      PremuiumData?.subscription_name}
+                                  </div>
                                 </div>
-                                <div className="text-gray-500 text-sm">
-                                  {PremuiumData &&
-                                    PremuiumData?.subscription_name}
+                                <div className=" py-2 px-2 lg:px-4">
+                                  <div className="py-2 text-sm text-gray-500  flex flex-row items-start">
+                                    Invoice URL
+                                  </div>
+                                  <Link
+                                    href={`${PremuiumData?.hosted_invoice_url}`}
+                                    target="_blank"
+                                  >
+                                    <div className="text-red-500 text-sm underline">
+                                      click this link to access the invoice
+                                    </div>
+                                  </Link>
                                 </div>
-                              </div>
-                              <div className=" py-2 px-2 lg:px-4">
-                                <div className="py-2 text-sm text-gray-500  flex flex-row items-start">
-                                   Invoice URL
-                                </div>
-                                <Link href={`${PremuiumData?.hosted_invoice_url}`} target="_blank">
-                                <div className="text-red-500 text-sm underline">
-                                  click this link to access the invoice
-                                </div>
-                                </Link>
-                              </div>
                               </div>
                             </div>
                           }
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <button
+                      type="button"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                      onClick={HandleOpen}
+                    >
+                      Close
+                    </button>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
