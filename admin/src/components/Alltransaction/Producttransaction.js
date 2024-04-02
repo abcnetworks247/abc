@@ -90,13 +90,10 @@ export default function Producttransaction() {
 
   const [transactionData, settransactionData] = React.useState(null);
 
-  function closeModal() {
-    setToggle(false);
-  }
+  const HandleOpen = () => {
+    setToggle((prev) => !prev);
+  };
 
-  function openModal() {
-    setToggle(true);
-  }
 
   React.useEffect(() => {
     setLoading(true);
@@ -307,44 +304,33 @@ export default function Producttransaction() {
                                 </div>
                               </div>
                             </td>
-                            <td
-                              className={classes}
-                              onClick={() => {
-                                openModal();
-                                settransactionData(transactionData);
-                              }}
-                            >
-                              <Tooltip
-                                content="View Info"
+                            <td className={classes}>
+                              <div
                                 onClick={() => {
-                                  openModal();
+                                  HandleOpen();
                                   settransactionData(transactionData);
                                 }}
                               >
-                                <IconButton
-                                  variant="text"
-                                  onClick={() => {
-                                    openModal();
-                                    settransactionData(transactionData);
-                                  }}
-                                >
-                                  <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="size-6"
-                                  >
-                                    <g
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      fill="#000"
+                                <Tooltip content="View Info">
+                                  <IconButton variant="text">
+                                    <svg
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="size-6"
                                     >
-                                      <path d="M12 9a3 3 0 100 6 3 3 0 000-6zm-1 3a1 1 0 112 0 1 1 0 01-2 0z" />
-                                      <path d="M21.83 11.28C19.542 7.153 15.812 5 12 5c-3.812 0-7.542 2.152-9.83 6.28a1.376 1.376 0 00-.01 1.308C4.412 16.8 8.163 19 12 19c3.837 0 7.588-2.199 9.84-6.412a1.376 1.376 0 00-.01-1.307zM12 17c-2.939 0-5.96-1.628-7.908-5.051C6.069 8.596 9.073 7 12 7c2.927 0 5.931 1.596 7.908 4.949C17.96 15.372 14.94 17 12 17z" />
-                                    </g>
-                                  </svg>
-                                </IconButton>
-                              </Tooltip>
+                                      <g
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        fill="#000"
+                                      >
+                                        <path d="M12 9a3 3 0 100 6 3 3 0 000-6zm-1 3a1 1 0 112 0 1 1 0 01-2 0z" />
+                                        <path d="M21.83 11.28C19.542 7.153 15.812 5 12 5c-3.812 0-7.542 2.152-9.83 6.28a1.376 1.376 0 00-.01 1.308C4.412 16.8 8.163 19 12 19c3.837 0 7.588-2.199 9.84-6.412a1.376 1.376 0 00-.01-1.307zM12 17c-2.939 0-5.96-1.628-7.908-5.051C6.069 8.596 9.073 7 12 7c2.927 0 5.931 1.596 7.908 4.949C17.96 15.372 14.94 17 12 17z" />
+                                      </g>
+                                    </svg>
+                                  </IconButton>
+                                </Tooltip>
+                              </div>
                             </td>
                           </tr>
                         );
@@ -355,8 +341,7 @@ export default function Producttransaction() {
                 <TransactionModal
                   isOpen={Toogle}
                   transactionData={transactionData}
-                  openModal={openModal}
-                  closeModal={closeModal}
+                  HandleOpen={HandleOpen}
                 />
               </>
             </table>
