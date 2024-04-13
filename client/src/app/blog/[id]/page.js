@@ -22,7 +22,7 @@ export default function page() {
 
   const [shareModal, setShareModal] = useState(false);
   const [linkToShare, setLinkToShare] = useState(false);
-
+  const [formatedTime, setFormatedTime] = useState('');
   const [commentSection, setCommentSection] = useState(false);
 
   //fetch blog api
@@ -37,6 +37,7 @@ export default function page() {
       console.log('this is blog oo', res);
       setBlog(data);
       setAuthor(author);
+      setFormatedTime(data.createdAt);
       console.log('hey', res.data.blogdata.author);
       console.log(data);
       setLoading(false);
@@ -44,6 +45,10 @@ export default function page() {
       console.log(error);
     }
   };
+
+  const formattedDate = new Date(formatedTime).toLocaleString('en-US', {
+    hour12: true,
+  });
 
   useEffect(() => {
     fetchBlog();
@@ -105,9 +110,7 @@ export default function page() {
                       <h3 className='text-base font-bold text-gray-900'>
                         {author.fullname}:
                       </h3>
-                      <p className='text-sm text-gray-800 ml-1'>
-                        Author
-                      </p>
+                      <p className='text-sm text-gray-800 ml-1'>Author</p>
                     </div>
                     <div className=''>
                       <p className='text-sm text-gray-800 mx-4'>
@@ -115,7 +118,7 @@ export default function page() {
                           pubdate
                           datetime='2022-02-08'
                           title='February 8th, 2022'>
-                          13 April 2024
+                          {formattedDate}
                         </time>
                       </p>
                     </div>
