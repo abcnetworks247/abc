@@ -193,7 +193,7 @@ function page() {
               Create a post!
             </h2>
             <p className='mt-2 text-sm text-gray-400'>
-              Lorem ipsum is placeholder text.
+              This is your selected News category.
               {newCategory && (
                 <span className='text-green-500'>{newCategory}</span>
               )}

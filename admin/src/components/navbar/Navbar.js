@@ -298,7 +298,7 @@ export function ComplexNavbar() {
   }, []);
 
   return (
-    <Navbar className="mx-auto w-full p-2 z-30  bg-white pl-6 sticky top-0  ">
+    <Navbar className="mx-auto w-full p-2 z-20  bg-white pl-6 sticky top-0  ">
       <div className="relative flex items-center justify-between text-blue-gray-900 rounded-none">
         <Link
           href={process.env.NEXT_PUBLIC_CLIENT_URL}

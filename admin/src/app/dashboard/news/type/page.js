@@ -1,5 +1,7 @@
 'use client';
 
+import NewsDialogType from '@/components/news/Newdialogtype';
+import NewsDialog from '@/components/news/newsDialog';
 import {
   IconButton,
   Tooltip,
@@ -23,9 +25,21 @@ const page = () => {
   const [uploadState, setUploadState] = useState(null);
   const [name, setName] = useState('');
   const [editname, setEditName] = useState('');
-  const [open, setOpen] = React.useState(false);
   const [editid, setEditid] = useState(null);
-  const handleOpen = () => setOpen(!open);
+
+  const [newDialogdata, setNewdialogdata] = useState(null)
+  
+
+  let [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
 
   const token = Cookies.get('adminToken');
 
@@ -125,44 +139,44 @@ const page = () => {
     });
   };
 
-  const handleEdit = (newid) => {
+  const handleEdit = async (newid) => {
     try {
       const fildata = {
         id: newid,
-        name: editname,
+        name: editname, // Make sure editname is defined and has the expected value
       };
 
-      const response = axios.patch(
+      const response = await axios.patch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}admin/category/news/type`,
         fildata,
         {
-          // Send id in the request body
           headers: {
-            Authorization: `Bearer ${String(token)}`,
+            Authorization: `Bearer ${String(token)}`, // Ensure token is properly validated and securely handled
             'Content-Type': 'application/json',
           },
         }
       );
 
-      if (response.status !== 200) {
-        setUploadState('File Uploaded Successfully 🎉🎉');
-        setSuccessful(true);
-        handleOpen(null);
+      console.log('new response', response);
+
+      if (response.status === 200) {
+        console.log('new response');
+        // setUploadState('File Uploaded Successfully 🎉🎉');
+        // setSuccessful(true);
+
         setLoading(false);
 
-        // if (typeof window !== "undefined") {
-        //   window.location.reload();
-        // }
+        closeModal();
       } else {
-        setLoading(false);
-        setUploadState('Error: Try again later');
+        // Handle other status codes appropriately
+        console.log('Unexpected response status:', response.status);
       }
     } catch (error) {
-      alert('Error: ' + error);
-      throw new Error('Error  updating category:', error);
-      // Handle the error or show an error message to the user
+      console.error('Error:', error); // Use console.error for errors
+      alert('Error: ' + error.message); // Provide a more detailed error message to the user
     }
   };
+
 
   return (
     <div>
@@ -175,8 +189,13 @@ const page = () => {
           {allproductCategory && (
             <div className='w-full overflow-hidden bg-white shadow sm:rounded-md overflow-y-auto max-h-[60vh]'>
               <ul>
-                {allproductCategory.map((item) => (
-                  <li key={item.id} className='border border-b border-gray-200'>
+                {allproductCategory.map((item) => {
+                  const newitem = {
+                    id: item._id,
+                    name: item.name,
+                  }
+                  return(
+                  <li key={item._id} className='border border-b border-gray-200'>
                     <div className='px-4 py-3 sm:px-6'>
                       <div className='flex items-center justify-between'>
                         <p className='max-w-2xl mt-1 text-sm font-semibold text-gray-500'>
@@ -194,7 +213,8 @@ const page = () => {
                               variant='text'
                               onClick={() => {
                                 setEditName(item.name);
-                                handleOpen();
+                                setNewdialogdata(newitem);
+                                openModal();
                               }}>
                               <FiEdit className='text-xl text-indigo-500 cursor-pointer indigo-600' />
                             </IconButton>
@@ -212,68 +232,8 @@ const page = () => {
                         </div>
                       </div>
                     </div>
-                    <Dialog open={open} handler={handleOpen}>
-                      <DialogHeader>Edit Category.</DialogHeader>
-                      <DialogBody>
-                        <div
-                          className='w-full max-w-md p-8 bg-white rounded-lg shadow-sm'
-                          Name>
-                          <h1 className='mb-4 text-lg font-semibold' Name>
-                            Update this News Type
-                          </h1>
-                          <p className='mb-6 text-sm text-gray-600' Name>
-                            this category will be associated to your product
-                            when created.
-                          </p>
-                          <div className='mb-4' Name>
-                            <input
-                              type='text'
-                              placeholder='write here...'
-                              value={editname}
-                              className='w-full px-4 py-2 text-gray-700 border rounded-lg email-input focus:border-blue-500'
-                              onChange={(e) => setEditName(e.target.value)}
-                              required
-                            />
-                          </div>
-                        </div>
-                      </DialogBody>
-                      <DialogFooter>
-                        <div className='flex flex-row justify-between w-full mt-10'>
-                          {!loading && <div className=''></div>}
-
-                          <div className='flex flex-row items-center gap-4 ml-5'>
-                            {loading && <Spinner />}
-                            <span className='text-sm'> {uploadState}</span>
-                          </div>
-
-                          <div className=''>
-                            <Button
-                              variant='text'
-                              color='red'
-                              onClick={() => handleOpen(null)}
-                              className='mr-1'>
-                              <span>Cancel</span>
-                            </Button>
-                            <Button
-                              variant='gradient'
-                              onClick={() => {
-                                let id = item._id;
-                                handleEdit(id);
-                              }}
-                              disabled={!editname}
-                              className={`${
-                                !editname
-                                  ? 'cursor-not-allowed'
-                                  : 'cursor-pointer'
-                              }`}>
-                              <span>Upload</span>
-                            </Button>
-                          </div>
-                        </div>
-                      </DialogFooter>
-                    </Dialog>
                   </li>
-                ))}
+                )})}
               </ul>
             </div>
           )}
@@ -310,6 +270,15 @@ const page = () => {
       </div>
 
       <div className=''></div>
+      <NewsDialogType
+        isOpen={isOpen}
+        closeModal={closeModal}
+        newDialogdata={newDialogdata}
+        setEditName={setEditName}
+        loading={loading}
+        uploadState={uploadState}
+        handleEdit={handleEdit}
+      />
     </div>
   );
 };
