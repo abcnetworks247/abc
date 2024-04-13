@@ -113,7 +113,7 @@ export default function page() {
                         className='text-md font-bold text-gray-900 lg:text-lg flex flex-row items-center gap-1 cursor-pointer'
                         onClick={() => {
                           let id = blog._id;
-                          console.log("this is modal id", id);
+                          console.log('this is modal id', blog);
                           openModal(id);
                         }}>
                         <svg

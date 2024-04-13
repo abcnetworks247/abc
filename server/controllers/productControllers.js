@@ -121,14 +121,12 @@ const createProduct = async (req, res) => {
 
 // Controller for fetching a list of products (accessible to all users)
 const getAllProducts = async (req, res) => {
-  console.log("hitting products")
+  console.log('hitting products');
   const page = req.query.page ? parseInt(req.query.page) : 1;
   const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
-  console.log("hitting server the second time")
-  
-  try {
-   
+  console.log('hitting server the second time');
 
+  try {
     // Fetch total count of products from the database
     const totalCount = await Product.countDocuments();
 
@@ -140,9 +138,7 @@ const getAllProducts = async (req, res) => {
     // Fetch products from the database with pagination
     const products = await Product.find().skip(skip).limit(perPage);
 
-     res
-       .status(StatusCodes.OK)
-       .json({ products, totalPages,totalCount,page});
+    res.status(StatusCodes.OK).json({ products, totalPages, totalCount, page });
   } catch (error) {
     console.error(error);
     res
@@ -297,20 +293,19 @@ const getSingleProduct = async (req, res) => {
   }
 };
 
-
 const HandleSearch = async (req, res) => {
-  console.log("hello search");
+  console.log('hello search');
 
   const { query } = req.query;
 
-  console.log("my query", query);
+  console.log('my query', query);
 
   try {
     // Perform text search query using Mongoose $text operator
     const products = await Product.find(
       { $text: { $search: query } },
-      { score: { $meta: "textScore" } }
-    ).sort({ score: { $meta: "textScore" } });
+      { score: { $meta: 'textScore' } }
+    ).sort({ score: { $meta: 'textScore' } });
 
     // if (products.length === 0) {
     //   // Return a not found response if no products match the query
@@ -326,7 +321,7 @@ const HandleSearch = async (req, res) => {
     // Return an internal server error response if an unexpected error occurs
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: "Internal Server Error" });
+      .json({ error: 'Internal Server Error' });
   }
 };
 
@@ -335,7 +330,9 @@ const getProductsByCategory = async (req, res) => {
     const category = req.query.category;
 
     if (!category) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ error: 'Category parameter is required' });
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: 'Category parameter is required' });
     }
 
     // Fetch products from the database based on the provided category
@@ -348,11 +345,11 @@ const getProductsByCategory = async (req, res) => {
     res.status(StatusCodes.OK).json(products);
   } catch (error) {
     console.error(error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: 'Internal Server Error' });
   }
 };
-
-
 
 module.exports = {
   createProduct,
@@ -361,5 +358,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   HandleSearch,
-  getProductsByCategory
+  getProductsByCategory,
 };
