@@ -1,5 +1,6 @@
 const BlogJoiSchema = require('../Utils/BlogJoiSchema');
 const CommentJoiSchema = require('../Utils/CommentJoiSchema');
+const Client = require('../models/clientAuthSchema');
 const cookieParser = require('cookie-parser');
 const { StatusCodes } = require('http-status-codes');
 const fs = require('fs');
@@ -7,6 +8,10 @@ const blog = require('../models/blogSchema');
 const Admin = require('../models/adminAuthSchema');
 const NewsType = require('../models/newsTypeSchema');
 require('dotenv').config();
+const sendMail = require('../Utils/sendMail');
+const path = require('path');
+const ejs = require('ejs');
+const localurl = process.env.CLIENT_URL;
 
 const clientUrl = process.env.CLIENT_URL;
 
@@ -205,6 +210,35 @@ const createBlog = async (req, res) => {
 
     // Save the updated user data
     await currentUser.save();
+
+    const templatePath = path.join(__dirname, '../views/postView.ejs');
+
+    const allUsers = await Client.find();
+    // Extract email addresses from users
+    const userEmails = allUsers.map((user) => user.email).filter(Boolean); // Filter out undefined/null values
+
+    // Iterate over each user's email and send email individually
+    for (const email of userEmails) {
+      const renderHtml = await ejs.renderFile(
+        templatePath,
+        {
+          userFullname: "post title", // Ensure you're using the correct user's fullname
+          userEmail: "post image", // Use the current email address
+          // donation_data: data,
+        },
+        { async: true }
+      );
+
+      await sendMail({
+        email: email, // Send email to the current user
+        subject: 'New post update on ABC Networks 24',
+        html: renderHtml,
+      });
+
+      console.log(`Sent email to ${email} successfully`);
+    }
+
+    console.log('sent email product successfully');
 
     return res.status(StatusCodes.CREATED).json({
       blogData,

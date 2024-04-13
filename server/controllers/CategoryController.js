@@ -100,17 +100,15 @@ const UpdateNewsType = async (req, res) => {
     const updatedNewsType = await NewsType.findByIdAndUpdate(
       id,
       { name }, // Pass necessary fields to update
-      { new: true, runValidators: true } // To get the updated document and run validators
+      { new: true } // To get the updated document and run validators
     );
-
-    await NewsType.save();
 
     if (!updatedNewsType) {
       throw new NotFoundError("Product Category not found");
     }
 
     console.log("updatedNewsType");
-    return res.status(StatusCodes.CREATED).json({
+    res.status(StatusCodes.OK).json({
       data: updatedNewsType,
       message: "Product Category updated successfully",
     });
@@ -248,14 +246,12 @@ const UpdateNewsCat = async (req, res) => {
       { new: true, runValidators: true } // To get the updated document and run validators
     );
 
-    await NewsCat.save();
-
     if (!updatedNewsType) {
       throw new NotFoundError("Product Category not found");
     }
 
     console.log("updatedNewsType");
-    return res.status(StatusCodes.CREATED).json({
+    return res.status(StatusCodes.OK).json({
       data: updatedNewsType,
       message: "Product Category updated successfully",
     });
@@ -393,14 +389,12 @@ const UpdateProductCat = async (req, res) => {
       { new: true, runValidators: true } // To get the updated document and run validators
     );
 
-    await ProductCat.save();
-
     if (!updatedNewsType) {
       throw new NotFoundError("Product Category not found");
     }
 
     console.log("updatedNewsType");
-    return res.status(StatusCodes.CREATED).json({
+    return res.status(StatusCodes.OK).json({
       data: updatedNewsType,
       message: "Product Category updated successfully",
     });
