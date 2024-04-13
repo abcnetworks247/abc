@@ -37,7 +37,6 @@ function Page() {
     });
   };
 
-
   // Define initial validation state
   const [errorMessages, setErrorMessages] = useState({
     email: "",
@@ -47,7 +46,6 @@ function Page() {
 
   function signUpValidate(fieldName, regex, value, errorMessage) {
     if (!regex.test(value)) {
-      setUniversalError("");
       setErrorMessages((prevErrors) => ({
         ...prevErrors,
         [fieldName]: errorMessage,
@@ -85,12 +83,10 @@ function Page() {
       position: toast.POSITION.TOP_LEFT,
     });
     try {
-
       // Perform an asynchronous API post request to sign up the user
       const data = await Api.post("admin/auth/signin", formData);
 
       const value = data.data;
-
 
       // Check the status of the response and log success or failure messages
       if (data.status === 200) {
@@ -140,7 +136,6 @@ function Page() {
       }, 2000);
     }
   };
-
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
@@ -193,12 +188,12 @@ function Page() {
                       placeholder="name@mail.com"
                       onChange={(e) => {
                         HandleInputChange(e);
-                        signUpValidate(
-                          "email",
-                          EMAIL_REGEX,
-                          e.target.value,
-                          "Please enter a valid email address."
-                        );
+                        // signUpValidate(
+                        //   "email",
+                        //   EMAIL_REGEX,
+                        //   e.target.value,
+                        //   "Please enter a valid email address."
+                        // );
                       }}
                       required
                       name="email"
@@ -221,12 +216,12 @@ function Page() {
                       name="password"
                       onChange={(e) => {
                         HandleInputChange(e);
-                        signUpValidate(
-                          "password",
-                          PASSWORD_REGEX,
-                          e.target.value,
-                          "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
-                        );
+                        // signUpValidate(
+                        //   "password",
+                        //   PASSWORD_REGEX,
+                        //   e.target.value,
+                        //   "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
+                        // );
                       }}
                       required
                       className={`w-full h-full font-medium bg-transparent placeholder-gray-500 border-none text-sm outline-none border-0 border-transparent focus:outline-none focus:ring-0`}

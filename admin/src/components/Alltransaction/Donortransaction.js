@@ -18,6 +18,7 @@ import {
   Input,
 } from "@material-tailwind/react";
 import CustompaymentFetch from "../Custom/CustompaymentFetch";
+import DonorModal from "../transcation/DonorModal";
 
 const TABLE_HEAD = [
   "Username",
@@ -85,6 +86,8 @@ export default function Donortransaction() {
   const [donorData, setDonorData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+  const [DonormodalData, setDonormodalData] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     setLoading(true);
     CustompaymentFetch(`donate`)
@@ -99,6 +102,10 @@ export default function Donortransaction() {
         console.error(error);
       });
   }, []);
+
+  const HandleOpen = () => {
+    setOpen((prev) => !prev);
+  };
 
   const NewDateinfo = (date, time) => {
     const Day = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
@@ -206,10 +213,30 @@ export default function Donortransaction() {
                           transaction_Id,
                           expiry,
                           _id,
+                          donationhistory,
+                          email,
+                          payment_method_types,
                         },
                         index
                       ) => {
                         const isLast = index === TABLE_ROWS.length - 1;
+                        let Donordata = {
+                          name,
+                          amount,
+                          donation_Date,
+                          donation_Time,
+                          currency,
+                          payment_status,
+                          status,
+                          account,
+                          accountNumber,
+                          transaction_Id,
+                          expiry,
+                          donationhistory,
+                          _id,
+                          email,
+                          payment_method_types,
+                        };
                         const classes = isLast
                           ? "p-4"
                           : "p-4 border-b border-blue-gray-50";
@@ -308,31 +335,43 @@ export default function Donortransaction() {
                               </div>
                             </td>
                             <td className={classes}>
-                              <Tooltip content="View Info">
-                                <IconButton variant="text">
-                                  <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="size-6"
-                                  >
-                                    <g
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      fill="#000"
+                              <div
+                                onClick={() => {
+                                  HandleOpen();
+                                  setDonormodalData(Donordata);
+                                }}
+                              >
+                                <Tooltip content="View Info">
+                                  <IconButton variant="text">
+                                    <svg
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="size-6"
                                     >
-                                      <path d="M12 9a3 3 0 100 6 3 3 0 000-6zm-1 3a1 1 0 112 0 1 1 0 01-2 0z" />
-                                      <path d="M21.83 11.28C19.542 7.153 15.812 5 12 5c-3.812 0-7.542 2.152-9.83 6.28a1.376 1.376 0 00-.01 1.308C4.412 16.8 8.163 19 12 19c3.837 0 7.588-2.199 9.84-6.412a1.376 1.376 0 00-.01-1.307zM12 17c-2.939 0-5.96-1.628-7.908-5.051C6.069 8.596 9.073 7 12 7c2.927 0 5.931 1.596 7.908 4.949C17.96 15.372 14.94 17 12 17z" />
-                                    </g>
-                                  </svg>
-                                </IconButton>
-                              </Tooltip>
+                                      <g
+                                        fillRule="evenodd"
+                                        clipRule="evenodd"
+                                        fill="#000"
+                                      >
+                                        <path d="M12 9a3 3 0 100 6 3 3 0 000-6zm-1 3a1 1 0 112 0 1 1 0 01-2 0z" />
+                                        <path d="M21.83 11.28C19.542 7.153 15.812 5 12 5c-3.812 0-7.542 2.152-9.83 6.28a1.376 1.376 0 00-.01 1.308C4.412 16.8 8.163 19 12 19c3.837 0 7.588-2.199 9.84-6.412a1.376 1.376 0 00-.01-1.307zM12 17c-2.939 0-5.96-1.628-7.908-5.051C6.069 8.596 9.073 7 12 7c2.927 0 5.931 1.596 7.908 4.949C17.96 15.372 14.94 17 12 17z" />
+                                      </g>
+                                    </svg>
+                                  </IconButton>
+                                </Tooltip>
+                              </div>
                             </td>
                           </tr>
                         );
                       }
                     )}
                 </tbody>
+                <DonorModal
+                  isOpen={open}
+                  DonorData={DonormodalData}
+                  HandleOpen={HandleOpen}
+                />
               </>
             </table>
           </CardBody>

@@ -18,6 +18,7 @@ import {
   Input,
 } from "@material-tailwind/react";
 import CustompaymentFetch from "../Custom/CustompaymentFetch";
+import TransactionModal from "../transcation/TransactionMondal";
 
 const TABLE_HEAD = [
   "Username",
@@ -85,11 +86,20 @@ export default function Producttransaction() {
   const [donorData, setDonorData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+  const [Toogle, setToggle] = React.useState(false);
+
+  const [transactionData, settransactionData] = React.useState(null);
+
+  const HandleOpen = () => {
+    setToggle((prev) => !prev);
+  };
+
+
   React.useEffect(() => {
     setLoading(true);
     CustompaymentFetch(`purchase`)
       .then((data) => {
-        console.log(data.data.data, "purcase")
+        console.log(data.data.data);
         setDonorData(data.data.data);
         setLoading(false);
       })
@@ -100,40 +110,6 @@ export default function Producttransaction() {
       });
   }, []);
 
-  const NewDateinfo = (date, time) => {
-    const Day = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-    const Dates = new Date(date);
-    const days = Day[Dates.getDay()];
-
-    return `${days} `;
-  };
-
-  const NewTime = (timeString) => {
-    const timeParts = timeString.split(":");
-
-    if (timeParts.length !== 3) {
-      return "Invalid time format";
-    }
-
-    const hours = parseInt(timeParts[0]);
-    const minutes = parseInt(timeParts[1]);
-    const seconds = parseInt(timeParts[2]);
-
-    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
-      return "Invalid time format";
-    }
-
-    const date = new Date();
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(seconds);
-
-    const amOrPm = hours >= 12 ? "pm" : "am";
-    const formattedHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
-    const formattedTime = `${formattedHours}:${minutes}${amOrPm}`;
-    return formattedTime;
-  };
-
   return (
     <div>
       {error && (
@@ -142,7 +118,7 @@ export default function Producttransaction() {
         </div>
       )}
 
-      {loading  ? (
+      {loading ? (
         <div className=" py-4 flex items-center justify-center h-full">
           <svg
             className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
@@ -165,118 +141,140 @@ export default function Producttransaction() {
             />
           </svg>
         </div>
-      ) :donorData && donorData?.length !== 0  ?(
-          <div>
-            <CardBody className="overflow-x-scroll px-0">
-              <table className="w-full min-w-max table-auto text-left ">
-                <>
-                  <thead>
-                    <tr>
-                      {TABLE_HEAD.map((head) => (
-                        <th
-                          key={head}
-                          className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+      ) : donorData && donorData?.length !== 0 ? (
+        <div>
+          <CardBody className="overflow-x-scroll px-0">
+            <table className="w-full min-w-max table-auto text-left ">
+              <>
+                <thead>
+                  <tr>
+                    {TABLE_HEAD.map((head) => (
+                      <th
+                        key={head}
+                        className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                      >
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal leading-none opacity-70"
                         >
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal leading-none opacity-70"
-                          >
-                            {head}
-                          </Typography>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
+                          {head}
+                        </Typography>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
 
-                  <tbody>
-                    {donorData &&
-                      donorData?.map(
-                        (
-                          {
-                            name,
-                            amount,
-                            payment_Date,
-                            payment_Time,
-                            currency,
-                            payment_status,
-                            status,
-                            account,
-                            accountNumber,
-                            transaction_Id,
-                            expiry,
-                            _id,
-                          },
-                          index
-                        ) => {
-                          const isLast = index === TABLE_ROWS.length - 1;
-                          const classes = isLast
-                            ? "p-4"
-                            : "p-4 border-b border-blue-gray-50";
+                <tbody>
+                  {donorData &&
+                    donorData?.map(
+                      (
+                        {
+                          name,
+                          amount,
+                          payment_Date,
+                          email,
+                          payment_Time,
+                          currency,
+                          payment_status,
+                          status,
+                          account,
+                          phone,
+                          accountNumber,
+                          transaction_Id,
+                          country,
+                          expiry,
+                          _id,
+                          cart,
+                        },
+                        index
+                      ) => {
+                        const isLast = index === TABLE_ROWS.length - 1;
+                        const transactionData = {
+                          name,
+                          amount,
+                          payment_Date,
+                          payment_Time,
+                          email,
+                          currency,
+                          payment_status,
+                          status,
+                          account,
+                          phone,
+                          accountNumber,
+                          country,
+                          transaction_Id,
+                          expiry,
+                          _id,
+                          cart,
+                        };
+                        const classes = isLast
+                          ? "p-4"
+                          : "p-4 border-b border-blue-gray-50";
 
-                          return (
-                            <tr key={name}>
-                              <td className={classes}>
-                                <div className="flex items-center gap-3">
-                                  {/* <Avatar
+                        return (
+                          <tr key={name}>
+                            <td className={classes}>
+                              <div className="flex items-center gap-3">
+                                {/* <Avatar
                             src={img}
                             alt={name}
                             size="md"
                             className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
                           /> */}
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-bold"
-                                  >
-                                    {name}
-                                  </Typography>
-                                </div>
-                              </td>
-                              <td className={classes}>
                                 <Typography
                                   variant="small"
                                   color="blue-gray"
-                                  className="font-normal"
+                                  className="font-bold"
                                 >
-                                  {currency === "usd"
-                                    ? "$"
-                                    : currency === "naira"
-                                    ? "₦"
-                                    : ""}
-                                  {amount}
+                                  {name}
                                 </Typography>
-                              </td>
-                              <td className={classes}>
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal truncate w-32"
-                                >
-                                 {payment_Date}
-                                </Typography>
-                              </td>
-                              <td className={classes}>
-                                <div className="w-max">
-                                  <Chip
-                                    size="sm"
-                                    variant="ghost"
-                                    value={payment_status}
-                                    color={
-                                      payment_status === "paid"
-                                        ? "green"
-                                        : payment_status === "pending"
-                                        ? "amber"
-                                        : "red"
-                                    }
-                                  />
-                                </div>
-                              </td>
-                              <td className={classes}>
-                                <div className="flex items-center gap-3">
-                                  <div className="   p-1 w-36 truncate">
-                                    {transaction_Id}
-                                    {/* <Avatar
+                              </div>
+                            </td>
+                            <td className={classes}>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {currency === "usd"
+                                  ? "$"
+                                  : currency === "naira"
+                                  ? "₦"
+                                  : ""}
+                                {amount}
+                              </Typography>
+                            </td>
+                            <td className={classes}>
+                              <Typography
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal truncate w-32"
+                              >
+                                {payment_Date}
+                              </Typography>
+                            </td>
+                            <td className={classes}>
+                              <div className="w-max">
+                                <Chip
+                                  size="sm"
+                                  variant="ghost"
+                                  value={payment_status}
+                                  color={
+                                    payment_status === "paid"
+                                      ? "green"
+                                      : payment_status === "pending"
+                                      ? "amber"
+                                      : "red"
+                                  }
+                                />
+                              </div>
+                            </td>
+                            <td className={classes}>
+                              <div className="flex items-center gap-3">
+                                <div className="   p-1 w-36 truncate">
+                                  {transaction_Id}
+                                  {/* <Avatar
                               src={
                                 account === "visa"
                                   ? "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/visa.png"
@@ -287,26 +285,32 @@ export default function Producttransaction() {
                               variant="square"
                               className="h-full w-full object-contain p-1"
                             /> */}
-                                  </div>
-                                  <div className="flex flex-col">
-                                    <Typography
-                                      variant="small"
-                                      color="blue-gray"
-                                      className="font-normal capitalize"
-                                    >
-                                      {/* {account.split("-").join(" ")} {accountNumber} */}
-                                    </Typography>
-                                    <Typography
-                                      variant="small"
-                                      color="blue-gray"
-                                      className="font-normal opacity-70"
-                                    >
-                                      {expiry}
-                                    </Typography>
-                                  </div>
                                 </div>
-                              </td>
-                              <td className={classes}>
+                                <div className="flex flex-col">
+                                  <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-normal capitalize"
+                                  >
+                                    {/* {account.split("-").join(" ")} {accountNumber} */}
+                                  </Typography>
+                                  <Typography
+                                    variant="small"
+                                    color="blue-gray"
+                                    className="font-normal opacity-70"
+                                  >
+                                    {expiry}
+                                  </Typography>
+                                </div>
+                              </div>
+                            </td>
+                            <td className={classes}>
+                              <div
+                                onClick={() => {
+                                  HandleOpen();
+                                  settransactionData(transactionData);
+                                }}
+                              >
                                 <Tooltip content="View Info">
                                   <IconButton variant="text">
                                     <svg
@@ -326,53 +330,61 @@ export default function Producttransaction() {
                                     </svg>
                                   </IconButton>
                                 </Tooltip>
-                              </td>
-                            </tr>
-                          );
-                        }
-                      )}
-                  </tbody>
-                </>
-              </table>
-            </CardBody>
-            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-              <Button variant="outlined" size="sm">
-                Previous
-              </Button>
-              <div className="flex items-center gap-2">
-                <IconButton variant="outlined" size="sm">
-                  1
-                </IconButton>
-                <IconButton variant="text" size="sm">
-                  2
-                </IconButton>
-                <IconButton variant="text" size="sm">
-                  3
-                </IconButton>
-                <IconButton variant="text" size="sm">
-                  ...
-                </IconButton>
-                <IconButton variant="text" size="sm">
-                  8
-                </IconButton>
-                <IconButton variant="text" size="sm">
-                  9
-                </IconButton>
-                <IconButton variant="text" size="sm">
-                  10
-                </IconButton>
-              </div>
-              <Button variant="outlined" size="sm">
-                Next
-              </Button>
-            </CardFooter>
-          </div>
-        ) : 
-        
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )}
+                </tbody>
+
+                <TransactionModal
+                  isOpen={Toogle}
+                  transactionData={transactionData}
+                  HandleOpen={HandleOpen}
+                />
+              </>
+            </table>
+          </CardBody>
+          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+            <Button variant="outlined" size="sm">
+              Previous
+            </Button>
+            <div className="flex items-center gap-2">
+              <IconButton variant="outlined" size="sm">
+                1
+              </IconButton>
+              <IconButton variant="text" size="sm">
+                2
+              </IconButton>
+              <IconButton variant="text" size="sm">
+                3
+              </IconButton>
+              <IconButton variant="text" size="sm">
+                ...
+              </IconButton>
+              <IconButton variant="text" size="sm">
+                8
+              </IconButton>
+              <IconButton variant="text" size="sm">
+                9
+              </IconButton>
+              <IconButton variant="text" size="sm">
+                10
+              </IconButton>
+            </div>
+            <Button variant="outlined" size="sm">
+              Next
+            </Button>
+          </CardFooter>
+        </div>
+      ) : (
         <div>
-        <h1 className="text-center ">You have no transaction history yet on Product.  </h1>
-      </div> }
- 
+          <h1 className="text-center ">
+            You have no transaction history yet on Product.{" "}
+          </h1>
+        </div>
+      )}
     </div>
   );
 }
