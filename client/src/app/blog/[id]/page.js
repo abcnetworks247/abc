@@ -117,7 +117,7 @@ export default function page() {
                         <time
                           pubdate
                           datetime='2022-02-08'
-                          title='February 8th, 2022'>
+                          title={formattedDate}>
                           {formattedDate}
                         </time>
                       </p>
