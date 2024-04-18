@@ -57,6 +57,7 @@ export default function Home() {
           Stay informed, inspired, and connected with the latest happenings
           across the globe. ABC Studio brings you a curated blend of breaking
           news, insightful features, and captivating stories that matter most.
+          
           Dive into a world of diverse perspectives, thought-provoking analyses,
           and compelling narratives, all in one dynamic platform.
         </Marquee>

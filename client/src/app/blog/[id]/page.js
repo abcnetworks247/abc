@@ -100,7 +100,7 @@ export default function page() {
                     </h1>
                   </header>
 
-                  <div className='flex items-center justify-between gap-5 my-10'>
+                  <div className='flex flex-col items-start justify-start md:flex-row md:items-center md:justify-between gap-5 my-10'>
                     <div className='flex items-center '>
                       <img
                         className='w-8 h-8 mr-2 rounded-full'
