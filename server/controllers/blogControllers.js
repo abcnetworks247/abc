@@ -212,6 +212,7 @@ const createBlog = async (req, res) => {
     await currentUser.save();
 
     const templatePath = path.join(__dirname, '../views/postView.ejs');
+    const postlink = `${clientUrl}/blog/${blogData._id}`;
 
     const allUsers = await Client.find();
     // Extract email addresses from users
@@ -222,9 +223,10 @@ const createBlog = async (req, res) => {
       const renderHtml = await ejs.renderFile(
         templatePath,
         {
-          userFullname: "post title", // Ensure you're using the correct user's fullname
-          userEmail: "post image", // Use the current email address
-          // donation_data: data,
+          title: title, // Ensure you're using the correct user's fullname
+          shortdescription: shortdescription,
+          blogimage: blogimage, // Use the current email address
+          postlink: postlink,
         },
         { async: true }
       );

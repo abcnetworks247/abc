@@ -222,10 +222,13 @@ const SubWebhook = async (req, res) => {
         const periodEndDate = new Date(periodEndMilliseconds);
         const periodStartDate = new Date(periodStartMilliseconds);
 
+        let amount_check = subscription.plan.amount / 100;
+        let paymenturl = invoicePaymentSucceeded.hosted_invoice_url;
+
         const subdata1 = {
           email: usersub.email,
           name: usersub.fullname,
-          amount: subscription.plan.amount / 100,
+          amount: amount_check,
           currency: subscription.currency,
           country: invoicePaymentSucceeded.customer_address.country,
           subscription_period_start: periodStartDate,
@@ -236,7 +239,7 @@ const SubWebhook = async (req, res) => {
           quantity: subscription.quantity,
           // subscription_status: subscription.status,
           subscription_status: 'Paid',
-          hosted_invoice_url: invoicePaymentSucceeded.hosted_invoice_url,
+          hosted_invoice_url: paymenturl,
           subscription_name: invoicePaymentSucceeded.lines.data[0].description,
         };
 
@@ -258,6 +261,8 @@ const SubWebhook = async (req, res) => {
           {
             userFullname: usersub.fullname,
             userEmail: usersub.email,
+            amount: amount_check,
+            paymenturl: paymenturl,
             // donation_data: data,
           },
           { async: true }
@@ -265,7 +270,7 @@ const SubWebhook = async (req, res) => {
 
         await sendMail({
           email: usersub.email,
-          subject: 'ABC Subscription activated successfully',
+          subject: 'Our Heartfelt Thanks for Your Generous Support!',
           html: renderHtml,
         });
 

@@ -46,4 +46,6 @@ router
   
 router.route("/account").delete(authChecker, userDelete);
 
+router.route('/viewemail').get();
+
 module.exports = router;

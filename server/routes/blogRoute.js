@@ -25,6 +25,8 @@ const {
 
 const router = require("express").Router();
 
+
+
 router.route("/").get(getAllBlog);
 router.route("/:id").get(getSingleBlog);
 router.route("/create").post(authChecker, createBlog);

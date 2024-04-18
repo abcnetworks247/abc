@@ -170,7 +170,8 @@ const StripeCheckout = async (req, res) => {
 const stripeProductWebhook = async (req, res) => {
   console.log('stripe webhook for product');
 
-  const templatePath = path.join(__dirname, '../views/purchaseView.ejs');
+  const templatePath1 = path.join(__dirname, '../views/purchaseView.ejs');
+  const templatePath2 = path.join(__dirname, '../views/donationView.ejs');
   const sig = req.headers['stripe-signature'];
 
   let event;
@@ -254,10 +255,12 @@ const stripeProductWebhook = async (req, res) => {
 
         console.log(combinedCart);
 
+        let amount_check = checkoutSessionCompleted.amount_total / 100;
+
         const data = {
           email: olduser.email,
           name: olduser.fullname,
-          amount: checkoutSessionCompleted.amount_total / 100,
+          amount: amount_check,
           currency: checkoutSessionCompleted.currency,
           payment_Date: formattedDate, // Current date
           payment_Time: formattedTime, // Current time
@@ -279,7 +282,7 @@ const stripeProductWebhook = async (req, res) => {
         const data2 = {
           email: olduser.email,
           name: olduser.fullname,
-          amount: checkoutSessionCompleted.amount_total / 100,
+          amount: amount_check,
           currency: checkoutSessionCompleted.currency,
           payment_Date: formattedDate, // Current date
           payment_Time: formattedTime, // Current time
@@ -313,10 +316,10 @@ const stripeProductWebhook = async (req, res) => {
         });
 
         const renderHtml = await ejs.renderFile(
-          templatePath,
+          templatePath1,
           {
             userFullname: olduser.fullname,
-            userEmail: olduser.email,
+            amount: amount_check,
             // donation_data: data,
           },
           { async: true }
@@ -330,10 +333,13 @@ const stripeProductWebhook = async (req, res) => {
 
         console.log('sent email product successfully');
       } else if (cartdesc === 'ABCDonatiom') {
+
+        let amount_check = checkoutSessionCompleted.amount_total / 100;
+
         const data = {
           email: olduser.email,
           name: olduser.fullname,
-          amount: checkoutSessionCompleted.amount_total / 100,
+          amount: amount_check,
           currency: checkoutSessionCompleted.currency,
           donation_Date: formattedDate, // Current date
           donation_Time: formattedTime, // Current time
@@ -358,10 +364,10 @@ const stripeProductWebhook = async (req, res) => {
         await olduser.save();
 
         const renderHtml = await ejs.renderFile(
-          templatePath,
+          templatePath2,
           {
             userFullname: olduser.fullname,
-            userEmail: olduser.email,
+            amount: amount_check,
             // donation_data: data,
           },
           { async: true }
@@ -369,7 +375,7 @@ const stripeProductWebhook = async (req, res) => {
 
         await sendMail({
           email: olduser.email,
-          subject: 'Thank you for your donation',
+          subject: 'Thank You for Your Generous Support to Ambazonia Broadcasting Corporation!',
           html: renderHtml,
         });
 
