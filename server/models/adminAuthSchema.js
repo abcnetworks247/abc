@@ -42,8 +42,8 @@ const AdminSchema = new mongoose.Schema(
 );
 
 AdminSchema.pre('save', async function (next) {
-  const gensalt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, gensalt);
+  // const gensalt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
@@ -62,8 +62,8 @@ AdminSchema.methods.checkPassword = async function (password) {
 
 AdminSchema.methods.newHashPassword = async function (password) {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    const hashedPassword = bcrypt.hash(password, 10);
     return hashedPassword;
   } catch (error) {}
 };
