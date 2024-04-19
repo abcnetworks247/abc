@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 // Define Donation Schema
 const subscriptionSchema = new mongoose.Schema({
@@ -7,8 +7,8 @@ const subscriptionSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   currency: { type: String, required: true },
   country: { type: String, required: true },
-  subscription_period_start: { type: Date, required: true},
-  subscription_period_end: { type: Date, required: true},
+  subscription_period_start: { type: Date, required: true },
+  subscription_period_end: { type: Date, required: true },
   subscription_id: { type: String, required: true },
   plan_id: { type: String, required: true },
   plan_type: { type: String, required: true },
@@ -19,6 +19,6 @@ const subscriptionSchema = new mongoose.Schema({
 });
 
 // Create Donation model
-const Subscription = mongoose.model("SubscriptionHistory", subscriptionSchema);
+const Subscription = mongoose.model('SubscriptionHistory', subscriptionSchema);
 
 module.exports = Subscription;

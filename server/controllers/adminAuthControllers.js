@@ -171,7 +171,7 @@ const userRecovery = async (req, res) => {
 
     await sendMail({
       email: userexist.email,
-      subject: 'ABCSTUDIO Password Recovery',
+      subject: 'Password Recovery',
       html: renderHtml,
     });
 
