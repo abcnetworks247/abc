@@ -40,7 +40,7 @@ const HomeBanner = () => {
             </Link>
 
             <a
-              href="www.statehousebuea.org"
+              href="https://www.statehousebuea.org/"
               target="_blank"
               className=" h-[10vh] md:h-[20vh] lg:h-[30vh] w-auto"
             >
