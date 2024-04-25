@@ -21,7 +21,10 @@ const HomeBanner = () => {
         </div> */}
         <div className="video-background w-full relative h-[40vh] items-center">
           <video autoPlay loop muted controls={false} className="w-[100vw]">
-            <source src="./vid.mp4" type="video/mp4" />
+            <source
+              src="https://firebasestorage.googleapis.com/v0/b/abcnetworks24-a6f88.appspot.com/o/vid.mp4?alt=media&token=a21c7f6e-06f5-44e5-a859-f519b4be8be7"
+              type="video/mp4"
+            />
             Your browser does not support the video tag.
           </video>
           <div className="absolute top-0 left-0 w-full md:t0p-2 lg:top-5 h-auto lg:h-full flex flex-row items-center justify-between">
