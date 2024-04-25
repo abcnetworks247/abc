@@ -9,7 +9,7 @@ import header2 from '../../resources/assets/image/header2.png';
 
 const HomeBanner = () => {
   return (
-    <div>
+    <div className="mb-20">
       <header>
         {/* <div
           className='w-full bg-cover bg-center h-[50vh] mb-10'
