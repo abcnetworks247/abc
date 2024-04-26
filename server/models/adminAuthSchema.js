@@ -42,8 +42,8 @@ const AdminSchema = new mongoose.Schema(
 );
 
 AdminSchema.pre('save', async function (next) {
-  // const gensalt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, 10);
+  const gensalt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, gensalt);
   next();
 });
 
@@ -54,6 +54,7 @@ AdminSchema.methods.checkPassword = async function (password) {
     console.log('Password comparison result:', checkPassword);
 
     return checkPassword;
+    
   } catch (error) {
     console.error('Error comparing passwords:', error);
     throw new Error('Error comparing passwords');

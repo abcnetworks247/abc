@@ -47,7 +47,7 @@ const signUp = async (req, res) => {
       throw new ValidationError('error');
     }
 
-    const newUser = await Client.create(value);
+    const newUser = await Client.save(value);
 
     res.status(StatusCodes.CREATED).json({
       data: newUser,

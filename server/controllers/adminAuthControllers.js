@@ -51,7 +51,7 @@ const signUp = async (req, res) => {
 
     console.log('this is a valid user ', value);
 
-    const newUser = await Admin.create(value);
+    const newUser = await Admin.save(value);
 
     console.log(newUser);
 
