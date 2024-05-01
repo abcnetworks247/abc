@@ -27,11 +27,11 @@ const HomeBanner = () => {
             />
             Your browser does not support the video tag.
           </video>
-          <div className="absolute top-0 left-0 w-full md:t0p-2 lg:top-5 h-auto lg:h-full flex flex-row items-center justify-between">
+          <div className="absolute top-0 left-0 w-full gap-5 md:t0p-2 lg:top-5 h-auto lg:h-full flex flex-row items-center justify-center">
             <a
               href="https://www.statehousebuea.org/"
               target="_blank"
-              className="h-[10vh] md:h-[20vh] lg:h-[30vh] w-auto"
+              className="h-[10vh] md:h-[10vh] lg:h-[20vh] w-auto"
             >
               <Image
                 src={header1}
