@@ -189,7 +189,7 @@ function page() {
                           </span>
                         </div>
                         <p className="mt-1 text-xs text-gray-600">
-                          9 minutes read
+                        
                         </p>
                       </div>
                     </section>

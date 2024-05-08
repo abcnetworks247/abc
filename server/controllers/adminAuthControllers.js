@@ -21,7 +21,7 @@ const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require('../errors/index');
+} = require("../errors/index");
 
 const Client = require('../models/clientAuthSchema');
 
@@ -313,7 +313,7 @@ const userUpdate = async (req, res) => {
         }
       }
     } else {
-      throw new UnauthorizedError('Unauthorized to update user information');
+      throw new UnAuthorizedError("Unauthorized to update user information");
     }
   } catch (error) {
     console.error('Error updating user account:', error);
