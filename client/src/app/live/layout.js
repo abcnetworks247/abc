@@ -10,15 +10,15 @@ const layout = ({ children }) => {
 
   const router = useRouter();
 
-  const userpackage = UserData && UserData.userpackage;
+  
 
-  console.log('userpackage', userpackage);
 
-  useEffect(() => {
-    if (userpackage === 'basic' || userpackage === null || undefined) {
-      router.push('/pricing');
-    }
-  }, ['userpackage']);
+
+  // useEffect(() => {
+  //   if (userpackage === 'basic' || userpackage === null || undefined) {
+  //     router.push('/pricing');
+  //   }
+  // }, ['userpackage']);
 
   return <div>{children}</div>;
 };
