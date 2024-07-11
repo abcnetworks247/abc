@@ -38,7 +38,7 @@ function page() {
   const [loading, setLoading] = useState(true);
   const [load, setLoad] = useState(false);
   const [error, setError] = useState('');
-  const [html, setHtml] = useState('');
+  const [html, setHtml] = useState("");
   const [title, setTitle] = useState('');
   const [shortDescription, setShortDescription] = useState('');
   const [type, setType] = useState([]);

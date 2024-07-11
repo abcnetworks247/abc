@@ -79,7 +79,7 @@ function UploadComp({ handleOpen, size }) {
   };
 
   return (
-    <div>
+    <div> 
       <Dialog
         open={
           size === "xs" ||
