@@ -124,10 +124,12 @@ const Page = () => {
               </div>
               {userpackage === "basic" || userpackage === null || undefined ? (
                 <div>
-                  <video width="600" controls>
-                    <source src={channel.vid} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
+                  <Link href="/pricing">
+                    <video width="600" controls>
+                      <source src={channel.vid} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </Link>
                 </div>
               ) : (
                 <iframe
