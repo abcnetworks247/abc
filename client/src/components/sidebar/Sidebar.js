@@ -154,7 +154,7 @@ export default function Sidebar() {
                       </li>
                     </Link>
                   ) : (
-                    <Link href='/pricing'>
+                    <Link href='/live'>
                       <li className='menu-item'>
                         <CgLivePhoto className='w-5 h-5 text-red-600 opacity-75' />
 
