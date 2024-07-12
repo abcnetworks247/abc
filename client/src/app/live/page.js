@@ -13,12 +13,10 @@ import Link from "next/link";
 // import vidPortuguese from "@/../public/assets/ABC_AMBA_TV_PORTUGUESE_Full HD 1080p_MEDIUM_FR30";
 
 const Page = () => {
-   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
+  const { UserData, HandleGetUser, Authtoken } = UseUserContext();
   const userpackage = UserData && UserData.userpackage;
 
   //new update
-
-    console.log("userpackage", userpackage);
 
   const channels = [
     {
@@ -50,8 +48,6 @@ const Page = () => {
       id: 4,
     },
   ];
-
- 
 
   return (
     <div>
@@ -124,14 +120,14 @@ const Page = () => {
                 <h2 className="text-center mb-3">{channel.description}</h2>
               </div>
               {userpackage === "basic" || userpackage === null || undefined ? (
-                <div>
-                  <Link href="/pricing">
+                <Link href="/pricing">
+                  <div>
                     <video width="600" controls>
                       <source src={channel.vid} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               ) : (
                 <iframe
                   src={channel.url}
