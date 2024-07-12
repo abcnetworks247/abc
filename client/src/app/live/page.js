@@ -6,6 +6,7 @@ import Nav1 from "@/components/navbar/Nav1";
 import Navbar from "@/components/navbar/Navbar";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { UseUserContext } from "../../../contexts/UserContext";
+import Link from "next/link";
 // import vidEnglish from "@/resources/assets/videos/English.mp4";
 // import vidFrancais from "@/../public/assets/ABC_AMBA_TV_FRANÇAIS_Full HD 1080p_MEDIUM_FR30.mp4";
 // // import vidPidgin from "@/../public/assets/ABC_AMBA_TV_PIDGIN__Full HD 1080p_MEDIUM_FR30";
