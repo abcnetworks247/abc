@@ -9,7 +9,7 @@ import header2 from '../../resources/assets/image/header2.png';
 
 const HomeBanner = () => {
   return (
-    <div className="mb-20">
+    <div className="">
       <header>
         {/* <div
           className='w-full bg-cover bg-center h-[50vh] mb-10'
@@ -19,7 +19,7 @@ const HomeBanner = () => {
           }}>
           <div className='flex items-center justify-center h-full w-full bg-gray-900 bg-opacity-50'></div>
         </div> */}
-        <div className="video-background w-full relative h-[40vh] items-center">
+        <div className="video-background w-full relative h-fit lg:h-[40vh] items-center">
           <video autoPlay loop muted controls={false} className="w-[100vw]">
             <source
               src="https://firebasestorage.googleapis.com/v0/b/abcnetworks24-a6f88.appspot.com/o/vid.mp4?alt=media&token=a21c7f6e-06f5-44e5-a859-f519b4be8be7"
@@ -55,9 +55,7 @@ const HomeBanner = () => {
                 className="h-full w-full"
               />
             </Link>
-            <div className="md:hidden lg:block">
-
-            </div>
+            <div className="md:hidden lg:block"></div>
           </div>
         </div>
       </header>
