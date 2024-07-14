@@ -113,7 +113,7 @@ const Page = () => {
 
           {channels.map((channel) => (
             <div className="w-full h-auto" key={channel.id}>
-              <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-col items-center justify-center mb-3">
                 <h1 className="text-xl font-semibold md:text-xl text-gray-800 mt-1 md:mt-3 text-center  leading-relaxed md:leading-snug">
                   {channel.name}
                 </h1>
