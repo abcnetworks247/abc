@@ -23,28 +23,28 @@ const Page = () => {
       name: "ABC AMBA TV, English Live",
       description: "-",
       url: "https://iframe.viewmedia.tv?channel=158",
-      vid: "./English.mp4",
+      img: "./English.jpg",
       id: 1,
     },
     {
       name: "ABC AMBA TV, Portuguese Live",
       description: "Notícias em Português",
       url: "https://iframe.viewmedia.tv?channel=158",
-      vid: "./Portuguese.mp4",
+      img: "./Portugues.jpg",
       id: 2,
     },
     {
       name: "ABC AMBA TV, French Live",
       description: "Actualités en français",
       url: "https://iframe.viewmedia.tv?channel=158",
-      vid: "./Francais.mp4",
+      img: "./Francaise.jpg",
       id: 3,
     },
     {
       name: "ABC AMBA TV, Pidgin English Live",
       description: "News in Pidgin English",
       url: "https://iframe.viewmedia.tv?channel=158",
-      vid: "./Pidgin.mp4",
+      img: "./Pidgin.jpg",
       id: 4,
     },
   ];
@@ -118,49 +118,18 @@ const Page = () => {
                   {channel.name}
                 </h1>
                 <h2 className="text-center">{channel.description}</h2>
-
-                {userpackage === "basic" ||
-                userpackage === null ||
-                undefined ? (
-                  <Link href={"/pricing"}>
-                    <div className="text-xs my-3 inline-flex items-center justify-center font-bold leading-sm uppercase px-3 py-1 bg-blue-800 text-gray-100 rounded-full gap-2">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        className="h-6 w-6 text-gray-200"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M14.9999 15.2547C13.8661 14.4638 12.4872 14 10.9999 14C7.40399 14 4.44136 16.7114 4.04498 20.2013C4.01693 20.4483 4.0029 20.5718 4.05221 20.6911C4.09256 20.7886 4.1799 20.8864 4.2723 20.9375C4.38522 21 4.52346 21 4.79992 21H9.94465M13.9999 19.2857L15.7999 21L19.9999 17M14.9999 7C14.9999 9.20914 13.2091 11 10.9999 11C8.79078 11 6.99992 9.20914 6.99992 7C6.99992 4.79086 8.79078 3 10.9999 3C13.2091 3 14.9999 4.79086 14.9999 7Z"
-                            stroke="#ffffff"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />{" "}
-                        </g>
-                      </svg>
-                      <span> Subscribe Now</span>
-                    </div>
-                  </Link>
-                ) : (
-                  <div className="mb-3"></div>
-                )}
               </div>
               {userpackage === "basic" || userpackage === null || undefined ? (
-                <div>
-                  <video width="600" controls>
-                    <source src={channel.vid} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
+                <Link href="/pricing">
+                  <div className="aspect-w-16 aspect-h-9">
+                    <img
+                      className="object-cover"
+                      src={channel.img}
+                      alt="Image 1"
+                    />
+                  </div>
+                  
+                </Link>
               ) : (
                 <iframe
                   src={channel.url}
