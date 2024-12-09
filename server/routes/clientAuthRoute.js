@@ -44,7 +44,7 @@ router
   .route("/account")
   .patch(authChecker, upload.single("userphoto"), userUpdate);
   
-router.route("/account").delete(authChecker, userDelete);
+router.route("/account/delete").delete(authChecker, userDelete);
 
 router.route('/viewemail').get();
 
