@@ -406,9 +406,7 @@ export default function Navbar() {
                     <a tabIndex="-2" className="text-sm dropdown-item">
                       Account settings
                     </a>
-                    <a tabIndex="-2" className="text-sm dropdown-item">
-                      Subscriptions
-                    </a>
+                  
                     <a tabIndex="-2" className="text-sm dropdown-item">
                       logout
                     </a>
