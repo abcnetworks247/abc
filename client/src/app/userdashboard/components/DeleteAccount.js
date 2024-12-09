@@ -30,7 +30,7 @@ const DeleteAccount = () => {
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(
-            `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
+            `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account/delete`,
             {
               data: data,
               headers: {
