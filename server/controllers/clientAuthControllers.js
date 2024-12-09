@@ -397,7 +397,7 @@ const userDelete = async (req, res) => {
     }
 
     if (email !== user.email) {
-      throw new UnAuthorizedError('you are not authorized to delete this user');
+      throw new UnAuthorizedError('invalid email address');
     }
 
     let userid = String(user._id);
@@ -407,7 +407,7 @@ const userDelete = async (req, res) => {
     const authenticatedUser = await olduser.checkPassword(password);
 
     if (!authenticatedUser) {
-      throw new UnAuthorizedError('you are not authorized to delete this user');
+      throw new UnAuthorizedError('incorrect password');
     }
 
     const deleteUser = await Client.findByIdAndDelete(userid);
