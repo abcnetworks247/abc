@@ -109,7 +109,6 @@ const createSubscription = async (req, res) => {
         userId: user._id,
         description: 'testing level',
       },
-
       customer: user._id,
     });
 
