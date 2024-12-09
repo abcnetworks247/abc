@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { UseUserContext } from "../../../../contexts/UserContext";
 import Cookies from "js-cookie";
@@ -8,15 +9,34 @@ import { useRouter } from "next/navigation";
 
 const DeleteAccount = () => {
   const router = useRouter();
-  const { authToken } = UseUserContext();
+  const reload = useRouter();
+  const { Authtoken } = UseUserContext();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [email, setEmail] = useState("");
 
-  const togglePasswordVisibility = () => setPasswordVisible((prev) => !prev);
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prevVisible) => !prevVisible);
+  };
+
+  const handlePassword = (e) => {
+    setCurrentPassword(e.target.value);
+  };
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  console.log(currentPassword, email);
 
   const handleDeleteConfirmation = async () => {
-    const data = { email, password: currentPassword };
+    let data = {
+      email: email,
+      password: currentPassword,
+    };
+    console.log("data to delete", data)
 
     Swal.fire({
       title: "Are you sure?",
@@ -31,15 +51,18 @@ const DeleteAccount = () => {
         try {
           const response = await axios.delete(
             `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account/delete`,
+            
             {
               data: data,
               headers: {
-                Authorization: `Bearer ${String(authToken)}`,
+                Authorization: `Bearer ${String(Authtoken)}`,
                 "Content-Type": "application/json",
               },
               withCredentials: true,
             }
           );
+
+          console.log("response is here ", response);
 
           if (response.status === 200) {
             Swal.fire({
@@ -49,20 +72,27 @@ const DeleteAccount = () => {
             });
 
             Cookies.remove("authToken");
+
+            if (typeof window !== "undefined") {
+              window.location.reload();
+            }
+            
             router.push("/");
+
           }
         } catch (error) {
+          console.error("There is an error:", error);
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text:
-              error.response?.data?.error || "An unexpected error occurred.",
+            text: `${error.response.data.error}`,
             footer: '<a href="/privacy-policy">Read our privacy policy</a>',
           });
         }
       }
     });
   };
+
 
   return (
     <div className="flex flex-col sm:flex-grow  w-full ">
