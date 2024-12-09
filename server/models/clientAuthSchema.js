@@ -92,13 +92,16 @@ AuthSchema.pre("save", async function (next) {
 
 AuthSchema.methods.checkPassword = async function (password) {
   try {
+    console.log("Input plaintext password:", password);
+    console.log("Stored hashed password:", this.password);
+
     const checkPassword = await bcrypt.compare(password, this.password);
 
     console.log("Password comparison result:", checkPassword);
 
     return checkPassword;
   } catch (error) {
-    console.error("Error comparing passwords:", error);
+    console.error("Error during password comparison:", error);
     throw new Error("Error comparing passwords");
   }
 };
