@@ -388,39 +388,54 @@ const userSignOut = async (req, res) => {
 
 const userDelete = async (req, res) => {
   const { email, password } = req.body;
-
   const { user } = req;
 
   try {
     if (!user) {
-      throw new NotFoundError('User not found');
+      throw new NotFoundError("User not found");
     }
 
     if (email !== user.email) {
-      throw new UnAuthorizedError('invalid email address');
+      throw new UnAuthorizedError("Invalid email address");
     }
 
-    let userid = String(user._id);
+    const userid = String(user._id);
+    const oldUser = await Client.findById(userid);
 
-    const olduser = await Client.findById(userid);
-
-    const authenticatedUser = await olduser.checkPassword(password);
-
-    if (!authenticatedUser) {
-      throw new UnAuthorizedError('incorrect password');
+    if (!oldUser) {
+      throw new NotFoundError("User not found");
     }
 
-    const deleteUser = await Client.findByIdAndDelete(userid);
+    const isAuthenticated = await oldUser.checkPassword(password);
 
-    if (deleteUser) {
-      res.status(StatusCodes.OK).json({ message: 'User deleted successfully' });
+    if (!isAuthenticated) {
+      throw new UnAuthorizedError("Incorrect password");
     }
+
+    const deletedUser = await Client.findByIdAndDelete(userid);
+
+    if (!deletedUser) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "User deletion failed" });
+    }
+
+    res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
   } catch (error) {
+    if (error instanceof NotFoundError) {
+      return res.status(StatusCodes.NOT_FOUND).json({ error: error.message });
+    }
+    if (error instanceof UnAuthorizedError) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ error: error.message });
+    }
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
   }
 };
+
 
 const Wishlist = (io) => {
   io.on('connection', (socket) => {
