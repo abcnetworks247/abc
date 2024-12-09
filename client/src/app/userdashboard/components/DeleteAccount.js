@@ -36,6 +36,7 @@ const DeleteAccount = () => {
       email: email,
       password: currentPassword,
     };
+    console.log("data to delete", data);
 
     Swal.fire({
       title: "Are you sure?",
@@ -50,8 +51,8 @@ const DeleteAccount = () => {
         try {
           const response = await axios.delete(
             `${process.env.NEXT_PUBLIC_SERVER_URL}client/auth/account`,
+            data,
             {
-              data: data,
               headers: {
                 Authorization: `Bearer ${String(Authtoken)}`,
                 "Content-Type": "application/json",
@@ -74,9 +75,8 @@ const DeleteAccount = () => {
             if (typeof window !== "undefined") {
               window.location.reload();
             }
-            
-            router.push("/");
 
+            router.push("/");
           }
         } catch (error) {
           console.error("There is an error:", error);
@@ -90,7 +90,6 @@ const DeleteAccount = () => {
       }
     });
   };
-
 
   return (
     <div className="flex flex-col sm:flex-grow  w-full ">

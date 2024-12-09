@@ -257,13 +257,7 @@ export default function Navbar() {
                           >
                             Account settings
                           </Link>
-                          <Link
-                            href="/userdashboard/subscription"
-                            tabIndex="-1"
-                            className="text-sm rounded-sm dropdown-item hover:bg-gray-100"
-                          >
-                            Subscriptions
-                          </Link>
+                        
                           <a
                             tabIndex="-1"
                             className="text-sm rounded-sm dropdown-item hover:bg-gray-100"
