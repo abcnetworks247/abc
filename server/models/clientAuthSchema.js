@@ -7,7 +7,6 @@ const AuthSchema = new mongoose.Schema(
     fullname: {
       type: String,
       required: true,
-      trim: true, // Removes whitespace
     },
     userdp: {
       type: String,
@@ -17,7 +16,6 @@ const AuthSchema = new mongoose.Schema(
     userbio: {
       type: String,
       default: "Tell us about yourself",
-      trim: true,
     },
     phone: {
       type: String,
@@ -27,8 +25,6 @@ const AuthSchema = new mongoose.Schema(
       type: String,
       unique: true,
       required: true,
-      lowercase: true, // Ensures email is stored in lowercase
-      trim: true,
     },
     shippingaddress: {
       type: String,
@@ -43,43 +39,43 @@ const AuthSchema = new mongoose.Schema(
       enum: ["basic", "coper", "silver", "gold", "diamond", "titanium"],
       default: "basic",
     },
+    
     cart: [
       {
         product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
         quantity: {
           type: Number,
-          default: 1,
-          min: 1, // Prevents invalid quantity values
+          default: 1, // Assuming default quantity is 1
         },
       },
     ],
     orderhistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "OrderHistory",
       },
     ],
     subscriptionhistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "SubscriptionHistory",
       },
     ],
     donationhistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Donation", // Updated capitalization for consistency
+        type: mongoose.Types.ObjectId,
+        ref: "donation",
       },
     ],
     wishlist: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Product",
       },
     ],
     productpurchasehistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "PurchaseHistory",
       },
     ],
@@ -87,37 +83,33 @@ const AuthSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Middleware to hash password before saving
 AuthSchema.pre("save", async function (next) {
-  try {
-    if (!this.isModified("password")) {
-      return next(); // Skip if password is not modified
-    }
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  const gensalt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, gensalt);
+  next();
 });
 
-// Method to verify password
+
 AuthSchema.methods.checkPassword = async function (password) {
   try {
-    return await bcrypt.compare(password, this.password);
+    const checkPassword = await bcrypt.compare(password, this.password);
+
+    console.log("Password comparison result:", checkPassword);
+
+    return checkPassword;
   } catch (error) {
+    console.error("Error comparing passwords:", error);
     throw new Error("Error comparing passwords");
   }
 };
 
-// Method to hash a new password (utility)
+
 AuthSchema.methods.newHashPassword = async function (password) {
   try {
     const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
-  } catch (error) {
-    throw new Error("Error hashing the password");
-  }
+    const hashedPassword = bcrypt.hash(password, salt);
+    return hashedPassword;
+  } catch (error) {}
 };
 
 module.exports = mongoose.model("Client", AuthSchema);
