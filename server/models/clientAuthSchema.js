@@ -84,24 +84,27 @@ const AuthSchema = new mongoose.Schema(
 );
 
 AuthSchema.pre("save", async function (next) {
-  const gensalt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, gensalt);
-  next();
+  if (!this.isModified("password")) {
+    // If password is not modified, proceed to the next middleware
+    return next();
+  }
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-
-AuthSchema.methods.checkPassword = async function (password) {
-  try {
-    const checkPassword = await bcrypt.compare(password, this.password);
-
-    console.log("Password comparison result:", checkPassword);
-
-    return checkPassword;
-  } catch (error) {
-    console.error("Error comparing passwords:", error);
-    throw new Error("Error comparing passwords");
-  }
+AuthSchema.methods.checkPassword = async function (userPassword) {
+  const isMatch = await bcrypt.compare(userPassword, this.password);
+  console.log(isMatch)
+  return isMatch;
 };
+
 
 
 AuthSchema.methods.newHashPassword = async function (password) {
