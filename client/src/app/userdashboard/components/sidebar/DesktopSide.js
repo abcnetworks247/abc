@@ -37,69 +37,77 @@ const DesktopSide = () => {
       >
         <SidebarHead />
 
-        <div className='h-full mt-8'>
+        <div className="h-full mt-8">
           <Link
-            href='/userdashboard'
+            href="/userdashboard"
             className={`flex items-center px-4 py-2 gap-4 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo   ${
-              pathname == '/userdashboard' ? 'sm:bg-gray-200' : ''
-            }`}>
+              pathname == "/userdashboard" ? "sm:bg-gray-200" : ""
+            }`}
+          >
             <IoPersonOutline size={24} />
-            <p className='text-sm text-gray-600'>My account</p>
+            <p className="text-sm text-gray-600">My account</p>
           </Link>
 
-          <Link href='/userdashboard/orders'>
+          <a
+            href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+            target="_blank"
+          >
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == '/userdashboard/orders' ? 'sm:bg-gray-200' : ''
-              }`}>
+                pathname == "/userdashboard/orders" ? "sm:bg-gray-200" : ""
+              }`}
+            >
               <HiOutlineShoppingBag size={24} />
-              <p className='text-sm text-gray-600'>Orders</p>
+              <p className="text-sm text-gray-600">Orders</p>
             </div>
-          </Link>
+          </a>
 
-          <Link href='/userdashboard/transactions'>
+          <Link href="/userdashboard/transactions">
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
-                pathname == '/userdashboard/transactions'
-                  ? 'sm:bg-gray-200'
-                  : ''
-              }`}>
+                pathname == "/userdashboard/transactions"
+                  ? "sm:bg-gray-200"
+                  : ""
+              }`}
+            >
               <PiCreditCard size={24} />
-              <p className='text-sm text-gray-600'>Transactions</p>
+              <p className="text-sm text-gray-600">Transactions</p>
             </div>
           </Link>
 
-          <Link href='/userdashboard/manageaccount ' className=''>
+          <Link href="/userdashboard/manageaccount " className="">
             <div
               className={`flex items-center  px-4 py-2 gap-4 rounded-sm  hover:bg-gray-100 accountInformation sidebarInfo ${
-                pathname == '/userdashboard/manageaccount'
-                  ? 'sm:bg-gray-300'
-                  : ''
-              }`}>
+                pathname == "/userdashboard/manageaccount"
+                  ? "sm:bg-gray-300"
+                  : ""
+              }`}
+            >
               <IoSettingsOutline size={24} />
 
-              <p className='text-sm text-gray-600'>Manage Account</p>
+              <p className="text-sm text-gray-600">Manage Account</p>
             </div>
           </Link>
 
           <div
             onClick={() => {
               setLoading(true);
-              Cookies.remove('authToken');
-              const authToken = Cookies.get('authToken');
-              console.log("my current authToken", authToken)
+              Cookies.remove("authToken");
+              const authToken = Cookies.get("authToken");
+              console.log("my current authToken", authToken);
               if (!authToken) {
                 setLoading(false);
-                if (typeof window !== 'undefined') {
+                if (typeof window !== "undefined") {
                   router.push("/");
                   window.location.reload();
                 }
               }
             }}
-            className='flex items-center hover:bg-gray-100 cursor-pointer gap-3  px-4 py-2 text-blue-500 border-b border-gray-300'>
-            {loading ? '...' : <MdLogout size={24} />}
+            className="flex items-center hover:bg-gray-100 cursor-pointer gap-3  px-4 py-2 text-blue-500 border-b border-gray-300"
+          >
+            {loading ? "..." : <MdLogout size={24} />}
 
-            <p className='rounded-sm text-center text-sm'>Logout</p>
+            <p className="rounded-sm text-center text-sm">Logout</p>
           </div>
           <Upgrade />
         </div>

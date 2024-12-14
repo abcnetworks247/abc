@@ -6,7 +6,7 @@ import DonateComp from '../components/donate/DonateComp';
 import SubscribeComp from '../components/subscribe/SubscribeComp';
 
 const page = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(2);
 
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
@@ -30,12 +30,12 @@ const page = () => {
       
       <div className='flex flex-row items-center justify-start max-w-lg px-2 md:px-4 mt-6'>
         <div className='flex items-center justify-start shadow-sm rounded-md mb-5' role='group'>
-          <button
+          {/* <button
             type='button'
             onClick={() => handleTabClick(1)}
             className={ activeTab === 1 ? `${active } rounded-l-lg`  : `${inactive } rounded-l-lg` }>
             Purchase
-          </button>
+          </button> */}
           <button
             type='button'
             onClick={() => handleTabClick(2)}
@@ -54,7 +54,7 @@ const page = () => {
       </div>
 
       <div className='tab-content'>
-        {activeTab === 1 && <PurchaseComp />}
+        {/* {activeTab === 1 && <PurchaseComp />} */}
         {activeTab === 2 && <DonateComp />}
         {activeTab === 3 && <SubscribeComp />}
       </div>

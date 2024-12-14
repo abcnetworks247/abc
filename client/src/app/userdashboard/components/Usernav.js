@@ -192,7 +192,10 @@ const Usernav = ({changeView, mobileView}) => {
             </Link>
           )}
 
-          <Link href="/userdashboard/orders">
+          {/* <a
+            href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+            target="_blank"
+          >
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
                 pathname == "/userdashboard/orders" ? "sm:bg-gray-200" : ""
@@ -206,7 +209,7 @@ const Usernav = ({changeView, mobileView}) => {
               <OrderIcon />
               <p className="text-sm text-gray-600">Orders</p>
             </div>
-          </Link>
+          </a> */}
 
           <div>
             <div
@@ -276,7 +279,6 @@ const Usernav = ({changeView, mobileView}) => {
                   ? "sm:bg-gray-200"
                   : ""
               }`}
-           
             >
               <svg
                 className="w-5 h-5"
@@ -331,7 +333,7 @@ const Usernav = ({changeView, mobileView}) => {
                 aria-label="loading"
               ></div>
             ) : (
-                <MdLogout size={24} />
+              <MdLogout size={24} />
             )}
 
             <p className="rounded-sm text-center text-sm">Logout</p>

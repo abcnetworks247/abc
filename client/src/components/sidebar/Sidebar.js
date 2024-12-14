@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { IoStorefrontOutline } from 'react-icons/io5';
-import { UseUserContext } from '../../../contexts/UserContext';
-import Image from 'next/image';
-import { MdClose } from 'react-icons/md';
-import Link from 'next/link';
-import { FaRegUser } from 'react-icons/fa6';
-import { CgLivePhoto } from 'react-icons/cg';
-import { BiHomeSmile } from 'react-icons/bi';
-import Logo from '@/resources/assets/image/AbcstudioNo.png';
-import { IoInformationCircleOutline } from 'react-icons/io5';
-import { FaRegHeart } from 'react-icons/fa';
-import { MdOutlineContacts } from 'react-icons/md';
-import { useEffect, useState } from 'react';
-import Api from '@/utils/Api';
+import { IoStorefrontOutline } from "react-icons/io5";
+import { UseUserContext } from "../../../contexts/UserContext";
+import Image from "next/image";
+import { MdClose } from "react-icons/md";
+import Link from "next/link";
+import { FaRegUser } from "react-icons/fa6";
+import { CgLivePhoto } from "react-icons/cg";
+import { BiHomeSmile } from "react-icons/bi";
+import Logo from "@/resources/assets/image/AbcstudioNo.png";
+import { IoInformationCircleOutline } from "react-icons/io5";
+import { FaRegHeart } from "react-icons/fa";
+import { MdOutlineContacts } from "react-icons/md";
+import { useEffect, useState } from "react";
+import Api from "@/utils/Api";
 
 export default function Sidebar() {
   const [type, setType] = useState(null);
   const [category, setCategory] = useState([]);
   const { loading, UserData, Authtoken } = UseUserContext();
-  const pathUrl = '/news/';
+  const pathUrl = "/news/";
 
   const fetchData = async () => {
     try {
-      const response = await Api.get('admin/category/news/type');
+      const response = await Api.get("admin/category/news/type");
 
       if (response.status === 200) {
-        console.log('data file 2', response.data.data);
+        console.log("data file 2", response.data.data);
         setType(response.data.data);
       }
     } catch (error) {
@@ -140,13 +140,17 @@ export default function Sidebar() {
                       </div>
                     </div>
                   </li>
-                  <Link href="/store">
+                  <a
+                    href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+                    target="_blank"
+                  >
                     <li className="menu-item">
                       <IoStorefrontOutline className="w-5 h-5 opacity-75" />
 
                       <p>Store</p>
                     </li>
-                  </Link>
+                  </a>
+
                   <Link href="/live">
                     <li className="menu-item">
                       <CgLivePhoto className="w-5 h-5 text-red-600 opacity-75" />
@@ -282,13 +286,11 @@ export default function Sidebar() {
                       </li>
                     </Link>
                   )}
-                  <Link href="/wish">
-                    <li className="menu-item">
-                      <FaRegHeart className="text-2xl" />
-                      Wishlist
-                    </li>
-                  </Link>
-                  <Link href="/cart">
+
+                  <a
+                    href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+                    target="_blank"
+                  >
                     <li className="menu-item">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -313,7 +315,7 @@ export default function Sidebar() {
                       </svg>
                       Cart
                     </li>
-                  </Link>
+                  </a>
                 </ul>
               </section>
             </nav>

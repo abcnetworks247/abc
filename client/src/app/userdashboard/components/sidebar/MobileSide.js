@@ -35,7 +35,8 @@ const MobileSide = () => {
             <p className='text-sm text-gray-600'>My account</p>
           </Link>
 
-          <Link href='/Mobile/Orders'>
+          <a href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+                target="_blank">
             <div
               className={`flex items-center px-4 py-2 gap-3 hover:bg-gray-100 rounded-sm accountInformation sidebarInfo  ${
                 pathname == '/Mobile/Orders' ? 'sm:bg-gray-200' : ''
@@ -43,7 +44,7 @@ const MobileSide = () => {
               <HiOutlineShoppingBag size={24} />
               <p className='text-sm text-gray-600'>Orders</p>
             </div>
-          </Link>
+          </a>
 
           <Link href='/Mobile/transactions'>
             <div

@@ -119,7 +119,9 @@ const Page = () => {
                 </h1>
                 <h2 className="text-center">{channel.description}</h2>
               </div>
-              {userpackage === "basic" || userpackage === null || undefined ? (
+              {userpackage === "basic" ||
+              userpackage === null ||
+              userpackage === undefined ? (
                 <Link href="/pricing">
                   <div className="aspect-w-16 aspect-h-9">
                     <img
@@ -128,7 +130,6 @@ const Page = () => {
                       alt="Image 1"
                     />
                   </div>
-                  
                 </Link>
               ) : (
                 <iframe

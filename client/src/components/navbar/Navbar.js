@@ -24,16 +24,15 @@ import Cookies from "js-cookie";
 export default function Navbar() {
   const router = useRouter();
 
-  const { HandleLogout, UserData, loading} = UseUserContext();
+  const { HandleLogout, UserData, loading } = UseUserContext();
   const { cartProducts, wishlist } = UseProductProvider();
   const pathname = usePathname();
   const pathUrl = "/news/";
-  const access =UserData && UserData.userpackage;
+  const access = UserData && UserData.userpackage;
 
+  const Authtoken = Cookies.get("authToken");
 
-  const Authtoken= Cookies.get('authToken')
-
-  console.log("Authtoken in nave", Authtoken)
+  console.log("Authtoken in nave", Authtoken);
 
   // console.log('tokk',Authtoken)
 
@@ -85,7 +84,7 @@ export default function Navbar() {
           text: "You've been logged out succesfully.",
           icon: "success",
         });
-        Cookies.remove("authToken")
+        Cookies.remove("authToken");
         router.push("/login");
       }
     });
@@ -111,46 +110,52 @@ export default function Navbar() {
         <div className="hidden text-white navbar-center md:block lg:ml-20">
           <Link
             href="/"
-            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${pathname === "/" ? "border-b-[2px] border-[#0e1b2b] " : ""
-              }`}
+            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
+              pathname === "/" ? "border-b-[2px] border-[#0e1b2b] " : ""
+            }`}
           >
             Home
           </Link>
-          <Link
-            href="/store"
-            className={`navbar-item text-[15px] rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/store" ? "border-b-[2px] border-[#0e1b2b]" : ""
-              }`}
+          <a
+            href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+            target="_blank"
+            className={`navbar-item text-[15px] rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/store" ? "border-b-[2px] border-[#0e1b2b]" : ""
+            }`}
           >
             Store
-          </Link>
+          </a>
           <Link
             href="/pricing"
-            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1 whitespace-nowrap  border-[#0e1b2b] transition-all ${pathname === "/pricing" ? "border-b-[2px] border-[#0e1b2b]" : ""
-              }`}
+            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1 whitespace-nowrap  border-[#0e1b2b] transition-all ${
+              pathname === "/pricing" ? "border-b-[2px] border-[#0e1b2b]" : ""
+            }`}
           >
             Club Membership
           </Link>
 
           <Link
             href="/about"
-            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/about" ? "border-b-[2px] border-[#0e1b2b]" : ""
-              }`}
+            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/about" ? "border-b-[2px] border-[#0e1b2b]" : ""
+            }`}
           >
             About
           </Link>
           <Link
             href="/contact"
-            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
-              }`}
+            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
+            }`}
           >
             Contact
           </Link>
           <Link
             //if access === basic redirect to home. else go to contact
-            href={'/live'}
-
-            className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
-              }`}
+            href={"/live"}
+            className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+              pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
+            }`}
           >
             <span className="px-4 py-1 text-sm font-medium text-white bg-red-600 rounded-[3px]">
               Live
@@ -178,7 +183,7 @@ export default function Navbar() {
         <div className="hidden navbar-center md:block "></div>
         <div className="flex flex-row items-center text-white navbar-end">
           <div className="flex flex-row items-center gap-3 mr-4 text-white">
-            <Link
+            {/* <Link
               href="/wish"
               className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
@@ -194,28 +199,29 @@ export default function Navbar() {
                   {WishlistValue}
                 </div>
               )}
-            </Link>
-            <Link
-              href="/cart"
+            </Link> */}
+            <a
+              href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+              target="_blank"
               className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
               <div className="text-2xl text-white">
                 <TiShoppingCart />
               </div>
               <div className="text-xs leading-3 text-white">cart</div>
-              {cartProducts && cartProducts.length === 0 ? (
+              {/* {cartProducts && cartProducts.length === 0 ? (
                 <></>
               ) : (
                 <div className="absolute right-0 flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full left-4 -top-1">
                   {cartvalue}
                 </div>
-              )}
-            </Link>
+              )} */}
+            </a>
           </div>
 
           {/* condition to display user profile picture on first render with token */}
           <div>
-            {Authtoken && UserData? (
+            {Authtoken && UserData ? (
               <div className="hidden avatar avatar-ring avatar-md md:block">
                 {loading === false ? (
                   <div className="dropdown-container ">
@@ -234,10 +240,10 @@ export default function Navbar() {
                               loading="lazy"
                               className="object-cover rounded-full cursor-pointer"
                               alt="avatar"
-                            // style={{
-                            //   width: '100%',
-                            //   height: 'auto',
-                            // }}
+                              // style={{
+                              //   width: '100%',
+                              //   height: 'auto',
+                              // }}
                             />
                           </div>
                         </label>
@@ -257,7 +263,7 @@ export default function Navbar() {
                           >
                             Account settings
                           </Link>
-                        
+
                           <a
                             tabIndex="-1"
                             className="text-sm rounded-sm dropdown-item hover:bg-gray-100"
@@ -334,10 +340,10 @@ export default function Navbar() {
                               loading="lazy"
                               className="object-cover rounded-full cursor-pointer"
                               alt="avatar"
-                            // style={{
-                            //   width: '100%',
-                            //   height: 'auto',
-                            // }}
+                              // style={{
+                              //   width: '100%',
+                              //   height: 'auto',
+                              // }}
                             />
                           </Link>
                         </div>
@@ -388,7 +394,11 @@ export default function Navbar() {
                   tabIndex="1"
                 >
                   {" "}
-                  <Link href={`${!Authtoken && !UserData ? "/login" : "/userdashboard"}`}>
+                  <Link
+                    href={`${
+                      !Authtoken && !UserData ? "/login" : "/userdashboard"
+                    }`}
+                  >
                     <FaRegUser className="text-white hover:text-btn-primary transition  text-[26px] cursor-pointer block lg:hidden" />
                   </Link>
                 </label>
@@ -400,7 +410,7 @@ export default function Navbar() {
                     <a tabIndex="-2" className="text-sm dropdown-item">
                       Account settings
                     </a>
-                  
+
                     <a tabIndex="-2" className="text-sm dropdown-item">
                       logout
                     </a>

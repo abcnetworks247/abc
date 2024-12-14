@@ -67,10 +67,14 @@
           </svg>
         </div>
 
-        <div className="mx-5">
-          <h4 className="text-2xl font-semibold text-gray-700">3453</h4>
-          <div className="text-gray-500">Total Orders</div>
-        </div>
+        <a
+          href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
+          target="_blank"
+          className="mx-5"
+        >
+          <h4 className="text-2xl font-semibold text-gray-700">All Orders</h4>
+          <div className="text-gray-500">Click to view</div>
+        </a>
       </div>
     </div>
 
