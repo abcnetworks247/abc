@@ -390,8 +390,6 @@ const userDelete = async (req, res) => {
   const { email, password } = req.body;
   const { user } = req;
 
-  console.log("User deleted", email, password);
-
   try {
     if (!user) {
       throw new NotFoundError("User not found");
@@ -411,13 +409,11 @@ const userDelete = async (req, res) => {
     const isAuthenticated = await oldUser.checkPassword(password);
 
     if (isAuthenticated) {
-      console.log("correct password")
       await Client.findByIdAndDelete(userid);
       res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
+    } else {
+      throw new UnAuthorizedError("Incorrect password");
     }
-
-    // console.log("about to delete user: " + oldUser);
-    throw new UnAuthorizedError("Incorrect password");
   } catch (error) {
     if (error instanceof NotFoundError) {
       return res.status(StatusCodes.NOT_FOUND).json({ error: error.message });
@@ -432,6 +428,7 @@ const userDelete = async (req, res) => {
       .json({ error: error.message });
   }
 };
+
 
 const Wishlist = (io) => {
   io.on("connection", (socket) => {
