@@ -1,217 +1,192 @@
-'use client';
-import FooterComp from '@/components/Footer/FooterComp';
-import Navbar from '@/components/navbar/Navbar';
-import RelatedArticles from '@/components/relatedArticles/RelatedArticles';
-import Sidebar from '@/components/sidebar/Sidebar';
-import Nav1 from '@/components/navbar/Nav1';
-import axios from 'axios';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import parse from 'html-react-parser';
-import Api from '@/utils/Api';
-import SharePostModal from '@/components/Modal/SharePostModal';
+"use client";
 
-export default function page() {
-  // store fetched data in state
-  const [blog, setBlog] = useState([]);
-  // store author's data in state
-  const [author, setAuthor] = useState([]);
-  // store loading state
-  const [loading, setLoading] = useState(false);
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import Image from "next/image";
+import { format } from "date-fns";
+import parse from "html-react-parser";
+import { Share2, MessageCircle, ThumbsUp, Eye } from "lucide-react";
+
+import Api from "@/utils/Api";
+import Navbar from "@/components/navbar/Navbar";
+import FooterComp from "@/components/Footer/FooterComp";
+import RelatedArticles from "@/components/relatedArticles/RelatedArticles";
+import ShareModal from "@/components/ShareModal";
+
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import Nav1 from "@/components/navbar/Nav1";
+import { Toaster } from "sonner";
+
+export default function BlogPost() {
+  const [blog, setBlog] = useState(null);
+  const [author, setAuthor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const { id } = useParams();
 
-  const [shareModal, setShareModal] = useState(false);
-  const [linkToShare, setLinkToShare] = useState(false);
-  const [formatedTime, setFormatedTime] = useState('');
-  const [commentSection, setCommentSection] = useState(false);
-
-  //fetch blog api
-  const fetchBlog = async () => {
-    try {
-      setLoading(true);
-      const res = await Api.get(`admin/blog/${id}`);
-
-      const data = await res.data.blogdata;
-      const author = await res.data.blogdata.author;
-
-      console.log('this is blog oo', res);
-      setBlog(data);
-      setAuthor(author);
-      setFormatedTime(data.createdAt);
-      console.log('hey', res.data.blogdata.author);
-      console.log(data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const formattedDate = new Date(formatedTime).toLocaleString('en-US', {
-    hour12: true,
-  });
-
   useEffect(() => {
-    fetchBlog();
-    console.log(id);
+    const fetchBlog = async () => {
+      try {
+        setLoading(true);
+        const res = await Api.get(`admin/blog/${id}`);
+        const data = res.data.blogdata;
+        setBlog(data);
+        setAuthor(data.author);
+      } catch (error) {
+        console.error("Error fetching blog post:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchBlog();
+    }
   }, [id]);
 
-  const openModal = (id) => {
-    console.log('this is ', id);
-    setLinkToShare(`${process.env.NEXT_PUBLIC_CLIENT_URL}/blog/${id}`);
-    setShareModal(true);
-    document.body.style.overflow = 'hidden'; // Hide the scrollbar
-  };
+  if (loading) {
+    return <BlogPostSkeleton />;
+  }
 
-  // Function to close the modal
-  const closeModal = () => {
-    setShareModal(false);
-    document.body.style.overflow = 'auto'; // Show the scrollbar
-  };
+  if (!blog) {
+    return (
+      <div className="container mx-auto px-4 py-8">Blog post not found.</div>
+    );
+  }
+
+  const formattedDate = format(new Date(blog.createdAt), "MMMM d, yyyy");
 
   return (
-    <div className='relative'>
+    <div className="min-h-screen bg-gray-50">
       <Nav1 />
-      <div className='bg-[#111827] sticky top-0 z-[10] mb-10'>
+      <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
-
-      {
-        // if loading is true, show loading component
-        loading ? (
-          <main className='mt-[110px] pb-16  lg:pb-24 bg-white w-auto antialiased'>
-            <div className='flex flex-col justify-between max-w-screen-xl gap-5 px-4 mx-auto'>
-              <span className='w-full h-12 max-w-2xl mx-auto bg-gray-200 rounded-lg animate-pulse lg:h-6 format format-sm sm:format-base lg:format-lg format-blue'></span>
-              <div className='w-full h-[50svh] bg-gray-200 rounded max-w-2xl mx-auto format format-sm sm:format-base lg:format-lg format-blue animate-pulse'></div>
+      <main className="container mx-auto px-4 py-8">
+        <article className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+          <figure>
+            <img
+              className="w-full h-[60vh] mb-6 rounded-lg"
+              src={blog.blogimage}
+            />
+          </figure>
+          <div className="p-6 md:p-8">
+            <h1 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
+              {blog.title}
+            </h1>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <Avatar className="h-10 w-10 mr-3">
+                  <AvatarImage
+                    src={"/placeholder.svg"}
+                    alt={"ABC Networks 24"}
+                  />
+                  <AvatarFallback>"A"</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-base font-semibold text-gray-900">
+                   ABC Networks 24
+                  </p>
+                  <p className="text-sm text-gray-600">{formattedDate}</p>
+                </div>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => setShareModalOpen(true)}
+                className="flex items-center text-sm"
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Share
+              </Button>
             </div>
-          </main>
-        ) : (
-          // else show fetched data
-          <>
-            <Sidebar />
-            <main className='mt-[30px] pb-16  lg:pb-24 bg-white w-auto antialiased'>
-              <div className='flex justify-between max-w-screen-xl px-4 mx-auto '>
-                <article className='w-full max-w-3xl mx-auto format format-sm sm:format-base lg:format-lg format-blue dark:format-invert'>
-                  <header className=' lg:mb-2 not-format'>
-                    <address className='flex items-center mb-2 not-italic'>
-                      {/* map through fetched data */}
-                    </address>
-                    <h1 className='text-xl font-semibold leading-tight text-gray-900 my-7 lg:mb-6 lg:text-xl'>
-                      {blog.title}
-                    </h1>
-                  </header>
-
-                  <div className='flex flex-col items-start justify-start md:flex-row md:items-center md:justify-between gap-5 my-10'>
-                    <div className='flex items-center '>
-                      <img
-                        className='w-8 h-8 mr-2 rounded-full'
-                        src={author.userdp}
-                        alt='Profile picture of author'
-                      />
-                      <h3 className='text-base font-bold text-gray-900'>
-                        {author.fullname}:
-                      </h3>
-                      <p className='text-sm text-gray-800 ml-1'>Author</p>
-                    </div>
-                    <div className=''>
-                      <p className='text-sm text-gray-800 mx-4'>
-                        <time
-                          pubdate
-                          datetime='2022-02-08'
-                          title={formattedDate}>
-                          {formattedDate}
-                        </time>
-                      </p>
-                    </div>
-                  </div>
-
-                  <figure>
-                    <img
-                      className='w-full h-auto mb-6 rounded-lg'
-                      src={blog.blogimage}
-                    />
-                  </figure>
-
-                  <div className='w-full text-base leading-relaxed text-gray-700 lg:px-0 lg:w-full'>
-                    {parse(`${blog.longdescription}`)}
-                  </div>
-
-                  <section className='mt-6 not-format'>
-                    <div className='flex items-center justify-between mb-6'>
-                      <h2 className='text-lg font-bold text-gray-900 lg:text-lg'>
-                        Discussion (0)
-                      </h2>
-
-                      <h2
-                        className='text-md font-bold text-gray-900 lg:text-lg flex flex-row items-center gap-1 cursor-pointer'
-                        onClick={() => {
-                          let id = blog._id;
-                          console.log('this is modal id', blog);
-                          openModal(id);
-                        }}>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          strokeWidth='1.5'
-                          stroke='currentColor'
-                          className='w-6 h-6'>
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z'
-                          />
-                        </svg>
-                        Share
-                      </h2>
-                    </div>
-                    <form className='mb-6'>
-                      <div className='px-4 py-2 mb-4 bg-gray-200 border border-gray-200 rounded-lg rounded-t-lg'>
-                        <label for='comment' className='sr-only'>
-                          Your comment
-                        </label>
-                        <textarea
-                          id='comment'
-                          rows='6'
-                          className='w-full px-0 text-lg text-gray-900 bg-gray-200 border-0 outline-0 focus:ring-0 dark:placeholder-gray-400'
-                          placeholder='Write a comment...'
-                          required></textarea>
-                      </div>
-                      <button
-                        type='submit'
-                        className='inline-flex items-end justify-end py-2.5 px-4 text-xs font-medium text-center text-white bg-gray-800 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 '>
-                        Post comment
-                      </button>
-                    </form>
-                    {commentSection && (
-                      <article className='p-6 mb-6 text-base bg-gray-200 rounded-lg '>
-                        <p className='text-gray-600'>
-                          Very straight-to-point article. Really worth time
-                          reading. Thank you! But tools are just the instruments
-                          for the UX designers. The knowledge of the design
-                          tools are as important as the creation of the design
-                          strategy.
-                        </p>
-                      </article>
-                    )}
-                  </section>
-                </article>
+            <div className="prose max-w-none text-base">
+              {parse(blog.longdescription)}
+            </div>
+            <div className="mt-8 flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" className="flex items-center text-sm">
+                  <ThumbsUp className="h-4 w-4 mr-2" />
+                  {blog.likes || 0}
+                </Button>
+                <Button variant="ghost" className="flex items-center text-sm">
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  {blog.comments?.length || 0}
+                </Button>
+                <span className="flex items-center text-gray-600 text-sm">
+                  <Eye className="h-4 w-4 mr-2" />
+                  {blog.views || 0} views
+                </span>
               </div>
-            </main>
+              <Button
+                variant="outline"
+                onClick={() => setShareModalOpen(true)}
+                className="text-sm"
+              >
+                Share Article
+              </Button>
+            </div>
+          </div>
+        </article>
 
-            <aside
-              aria-label='Related articles'
-              className='px-5 py-8 overflow-hidden'>
-              <div className='max-w-screen-xl px-4 mx-auto'></div>
-              <div className=''>
-                <RelatedArticles id={id} />
+        <section className="max-w-4xl mx-auto mt-12">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Comments</h2>
+          {/* Add comment form and list here */}
+        </section>
+
+        <section className="max-w-4xl mx-auto mt-12">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            Related Articles
+          </h2>
+          <RelatedArticles id={id} />
+        </section>
+      </main>
+
+      <FooterComp />
+
+      <ShareModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        url={`${process.env.NEXT_PUBLIC_CLIENT_URL}/blog/${id}`}
+        title={blog.title}
+        image={blog.blogimage}
+      />
+      <Toaster />
+    </div>
+  );
+}
+
+function BlogPostSkeleton() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Nav1 />
+      <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
+        <Navbar />
+      </div>
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+          <Skeleton className="h-72 w-full" />
+          <div className="p-6 md:p-8">
+            <Skeleton className="h-8 w-3/4 mb-4" />
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <Skeleton className="h-10 w-10 rounded-full mr-3" />
+                <div>
+                  <Skeleton className="h-5 w-32 mb-2" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
               </div>
-            </aside>
-          </>
-        )
-      }
-      {shareModal && (
-        <SharePostModal closeModal={closeModal} linkToShare={linkToShare} />
-      )}
+              <Skeleton className="h-9 w-20" />
+            </div>
+            <div className="space-y-4">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </div>
+          </div>
+        </div>
+      </main>
       <FooterComp />
     </div>
   );

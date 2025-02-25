@@ -89,20 +89,13 @@ export default function () {
           <div className="flex items-center justify-start h-screen max-w-screen-xl px-4 mx-auto md:px-8">
             <div className="max-w-lg mx-auto space-y-3 text-center">
               <h3 className="font-semibold text-indigo-600">404 Error,</h3>
-              <p className="text-4xl font-semibold text-gray-800 sm:text-5xl">
-                {error}
-              </p>
+             
               <p className="text-gray-600">
                 Sorry, the post you are looking for could not be found or has
                 been removed.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <Link
-                  href="/store"
-                  className="block px-4 py-2 font-medium text-white duration-150 bg-blue-500 rounded-lg hover:bg-blue-600"
-                >
-                  View shop
-                </Link>
+                
                 <Link
                   href="/contact"
                   className="block px-4 py-2 font-medium text-gray-700 duration-150 border rounded-lg hover:bg-gray-50 active:bg-gray-100"
@@ -122,7 +115,7 @@ export default function () {
       {/* // if loading is true, show a skeleton loader. Else, show the blog posts. */}
       {loading ? (
         // skeleton loader
-        <div className="flex flex-col gap-5 px-3 space-x-0 lg:flex-row md:flex-row md:space-x-6">
+        <div className="flex flex-col gap-5 px-3 space-x-0 lg:flex-row md:flex-row md:space-x-6 mt-28">
           {Array.from({ length: 3 }).map((_, index) => (
             <div
               className="block w-full px-1 mb-4 rounded animate-pulse lg:mb-0 lg:p-0 md:w-4/7"
@@ -149,7 +142,7 @@ export default function () {
           ))}
         </div>
       ) : (
-        <div className="flex justify-center w-full p-2 m-0">
+        <div className="flex justify-center w-full p-2 mt-20">
           {/* <!-- component --> */}
           <div className="w-full p-0 lg:p-5 ">
             <main className="w-full ">
