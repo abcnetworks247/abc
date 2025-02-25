@@ -1,7 +1,7 @@
 const CategoryJoi = require("../Utils/CategoryJoiSchema");
 const Admin = require("../models/adminAuthSchema");
 const { StatusCodes } = require("http-status-codes");
-
+const slugify = require("slugify");
 const NewsType = require("../models/newsTypeSchema");
 const NewsCat = require("../models/newsCatSchema");
 const ProductCat = require("../models/productCatSchema");
@@ -17,42 +17,39 @@ const CreateNewsType = async (req, res) => {
   const { user } = req;
 
   try {
-    // Check if user exists
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
-    // Check user authorization roles
+    if (!user) throw new NotFoundError("User not found");
     if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized");
     }
-
-    // Check if the category type already exists
-    const existingCategory = await NewsType.findOne({ name });
-
-    if (existingCategory) {
+    if (await NewsType.findOne({ name })) {
       throw new UnAuthorizedError("Category type already exists");
     }
 
-    // Validate the category name using Joi schema
     const { error, value } = CategoryJoi.validate({ name });
+    if (error) throw new ValidationError("Invalid category name");
 
-    if (error) {
-      throw new ValidationError("Invalid category name");
+    const slug = slugify(value.name, { lower: true, strict: true });
+    let uniqueSlug = slug,
+      count = 1;
+    while (await NewsType.findOne({ slug: uniqueSlug })) {
+      uniqueSlug = `${slug}-${count++}`;
     }
 
-    // Create a new category using the ProductCat model
+    const lastType = await NewsType.findOne().sort("-position");
+    const position = (lastType?.position || 0) + 1;
+
     const createdCategory = await NewsType.create({
       name: value.name,
-      // Add other necessary fields here
+      slug: uniqueSlug,
+      position,
     });
 
-    return res.status(StatusCodes.CREATED).json({
+    res.status(StatusCodes.CREATED).json({
       data: createdCategory,
       message: "Category created successfully",
     });
   } catch (error) {
-    return res
+    res
       .status(
         error instanceof CustomError
           ? error.statusCode
@@ -86,34 +83,32 @@ const UpdateNewsType = async (req, res) => {
     const { name, id } = req.body;
     const { user } = req;
 
-    console.log(id, name);
-
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
+    if (!user) throw new NotFoundError("User not found");
     if (!["superadmin", "admin", "editor"].includes(user.role)) {
       throw new UnAuthorizedError("You are not authorized to update News Type");
     }
+    if (!id) throw new ValidationError("ID is required");
 
-    // Assuming ProductCat is a model with a findByIdAndUpdate method
-    const updatedNewsType = await NewsType.findByIdAndUpdate(
-      id,
-      { name }, // Pass necessary fields to update
-      { new: true } // To get the updated document and run validators
-    );
-
-    if (!updatedNewsType) {
-      throw new NotFoundError("Product Category not found");
+    const slug = slugify(name, { lower: true, strict: true });
+    let uniqueSlug = slug,
+      count = 1;
+    while (await NewsType.findOne({ slug: uniqueSlug, _id: { $ne: id } })) {
+      uniqueSlug = `${slug}-${count++}`;
     }
 
-    console.log("updatedNewsType");
+    const updatedNewsType = await NewsType.findByIdAndUpdate(
+      id,
+      { name, slug: uniqueSlug },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedNewsType) throw new NotFoundError("News Type not found");
     res.status(StatusCodes.OK).json({
       data: updatedNewsType,
-      message: "Product Category updated successfully",
+      message: "News Type updated successfully",
     });
   } catch (error) {
-    return res
+    res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
   }
@@ -184,10 +179,18 @@ const CreateNewsCat = async (req, res) => {
       throw new ValidationError("Invalid category name");
     }
 
-    // Create a new category using the ProductCat model
+    // Generate slug
+    const slug = slugify(value.name, { lower: true, strict: true });
+
+    // Determine position
+    const lastCategory = await NewsCat.findOne().sort({ position: -1 });
+    const position = lastCategory ? lastCategory.position + 1 : 1;
+
+    // Create a new category
     const createdCategory = await NewsCat.create({
       name: value.name,
-      // Add other necessary fields here
+      slug,
+      position,
     });
 
     return res.status(StatusCodes.CREATED).json({
@@ -239,11 +242,14 @@ const UpdateNewsCat = async (req, res) => {
       throw new UnAuthorizedError("You are not authorized to update News Type");
     }
 
-    // Assuming ProductCat is a model with a findByIdAndUpdate method
+    // Generate new slug
+    const slug = slugify(name, { lower: true, strict: true });
+
+    // Update category
     const updatedNewsType = await NewsCat.findByIdAndUpdate(
       id,
-      { name }, // Pass necessary fields to update
-      { new: true, runValidators: true } // To get the updated document and run validators
+      { name, slug },
+      { new: true, runValidators: true }
     );
 
     if (!updatedNewsType) {

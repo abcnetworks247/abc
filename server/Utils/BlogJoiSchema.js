@@ -3,6 +3,7 @@ const commentSchema = require("./CommentJoiSchema");
 
 const BlogJoiSchema = joi.object({
   title: joi.string().required(),
+  slug: joi.string().required(),
   shortdescription: joi.string().required(),
   longdescription: joi.string().required(),
   category: joi.string().required(),

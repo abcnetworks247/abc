@@ -31,6 +31,7 @@
     "paystack": "^2.0.1",
     "raw-body": "^2.5.2",
     "serverless-http": "^3.2.0",
+    "slugify": "^1.6.6",
     "socket.io": "^4.7.2",
     "stripe": "^14.12.0"
   },

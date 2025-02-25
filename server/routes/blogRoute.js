@@ -28,7 +28,7 @@ const router = require("express").Router();
 
 
 router.route("/").get(getAllBlog);
-router.route("/:id").get(getSingleBlog);
+router.route("/:slug").get(getSingleBlog);
 router.route("/create").post(authChecker, createBlog);
 router.route("/edit/:id").get(authChecker, getUserBlog);
 
@@ -38,6 +38,6 @@ router.route("/update").patch(authChecker, updateBlog);
 router.route("/delete").delete(authChecker, deleteBlog);
 router.route("/search").get(searchBlog);
 
-router.route("/news/:id").get(getBlogsByType);
+router.route("/news/:slug").get(getBlogsByType);
 
 module.exports = router;

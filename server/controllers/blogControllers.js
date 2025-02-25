@@ -9,6 +9,7 @@ const Admin = require('../models/adminAuthSchema');
 const NewsType = require('../models/newsTypeSchema');
 require('dotenv').config();
 const sendMail = require('../Utils/sendMail');
+const slugify = require("slugify");
 const path = require('path');
 const ejs = require('ejs');
 const localurl = process.env.CLIENT_URL;
@@ -22,66 +23,6 @@ const {
 } = require('../errors');
 const cloudinary = require('../Utils/CloudinaryFileUpload');
 
-// const getAllBlog = async (req, res) => {
-//   try {
-//     const page = req.query.page ? parseInt(req.query.page) : 1;
-//     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
-
-//     const fetchBlogsByType = async (blogType) => {
-//       try {
-//         const result = await blog
-//           .find({ type: blogType })
-//           .populate('author', 'fullname username userdp')
-//           .sort({ createdAt: -1 })
-//           .skip((page - 1) * perPage)
-//           .limit(perPage);
-//         return result;
-//       } catch (error) {
-//         console.error(error);
-//         throw error;
-//       }
-//     };
-
-//     const blogTypes = [
-//       'Africa News Update',
-//       'Dr. Martin Mungwa - Press Releases',
-//       'Office of the President',
-//       'Socio Cultural',
-//       'Archives & Analysis',
-//       'Breaking News',
-//       'Sports',
-//       'World News',
-//       'Interim Government Updates',
-//       'Business',
-//     ];
-
-//     const blogTypePromises = blogTypes.map(async (type) => {
-//       const blogs = await fetchBlogsByType(type);
-//       return { [type]: blogs };
-//     });
-
-//     const blogTypeResults = await Promise.all(blogTypePromises);
-
-//     const allBlogs = await blog
-//       .find()
-//       .populate('author', 'fullname username userdp')
-//       .sort({ createdAt: -1 })
-//       .skip((page - 1) * perPage)
-//       .limit(perPage);
-
-//     if (allBlogs.length === 0) {
-//       return res
-//         .status(StatusCodes.NOT_FOUND)
-//         .json({ message: 'No Post found' });
-//     }
-
-//     return res.status(StatusCodes.OK).json({ allBlogs, ...blogTypeResults });
-//   } catch (error) {
-//     return res
-//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//       .json({ message: error.message });
-//   }
-// };
 
 const getAllBlog = async (req, res) => {
   try {
@@ -150,9 +91,63 @@ const getAllBlog = async (req, res) => {
   }
 };
 
+// const getSingleBlog = async (req, res) => {
+//   const { slug } = req.params; // Get slug from request parameters
+
+//   try {
+//     const blogdata = await blog
+//       .findOne({ slug }) // Find by slug instead of ID
+//       .populate("author", "fullname username userdp")
+//       .populate({
+//         path: "comment.userid",
+//         select: "fullname userdp",
+//       });
+
+//     if (!blogdata) {
+//       throw new NotFoundError("Blog not found");
+//     }
+
+//     return res.status(StatusCodes.OK).json({ blogdata });
+//   } catch (error) {
+//     console.error("Error in getSingleBlog:", error);
+//     return res
+//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
+//       .json({ message: "Internal Server Error" });
+//   }
+// };
+
+const getSingleBlog = async (req, res) => {
+  const { slug } = req.params;
+  console.log(`Received slug: ${slug}`);
+
+  try {
+    const blogdata = await blog
+      .findOne({ slug }) // Find blog by slug
+      .populate("author", "fullname username userdp")
+      .populate({
+        path: "comment.userid",
+        select: "fullname userdp",
+      });
+
+    if (!blogdata) {
+      console.log(`No blog found with slug: ${slug}`);
+      // throw new NotFoundError("Blog not found");
+    }
+
+    return res.status(StatusCodes.OK).json({ blogdata });
+  } catch (error) {
+    console.error("Error in getSingleBlog:", error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
+
 const createBlog = async (req, res) => {
   try {
-    console.log('Request received to create a new blog');
+    console.log("Request received to create a new blog");
 
     const {
       title,
@@ -162,25 +157,26 @@ const createBlog = async (req, res) => {
       type,
       blogimage,
     } = req.body;
-    // Retrieve the current user from the request
     const { user: currentUser } = req;
 
     if (!currentUser) {
-      throw new UnAuthorizedError('User not found');
+      throw new UnAuthorizedError("User not found");
     }
 
-    console.log('User authorized to create a new blog');
+    console.log("User authorized to create a new blog");
 
-    // Check user roles for authorization
-    if (!['superadmin', 'admin', 'editor'].includes(currentUser.role)) {
+    if (!["superadmin", "admin", "editor"].includes(currentUser.role)) {
       throw new UnAuthorizedError(
-        'You are not authorized to create a new blog'
+        "You are not authorized to create a new blog"
       );
     }
 
-    // Construct a new blog object
+    // Generate slug from title
+    const slug = slugify(title, { lower: true, strict: true });
+
     const newBlog = {
       title,
+      slug,
       shortdescription,
       longdescription,
       category,
@@ -189,159 +185,151 @@ const createBlog = async (req, res) => {
       author: currentUser._id,
     };
 
-    // Validate the blog data using Joi schema
     const { error, value } = BlogJoiSchema.validate(newBlog);
 
     if (error) {
-      console.log('Validation error:', error.message);
-      throw new ValidationError('Invalid blog information', error.details);
+      console.log("Validation error:", error.message);
+      throw new ValidationError("Invalid blog information", error.details);
     }
 
-    console.log('Blog data validated successfully');
+    console.log("Blog data validated successfully");
 
-    // Create the new blog
     const blogData = await blog.create(value);
 
-    console.log('Blog created successfully:', blogData);
+    console.log("Blog created successfully:", blogData);
 
-    // Update the current user's mypost array
     currentUser.mypost.push(blogData._id);
     console.log("Blog ID pushed to user's mypost array");
 
-    // Save the updated user data
     await currentUser.save();
 
-    const templatePath = path.join(__dirname, '../views/postView.ejs');
-    const postlink = `${clientUrl}/blog/${blogData._id}`;
+    const templatePath = path.join(__dirname, "../views/postView.ejs");
+    const postlink = `${clientUrl}/blog/${blogData.slug}`;
 
     const allUsers = await Client.find();
-    // Extract email addresses from users
-    const userEmails = allUsers.map((user) => user.email).filter(Boolean); // Filter out undefined/null values
+    const userEmails = allUsers.map((user) => user.email).filter(Boolean);
 
-    // Iterate over each user's email and send email individually
     for (const email of userEmails) {
       const renderHtml = await ejs.renderFile(
         templatePath,
         {
-          title: title, // Ensure you're using the correct user's fullname
+          title: title,
           shortdescription: shortdescription,
-          blogimage: blogimage, // Use the current email address
+          blogimage: blogimage,
           postlink: postlink,
         },
         { async: true }
       );
 
       await sendMail({
-        email: email, // Send email to the current user
-        subject: 'New post update on ABC Networks 24',
+        email: email,
+        subject: "New post update on ABC Networks 24",
         html: renderHtml,
       });
 
       console.log(`Sent email to ${email} successfully`);
     }
 
-    console.log('sent email product successfully');
+    console.log("sent email product successfully");
 
     return res.status(StatusCodes.CREATED).json({
       blogData,
-      message: 'Blog created successfully',
+      message: "Blog created successfully",
     });
   } catch (error) {
-    console.error('Error creating blog:', error);
+    console.error("Error creating blog:", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: error.message, details: error.details });
   }
 };
 
-const getSingleBlog = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const blogdata = await blog
-      .findById(id)
-      .populate('author', 'fullname username userdp')
-      .populate({
-        path: 'comment.userid',
-        select: 'fullname userdp',
-      });
-
-    if (!blogdata) {
-      throw new NotFoundError('Blog not found');
-    }
-
-    return res.status(StatusCodes.OK).json({ blogdata });
-  } catch (error) {
-    console.error('Error in getSingleBlog:', error); // Log the error for debugging
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: 'Internal Server Error' });
-  }
-};
-
 const updateBlog = async (req, res) => {
-  const {
-    title,
-    shortdescription,
-    longdescription,
-    category,
-    blogid,
-    blogimage,
-    type,
-  } = req.body;
-
-  console.log(
-    title,
-    shortdescription,
-    longdescription,
-    category,
-    blogid,
-    blogimage,
-    type
-  );
-
   try {
-    const currentUser = req.user;
-
-    // Find the blog by ID
-    const blogData = await blog.findById(blogid);
-
-    // Ensure the blog exists
-    if (!blogData) {
-      throw new NotFoundError('Blog not found');
-    }
-
-    // Check if the user is authorized to update the blog
-    if (!['superadmin', 'admin', 'editor'].includes(currentUser.role)) {
-      throw new UnAuthorizedError('You are not authorized to update this blog');
-    }
-
-    // Prepare the updated blog data
-    const updatedBlogData = {
+    const {
       title,
       shortdescription,
       longdescription,
       category,
-      blogimage, // Make sure blogimage is defined in the request or adjust accordingly
+      blogid,
+      blogimage,
+      type,
+    } = req.body;
+
+    console.log(
+      title,
+      shortdescription,
+      longdescription,
+      category,
+      blogid,
+      blogimage,
+      type
+    );
+
+    const currentUser = req.user;
+    const blogData = await blog.findById(blogid);
+
+    if (!blogData) {
+      throw new NotFoundError("Blog not found");
+    }
+
+    if (!["superadmin", "admin", "editor"].includes(currentUser.role)) {
+      throw new UnAuthorizedError("You are not authorized to update this blog");
+    }
+
+    const slug = slugify(title, { lower: true, strict: true });
+
+    const updatedBlogData = {
+      title,
+      slug,
+      shortdescription,
+      longdescription,
+      category,
+      blogimage,
       type,
     };
 
-    // Update the blog and retrieve the updated data
     const updatedBlog = await blog.findByIdAndUpdate(blogid, updatedBlogData, {
       new: true,
     });
 
-    // Return the updated blog data
     res
       .status(StatusCodes.OK)
-      .json({ data: updatedBlog, message: 'Blog updated successfully' });
+      .json({ data: updatedBlog, message: "Blog updated successfully" });
   } catch (error) {
-    // Handle errors and return an appropriate response
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });
   }
 };
+
+
+// const getSingleBlog = async (req, res) => {
+//   const { id } = req.params;
+
+//   try {
+//     const blogdata = await blog
+//       .findById(id)
+//       .populate('author', 'fullname username userdp')
+//       .populate({
+//         path: 'comment.userid',
+//         select: 'fullname userdp',
+//       });
+
+//     if (!blogdata) {
+//       throw new NotFoundError('Blog not found');
+//     }
+
+//     return res.status(StatusCodes.OK).json({ blogdata });
+//   } catch (error) {
+//     console.error('Error in getSingleBlog:', error); // Log the error for debugging
+//     return res
+//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
+//       .json({ message: 'Internal Server Error' });
+//   }
+// };
+
+
 
 const deleteBlog = async (req, res) => {
   const { id } = req.body;
@@ -438,32 +426,41 @@ const getUserBlog = async (req, res) => {
 };
 
 const getBlogsByType = async (req, res) => {
-  const { id } = req.params;
+  const { slug } = req.params;
 
   try {
-    const checkType = await NewsType.findById(id);
+    console.log("slug:", slug);
+
+    // Find the type by slug instead of using findById
+    const checkType = await NewsType.findOne({ slug });
 
     if (!checkType) {
-      throw new NotFoundError('This Category is empty.');
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ error: "This category is empty." });
     }
 
-    const page = req.query.page ? parseInt(req.query.page) : 1;
-    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
-
-    // Calculate the number of documents to skip
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 10;
     const skip = (page - 1) * perPage;
 
-    const allblogs = await blog
-      .find({ type: checkType.name })
+    // Fetch blogs using the correct type reference
+    const allblogs = await blog.find({ type: checkType.slug })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(perPage);
+    
+    console.log("type blog", allblogs)
 
-    res.status(StatusCodes.OK).send({ data: allblogs, name: checkType.name });
+    res.status(StatusCodes.OK).json({ data: allblogs, name: checkType.name });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ err: error.message });
+    console.error("Error fetching blogs by type:", error);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
   }
 };
+
 
 const searchBlog = async (req, res) => {
   try {

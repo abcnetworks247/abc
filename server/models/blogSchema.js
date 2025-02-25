@@ -1,4 +1,8 @@
+
+
+
 const mongoose = require("mongoose");
+const slugify = require("slugify");
 
 const commentSchema = new mongoose.Schema({
   usercomment: {
@@ -7,7 +11,7 @@ const commentSchema = new mongoose.Schema({
   },
   userid: {
     type: mongoose.Types.ObjectId,
-    ref: 'Client',
+    ref: "Client",
     required: true,
   },
   createdAt: {
@@ -16,38 +20,52 @@ const commentSchema = new mongoose.Schema({
   },
 });
 
-const blogSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+const blogSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    slug: {
+      type: String,
+      unique: true,
+    },
+    shortdescription: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+    },
+    longdescription: {
+      type: String,
+      required: true,
+    },
+    blogimage: {
+      type: String,
+    },
+    comment: [commentSchema],
+    author: {
+      type: mongoose.Types.ObjectId,
+      ref: "Admin",
+      required: true,
+    },
   },
-  shortdescription: {
-    type: String,
-    required: true,
-  },
-  
-  category: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-  },
-  longdescription: {
-    type: String,
-    required: true,
-  },
-  blogimage: {
-    type: String,
-  },
-  comment: [commentSchema],
-  author: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Admin',
-    required: true,
+  { timestamps: true }
+);
+
+// Middleware to generate slug before saving
+blogSchema.pre("save", function (next) {
+  if (!this.slug) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
   }
-}, {timestamps: true});
+  next();
+});
 
 const Blog = mongoose.model("Blog", blogSchema);
 
