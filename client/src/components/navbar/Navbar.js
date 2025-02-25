@@ -170,7 +170,7 @@ export default function Navbar() {
                 return (
                   <Link
                     key={index}
-                    href={`${pathUrl}${item._id}`}
+                    href={`${pathUrl}${item.slug}`}
                     className="text-sm dropdown-item hover:bg-gray-200"
                   >
                     {item.name}
@@ -348,36 +348,7 @@ export default function Navbar() {
                           </Link>
                         </div>
 
-                        {/* <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white">
-                          <Link
-                            href="/userdashboard"
-                            className="text-sm dropdown-item -z-50"
-                          >
-                            Profile
-                          </Link>
-
-                          <Link
-                            href="/userdashboard/manageaccount"
-                            tabIndex="-1"
-                            className="text-sm dropdown-item"
-                          >
-                            Account settings
-                          </Link>
-                          <Link
-                            href="/userdashboard/subscription"
-                            tabIndex="-1"
-                            className="text-sm dropdown-item"
-                          >
-                            Subscriptions
-                          </Link>
-                          <a
-                            tabIndex="-1"
-                            className="text-sm dropdown-item"
-                            onClick={Logout}
-                          >
-                            logout
-                          </a>
-                        </div> */}
+                        
                       </div>
                     </div>
                   </div>

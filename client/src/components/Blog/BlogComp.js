@@ -60,7 +60,7 @@ export default function () {
         setTrending(data["socio cultural"]);
         setTopNews(data["breaking news"]);
         setPopular(data.sports);
-
+        
         setAfricaNews(data[0]["Africa News Update"]);
         setPressReleases(data[1]["Secretary of State for Communications"]);
         setOfficeOfThePresident(data[2]["Office of the President"]);
@@ -142,7 +142,7 @@ export default function () {
           ))}
         </div>
       ) : (
-        <div className="flex justify-center w-full p-2 mt-20">
+        <div className="flex justify-center w-full p-2 lg:mt-20">
           {/* <!-- component --> */}
           <div className="w-full p-0 lg:p-5 ">
             <main className="w-full ">
@@ -151,7 +151,7 @@ export default function () {
                 {/* map throught the the fetched data.highlight */}
 
                 <div className="w-full block  md:w-[50vw]  mb-4 px-1 rounded lg:mb-0 lg:p-0 md:w-4/7">
-                  <h2 className="px-2 text-xl font-bold">Africa News Update</h2>
+                  <h2 className="px-2 text-xl font-bold">AMBA News Update</h2>
                   <br />
                   <Swiper
                     spaceBetween={30}
@@ -191,7 +191,7 @@ export default function () {
                             {post.shortdescription}
                           </p>
                           <Link
-                            href={`${pathUrl}/${post._id}`}
+                            href={`${pathUrl}/${post.slug}`}
                             className="inline-block px-6 py-2.5 mt-2 text-white bg-blue-500 rounded-md"
                           >
                             Read more
@@ -210,7 +210,7 @@ export default function () {
                   <br />
                   <div className="space-x-0 sm:grid sm:grid-cols-2 md:grid md:grid-cols-1 lg:grid lg:grid-cols-1">
                     {interimGovernmentUpdates.map((post) => (
-                      <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                      <Link href={`${pathUrl}/${post.slug}`} key={post._id}>
                         <div className="flex flex-row p-0 m-0 mb-5 space-x-0 rounded md:flex-row lg:space-x-3 md:space-x-2 ">
                           <Image
                             src={post.blogimage}
@@ -252,7 +252,7 @@ export default function () {
                     {/* map through the fetched data.popular */}
                     {worldNews.map((post) => (
                       <div className="w-full p-4 px-0 rounded lg:p-0 ">
-                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                        <Link href={`${pathUrl}/${post.slug}`} key={post._id}>
                           <Image
                             src={post.blogimage}
                             className="rounded object-cover h-[212px] "
@@ -294,7 +294,7 @@ export default function () {
                     {/* map through top news */}
                     {breakingNews.map((post) => (
                       <div className="w-full p-4 px-0 rounded lg:p-0">
-                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                        <Link href={`${pathUrl}/${post.slug}`} key={post._id}>
                           <Image
                             src={post.blogimage}
                             className="rounded h-[212px] object-cover"
@@ -337,7 +337,7 @@ export default function () {
                 </a> */}
                   </div>
                   {businessNews.map((post) => (
-                    <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                    <Link href={`${pathUrl}/${post.slug}`} key={post._id}>
                       <div className="flex flex-row gap-2 py-4 m-0 mb-5 space-x-0 rounded shadow-sm md:gap-6 md:flex-row lg:space-x-3 md:space-x-2 md:pr-20 md:items-center">
                         <Image
                           src={post.blogimage}
@@ -381,7 +381,7 @@ export default function () {
                     {/* map through top news */}
                     {sportsNews.map((post) => (
                       <div className="w-full p-4 px-0 rounded lg:p-0">
-                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                        <Link href={`${pathUrl}/${post.slug}`} key={post._id}>
                           <Image
                             src={post.blogimage}
                             className="rounded h-[212px] object-cover"
@@ -423,7 +423,7 @@ export default function () {
                     {/* map through top news */}
                     {socioCultural.map((post) => (
                       <div className="w-full p-4 px-0 rounded lg:p-0">
-                        <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                        <Link href={`${pathUrl}/${post.slug}`} key={post._id}>
                           <Image
                             src={post.blogimage}
                             className="rounded h-[212px] object-cover"
@@ -466,7 +466,7 @@ export default function () {
                 </a> */}
                   </div>
                   {archivesAndAnalysis.map((post) => (
-                    <Link href={`${pathUrl}/${post._id}`} key={post._id}>
+                    <Link href={`${pathUrl}/${post.slug}`} key={post._id}>
                       <div className="flex flex-row p-0 m-0 mb-5 space-x-0 rounded md:flex-row lg:space-x-3 md:space-x-2 ">
                         <Image
                           src={post.blogimage}

@@ -1,66 +1,54 @@
-"use client"
-import React from 'react'
-import Navbar from '@/components/navbar/Navbar'
-import NewArrival from '@/components/NewArrival/NewArrival'
+"use client";
+import React from "react";
+import Navbar from "@/components/navbar/Navbar";
+import NewArrival from "@/components/NewArrival/NewArrival";
 
-import SingleArrival from '@/components/NewArrival/SingleArrival'
-import LoadingSkeleton from '@/components/NewArrival/Loadingskeleton'
-import FooterComp from '@/components/Footer/FooterComp'
+import SingleArrival from "@/components/NewArrival/SingleArrival";
+import LoadingSkeleton from "@/components/NewArrival/Loadingskeleton";
+import FooterComp from "@/components/Footer/FooterComp";
 
-import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { UseProductProvider } from '../../../contexts/ProductProvider'
-import Link from 'next/link'
-import ProductNav from '@/components/Products/ProductNav'
-import axios from 'axios'
-import Nav1 from '@/components/navbar/Nav1'
-
-
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { UseProductProvider } from "../../../contexts/ProductProvider";
+import Link from "next/link";
+import ProductNav from "@/components/Products/ProductNav";
+import axios from "axios";
+import Nav1 from "@/components/navbar/Nav1";
 
 const page = () => {
-   
-  const {  fetchData, setAllProducts } = UseProductProvider()
-  const params = useSearchParams()
+  const { fetchData, setAllProducts } = UseProductProvider();
+  const params = useSearchParams();
 
- const searchTerm = params.get("query")
- const [searchResults, setSearchResults] = useState([])
-useEffect(() => {
- const handleSearch = async (searchQuery) => {
-   try {
-     const response = await axios.get(
-       `https://abc-server-nazd.onrender.com/api/v1/admin/commerce/search?query=${searchQuery}`
-     );
+  const searchTerm = params.get("query");
+  const [searchResults, setSearchResults] = useState([]);
+  useEffect(() => {
+    const handleSearch = async (searchQuery) => {
+      try {
+        const response = await axios.get(
+          `https://abc-server-nazd.onrender.com/api/v1/admin/commerce/search?query=${searchQuery}`
+        );
 
-     console.log("req", searchQuery);
-     console.log("log", response);
+        console.log("req", searchQuery);
+        console.log("log", response);
 
-     if (response.status === 200) {
-       const searchData = response.data;
-       console.log("Search Results:", searchData);
-       setSearchResults(searchData);
-     } else {
-       console.error("Error fetching search results");
-     }
-   } catch (error) {
-     console.error("Error:", error);
-   }
-  };
-  
-  handleSearch(searchTerm)
+        if (response.status === 200) {
+          const searchData = response.data;
+          console.log("Search Results:", searchData);
+          setSearchResults(searchData);
+        } else {
+          console.error("Error fetching search results");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
 
-}, []);
+    handleSearch(searchTerm);
+  }, []);
 
-  
-  
 
-  
 
- 
- 
-
-  
-  
-  const numberOfSkeletons= 5
+  const numberOfSkeletons = 5;
   return (
     <div className="relative bg-gray-50">
       <Nav1 />
@@ -136,6 +124,6 @@ useEffect(() => {
       <FooterComp />
     </div>
   );
-}
+};
 
-export default page
+export default page;
