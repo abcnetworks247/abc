@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import Nav1 from "@/components/navbar/Nav1";
 import { Toaster } from "sonner";
+import SEOHead from "@/components/SEOHEAD";
 
 export default function BlogPost() {
   const [blog, setBlog] = useState(null);
@@ -60,15 +61,21 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHead
+        title={blog.title}
+        description={blog.shortdescription}
+        image={blog.blogimage}
+        url={`${process.env.NEXT_PUBLIC_CLIENT_URL}blog/${id}`}
+      />
       <Nav1 />
       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
       <main className="container mx-auto px-4 py-8">
-        <article className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <article className="max-w-3xl mx-auto bg-white overflow-hidden">
           <figure>
             <img
-              className="w-full h-[60vh] mb-6 rounded-lg"
+              className="w-full h-[50vh] mb-6 rounded-lg object-cover"
               src={blog.blogimage}
             />
           </figure>
@@ -80,14 +87,16 @@ export default function BlogPost() {
               <div className="flex items-center">
                 <Avatar className="h-10 w-10 mr-3">
                   <AvatarImage
-                    src={"/placeholder.svg"}
+                    src={
+                      "http://abcnetworks24.com/_next/static/media/AbcstudioNo.b0321c29.png"
+                    }
                     alt={"ABC Networks 24"}
                   />
-                  <AvatarFallback>"A"</AvatarFallback>
+                  <AvatarFallback>A</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="text-base font-semibold text-gray-900">
-                   ABC Networks 24
+                    ABC Networks 24
                   </p>
                   <p className="text-sm text-gray-600">{formattedDate}</p>
                 </div>
@@ -105,7 +114,7 @@ export default function BlogPost() {
               {parse(blog.longdescription)}
             </div>
             <div className="mt-8 flex items-center justify-between">
-              <div className="flex items-center space-x-4">
+              {/* <div className="flex items-center space-x-4">
                 <Button variant="ghost" className="flex items-center text-sm">
                   <ThumbsUp className="h-4 w-4 mr-2" />
                   {blog.likes || 0}
@@ -118,7 +127,7 @@ export default function BlogPost() {
                   <Eye className="h-4 w-4 mr-2" />
                   {blog.views || 0} views
                 </span>
-              </div>
+              </div> */}
               <Button
                 variant="outline"
                 onClick={() => setShareModalOpen(true)}
@@ -130,17 +139,15 @@ export default function BlogPost() {
           </div>
         </article>
 
-        <section className="max-w-4xl mx-auto mt-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Comments</h2>
-          {/* Add comment form and list here */}
-        </section>
-
-        <section className="max-w-4xl mx-auto mt-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
-            Related Articles
-          </h2>
-          <RelatedArticles id={id} />
-        </section>
+        <aside
+          aria-label="Related articles"
+          className="px-5 py-8 overflow-hidden"
+        >
+          <div className="max-w-screen-xl px-4 mx-auto"></div>
+          <div className="">
+            <RelatedArticles id={id} />
+          </div>
+        </aside>
       </main>
 
       <FooterComp />
@@ -148,7 +155,7 @@ export default function BlogPost() {
       <ShareModal
         isOpen={shareModalOpen}
         onClose={() => setShareModalOpen(false)}
-        url={`${process.env.NEXT_PUBLIC_CLIENT_URL}/blog/${id}`}
+        url={`${process.env.NEXT_PUBLIC_CLIENT_URL}blog/${id}`}
         title={blog.title}
         image={blog.blogimage}
       />

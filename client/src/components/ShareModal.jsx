@@ -1,33 +1,28 @@
-import React from "react";
-import Image from "next/image";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Facebook, Twitter, Linkedin, Link } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
-import { toast } from "sonner";
+"use client"
+
+import Image from "next/image"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { Facebook, Twitter, Linkedin, Link } from "lucide-react"
+import { FaWhatsapp } from "react-icons/fa"
+import { toast } from "sonner"
 
 const ShareModal = ({ isOpen, onClose, url, title, image }) => {
-  const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
+  const encodedUrl = encodeURIComponent(url)
+  const encodedTitle = encodeURIComponent(title)
 
   const shareLinks = {
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
     twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
     linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`,
     whatsapp: `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`,
-  };
+  }
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(url).then(() => {
-      toast.success("Link copied to clipboard");
-    });
-  };
+      toast.success("Link copied to clipboard")
+    })
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
