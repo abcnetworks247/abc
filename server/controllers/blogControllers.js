@@ -24,72 +24,72 @@ const {
 const cloudinary = require('../Utils/CloudinaryFileUpload');
 
 
-const getAllBlog = async (req, res) => {
-  try {
-    const page = req.query.page ? parseInt(req.query.page) : 1;
-    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
+// const getAllBlog = async (req, res) => {
+//   try {
+//     const page = req.query.page ? parseInt(req.query.page) : 1;
+//     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
-    const totalCount = await blog.countDocuments();
-    const totalPages = Math.ceil(totalCount / perPage);
-    const skip = (page - 1) * perPage;
+//     const totalCount = await blog.countDocuments();
+//     const totalPages = Math.ceil(totalCount / perPage);
+//     const skip = (page - 1) * perPage;
 
-    const fetchBlogsByType = async (blogType) => {
-      try {
-        const result = await blog
-          .find({ type: blogType })
-          .populate('author', 'fullname username userdp')
-          .sort({ createdAt: -1 })
-          .skip(skip)
-          .limit(perPage);
-        return result;
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    };
+//     const fetchBlogsByType = async (slug) => {
+//       try {
+//         const result = await blog
+//           .find({ slug: slug })
+//           .populate('author', 'fullname username userdp')
+//           .sort({ createdAt: -1 })
+//           .skip(skip)
+//           .limit(perPage);
+//         return result;
+//       } catch (error) {
+//         console.error(error);
+//         throw error;
+//       }
+//     };
 
-    const blogTypes = [
-      'Africa News Update',
-      'Secretary of State for Communications',
-      'Office of the President',
-      'Socio Cultural',
-      'Archives & Analysis',
-      'Breaking News',
-      'Sports',
-      'World News',
-      'Government Updates',
-      'Business',
-    ];
+//     const blogSlugs = [
+//       'Africa News Update',
+//       'Secretary of State for Communications',
+//       'Office of the President',
+//       'Socio Cultural',
+//       'Archives & Analysis',
+//       'Breaking News',
+//       'Sports',
+//       'World News',
+//       'Government Updates',
+//       'Business',
+//     ];
 
-    const blogTypePromises = blogTypes.map(async (type) => {
-      const blogs = await fetchBlogsByType(type);
-      return { [type]: blogs };
-    });
+//     const blogTypePromises = blogSlugs.map(async (slug) => {
+//       const blogs = await fetchBlogsByType(slug);
+//       return { [slug]: blogs };
+//     });
 
-    const blogTypeResults = await Promise.all(blogTypePromises);
+//     const blogTypeResults = await Promise.all(blogTypePromises);
 
-    const allBlogs = await blog
-      .find()
-      .populate('author', 'fullname username userdp')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(perPage);
+//     const allBlogs = await blog
+//       .find()
+//       .populate('author', 'fullname username userdp')
+//       .sort({ createdAt: -1 })
+//       .skip(skip)
+//       .limit(perPage);
 
-    if (allBlogs.length === 0) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: 'No Post found' });
-    }
+//     if (allBlogs.length === 0) {
+//       return res
+//         .status(StatusCodes.NOT_FOUND)
+//         .json({ message: 'No Post found' });
+//     }
 
-    return res
-      .status(StatusCodes.OK)
-      .json({ allBlogs, totalPages, totalCount, page, ...blogTypeResults });
-  } catch (error) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: error.message });
-  }
-};
+//     return res
+//       .status(StatusCodes.OK)
+//       .json({ allBlogs, totalPages, totalCount, page, ...blogTypeResults });
+//   } catch (error) {
+//     return res
+//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
+//       .json({ message: error.message });
+//   }
+// };
 
 // const getSingleBlog = async (req, res) => {
 //   const { slug } = req.params; // Get slug from request parameters
@@ -115,6 +115,73 @@ const getAllBlog = async (req, res) => {
 //       .json({ message: "Internal Server Error" });
 //   }
 // };
+
+const getAllBlog = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const perPage = parseInt(req.query.perPage) || 10;
+    const skip = (page - 1) * perPage;
+
+    // Get total count of blogs
+    const totalCount = await blog.countDocuments();
+    const totalPages = Math.ceil(totalCount / perPage);
+
+    // Fetch all unique blog types
+    const uniqueTypes = await blog.distinct("type");
+
+    if (!uniqueTypes.length) {
+      return res.status(404).json({ message: "No blog types found." });
+    }
+
+    // Function to fetch blogs by type
+    const fetchBlogsByType = async (type) => {
+      try {
+        return await blog
+          .find({ type })
+          .populate("author", "fullname username userdp")
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(perPage);
+      } catch (error) {
+        console.error(`Error fetching blogs for type ${type}:`, error);
+        return [];
+      }
+    };
+
+    // Fetch blogs for each type concurrently
+    const blogsByType = Object.fromEntries(
+      await Promise.all(
+        uniqueTypes.map(async (type) => [type, await fetchBlogsByType(type)])
+      )
+    );
+
+    // Fetch all blogs (without type filtering)
+    const allBlogs = await blog
+      .find()
+      .populate("author", "fullname username userdp")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(perPage);
+
+    if (!allBlogs.length) {
+      return res.status(404).json({ message: "No Posts found" });
+    }
+
+    return res.status(200).json({
+      allBlogs,
+      totalPages,
+      totalCount,
+      page,
+      blogsByType, // Object where each type has an array of blogs
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+};
+
 
 const getSingleBlog = async (req, res) => {
   const { slug } = req.params;
@@ -142,8 +209,6 @@ const getSingleBlog = async (req, res) => {
     });
   }
 };
-
-
 
 const createBlog = async (req, res) => {
   try {
@@ -304,33 +369,6 @@ const updateBlog = async (req, res) => {
 };
 
 
-// const getSingleBlog = async (req, res) => {
-//   const { id } = req.params;
-
-//   try {
-//     const blogdata = await blog
-//       .findById(id)
-//       .populate('author', 'fullname username userdp')
-//       .populate({
-//         path: 'comment.userid',
-//         select: 'fullname userdp',
-//       });
-
-//     if (!blogdata) {
-//       throw new NotFoundError('Blog not found');
-//     }
-
-//     return res.status(StatusCodes.OK).json({ blogdata });
-//   } catch (error) {
-//     console.error('Error in getSingleBlog:', error); // Log the error for debugging
-//     return res
-//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-//       .json({ message: 'Internal Server Error' });
-//   }
-// };
-
-
-
 const deleteBlog = async (req, res) => {
   const { id } = req.body;
   console.log(id);
@@ -449,8 +487,6 @@ const getBlogsByType = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(perPage);
-    
-    console.log("type blog", allblogs)
 
     res.status(StatusCodes.OK).json({ data: allblogs, name: checkType.name });
   } catch (error) {
