@@ -130,10 +130,10 @@ export default function Navbar() {
           </Link>
         </div>
         {/*  Pages  */}
-        <div className="hidden text-white navbar-center lg:flex   flex-row items-center justify-center gap-4">
+        <div className="hidden text-white navbar-center lg:flex flex-row items-center justify-center gap-4">
           <Link
             href="/"
-            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
+            className={`navbar-item text-sm rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
               pathname === "/" ? "border-b-[2px] border-[#0e1b2b] " : ""
             }`}
           >
@@ -142,7 +142,7 @@ export default function Navbar() {
           <a
             href="https://pjajuc-hq.myshopify.com/?_cd=a4f2799dde32c7fc24a2db3b7246bdb4a476014d36160b46204195018a7f1eaf&_uid=104852226084"
             target="_blank"
-            className={`navbar-item text-[15px] rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item text-sm rounded-none mx-1  hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/store" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -150,7 +150,7 @@ export default function Navbar() {
           </a>
           <Link
             href="/pricing"
-            className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1 whitespace-nowrap  border-[#0e1b2b] transition-all ${
+            className={`navbar-item text-sm rounded-none hover:border-b-[2px] mx-1 whitespace-nowrap  border-[#0e1b2b] transition-all ${
               pathname === "/pricing" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -159,7 +159,7 @@ export default function Navbar() {
 
           <Link
             href="/about"
-            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item mx-1 text-sm  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/about" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -167,7 +167,7 @@ export default function Navbar() {
           </Link>
           <Link
             href="/contact"
-            className={`navbar-item mx-1 text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item mx-1 text-sm  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -176,7 +176,7 @@ export default function Navbar() {
           <Link
             //if access === basic redirect to home. else go to contact
             href={"/live"}
-            className={`navbar-item mx-1 w-fit text-[15px]  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
+            className={`navbar-item mx-1 w-fit text-sm  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
           >
@@ -284,7 +284,7 @@ export default function Navbar() {
                           </div>
                         </label>
 
-                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50 text-gray-900 rounded-sm">
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-sm bg-white z-50 text-gray-900 rounded-sm">
                           <Link
                             href="/userdashboard"
                             className="text-sm rounded-sm dropdown-item -z-50 hover:bg-gray-100"
