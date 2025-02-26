@@ -1,146 +1,163 @@
-import Link from 'next/link';
-import { FaSquareXTwitter } from 'react-icons/fa6';
-import { FaSquareFacebook } from 'react-icons/fa6';
-import { FaSquareInstagram } from 'react-icons/fa6';
-import { IoLogoYoutube } from 'react-icons/io';
+import Link from "next/link";
+import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 
-export default function FooterComp() {
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+
+export default function Footer() {
   return (
-    <div>
-      <footer
-        id='footer'
-        className='relative bg-blueGray-200 pt-8 pb-6 bg-[#111827] shadow lg:px-8'>
-        <div className='container mx-auto '>
-          <div className='flex flex-wrap text-left lg:text-left'>
-            <div className='w-full lg:w-6/12  pl-4 md:pl-0 '>
-              <h4 className='text-2xl  fonat-semibold text-white'>
+    <footer className="w-full bg-[#111827]">
+      <div className="px-4 md:px-6 py-12 ">
+        <div className="grid gap-12 lg:grid-cols-2">
+          <div className="flex flex-col gap-6">
+            <div>
+              <h3 className="text-2xl font-semibold text-white">
                 Let's keep in touch!
-              </h4>
-              <h5 className='text-sm  mt-0 mb-2 text-white'>
-                Find us on any of these platforms, we respond 1-2 business days.
-              </h5>
-              <div className='mt-6 lg:mb-0 mb-6 flex flex-wrap'>
-                <a
-                  href='https://web.facebook.com/ABCAmbaTelevision/?_rdc=1&_rdr'
-                  target='_blank'
-                  rel='noopener noreferrer'>
-                  <FaSquareFacebook className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
-                </a>
-                <a
-                  href='https://twitter.com/AbcAmbaTV?t=_pw3uE46en4ZX2MGMoZUHg&s=08'
-                  target='_blank'
-                  rel='noopener noreferrer'>
-                  <FaSquareXTwitter className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
-                </a>
-                <a href='#' target='_blank' rel='noopener noreferrer'>
-                  <FaSquareInstagram className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
-                </a>
-                <a
-                  href='https://www.youtube.com/c/ABCAmbaTV'
-                  target='_blank'
-                  rel='noopener noreferrer'>
-                  <IoLogoYoutube className=' text-white shadow-lg font-normal text-2xl items-center justify-center align-center outline-none focus:outline-none mr-2' />
-                </a>
-              </div>
+              </h3>
+              <p className="text-sm mt-2 text-white/80">
+                Find us on any of these platforms. We respond within 1-2
+                business days.
+              </p>
             </div>
-            <div className='w-full lg:w-6/12 '>
-              <div className='flex flex-wrap items-top mb-6 gap-8'>
-                <div className='w-full lg:w-4/12 px-4 ml-auto'>
-                  <span className='block uppercase text-white text-[12px]  font-semibold mb-2'>
-                    Useful Links
-                  </span>
-                  <ul className='list-unstyled'>
-                    <li>
-                      <Link
-                        className='text-white hover:text-white  block pb-2 text-sm'
-                        href='/about'
-                        target='_blank'>
-                        About Us
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className='text-white hover:text-white  block pb-2 text-sm'
-                        href='/contact'
-                        target='_blank'>
-                        Contact Us
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className='text-white hover:text-white  block pb-2 text-sm'
-                        href='/terms'
-                        target='_blank'>
-                        Terms & Conditions
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className='text-white hover:text-white  block pb-2 text-sm'
-                        href='/privacy-policy'
-                        target='_blank'>
-                        Privacy Policy
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className='w-full lg:w-4/12 px-4'>
-                  <span className='block uppercase text-white text-[12px] font-semibold mb-2'>
-                    Social Accounts
-                  </span>
-                  <ul className='list-unstyled'>
-                    <li>
-                      <Link
-                        className='text-white hover:text-white  block pb-2 text-sm'
-                        href='https://www.facebook.com/ABCAmbaTelevision/'
-                        target='_blank'>
-                        Facebook
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className='text-white hover:text-white  block pb-2 text-sm'
-                        href='https://twitter.com/AbcAmbaTV?t=_pw3uE46en4ZX2MGMoZUHg&s=08'
-                        target='_blank'>
-                        Twitter
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link
-                        className='text-white hover:text-white  block pb-2 text-sm'
-                        href='https://www.youtube.com/c/ABCAmbaTV'
-                        target='_blank'>
-                        Youtube
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+            <div className="flex gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:text-white hover:bg-white/10"
+                asChild
+              >
+                <a
+                  href="https://web.facebook.com/ABCAmbaTelevision"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Facebook className="h-5 w-5" />
+                  <span className="sr-only">Facebook</span>
+                </a>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:text-white hover:bg-white/10"
+                asChild
+              >
+                <a
+                  href="https://twitter.com/AbcAmbaTV"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Twitter className="h-5 w-5" />
+                  <span className="sr-only">Twitter</span>
+                </a>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:text-white hover:bg-white/10"
+                asChild
+              >
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="h-5 w-5" />
+                  <span className="sr-only">Instagram</span>
+                </a>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:text-white hover:bg-white/10"
+                asChild
+              >
+                <a
+                  href="https://www.youtube.com/c/ABCAmbaTV"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Youtube className="h-5 w-5" />
+                  <span className="sr-only">YouTube</span>
+                </a>
+              </Button>
             </div>
           </div>
-
-          <hr className='my-6 border-gray-50 opacity-20' />
-          <div className='px-3 lg:px-0 flex flex-wrap items-start  justify-start'>
-            <div className='w-full mx-auto text-start'>
-              <div className='text-sm text-white font-semibold py-1'>
-                Copyright ©<span id='get-current-year'>2024</span>
+          <div className="grid sm:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h4 className="text-[12px] font-semibold uppercase tracking-wider text-white">
+                Useful Links
+              </h4>
+              <nav className="flex flex-col space-y-2">
                 <Link
-                  href='/'
-                  className='text-white hover:text-gray-800'
-                  target='_blank'
-                />{' '}
-                ABC Network 24,
-                <a
-                  href='https://www.creative-tim.com?ref=njs-profile'
-                  className='text-white hover:text-white ml-1'>
-                  Powered by - Klipto Inc.
-                </a>
-              </div>
+                  href="/about"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
+                >
+                  About Us
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
+                >
+                  Contact Us
+                </Link>
+                <Link
+                  href="/terms"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
+                >
+                  Terms & Conditions
+                </Link>
+                <Link
+                  href="/privacy-policy"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </nav>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-[12px] font-semibold uppercase tracking-wider text-white">
+                Social Accounts
+              </h4>
+              <nav className="flex flex-col space-y-2">
+                <Link
+                  href="https://www.facebook.com/ABCAmbaTelevision/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
+                >
+                  Facebook
+                </Link>
+                <Link
+                  href="https://twitter.com/AbcAmbaTV"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
+                >
+                  Twitter
+                </Link>
+                <Link
+                  href="https://www.youtube.com/c/ABCAmbaTV"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/80 hover:text-white transition-colors"
+                >
+                  YouTube
+                </Link>
+              </nav>
             </div>
           </div>
         </div>
-      </footer>
-    </div>
+        <Separator className="my-8 bg-white/20" />
+        <div className="text-sm text-white">
+          <p>
+            Copyright © {new Date().getFullYear()} ABC Network 24,{" "}
+            <a
+              href="https://www.klipto.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/80 hover:text-white transition-colors"
+            >
+              Powered by - Klipto Inc.
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
   );
 }

@@ -16,19 +16,6 @@ import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Menu,
-  ShoppingCart,
-  User,
-  LogOut,
-  Settings,
-  ChevronDown,
-  Heart,
-  Bot,
-  Sparkles,
-  Zap,
-} from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -117,20 +104,21 @@ export default function Navbar() {
   return (
     <div id="mainnav">
       <div className="navbar rounded-b-lg top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-[#111827]">
-        <div className="w-fit lg:hidden">
-          <label htmlFor="sidebar-mobile-fixed" className=" lg:hidden">
-            <RiMenu2Fill className="text-white hover:text-gray-300 transition  text-[26px] cursor-pointer" />
-          </label>
+        <div>
+          <div className="w-fit ">
+            <label htmlFor="sidebar-mobile-fixed" className=" md:hidden">
+              <RiMenu2Fill className="text-white hover:text-gray-300 transition  text-[26px] cursor-pointer" />
+            </label>
+          </div>
         </div>
-
         {/* abcdstudio logo */}
-        <div className="">
+        <div className="navbar-start ">
           <Link href="/">
             <Image src={Logo} alt="logo" width={130} height={130} priority />
           </Link>
         </div>
         {/*  Pages  */}
-        <div className="hidden text-white navbar-center lg:flex   flex-row items-center justify-center gap-4">
+        <div className="hidden text-white navbar-center md:block lg:ml-20">
           <Link
             href="/"
             className={`navbar-item text-[15px] rounded-none hover:border-b-[2px] mx-1  border-[#0e1b2b] transition-all ${
@@ -203,8 +191,8 @@ export default function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className=" navbar-center lg:hidden "></div>
-        <div className="flex flex-row items-center text-white">
+        <div className="hidden navbar-center md:block "></div>
+        <div className="flex flex-row items-center text-white navbar-end">
           <div className="flex flex-row items-center gap-3 mr-4 text-white">
             {/* <Link
               href="/wish"
@@ -229,22 +217,9 @@ export default function Navbar() {
               className="relative flex flex-col items-center text-center text-gray-700 transition hover:text-primary"
             >
               <div className="text-2xl text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                  />
-                </svg>
+                <TiShoppingCart />
               </div>
-              {/* <div className="text-xs leading-3 text-white">cart</div> */}
+              <div className="text-xs leading-3 text-white">cart</div>
               {/* {cartProducts && cartProducts.length === 0 ? (
                 <></>
               ) : (
@@ -324,7 +299,7 @@ export default function Navbar() {
           {!Authtoken ? (
             <div className={`hidden lg:block ${loading ? "hidden" : "block"}`}>
               <div className="flex items-center justify-center h-fit ">
-                <div className="items-center gap-1 p-1 m-2 shadow-sm w-fit item-center rounded-xl">
+                <div className="items-center gap-1 p-1 m-5 shadow-sm w-fit item-center rounded-xl">
                   <Link href="/login">
                     <span className="flex flex-row gap-2 px-5 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg cursor-pointer whitespace-nowrap hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       <svg
@@ -395,7 +370,7 @@ export default function Navbar() {
             ) : (
               <>
                 <label
-                  className="px-0 cursor-pointer btn btn-ghost"
+                  className="px-0 cursor-pointer btn btn-ghost "
                   tabIndex="1"
                 >
                   {" "}
@@ -404,21 +379,7 @@ export default function Navbar() {
                       !Authtoken && !UserData ? "/login" : "/userdashboard"
                     }`}
                   >
-                    {/* <FaRegUser className="text-white hover:text-btn-primary transition  text-[26px] cursor-pointer block lg:hidden" /> */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="size-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                      />
-                    </svg>
+                    <FaRegUser className="text-white hover:text-btn-primary transition  text-[26px] cursor-pointer block lg:hidden" />
                   </Link>
                 </label>
                 <div className=" dropdown-container">

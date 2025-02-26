@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 //import axios
 import Api from "@/utils/Api";
 import Link from "next/link";
-export default function RelatedArticles({ id }) {
+export default function RelatedArticles({ slug }) {
   //state for articles
   const [articles, setArticles] = useState([]);
   //state for loading
@@ -27,14 +27,14 @@ export default function RelatedArticles({ id }) {
       );
       //fetch blog by the id
       const idRes = await Api.get(
-        `/admin/blog/${id}`
+        `/admin/blog/${slug}`
       );
       // if the type of the fetched blog is equal to the category of id then return the data
-      const cat = idRes.data.blogdata.type;
+      const cat = idRes.data.blogdata.slug;
       const data = blogRes && blogRes.data.allBlogs;
       // console.log("data", data);
       const filteredData = data.filter(
-        (item) => item.type === cat && item._id !== idRes.data.blogdata._id
+        (item) => item.slug === cat && item._id !== idRes.data.blogdata._id
       );
       setArticles(filteredData);
       // console.log("filteredData", filteredData);
@@ -108,7 +108,7 @@ export default function RelatedArticles({ id }) {
                             />
                           </Link>
                           <h2 className="mb-2 text-lg font-semibold leading-tight text-gray-900 truncate w-full">
-                            <Link href={`${baseUrl}/${article._id}`}>{article.title}</Link>
+                            <Link href={`${baseUrl}/${article.slug}`}>{article.title}</Link>
                           </h2>
                           <p className="mb-4 h-22 text-sm text-gray-700 line-clamp-2">
                             {article.shortdescription}
@@ -117,7 +117,7 @@ export default function RelatedArticles({ id }) {
                             href={`${baseUrl}/${article._id}`}
                             className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline line-clamp-2"
                           >
-                            Read in 2 minutes
+                            {/* Read in 2 minutes */}
                           </Link>
                         </article>
                         

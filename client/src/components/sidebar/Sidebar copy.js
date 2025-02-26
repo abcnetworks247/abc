@@ -14,24 +14,6 @@ import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineContacts } from "react-icons/md";
 import { useEffect, useState } from "react";
 import Api from "@/utils/Api";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import {
-  Home,
-  Store,
-  Radio,
-  CreditCard,
-  Info,
-  Mail,
-  ShoppingCart,
-  User,
-  Menu,
-  X,
-  ChevronDown,
-  DollarSign,
-} from "lucide-react";
 
 export default function Sidebar() {
   const [type, setType] = useState(null);
@@ -337,46 +319,48 @@ export default function Sidebar() {
               </section>
             </nav>
           </section>
-          <Separator className="my-4" />
-
-          <div className="p-4">
-            {Authtoken && UserData && Authtoken.length !== 0 ? (
-              <div className="flex items-center space-x-4">
-                {userLoading ? (
-                  <div className="flex items-center space-x-4">
-                    <div className="h-10 w-10 rounded-full bg-muted animate-pulse" />
-                    <div className="space-y-2">
-                      <div className="h-4 w-24 bg-muted animate-pulse rounded" />
-                    </div>
-                  </div>
-                ) : (
+          <section className="justify-end pt-2 sidebar-footer bg-gray-2">
+            <div className="my-0 divider"></div>
+            <div className="z-50 flex w-full cursor-pointer dropdown h-fit hover:bg-gray-4">
+              <div className="flex flex-row gap-4 p-4">
+                {Authtoken && UserData && Authtoken.length !== 0 ? (
                   <>
-                    <Avatar>
-                      <AvatarImage
-                        src={UserData?.userdp}
-                        alt={UserData?.fullname}
-                      />
-                      <AvatarFallback>
-                        {UserData?.fullname?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">
-                        {UserData?.fullname}
-                      </p>
-                    </div>
+                    {loading === false ? (
+                      <div className="items-center gap-4 dropdown-container">
+                        <div className="avatar-square avatar avatar-md">
+                          <Image
+                            src={UserData && UserData.userdp}
+                            height={20}
+                            width={33}
+                            quality={100}
+                            loading="lazy"
+                            className="object-cover rounded-full cursor-pointer"
+                            alt="avatar"
+                            // style={{
+                            //   width: '100%',
+                            //   height: 'auto',
+                            // }}
+                          />
+                        </div>
+
+                        <div className="flex flex-col">
+                          <span>{UserData && UserData.fullname}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="h-full w-[40px] rounded-full bg-gray-400 animate-pulse"></div>
+                      </>
+                    )}
                   </>
+                ) : (
+                  <Link href="/login">
+                    <FaRegUser className="text-gray-700 hover:text-primary transition  text-[26px] cursor-pointer block md:hidden" />
+                  </Link>
                 )}
               </div>
-            ) : (
-              <Button variant="secondary" asChild className="w-full">
-                <Link href="/login">
-                  <User className="mr-2 h-4 w-4" />
-                  Sign In
-                </Link>
-              </Button>
-            )}
-          </div>
+            </div>
+          </section>
         </aside>
       </div>
     </div>
