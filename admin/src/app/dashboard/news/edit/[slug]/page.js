@@ -6,7 +6,7 @@ import { UseFileManager } from "@/context/FileManagerProvidert";
 import PopUpFilemanager from "@/components/filemanager/PopUpFilemanager";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
 import { Loader2, ImagePlus, Trash2 } from "lucide-react";
@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-function Page() {
+export default function EditNewsPage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -50,14 +50,49 @@ function Page() {
   );
 
   const router = useRouter();
+  const { slug } = useParams();
   const { handleOpen, size } = UseFileManager();
   const AuthToken = Cookies.get("adminToken");
 
-  function onChange(newContent) {
-    setHtml(newContent);
-  }
+  const fetchData = useCallback(async () => {
+    try {
+      const [typeRes, catRes, postRes] = await Promise.all([
+        Api.get("admin/category/news/type"),
+        Api.get("admin/category/news/category"),
+        Api.get(`admin/blog/${slug}`),
+      ]);
 
-  const handleUpload = async (e) => {
+      if (typeRes.status === 200) {
+        setType(typeRes.data.data);
+      }
+
+      if (catRes.status === 200) {
+        setCategory(catRes.data.data);
+      }
+
+      if (postRes.status === 200) {
+        const data = postRes.data.blogdata;
+        setTitle(data.title);
+        setShortDescription(data.shortdescription);
+        setHtml(data.longdescription);
+        setNewType(data.type);
+        setNewCategory(data.category);
+        setImageSrc(data.blogimage);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to load post data");
+      toast.error("Failed to load post data");
+    } finally {
+      setLoading(false);
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
 
     if (!title || !newType || !newCategory || !shortDescription || !html) {
@@ -70,71 +105,50 @@ function Page() {
       return;
     }
 
-    const data = {
-      title,
-      type: newType,
-      category: newCategory,
-      shortdescription: shortDescription,
-      longdescription: html,
-      blogimage: imageSrc,
-    };
-
-    const toastId = toast.loading("Creating news post...");
+    const toastId = toast.loading("Updating post...");
     setSubmitting(true);
 
     try {
-      const response = await Api.post("admin/blog/create", data, {
-        headers: { Authorization: `Bearer ${AuthToken}` },
-      });
+      const response = await Api.patch(
+        "admin/blog/update",
+        {
+          blogid: id,
+          title,
+          shortdescription: shortDescription,
+          longdescription: html,
+          category: newCategory,
+          type: newType,
+          blogimage: imageSrc,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${AuthToken}`,
+          },
+        }
+      );
 
-      if (response.status === 201) {
-        toast.success("News post created successfully", { id: toastId });
+      if (response.status === 200) {
+        toast.success("Post updated successfully", { id: toastId });
         router.push("/dashboard/news/all-news");
       }
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message || "Something went wrong";
-      toast.error(`Error: ${errorMessage}`, { id: toastId });
+        error.response?.data?.message || "Failed to update post";
+      toast.error(errorMessage, { id: toastId });
     } finally {
       setSubmitting(false);
     }
   };
 
-  const fetchData = useCallback(async () => {
-    try {
-      const [typeRes, catRes] = await Promise.all([
-        Api.get("admin/category/news/type"),
-        Api.get("admin/category/news/category"),
-      ]);
-
-      if (catRes.status === 200) {
-        setCategory(catRes.data.data);
-      }
-      if (typeRes.status === 200) {
-        setType(typeRes.data.data);
-      }
-    } catch (error) {
-      toast.error("Failed to load categories and types");
-      setError("Failed to load data");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
   if (loading) {
     return (
       <div className="container max-w-4xl mx-auto p-6 space-y-6">
-        <Skeleton className="h-8 w-[200px]" />
         <Card>
           <CardHeader>
-            <Skeleton className="h-6 w-[150px]" />
-            <Skeleton className="h-4 w-[300px]" />
+            <Skeleton className="h-8 w-[180px]" />
+            <Skeleton className="h-4 w-[300px] mt-2" />
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <Skeleton className="h-10 w-full" />
             <div className="grid grid-cols-2 gap-4">
               <Skeleton className="h-10" />
@@ -142,6 +156,7 @@ function Page() {
             </div>
             <Skeleton className="h-32" />
             <Skeleton className="h-[400px]" />
+            <Skeleton className="h-[200px] w-full" />
           </CardContent>
         </Card>
       </div>
@@ -150,14 +165,14 @@ function Page() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-[70vh]">
-        <Card className="w-[400px]">
+      <div className="container max-w-4xl mx-auto p-6">
+        <Card className="border-destructive">
           <CardHeader>
             <CardTitle className="text-destructive">Error</CardTitle>
             <CardDescription>{error}</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => window.location.reload()}>Try Again</Button>
+            <Button onClick={() => fetchData()}>Try Again</Button>
           </CardContent>
         </Card>
       </div>
@@ -168,26 +183,25 @@ function Page() {
     <div className="container max-w-4xl mx-auto p-6">
       <Card>
         <CardHeader>
-          <CardTitle>Create News Post</CardTitle>
+          <CardTitle>Edit News Post</CardTitle>
           <CardDescription>
-            Create a new news post with title, description, and content.
-            {newCategory && newType && (
-              <span className="text-muted-foreground">
-                {" "}
-                Selected: {newCategory} - {newType}
+            Make changes to your news post.
+            {newType && newCategory && (
+              <span className="text-muted-foreground ml-1">
+                Current: {newType} - {newCategory}
               </span>
             )}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleUpload} className="space-y-6">
+          <form onSubmit={handleUpdate} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
-                placeholder="Enter post title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                placeholder="Enter post title"
                 required
               />
             </div>
@@ -234,26 +248,26 @@ function Page() {
               <Label htmlFor="shortDescription">Short Description</Label>
               <Textarea
                 id="shortDescription"
-                placeholder="Enter a brief description"
                 value={shortDescription}
                 onChange={(e) => setShortDescription(e.target.value)}
+                placeholder="Enter a brief description"
+                className="h-20 resize-none"
                 required
-                className="h-20"
               />
             </div>
 
             <div className="space-y-2">
               <Label>Full Details</Label>
-              <div className="border rounded-md">
+              <div className="border rounded-lg overflow-hidden">
                 <JoditEditor
                   value={html}
-                  onChange={onChange}
+                  onChange={(content) => setHtml(content)}
                   className="min-h-[400px]"
                 />
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
               <Label>Featured Image</Label>
               {!imageSrc ? (
                 <Button
@@ -273,7 +287,7 @@ function Page() {
                   </div>
                 </Button>
               ) : (
-                <div className="relative rounded-lg overflow-hidden">
+                <div className="relative rounded-lg overflow-hidden border">
                   <Image
                     src={imageSrc || "/placeholder.svg"}
                     alt="Preview"
@@ -294,10 +308,22 @@ function Page() {
               )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={submitting}>
-              {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {submitting ? "Creating..." : "Create Post"}
-            </Button>
+            <div className="flex gap-4 justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.back()}
+                disabled={submitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {submitting ? "Updating..." : "Update Post"}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>
@@ -310,5 +336,3 @@ function Page() {
     </div>
   );
 }
-
-export default Page;

@@ -21,13 +21,11 @@ export default function BlogCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const { id } = useParams();
+  const { slug } = useParams();
   useEffect(() => {
-    Api.get(`admin/blog/${id}`)
+    Api.get(`admin/blog/${slug}`)
       .then((res) => {
         const data = res.data.blogdata;
-        console.log(data);
-        console.log(id);
         setNews(data);
         setLoading(false);
       })
@@ -83,7 +81,7 @@ export default function BlogCard() {
           <div className="flex items-end justify-end m-0">
             <button
               onClick={() => {
-                router.push(`${editUrl}/${news._id}`);
+                router.push(`${editUrl}/${news.slug}`);
               }}
               className=" mb-0.5 font-semibold border text-sm border-indigo-500 bg-indigo-500 px-5 py-1 text-[10px] mr-0 text-white"
             >

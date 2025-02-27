@@ -1,33 +1,62 @@
 "use client";
-import { AddMember } from "@/components/User/AddUser";
-import { useQuery } from "react-query";
-import {
-  MagnifyingGlassIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
-import Cookies from "js-cookie";
-import axios from "axios";
-import UseUserlist from "@/hooks/UseUserlist";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 
+import { useState } from "react";
+import Cookies from "js-cookie";
+import { toast } from "sonner";
+import {
+  Search,
+  UserPlus,
+  ChevronUp,
+  ChevronDown,
+  MoreHorizontal,
+  Trash2,
+  Loader2,
+  Filter,
+  RefreshCw,
+} from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Card,
-  CardHeader,
-  Input,
-  Typography,
-  Button,
-  CardBody,
-  Chip,
+  CardContent,
+  CardDescription,
   CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Avatar,
-  IconButton,
-  Tooltip,
-} from "@material-tailwind/react";
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+import { AddMember } from "@/components/User/AddUser";
+import UseUserlist from "@/hooks/UseUserlist";
 import Api from "@/utils/Api";
 
 const TABS = [
@@ -36,12 +65,12 @@ const TABS = [
     value: "all",
   },
   {
-    label: "Basics",
-    value: "Subscriptions",
+    label: "Basic",
+    value: "basic",
   },
   {
-    label: "Coper",
-    value: "coper",
+    label: "Copper",
+    value: "copper",
   },
   {
     label: "Silver",
@@ -61,370 +90,318 @@ const TABS = [
   },
 ];
 
-const TABLE_HEAD = ["Member", "Package", "Creation Date", ""];
+const TABLE_HEAD = ["Member", "Package", "Creation Date", "Actions"];
 
-export default function Page() {
+export default function MembersPage() {
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const { users, isLoading, isError, isSuccess } = UseUserlist();
+  const [activeTab, setActiveTab] = useState("all");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const { users, isLoading, isError, isSuccess, refetch } = UseUserlist();
 
   const handleOpen = () => setOpen(!open);
-  //cookies
+
   const ITEMS_PER_PAGE = 10;
-  const totalItems = users ? users.data.length : 0;
+
+  // Filter users based on search query and active tab
+  const filteredUsers = users
+    ? users.data.filter((user) => {
+        const matchesSearch =
+          user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.toLowerCase());
+
+        const matchesTab =
+          activeTab === "all" || user.userpackage === activeTab;
+
+        return matchesSearch && matchesTab;
+      })
+    : [];
+
+  const totalItems = filteredUsers.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-
-  const filteredUsers = users
-    ? users.data.filter(
-        (user) =>
-          user.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          user.email.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : [];
-
-  
   const currentItems = filteredUsers.slice(startIndex, endIndex);
+
   const token = Cookies.get("adminToken");
 
-  function DeleteUser(_id) {
-    const id = { _id };
-   console.log(id, "user id")
-
-    let data = {
-      id: id._id,
-    };
-
-    Swal.fire({
-      title: `Are you sure you want to delete this user?`,
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete!",
-    })
-      .then((result) => {
-        if (result.isConfirmed) {
-          Api.delete("admin/auth/account/client", {
-            data,
-            headers: {
-              Authorization: `Bearer ${String(token)}`,
-            },
-            withCredentials: true,
-          }).then((res) => {
-            console.log(res, "res from bg");
-            if (res && res.status === 200) {
-              console.log(res, "sucess");
-              Swal.fire({
-                title: "Acoount Deleted!",
-                text: `${res?.data?.message}`,
-                icon: "success",
-              });
-              window.location.reload();
-            } else {
-              Swal.fire({
-                title: "Account not Deleted!",
-                text: "Account Not Deleted. Error occurred during the request.",
-                icon: "error",
-              });
-            }
-          });
-        }
-      })
-      .catch(function (err) {
-        Swal.fire({
-          title: "Account not Deleted!",
-          text: `${err}`,
-          icon: "error",
-        });
-      });
+  function handleDeleteUser(user) {
+    setSelectedUser(user);
+    setDeleteDialogOpen(true);
   }
+
+  async function confirmDeleteUser() {
+    try {
+      const response = await Api.delete("admin/auth/account/client", {
+        data: { id: selectedUser._id },
+        headers: {
+          Authorization: `Bearer ${String(token)}`,
+        },
+        withCredentials: true,
+      });
+
+      if (response && response.status === 200) {
+        toast.success("User deleted successfully", {
+          description:
+            response?.data?.message ||
+            "The user has been removed from the system",
+        });
+        refetch();
+      } else {
+        toast.error("Failed to delete user", {
+          description: "An error occurred while deleting the user",
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to delete user", {
+        description:
+          error.message || "An error occurred while deleting the user",
+      });
+    } finally {
+      setDeleteDialogOpen(false);
+    }
+  }
+
+  // Get badge color based on package type
+  const getPackageBadgeVariant = (packageType) => {
+    switch (packageType) {
+      case "basic":
+        return "secondary";
+      case "copper":
+        return "warning";
+      case "silver":
+        return "default";
+      case "gold":
+        return "warning";
+      case "diamond":
+        return "secondary";
+      case "titanium":
+        return "destructive";
+      default:
+        return "outline";
+    }
+  };
 
   return (
     <>
-      {isLoading ? (
-        <div className="flex items-center justify-center h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-        </div>
-      ) : (
-        <Card className="h-full w-full px-3">
-          <CardHeader floated={false} shadow={false} className="rounded-none">
-            <div className="mb-8 flex items-center justify-between gap-8">
+      <div className="container mx-auto py-6">
+        <Card className="border-none shadow-sm">
+          <CardHeader className="pb-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <Typography variant="h5" color="blue-gray">
-                  Members list
-                </Typography>
-                <Typography color="gray" className="mt-1 font-normal">
-                  See information about all members
-                </Typography>
+                <CardTitle className="text-2xl font-bold">Members</CardTitle>
+                <CardDescription className="text-muted-foreground mt-1">
+                  Manage your members and their subscription packages
+                </CardDescription>
               </div>
-              <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                <Button
-                  className="flex items-center gap-3"
-                  size="sm"
-                  onClick={handleOpen}
-                >
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add user
-                </Button>
-              </div>
-            </div>
-            <div className=" w-full flex justify-end mb-4">
-              <div className="w-72 flex justify-end">
-                <Input
-                  label="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                />
-              </div>
-            </div>
-            <div className="flex flex-col flex-c items-center justify-between gap-4 md:flex-row">
-              <Tabs value="all" className="w-full md:w-max">
-                <TabsHeader>
-                  {TABS.map(({ label, value }) => (
-                    <Tab key={value} value={value}>
-                      &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                    </Tab>
-                  ))}
-                </TabsHeader>
-              </Tabs>
+              <Button
+                onClick={handleOpen}
+                className="md:w-auto w-full"
+                size="sm"
+              >
+                <UserPlus className="mr-2 h-4 w-4" />
+                Add Member
+              </Button>
             </div>
           </CardHeader>
-          <CardBody className="overflow-x-scroll px-0">
-            <table className="mt-4 w-full min-w-max table-auto text-left">
-              <thead>
-                <tr>
-                  {TABLE_HEAD.map((head, index) => (
-                    <th
-                      key={head}
-                      className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                    >
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+
+          <div className="px-6">
+            <div className="flex flex-col md:flex-row gap-4 justify-between mb-6">
+              <div className="relative w-full md:w-72">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search members..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-8"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => refetch()}
+                  className="h-9"
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Refresh
+                </Button>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-9">
+                      <Filter className="h-4 w-4 mr-2" />
+                      Filter
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Filter by Package</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {TABS.map((tab) => (
+                      <DropdownMenuItem
+                        key={tab.value}
+                        onClick={() => setActiveTab(tab.value)}
+                        className={activeTab === tab.value ? "bg-accent" : ""}
                       >
-                        {head}{" "}
-                        {index !== TABLE_HEAD.length - 1 && (
-                          <ChevronUpDownIcon
-                            strokeWidth={2}
-                            className="h-4 w-4"
-                          />
-                        )}
-                      </Typography>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="w-full">
-                {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={TABLE_HEAD.length} className="text-center p-4">
-                      No User Found.
-                    </td>
-                  </tr>
-                ) : (
-                  <>
-                    {users &&
-                      currentItems.map(
-                        (
-                          {
-                            userdp,
-                            fullname,
-                            email,
-                            userpackage,
-                            createdAt,
-                            _id,
-                          },
-                          index
-                        ) => {
-                          const isLast = index === users.data.length - 1;
-                          const classes = isLast
-                            ? "p-4"
-                            : "p-4 border-b border-blue-gray-50";
+                        {tab.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
 
-                          return (
-                            <tr key={createdAt}>
-                              <td className={classes}>
-                                <div className="flex items-center gap-3">
-                                  <Avatar
-                                    src={userdp}
-                                    alt={fullname}
-                                    size="sm"
-                                  />
-                                  <div className="flex flex-col">
-                                    <Typography
-                                      variant="small"
-                                      color="blue-gray"
-                                      className="font-normal"
-                                    >
-                                      {fullname}
-                                    </Typography>
-                                    <Typography
-                                      variant="small"
-                                      color="blue-gray"
-                                      className="font-normal opacity-70"
-                                    >
-                                      {email}
-                                    </Typography>
-                                  </div>
-                                </div>
-                              </td>
-
-                              <td className={classes}>
-                                <div className="w-max">
-                                  <Chip
-                                    variant="ghost"
-                                    size="sm"
-                                    value={
-                                      userpackage === "basic"
-                                        ? "basic"
-                                        : userpackage === "silver"
-                                        ? "silver"
-                                        : userpackage === "gold"
-                                        ? "gold"
-                                        : userpackage === "diamond"
-                                        ? "diamond"
-                                        : userpackage === "titanium"
-                                        ? "titanium"
-                                        : "offline"
-                                    }
-                                    color={
-                                      userpackage === "basic"
-                                        ? "green"
-                                        : userpackage === "silver"
-                                        ? "silver"
-                                        : userpackage === "gold"
-                                        ? "gold"
-                                        : userpackage === "diamond"
-                                        ? "diamond"
-                                        : userpackage === "titanium"
-                                        ? "titanium"
-                                        : "blue-gray"
-                                    }
-                                  />
-                                </div>
-                              </td>
-                              <td className={classes}>
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal"
-                                >
-                                  {createdAt.split("T")[0]}
-                                </Typography>
-                              </td>
-                              <td className={classes}>
-                                <Tooltip content="delete User">
-                                  <IconButton
-                                    variant="text"
-                                    onClick={() => {
-                                      DeleteUser(_id);
-                                    }}
-                                  >
-                                    <svg
-                                      width="64px"
-                                      height="64px"
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
-                                      className="h-5 w-5"
-                                    >
-                                      <g
-                                        id="SVGRepo_bgCarrier"
-                                        strokeWidth={0}
-                                      />
-                                      <g
-                                        id="SVGRepo_tracerCarrier"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />
-                                      <g id="SVGRepo_iconCarrier">
-                                        {" "}
-                                        <path
-                                          d="M10 12V17"
-                                          stroke="#000000"
-                                          strokeWidth={2}
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                        />{" "}
-                                        <path
-                                          d="M14 12V17"
-                                          stroke="#000000"
-                                          strokeWidth={2}
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                        />{" "}
-                                        <path
-                                          d="M4 7H20"
-                                          stroke="#000000"
-                                          strokeWidth={2}
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                        />{" "}
-                                        <path
-                                          d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10"
-                                          stroke="#000000"
-                                          strokeWidth={2}
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                        />{" "}
-                                        <path
-                                          d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"
-                                          stroke="#000000"
-                                          strokeWidth={2}
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                        />{" "}
-                                      </g>
-                                    </svg>
-                                  </IconButton>
-                                </Tooltip>
-                              </td>
-                            </tr>
-                          );
-                        }
-                      )}
-                  </>
-                )}
-              </tbody>
-            </table>
-          </CardBody>
-          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
             >
-              Page {currentPage} of {totalPages}
-            </Typography>
+              <TabsList className="w-full md:w-fit grid grid-cols-3 md:grid-cols-7 h-auto">
+                {TABS.map((tab) => (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className="text-xs md:text-sm py-2"
+                  >
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+
+          <CardContent className="p-0 mt-4">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-24">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      {TABLE_HEAD.map((head, index) => (
+                        <TableHead
+                          key={head}
+                          className={index === 0 ? "w-[40%]" : ""}
+                        >
+                          <div className="flex items-center gap-1">
+                            {head}
+                            {index !== TABLE_HEAD.length - 1 && (
+                              <div className="flex flex-col">
+                                <ChevronUp className="h-3 w-3" />
+                                <ChevronDown className="h-3 w-3 -mt-1" />
+                              </div>
+                            )}
+                          </div>
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredUsers.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={TABLE_HEAD.length}
+                          className="text-center h-32 text-muted-foreground"
+                        >
+                          No members found matching your criteria
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      currentItems.map((user) => (
+                        <TableRow key={user._id} className="hover:bg-muted/50">
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-10 w-10 border">
+                                <AvatarImage
+                                  src={user.userdp}
+                                  alt={user.fullname}
+                                />
+                                <AvatarFallback className="bg-primary/10 text-primary">
+                                  {user.fullname.charAt(0)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex flex-col">
+                                <span className="font-medium">
+                                  {user.fullname}
+                                </span>
+                                <span className="text-sm text-muted-foreground">
+                                  {user.email}
+                                </span>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={getPackageBadgeVariant(user.userpackage)}
+                              className="capitalize"
+                            >
+                              {user.userpackage || "basic"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            {new Date(user.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              }
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={() => handleDeleteUser(user)}
+                                >
+                                  <Trash2 className="h-4 w-4 mr-2 text-destructive" />
+                                  Delete User
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+
+          <CardFooter className="flex items-center justify-between py-4 border-t">
+            <div className="text-sm text-muted-foreground">
+              Showing{" "}
+              <span className="font-medium">
+                {Math.min(startIndex + 1, totalItems)}
+              </span>{" "}
+              to{" "}
+              <span className="font-medium">
+                {Math.min(endIndex, totalItems)}
+              </span>{" "}
+              of <span className="font-medium">{totalItems}</span> members
+            </div>
             <div className="flex gap-2">
               <Button
-                variant="outlined"
+                variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -432,24 +409,42 @@ export default function Page() {
                 Previous
               </Button>
               <Button
-                variant="outlined"
+                variant="outline"
                 size="sm"
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
-                disabled={currentPage === totalPages}
+                disabled={currentPage === totalPages || totalPages === 0}
               >
                 Next
               </Button>
             </div>
-            <AddMember
-              open={open}
-              handleOpen={handleOpen}
-              // CurrentUser={CurrentUser}
-            />
           </CardFooter>
         </Card>
-      )}
+      </div>
+
+      <AddMember open={open} handleOpen={handleOpen} />
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Member</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this member? This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDeleteUser}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

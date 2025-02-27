@@ -1,93 +1,66 @@
-import React from "react";
-import { PencilIcon } from "@heroicons/react/24/solid";
+"use client";
+
+import * as React from "react";
+import axios from "axios";
 import {
-  ArrowDownTrayIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+  Eye,
+  Download,
+  Search,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  Copy,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import { Toaster, toast } from "sonner";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardHeader,
-  Typography,
-  Button,
-  CardBody,
-  Chip,
+  CardContent,
+  CardDescription,
   CardFooter,
-  Avatar,
-  IconButton,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
   Tooltip,
-  Input,
-} from "@material-tailwind/react";
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import CustompaymentFetch from "../Custom/CustompaymentFetch";
-import DonorModal from "../transcation/DonorModal";
 
-const TABLE_HEAD = [
-  "Username",
-  "Amount",
-  "Date",
-  "Status",
-  "Transaction ID",
-  "View",
-];
-
-const TABLE_ROWS = [
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
-    name: "Spotify",
-    amount: "$2,500",
-    date: "Wed 3:00pm",
-    status: "paid",
-    account: "visa",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-amazon.svg",
-    name: "Amazon",
-    amount: "$5,000",
-    date: "Wed 1:00pm",
-    status: "paid",
-    account: "master-card",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-pinterest.svg",
-    name: "Pinterest",
-    amount: "$3,400",
-    date: "Mon 7:40pm",
-    status: "pending",
-    account: "master-card",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-google.svg",
-    name: "Google",
-    amount: "$1,000",
-    date: "Wed 5:00pm",
-    status: "paid",
-    account: "visa",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-  {
-    img: "https://docs.material-tailwind.com/img/logos/logo-netflix.svg",
-    name: "netflix",
-    amount: "$14,000",
-    date: "Wed 3:30am",
-    status: "cancelled",
-    account: "visa",
-    accountNumber: "1234",
-    expiry: "06/2026",
-  },
-];
-
-export default function Donortransaction() {
+export default function DonorTransaction() {
   const [donorData, setDonorData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  const [DonormodalData, setDonormodalData] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
+  const [selectedDonor, setSelectedDonor] = React.useState(null);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [showTransactionId, setShowTransactionId] = React.useState({});
+  const itemsPerPage = 10;
+
   React.useEffect(() => {
     setLoading(true);
     CustompaymentFetch(`donate`)
@@ -103,317 +76,470 @@ export default function Donortransaction() {
       });
   }, []);
 
-  const HandleOpen = () => {
-    setOpen((prev) => !prev);
-  };
-
-  const NewDateinfo = (date, time) => {
-    const Day = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-    const Dates = new Date(date);
-    const days = Day[Dates.getDay()];
-
-    return `${days} `;
-  };
-
-  const NewTime = (timeString) => {
-    const timeParts = timeString.split(":");
-
-    if (timeParts.length !== 3) {
-      return "Invalid time format";
+  const handleCopyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Transaction ID copied to clipboard");
+    } catch (err) {
+      toast.error("Failed to copy to clipboard");
     }
-
-    const hours = parseInt(timeParts[0]);
-    const minutes = parseInt(timeParts[1]);
-    const seconds = parseInt(timeParts[2]);
-
-    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
-      return "Invalid time format";
-    }
-
-    const date = new Date();
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    date.setSeconds(seconds);
-
-    const amOrPm = hours >= 12 ? "pm" : "am";
-    const formattedHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
-    const formattedTime = `${formattedHours}:${minutes}${amOrPm}`;
-    return formattedTime;
   };
+
+  const toggleTransactionId = (id) => {
+    setShowTransactionId((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const formatDate = (dateString, timeString) => {
+    if (!dateString) return "N/A";
+
+    try {
+      const date = new Date(dateString);
+      const day = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(
+        date
+      );
+      return `${day} ${formatTime(timeString)}`;
+    } catch {
+      return "Invalid date";
+    }
+  };
+
+  const formatTime = (timeString) => {
+    if (!timeString) return "";
+
+    try {
+      const [hours, minutes] = timeString.split(":");
+      const hour = Number.parseInt(hours);
+      const amPm = hour >= 12 ? "pm" : "am";
+      const formattedHour = hour % 12 || 12;
+      return `${formattedHour}:${minutes}${amPm}`;
+    } catch {
+      return "";
+    }
+  };
+
+  const getStatusStyle = (status) => {
+    switch (status?.toLowerCase()) {
+      case "paid":
+        return {
+          bg: "bg-emerald-50 dark:bg-emerald-500/20",
+          text: "text-emerald-700 dark:text-emerald-400",
+          icon: "🟢",
+          hover: "hover:bg-emerald-100 dark:hover:bg-emerald-500/30",
+        };
+      case "failed":
+        return {
+          bg: "bg-red-50 dark:bg-red-500/20",
+          text: "text-red-700 dark:text-red-400",
+          icon: "🔴",
+          hover: "hover:bg-red-100 dark:hover:bg-red-500/30",
+        };
+      case "pending":
+        return {
+          bg: "bg-yellow-50 dark:bg-yellow-500/20",
+          text: "text-yellow-700 dark:text-yellow-400",
+          icon: "🟡",
+          hover: "hover:bg-yellow-100 dark:hover:bg-yellow-500/30",
+        };
+      default:
+        return {
+          bg: "bg-gray-50 dark:bg-gray-500/20",
+          text: "text-gray-700 dark:text-gray-400",
+          icon: "⚪",
+          hover: "hover:bg-gray-100 dark:hover:bg-gray-500/30",
+        };
+    }
+  };
+
+  const getCurrencySymbol = (currency) => {
+    switch (currency?.toLowerCase()) {
+      case "usd":
+        return "$";
+      case "naira":
+        return "₦";
+      default:
+        return "";
+    }
+  };
+
+  const filteredData = React.useMemo(() => {
+    return (
+      donorData?.filter(
+        (donor) =>
+          donor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          donor.transaction_Id
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          donor.email?.toLowerCase().includes(searchTerm.toLowerCase())
+      ) || []
+    );
+  }, [donorData, searchTerm]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
-    <div>
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-          {error}
-        </div>
-      )}
+    <TooltipProvider>
+      <div className="container mx-auto py-6 space-y-6">
+        <Card className="border-0 shadow-sm">
+         
 
-      {loading ? (
-        <div className=" py-4 flex items-center justify-center h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-        </div>
-      ) : donorData && donorData?.length !== 0 ? (
-        <div>
-          <CardBody className="overflow-x-scroll px-0">
-            <table className="w-full min-w-max table-auto text-left ">
-              <>
-                <thead>
-                  <tr>
-                    {TABLE_HEAD.map((head) => (
-                      <th
-                        key={head}
-                        className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                      >
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal leading-none opacity-70"
-                        >
-                          {head}
-                        </Typography>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {donorData &&
-                    donorData?.map(
-                      (
-                        {
-                          name,
-                          amount,
-                          donation_Date,
-                          donation_Time,
-                          currency,
-                          payment_status,
-                          status,
-                          account,
-                          accountNumber,
-                          transaction_Id,
-                          expiry,
-                          _id,
-                          donationhistory,
-                          email,
-                          payment_method_types,
-                        },
-                        index
-                      ) => {
-                        const isLast = index === TABLE_ROWS.length - 1;
-                        let Donordata = {
-                          name,
-                          amount,
-                          donation_Date,
-                          donation_Time,
-                          currency,
-                          payment_status,
-                          status,
-                          account,
-                          accountNumber,
-                          transaction_Id,
-                          expiry,
-                          donationhistory,
-                          _id,
-                          email,
-                          payment_method_types,
-                        };
-                        const classes = isLast
-                          ? "p-4"
-                          : "p-4 border-b border-blue-gray-50";
-
-                        return (
-                          <tr key={name}>
-                            <td className={classes}>
-                              <div className="flex items-center gap-3">
-                                {/* <Avatar
-                            src={img}
-                            alt={name}
-                            size="md"
-                            className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
-                          /> */}
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-bold"
-                                >
-                                  {name}
-                                </Typography>
-                              </div>
-                            </td>
-                            <td className={classes}>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                {currency === "usd"
-                                  ? "$"
-                                  : currency === "naira"
-                                  ? "₦"
-                                  : ""}
-                                {amount}
-                              </Typography>
-                            </td>
-                            <td className={classes}>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                {NewDateinfo(donation_Date)}{" "}
-                                {NewTime(donation_Time)}
-                              </Typography>
-                            </td>
-                            <td className={classes}>
-                              <div className="w-max">
-                                <Chip
-                                  size="sm"
-                                  variant="ghost"
-                                  value={payment_status}
-                                  color={
-                                    payment_status === "paid"
-                                      ? "green"
-                                      : payment_status === "failed"
-                                      ? "red"
-                                      : "amber"
-                                  }
-                                />
-                              </div>
-                            </td>
-                            <td className={classes}>
-                              <div className="flex items-center gap-3">
-                                <div className="   p-1 w-36 truncate">
-                                  {transaction_Id}
-                                  {/* <Avatar
-                              src={
-                                account === "visa"
-                                  ? "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/visa.png"
-                                  : "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/mastercard.png"
-                              }
-                              size="sm"
-                              alt={account}
-                              variant="square"
-                              className="h-full w-full object-contain p-1"
-                            /> */}
-                                </div>
-                                <div className="flex flex-col">
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal capitalize"
-                                  >
-                                    {/* {account.split("-").join(" ")} {accountNumber} */}
-                                  </Typography>
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal opacity-70"
-                                  >
-                                    {expiry}
-                                  </Typography>
-                                </div>
-                              </div>
-                            </td>
-                            <td className={classes}>
+          <CardContent>
+            {error ? (
+              <div className="rounded-lg bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 p-4 text-red-700 dark:text-red-400">
+                <p>{error}</p>
+              </div>
+            ) : loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : donorData?.length ? (
+              <div className="relative overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Username</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Transaction ID
+                      </TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedData.map((donor) => {
+                      const status = getStatusStyle(donor.payment_status);
+                      return (
+                        <React.Fragment key={donor._id || donor.transaction_Id}>
+                          <TableRow className="group">
+                            <TableCell className="font-medium">
+                              {donor.name}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                              {getCurrencySymbol(donor.currency)}
+                              {donor.amount}
+                            </TableCell>
+                            <TableCell>
+                              {formatDate(
+                                donor.donation_Date,
+                                donor.donation_Time
+                              )}
+                            </TableCell>
+                            <TableCell>
                               <div
-                                onClick={() => {
-                                  HandleOpen();
-                                  setDonormodalData(Donordata);
-                                }}
+                                className={cn(
+                                  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors",
+                                  status.bg,
+                                  status.text,
+                                  status.hover
+                                )}
                               >
-                                <Tooltip content="View Info">
-                                  <IconButton variant="text">
-                                    <svg
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="size-6"
+                                <span className="mr-1">{status.icon}</span>
+                                {donor.payment_status}
+                              </div>
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell font-mono text-sm max-w-[150px]">
+                              <div className="flex items-center gap-2">
+                                <span className="truncate">
+                                  {donor.transaction_Id}
+                                </span>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                      onClick={() =>
+                                        handleCopyToClipboard(
+                                          donor.transaction_Id
+                                        )
+                                      }
                                     >
-                                      <g
-                                        fillRule="evenodd"
-                                        clipRule="evenodd"
-                                        fill="#000"
-                                      >
-                                        <path d="M12 9a3 3 0 100 6 3 3 0 000-6zm-1 3a1 1 0 112 0 1 1 0 01-2 0z" />
-                                        <path d="M21.83 11.28C19.542 7.153 15.812 5 12 5c-3.812 0-7.542 2.152-9.83 6.28a1.376 1.376 0 00-.01 1.308C4.412 16.8 8.163 19 12 19c3.837 0 7.588-2.199 9.84-6.412a1.376 1.376 0 00-.01-1.307zM12 17c-2.939 0-5.96-1.628-7.908-5.051C6.069 8.596 9.073 7 12 7c2.927 0 5.931 1.596 7.908 4.949C17.96 15.372 14.94 17 12 17z" />
-                                      </g>
-                                    </svg>
-                                  </IconButton>
+                                      <Copy className="h-3 w-3" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Copy ID</TooltipContent>
                                 </Tooltip>
                               </div>
-                            </td>
-                          </tr>
-                        );
-                      }
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex items-center justify-end gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="md:hidden h-8 w-8"
+                                  onClick={() =>
+                                    toggleTransactionId(
+                                      donor._id || donor.transaction_Id
+                                    )
+                                  }
+                                >
+                                  {showTransactionId[
+                                    donor._id || donor.transaction_Id
+                                  ] ? (
+                                    <ChevronUp className="h-4 w-4" />
+                                  ) : (
+                                    <ChevronDown className="h-4 w-4" />
+                                  )}
+                                </Button>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-8 w-8"
+                                      onClick={() => {
+                                        setSelectedDonor(donor);
+                                        setDialogOpen(true);
+                                      }}
+                                    >
+                                      <Eye className="h-4 w-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>View details</TooltipContent>
+                                </Tooltip>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                          {/* Mobile Transaction ID row */}
+                          {showTransactionId[
+                            donor._id || donor.transaction_Id
+                          ] && (
+                            <TableRow className="md:hidden bg-muted/50">
+                              <TableCell colSpan={6} className="py-2">
+                                <div className="flex items-center justify-between gap-2">
+                                  <div className="font-mono text-sm truncate">
+                                    <span className="text-muted-foreground">
+                                      ID:{" "}
+                                    </span>
+                                    {donor.transaction_Id}
+                                  </div>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 shrink-0"
+                                    onClick={() =>
+                                      handleCopyToClipboard(
+                                        donor.transaction_Id
+                                      )
+                                    }
+                                  >
+                                    <Copy className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="py-12 text-center">
+                <p className="text-muted-foreground">
+                  No donor transactions found.
+                </p>
+              </div>
+            )}
+          </CardContent>
+
+          {donorData?.length > 0 && (
+            <CardFooter className="border-t px-6 py-4">
+              <div className="flex items-center justify-between w-full">
+                <div className="text-sm text-muted-foreground">
+                  Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                  {Math.min(currentPage * itemsPerPage, filteredData.length)} of{" "}
+                  {filteredData.length} entries
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <div className="flex -space-x-px">
+                    {Array.from({ length: Math.min(totalPages, 3) }).map(
+                      (_, i) => (
+                        <Button
+                          key={i}
+                          variant={
+                            currentPage === i + 1 ? "default" : "outline"
+                          }
+                          size="sm"
+                          className={cn(
+                            "h-8 w-8",
+                            currentPage === i + 1 && "z-10"
+                          )}
+                          onClick={() => setCurrentPage(i + 1)}
+                        >
+                          {i + 1}
+                        </Button>
+                      )
                     )}
-                </tbody>
-                <DonorModal
-                  isOpen={open}
-                  DonorData={DonormodalData}
-                  HandleOpen={HandleOpen}
-                />
-              </>
-            </table>
-          </CardBody>
-          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Button variant="outlined" size="sm">
-              Previous
-            </Button>
-            <div className="flex items-center gap-2">
-              <IconButton variant="outlined" size="sm">
-                1
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                2
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                3
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                ...
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                8
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                9
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                10
-              </IconButton>
-            </div>
-            <Button variant="outlined" size="sm">
-              Next
-            </Button>
-          </CardFooter>
-        </div>
-      ) : (
-        <div>
-          <h1 className="text-center ">
-            You have no transaction history yet on Donor.{" "}
-          </h1>
-        </div>
-      )}
-    </div>
+                    {totalPages > 3 && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 w-8"
+                          disabled
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant={
+                            currentPage === totalPages ? "default" : "outline"
+                          }
+                          size="sm"
+                          className="h-8 w-8"
+                          onClick={() => setCurrentPage(totalPages)}
+                        >
+                          {totalPages}
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardFooter>
+          )}
+        </Card>
+
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Transaction Details</DialogTitle>
+              <DialogDescription>
+                Complete information about this donation
+              </DialogDescription>
+            </DialogHeader>
+            {selectedDonor && (
+              <div className="grid gap-4">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Donor Name
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {selectedDonor.name}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Email
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {selectedDonor.email || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Amount
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {getCurrencySymbol(selectedDonor.currency)}
+                      {selectedDonor.amount}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </h3>
+                    <div
+                      className={cn(
+                        "mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors",
+                        getStatusStyle(selectedDonor.payment_status).bg,
+                        getStatusStyle(selectedDonor.payment_status).text
+                      )}
+                    >
+                      <span className="mr-1">
+                        {getStatusStyle(selectedDonor.payment_status).icon}
+                      </span>
+                      {selectedDonor.payment_status}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Date & Time
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {formatDate(
+                        selectedDonor.donation_Date,
+                        selectedDonor.donation_Time
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Payment Method
+                    </h3>
+                    <p className="mt-1 text-sm font-medium capitalize">
+                      {selectedDonor.payment_method_types || "N/A"}
+                    </p>
+                  </div>
+                  <div className="col-span-2">
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Transaction ID
+                    </h3>
+                    <div className="mt-1 flex items-center gap-2">
+                      <p className="text-sm font-mono break-all">
+                        {selectedDonor.transaction_Id}
+                      </p>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 shrink-0"
+                        onClick={() =>
+                          handleCopyToClipboard(selectedDonor.transaction_Id)
+                        }
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                  {selectedDonor.donationhistory && (
+                    <div className="col-span-2">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        Donation History
+                      </h3>
+                      <p className="mt-1 text-sm">
+                        {selectedDonor.donationhistory}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+        <Toaster />
+      </div>
+    </TooltipProvider>
   );
 }

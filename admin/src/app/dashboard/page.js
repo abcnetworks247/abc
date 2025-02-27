@@ -78,12 +78,12 @@ export default function Page() {
         </div>
        { typeof window !== "undefined" ? 
         <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
-        <div className="">
+        {/* <div className="">
          <BarChart />
         </div>
         <div className="">
           <FlowChart />
-        </div>
+        </div> */}
       </div>
       : 
       []

@@ -1,332 +1,577 @@
-import React from "react";
-import { PencilIcon } from "@heroicons/react/24/solid";
+"use client";
+
+import * as React from "react";
 import {
-  ArrowDownTrayIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+  Eye,
+  Download,
+  Search,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  Copy,
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+} from "lucide-react";
+import { Toaster, toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardHeader,
-  Typography,
-  Button,
-  CardBody,
-  Chip,
+  CardContent,
+  CardDescription,
   CardFooter,
-  Avatar,
-  IconButton,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
   Tooltip,
-  Input,
-} from "@material-tailwind/react";
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import CustompaymentFetch from "../Custom/CustompaymentFetch";
-import SubscribeModal from "../transcation/SubscriptionModal";
 
-const TABLE_HEAD = [
-  "Username",
-  "Amount",
-  "Plan Type",
-  "Status",
-  "Transaction ID",
-  "Subscription Name",
-  "View",
-];
-
-export default function Premiumtransaction() {
-  const [donorData, setDonorData] = React.useState(null);
+export default function SubscriptionTransaction() {
+  const [subscriptionData, setSubscriptionData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [PremuiumData, setPremuiumData] = React.useState(null);
+  const [selectedSubscription, setSelectedSubscription] = React.useState(null);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [showTransactionId, setShowTransactionId] = React.useState({});
+  const itemsPerPage = 10;
 
-  const HandleToggle = () => {
-    setOpen((prev) => !prev);
-  };
   React.useEffect(() => {
     setLoading(true);
     CustompaymentFetch(`subscribe`)
       .then((data) => {
-        console.log(data.data.data, "subscrbe data");
-        setDonorData(data.data.data);
+        console.log(data.data.data, "subscribe data");
+        setSubscriptionData(data.data.data);
         setLoading(false);
       })
       .catch((error) => {
-        setError(error.response.data.error);
+        setError(
+          error.response?.data?.error || "Failed to fetch subscription data"
+        );
         setLoading(false);
         console.error(error);
       });
   }, []);
 
-  const test = "lorem2 000";
+  const handleCopyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast.success("Subscription ID copied to clipboard");
+    } catch (err) {
+      toast.error("Failed to copy to clipboard");
+    }
+  };
 
-  console.log(test.slice(2, 0));
+  const toggleTransactionId = (id) => {
+    setShowTransactionId((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+
+    try {
+      return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch {
+      return "Invalid date";
+    }
+  };
+
+  const getStatusStyle = (status) => {
+    switch (status?.toLowerCase()) {
+      case "paid":
+        return {
+          bg: "bg-emerald-50 dark:bg-emerald-500/20",
+          text: "text-emerald-700 dark:text-emerald-400",
+          icon: "🟢",
+          hover: "hover:bg-emerald-100 dark:hover:bg-emerald-500/30",
+        };
+      case "canceled":
+        return {
+          bg: "bg-amber-50 dark:bg-amber-500/20",
+          text: "text-amber-700 dark:text-amber-400",
+          icon: "🟡",
+          hover: "hover:bg-amber-100 dark:hover:bg-amber-500/30",
+        };
+      case "failed":
+        return {
+          bg: "bg-red-50 dark:bg-red-500/20",
+          text: "text-red-700 dark:text-red-400",
+          icon: "🔴",
+          hover: "hover:bg-red-100 dark:hover:bg-red-500/30",
+        };
+      default:
+        return {
+          bg: "bg-gray-50 dark:bg-gray-500/20",
+          text: "text-gray-700 dark:text-gray-400",
+          icon: "⚪",
+          hover: "hover:bg-gray-100 dark:hover:bg-gray-500/30",
+        };
+    }
+  };
+
+  const getCurrencySymbol = (currency) => {
+    switch (currency?.toLowerCase()) {
+      case "usd":
+        return "$";
+      case "naira":
+        return "₦";
+      default:
+        return "";
+    }
+  };
+
+  const filteredData = React.useMemo(() => {
+    return (
+      subscriptionData?.filter(
+        (sub) =>
+          sub.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          sub.subscription_id
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          sub.subscription_name
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase())
+      ) || []
+    );
+  }, [subscriptionData, searchTerm]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
-    <div>
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-center justify-center">
-          {error}
-        </div>
-      )}
+    <TooltipProvider>
+      <div className="container mx-auto py-6 space-y-6">
+        <Card className="border-0 shadow-sm">
 
-      {loading ? (
-        <div className=" py-4 flex items-center justify-center h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-        </div>
-      ) : donorData && donorData?.length !== 0 ? (
-        <div>
-          <CardBody className="overflow-x-scroll px-0">
-            <table className="w-full min-w-max table-auto text-left ">
-              <>
-                <thead>
-                  <tr>
-                    {TABLE_HEAD.map((head) => (
-                      <th
-                        key={head}
-                        className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                      >
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal leading-none opacity-70"
-                        >
-                          {head}
-                        </Typography>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {donorData &&
-                    donorData?.map(
-                      (
-                        {
-                          name,
-                          amount,
-                          donation_Date,
-                          donation_Time,
-                          currency,
-                          payment_status,
-                          status,
-                          plan_type,
-                          accountNumber,
-                          subscription_id,
-                          expiry,
-                          _id,
-                          subscription_status,
-                          subscription_name,
-                          subscription_period_start,
-                          subscription_period_end,
-                          hosted_invoice_url,
-                        },
-                        index
-                      ) => {
-                        let Premium = {
-                          name,
-                          amount,
-                          donation_Date,
-                          donation_Time,
-                          currency,
-                          payment_status,
-                          status,
-                          plan_type,
-                          accountNumber,
-                          subscription_id,
-                          expiry,
-                          _id,
-                          subscription_status,
-                          subscription_name,
-                          subscription_period_start,
-                          subscription_period_end,
-                          hosted_invoice_url,
-                        };
-                        return (
-                          <tr key={_id}>
-                            <td className={"p-4 border-b border-blue-gray-50"}>
-                              <div className="flex items-center gap-3">
-                                {/* <Avatar
-                            src={img}
-                            alt={name}
-                            size="md"
-                            className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
-                          /> */}
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-bold"
-                                >
-                                  {name}
-                                </Typography>
-                              </div>
-                            </td>
-                            <td className={"p-4 border-b border-blue-gray-50"}>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                {currency === "usd"
-                                  ? "$"
-                                  : currency === "naira"
-                                  ? "₦"
-                                  : ""}
-                                {amount}
-                              </Typography>
-                            </td>
-                            <td className={"p-4 border-b border-blue-gray-50"}>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal"
-                              >
-                                {plan_type}
-                              </Typography>
-                            </td>
-                            <td className={"p-4 border-b border-blue-gray-50"}>
-                              <div className="w-max">
-                                <Chip
-                                  size="sm"
-                                  variant="ghost"
-                                  value={subscription_status}
-                                  color={
-                                    subscription_status === "paid"
-                                      ? "green"
-                                      : subscription_status === "canceled"
-                                      ? "amber"
-                                      : "red"
-                                  }
-                                />
-                              </div>
-                            </td>
-                            <td className={"p-4 border-b border-blue-gray-50"}>
-                              <div className="flex items-center gap-3">
-                                <div className="   p-1 w-36 truncate">
-                                  {subscription_id}
-                                </div>
-                                <div className="flex flex-col">
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal capitalize"
-                                  >
-                                    {/* {account.split("-").join(" ")} {accountNumber} */}
-                                  </Typography>
-                                </div>
-                              </div>
-                            </td>
-                            <td className={"p-4 border-b border-blue-gray-50"}>
-                              <div className="flex items-center gap-3">
-                                <div className="   p-1 w-[130px] truncate">
-                                  {subscription_name?.slice(14)}
-                                </div>
-                                <div className="flex flex-col">
-                                  <Typography
-                                    variant="small"
-                                    color="blue-gray"
-                                    className="font-normal capitalize"
-                                  >
-                                    {/* {account.split("-").join(" ")} {accountNumber} */}
-                                  </Typography>
-                                </div>
-                              </div>
-                            </td>
-                            <td className={"p-4 border-b border-blue-gray-50"}>
+          <CardContent>
+            {error ? (
+              <div className="rounded-lg bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800 p-4 text-red-700 dark:text-red-400">
+                <p>{error}</p>
+              </div>
+            ) : loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : subscriptionData?.length ? (
+              <div className="relative overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Username</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Plan Type</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Subscription ID
+                      </TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        Subscription Name
+                      </TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {paginatedData.map((subscription) => {
+                      const status = getStatusStyle(
+                        subscription.subscription_status
+                      );
+                      return (
+                        <React.Fragment key={subscription._id}>
+                          <TableRow className="group">
+                            <TableCell className="font-medium">
+                              {subscription.name}
+                            </TableCell>
+                            <TableCell>
+                              {getCurrencySymbol(subscription.currency)}
+                              {subscription.amount}
+                            </TableCell>
+                            <TableCell className="capitalize">
+                              {subscription.plan_type}
+                            </TableCell>
+                            <TableCell>
                               <div
-                                onClick={() => {
-                                  HandleToggle();
-                                  setPremuiumData(Premium);
-                                }}
+                                className={cn(
+                                  "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors",
+                                  status.bg,
+                                  status.text,
+                                  status.hover
+                                )}
                               >
-                                <Tooltip content="View Info">
-                                  <IconButton variant="text">
-                                    <svg
-                                      viewBox="0 0 24 24"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="size-6"
+                                <span className="mr-1">{status.icon}</span>
+                                {subscription.subscription_status}
+                              </div>
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell font-mono text-sm max-w-[150px]">
+                              <div className="flex items-center gap-2">
+                                <span className="truncate">
+                                  {subscription.subscription_id}
+                                </span>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                                      onClick={() =>
+                                        handleCopyToClipboard(
+                                          subscription.subscription_id
+                                        )
+                                      }
                                     >
-                                      <g
-                                        fillRule="evenodd"
-                                        clipRule="evenodd"
-                                        fill="#000"
-                                      >
-                                        <path d="M12 9a3 3 0 100 6 3 3 0 000-6zm-1 3a1 1 0 112 0 1 1 0 01-2 0z" />
-                                        <path d="M21.83 11.28C19.542 7.153 15.812 5 12 5c-3.812 0-7.542 2.152-9.83 6.28a1.376 1.376 0 00-.01 1.308C4.412 16.8 8.163 19 12 19c3.837 0 7.588-2.199 9.84-6.412a1.376 1.376 0 00-.01-1.307zM12 17c-2.939 0-5.96-1.628-7.908-5.051C6.069 8.596 9.073 7 12 7c2.927 0 5.931 1.596 7.908 4.949C17.96 15.372 14.94 17 12 17z" />
-                                      </g>
-                                    </svg>
-                                  </IconButton>
+                                      <Copy className="h-3 w-3" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Copy ID</TooltipContent>
                                 </Tooltip>
                               </div>
-                            </td>
-                          </tr>
-                        );
-                      }
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell max-w-[200px]">
+                              <span className="truncate">
+                                {subscription.subscription_name?.slice(14) ||
+                                  "N/A"}
+                              </span>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex items-center justify-end gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="md:hidden h-8 w-8"
+                                  onClick={() =>
+                                    toggleTransactionId(subscription._id)
+                                  }
+                                >
+                                  {showTransactionId[subscription._id] ? (
+                                    <ChevronUp className="h-4 w-4" />
+                                  ) : (
+                                    <ChevronDown className="h-4 w-4" />
+                                  )}
+                                </Button>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-8 w-8"
+                                      onClick={() => {
+                                        setSelectedSubscription(subscription);
+                                        setDialogOpen(true);
+                                      }}
+                                    >
+                                      <Eye className="h-4 w-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>View details</TooltipContent>
+                                </Tooltip>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                          {/* Mobile Subscription Details row */}
+                          {showTransactionId[subscription._id] && (
+                            <TableRow className="md:hidden bg-muted/50">
+                              <TableCell colSpan={7} className="p-4">
+                                <div className="space-y-3">
+                                  <div>
+                                    <span className="text-sm font-medium text-muted-foreground">
+                                      Subscription ID:
+                                    </span>
+                                    <div className="flex items-center justify-between gap-2 mt-1">
+                                      <span className="font-mono text-sm truncate">
+                                        {subscription.subscription_id}
+                                      </span>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8 shrink-0"
+                                        onClick={() =>
+                                          handleCopyToClipboard(
+                                            subscription.subscription_id
+                                          )
+                                        }
+                                      >
+                                        <Copy className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <span className="text-sm font-medium text-muted-foreground">
+                                      Subscription Name:
+                                    </span>
+                                    <p className="mt-1 text-sm">
+                                      {subscription.subscription_name?.slice(
+                                        14
+                                      ) || "N/A"}
+                                    </p>
+                                  </div>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="py-12 text-center">
+                <p className="text-muted-foreground">
+                  No subscription transactions found.
+                </p>
+              </div>
+            )}
+          </CardContent>
+
+          {subscriptionData?.length > 0 && (
+            <CardFooter className="border-t px-6 py-4">
+              <div className="flex items-center justify-between w-full">
+                <div className="text-sm text-muted-foreground">
+                  Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+                  {Math.min(currentPage * itemsPerPage, filteredData.length)} of{" "}
+                  {filteredData.length} entries
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <div className="flex -space-x-px">
+                    {Array.from({ length: Math.min(totalPages, 3) }).map(
+                      (_, i) => (
+                        <Button
+                          key={i}
+                          variant={
+                            currentPage === i + 1 ? "default" : "outline"
+                          }
+                          size="sm"
+                          className={cn(
+                            "h-8 w-8",
+                            currentPage === i + 1 && "z-10"
+                          )}
+                          onClick={() => setCurrentPage(i + 1)}
+                        >
+                          {i + 1}
+                        </Button>
+                      )
                     )}
-                </tbody>
-                <SubscribeModal
-                  isOpen={open}
-                  HandleOpen={HandleToggle}
-                  PremuiumData={PremuiumData}
-                />
-              </>
-            </table>
-          </CardBody>
-          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Button variant="outlined" size="sm">
-              Previous
-            </Button>
-            <div className="flex items-center gap-2">
-              <IconButton variant="outlined" size="sm">
-                1
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                2
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                3
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                ...
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                8
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                9
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                10
-              </IconButton>
-            </div>
-            <Button variant="outlined" size="sm">
-              Next
-            </Button>
-          </CardFooter>
-        </div>
-      ) : (
-        <div>
-          <h1 className="text-center ">
-            You have no transaction history yet on Subscripttion.{" "}
-          </h1>
-        </div>
-      )}
-    </div>
+                    {totalPages > 3 && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 w-8"
+                          disabled
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant={
+                            currentPage === totalPages ? "default" : "outline"
+                          }
+                          size="sm"
+                          className="h-8 w-8"
+                          onClick={() => setCurrentPage(totalPages)}
+                        >
+                          {totalPages}
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardFooter>
+          )}
+        </Card>
+
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Subscription Details</DialogTitle>
+              <DialogDescription>
+                Complete information about this subscription
+              </DialogDescription>
+            </DialogHeader>
+            {selectedSubscription && (
+              <div className="grid gap-4">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Subscriber Name
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {selectedSubscription.name}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Amount
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {getCurrencySymbol(selectedSubscription.currency)}
+                      {selectedSubscription.amount}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Plan Type
+                    </h3>
+                    <p className="mt-1 text-sm font-medium capitalize">
+                      {selectedSubscription.plan_type}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Status
+                    </h3>
+                    <div
+                      className={cn(
+                        "mt-1 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors",
+                        getStatusStyle(selectedSubscription.subscription_status)
+                          .bg,
+                        getStatusStyle(selectedSubscription.subscription_status)
+                          .text
+                      )}
+                    >
+                      <span className="mr-1">
+                        {
+                          getStatusStyle(
+                            selectedSubscription.subscription_status
+                          ).icon
+                        }
+                      </span>
+                      {selectedSubscription.subscription_status}
+                    </div>
+                  </div>
+                  <div className="col-span-2">
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Subscription Name
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {selectedSubscription.subscription_name?.slice(14) ||
+                        "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Period Start
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {formatDate(
+                        selectedSubscription.subscription_period_start
+                      )}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Period End
+                    </h3>
+                    <p className="mt-1 text-sm font-medium">
+                      {formatDate(selectedSubscription.subscription_period_end)}
+                    </p>
+                  </div>
+                  <div className="col-span-2">
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      Subscription ID
+                    </h3>
+                    <div className="mt-1 flex items-center gap-2">
+                      <p className="text-sm font-mono break-all">
+                        {selectedSubscription.subscription_id}
+                      </p>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 shrink-0"
+                        onClick={() =>
+                          handleCopyToClipboard(
+                            selectedSubscription.subscription_id
+                          )
+                        }
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                  {selectedSubscription.hosted_invoice_url && (
+                    <div className="col-span-2">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        Invoice
+                      </h3>
+                      <div className="mt-1">
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                          onClick={() =>
+                            window.open(
+                              selectedSubscription.hosted_invoice_url,
+                              "_blank"
+                            )
+                          }
+                        >
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          View Invoice
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+        <Toaster />
+      </div>
+    </TooltipProvider>
   );
 }

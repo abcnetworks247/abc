@@ -1,479 +1,505 @@
 "use client";
-import { AddAdminMeMber } from "@/components/AdminMemeber/AddAdminMember";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Loader2, MoreHorizontal, Plus } from "lucide-react";
+import { format } from "date-fns";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
-  MagnifyingGlassIcon,
-  ChevronUpDownIcon,
-} from "@heroicons/react/24/outline";
-import useallAdmin from "@/hooks/useallAdmin";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
-  Card,
-  CardHeader,
-  Input,
-  Typography,
-  Button,
-  CardBody,
-  Chip,
-  CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
-  Avatar,
-  IconButton,
-  Tooltip,
-} from "@material-tailwind/react";
-import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { MdDeleteForever } from "react-icons/md";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import useCurrentAdmin from "@/hooks/useCurrentAdmin";
-import { UpdateAdmin } from "@/components/updateAdmin/UpdateAdmin";
-import Api from "@/utils/Api";
-import Cookies from "js-cookie";
+import useAllAdmin from "@/hooks/useallAdmin"; // Fixed casing for consistency
+// import { deleteAdmin, updateAdmin, createAdmin } from "@/lib/api"; // Uncommented this line
 
-const TABS = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "SuperAdmin",
-    value: "superadmin",
-  },
-  {
-    label: "Admin",
-    value: "admin",
-  },
-  {
-    label: "Editor",
-    value: "editor",
-  },
-];
-
-const TABLE_HEAD = ["Member", "Roles", "Date", "Employed", ""];
-
-export default function Page() {
-  const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
+export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
-  const { user, isError, isLoading, isSuccess } = useallAdmin();
-  const { CurrentUser } = useCurrentAdmin();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const router = useRouter();
+  const { user, isError, isLoading, isSuccess, mutate } = useAllAdmin(); // Added mutate
+  const { currentAdmin } = useCurrentAdmin();
   const Admins = user?.data;
-  const value = Admins?.data;
+  const ITEMS_PER_PAGE = 10;
 
-  const [NewAdmin, setNewAdmin] = useState(null);
+  // const filteredAdmins =
+  //   Admins?.filter(
+  //     (admin) =>
+  //       admin.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //       admin.email.toLowerCase().includes(searchQuery.toLowerCase())
+  //   ) || [];
+  // const totalPages = Math.ceil(filteredAdmins.length / ITEMS_PER_PAGE);
+  // const paginatedAdmins = filteredAdmins.slice(
+  //   (currentPage - 1) * ITEMS_PER_PAGE,
+  //   currentPage * ITEMS_PER_PAGE
+  // );
 
-  const handleOpen = () => setOpen(!open);
-  const handleOpen2 = () => {
-    setOpen2(!open2);
+
+    const filteredAdmins = user
+      ? Admins.data.filter(
+          (user) =>
+            user.fullname
+              .toLowerCase()
+              .includes(searchQuery.trim().toLowerCase()) ||
+            user.email.toLowerCase().includes(searchQuery.trim().toLowerCase())
+        )
+      : [];
+  
+  console.log("filteredAdmins", filteredAdmins);
+  
+    // const currentItems = filteredAdmins.slice(startIndex, endIndex);
+
+  
+  const handleAddAdmin = async (data) => {
+    try {
+      // await createAdmin(data);
+      mutate();
+      setIsAddDialogOpen(false);
+      toast.success("Admin added successfully");
+    } catch (error) {
+      toast.error("Failed to add admin");
+    }
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const handleEditAdmin = async (data) => {
+    try {
+      // await updateAdmin(selectedAdmin._id, data);
+      mutate();
+      setIsEditDialogOpen(false);
+      toast.success("Admin updated successfully");
+    } catch (error) {
+      toast.error("Failed to update admin");
+    }
+  };
 
-  const ITEMS_PER_PAGE = 10;
-  const totalItems = Admins ? Admins.data.length : 0;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const handleDeleteAdmin = async () => {
+    try {
+      // await deleteAdmin(selectedAdmin._id);
+      mutate();
+      setIsDeleteDialogOpen(false);
+      toast.success("Admin deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete admin");
+    }
+  };
 
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const canEdit = (admin) => {
+    if (currentAdmin?.role === "superadmin") return true;
+    if (
+      currentAdmin?.role === "admin" &&
+      admin.role !== "superadmin" &&
+      admin.role !== "admin"
+    )
+      return true;
+    return false;
+  };
 
-  const filteredUsers = user
-    ? Admins.data.filter(
-        (user) =>
-          user.fullname
-            .toLowerCase()
-            .includes(searchQuery.trim().toLowerCase()) ||
-          user.email.toLowerCase().includes(searchQuery.trim().toLowerCase())
-      )
-    : [];
+  const canDelete = canEdit;
 
-  const currentItems = filteredUsers.slice(startIndex, endIndex);
-
-  console.log(currentItems, "current items");
-  const token = Cookies.get("adminToken");
-
-  function DeleteUser(role, _id) {
-    const id = { _id };
-
-    console.log("id: " + id._id);
-
-    let data = {
-      id: id._id,
-    };
-
-
-    Swal.fire({
-      title: `Are you sure you want to delete this ${role}?`,
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Delete!",
-    })
-      .then((result) => {
-        if (result.isConfirmed) {
-          Api.delete("admin/auth/account/admin", {
-            data,
-            headers: {
-              Authorization: `Bearer ${String(token)}`,
-            },
-            withCredentials: true,
-          }).then((res) => {
-            console.log(res, "res from bg");
-            if (res && res.status === 200) {
-              console.log(res, "sucess");
-              Swal.fire({
-                title: "Acoount Deleted!",
-                text: `${res?.data?.message}`,
-                icon: "success",
-              });
-              window.location.reload();
-            } else if (res.status === 500) {
-              Swal.fire({
-                title: `${res.data.error}`,
-                text: "you're not eligble to make this request.",
-                icon: "error",
-              });
-            }
-          });
-        }
-      })
-      .catch(function (err) {
-        Swal.fire({
-          title: "Account not Deleted!",
-          text: `${err}`,
-          icon: "error",
-        });
-      });
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
   }
 
   return (
-    <>
-      {isLoading ? (
-        <div className="flex items-center justify-center h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
-        </div>
-      ) : (
-        <Card className="h-full w-full px-3">
-          <CardHeader floated={false} shadow={false} className="rounded-none">
-            <div className="mb-8 flex items-center justify-between gap-8">
-              <div>
-                <Typography variant="h5" color="blue-gray">
-                  Admin list
-                </Typography>
-                <Typography color="gray" className="mt-1 font-normal">
-                  See information about all members
-                </Typography>
-              </div>
-              <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                <Button variant="outlined" size="sm">
-                  view all
-                </Button>
-                <Button
-                  className="flex items-center gap-3"
-                  size="sm"
-                  onClick={handleOpen}
-                >
-                  <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Admin
-                </Button>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-              <Tabs value="all" className="w-full md:w-[60%]">
-                <TabsHeader className="w-full">
-                  {TABS.map(({ label, value }) => (
-                    <Tab key={value} value={value}>
-                      &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                    </Tab>
-                  ))}
-                </TabsHeader>
-              </Tabs>
-              <div className="w-full md:w-72">
-                <Input
-                  label="Search"
-                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-          </CardHeader>
-          <CardBody className="overflow-x-scroll px-0">
-            <table className="mt-4 w-full min-w-max table-auto text-left">
-              <thead>
-                <tr>
-                  {TABLE_HEAD.map((head, index) => (
-                    <th
-                      key={head}
-                      className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
-                    >
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
+    <div className="mx-2 md:mx-4 lg:mx-8 py-10">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <Button onClick={() => setIsAddDialogOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" /> Add Admin
+        </Button>
+      </div>
+
+      <div className="flex justify-between items-center mb-4">
+        <Input
+          placeholder="Search admins..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-sm"
+        />
+        <Select onValueChange={(value) => setSearchQuery(value)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Filter by role" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All roles</SelectItem>
+            <SelectItem value="superadmin">Superadmin</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
+            <SelectItem value="editor">Editor</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredAdmins.map((admin) => (
+              <TableRow key={admin._id}>
+                <TableCell className="font-medium">
+                  <div className="flex items-center">
+                    <Avatar className="h-8 w-8 mr-2">
+                      <AvatarImage src={admin.userdp} alt={admin.fullname} />
+                      <AvatarFallback>{admin.fullname[0]}</AvatarFallback>
+                    </Avatar>
+                    {admin.fullname}
+                  </div>
+                </TableCell>
+                <TableCell>{admin.email}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      admin.role === "superadmin"
+                        ? "destructive"
+                        : admin.role === "admin"
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {admin.role}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  {format(new Date(admin.createdAt), "PPP")}
+                </TableCell>
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelectedAdmin(admin);
+                          setIsEditDialogOpen(true);
+                        }}
+                        disabled={!canEdit(admin)}
                       >
-                        {head}{" "}
-                        {index !== TABLE_HEAD.length - 1 && (
-                          <ChevronUpDownIcon
-                            strokeWidth={2}
-                            className="h-4 w-4"
-                          />
-                        )}
-                      </Typography>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="w-full">
-                {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={TABLE_HEAD.length} className="text-center p-4">
-                      No results found.
-                    </td>
-                  </tr>
-                ) : (
-                  <>
-                    {Admins &&
-                      currentItems.map(
-                        (
-                          { userdp, fullname, email, role, createdAt, _id },
-                          index
-                        ) => {
-                          const isLast = index === Admins.data.length - 1;
-                          const classes = isLast
-                            ? "p-4"
-                            : "p-4 border-b border-blue-gray-50";
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setSelectedAdmin(admin);
+                          setIsDeleteDialogOpen(true);
+                        }}
+                        disabled={!canDelete(admin)}
+                      >
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
-                          return (
-                            <tr key={createdAt}>
-                              <td className={classes}>
-                                <div className="flex items-center gap-3">
-                                  <Avatar
-                                    src={userdp}
-                                    alt={fullname}
-                                    size="sm"
-                                  />
-                                  <div className="flex flex-col">
-                                    <Typography
-                                      variant="small"
-                                      color="blue-gray"
-                                      className="font-normal"
-                                    >
-                                      {fullname}
-                                    </Typography>
-                                    <Typography
-                                      variant="small"
-                                      color="blue-gray"
-                                      className="font-normal opacity-70"
-                                    >
-                                      {email}
-                                    </Typography>
-                                  </div>
-                                </div>
-                              </td>
+      {/* <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </Button>
+      </div> */}
 
-                              <td className={classes}>
-                                <div className="w-max">
-                                  <Chip
-                                    variant="ghost"
-                                    size="sm"
-                                    value={
-                                      role === "admin"
-                                        ? "admin"
-                                        : role === "superadmin"
-                                        ? "superadmin"
-                                        : role === "editor"
-                                        ? "editor"
-                                        : ""
-                                    }
-                                    color={
-                                      role === "editor"
-                                        ? "green"
-                                        : role === "admin"
-                                        ? "silver"
-                                        : role === "superadmin"
-                                        ? "gold"
-                                        : userpackage === "diamond"
-                                    }
-                                  />
-                                </div>
-                              </td>
-                              <td className={classes}>
-                                <Typography
-                                  variant="small"
-                                  color="blue-gray"
-                                  className="font-normal"
-                                >
-                                  {createdAt.split("T")[0]}
-                                </Typography>
-                              </td>
+      <AddAdminDialog
+        isOpen={isAddDialogOpen}
+        onClose={() => setIsAddDialogOpen(false)}
+        onSubmit={handleAddAdmin}
+      />
 
-                              {CurrentUser &&
-                              CurrentUser.data.olduser.role === "superadmin" &&
-                              role !== "superadmin" ? (
-                                <td className={classes}>
-                                  <Tooltip content={`Edit User ${role}`}>
-                                    <IconButton
-                                      variant="text"
-                                      onClick={() => {
-                                        let data = {
-                                          userdp,
-                                          fullname,
-                                          email,
-                                          role,
-                                          createdAt,
-                                          _id,
-                                        };
-                                        setNewAdmin(data);
-                                        handleOpen2();
-                                      }}
-                                    >
-                                      <PencilIcon className="h-4 w-4" />
-                                    </IconButton>
-                                  </Tooltip>
-                                </td>
-                              ) : CurrentUser &&
-                                CurrentUser.data.olduser.role === "admin" &&
-                                role !== "superadmin" &&
-                                role !== "admin" ? (
-                                <td className={classes}>
-                                   <Tooltip content={`Edit User ${role}`}>
-                                    <IconButton
-                                      variant="text"
-                                      onClick={() => {
-                                        let data = {
-                                          userdp,
-                                          fullname,
-                                          email,
-                                          role,
-                                          createdAt,
-                                          _id,
-                                        };
-                                        setNewAdmin(data);
-                                        handleOpen2();
-                                      }}
-                                    >
-                                      <PencilIcon className="h-4 w-4" />
-                                    </IconButton>
-                                  </Tooltip>
-                                </td>
-                              ) : (
-                                <></>
-                              )}
-                              {CurrentUser &&
-                              CurrentUser.data.olduser.role === "superadmin" &&
-                              role !== "superadmin" ? (
-                                <td className={classes}>
-                                  <Tooltip content={`Delete ${role}`}>
-                                    <IconButton
-                                      variant="text"
-                                      onClick={() => {
-                                        DeleteUser(role, _id);
-                                      }}
-                                    >
-                                      <MdDeleteForever className="h-6 w-6 text-red-600" />
-                                    </IconButton>
-                                  </Tooltip>
-                                </td>
-                              ) : CurrentUser &&
-                                CurrentUser.data.olduser.role === "admin" &&
-                                role !== "superadmin" &&
-                                role !== "admin" ? (
-                                <td className={classes}>
-                                  <Tooltip content={`Delete ${role}`}>
-                                    <IconButton
-                                      variant="text"
-                                      onClick={() => {
-                                        DeleteUser(role, _id);
-                                      }}
-                                    >
-                                      <MdDeleteForever className="h-6 w-6 text-red-600" />
-                                    </IconButton>
-                                  </Tooltip>
-                                </td>
-                              ) : (
-                                <></>
-                              )}
-                            </tr>
-                          );
-                        }
-                      )}
-                  </>
-                )}
+      <EditAdminDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => setIsEditDialogOpen(false)}
+        onSubmit={handleEditAdmin}
+        admin={selectedAdmin}
+      />
 
-                {CurrentUser && CurrentUser.data.olduser.length === 0 ? (
-                  <tr>
-                    <td colSpan={TABLE_HEAD.length} className="text-center p-4">
-                      No Admin Found.
-                    </td>
-                  </tr>
-                ) : (
-                  <></>
-                )}
-              </tbody>
-            </table>
-          </CardBody>
-          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
-              Page {currentPage} of {totalPages}
-            </Typography>
-            <div className="flex gap-2">
-              <Button
-                variant="outlined"
-                size="sm"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outlined"
-                size="sm"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </Button>
+      <DeleteAdminDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onConfirm={handleDeleteAdmin}
+        admin={selectedAdmin}
+      />
+    </div>
+  );
+}
+
+function AddAdminDialog({ isOpen, onClose, onSubmit }) {
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    password: "",
+    role: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add New Admin</DialogTitle>
+          <DialogDescription>Create a new admin user here.</DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="fullname" className="text-right">
+                Full Name
+              </Label>
+              <Input
+                id="fullname"
+                name="fullname"
+                value={formData.fullname}
+                onChange={handleChange}
+                className="col-span-3"
+              />
             </div>
-            <AddAdminMeMber
-              open={open}
-              handleOpen={handleOpen}
-              CurrentUser={CurrentUser}
-            />
-            <UpdateAdmin
-              open={open2}
-              handleOpen={handleOpen2}
-              CurrentUser={CurrentUser}
-              NewAdmin={NewAdmin}
-            />
-          </CardFooter>
-        </Card>
-      )}
-    </>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                Email
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="password" className="text-right">
+                Password
+              </Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="role" className="text-right">
+                Role
+              </Label>
+              <Select
+                name="role"
+                value={formData.role}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, role: value }))
+                }
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="editor">Editor</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="superadmin">Superadmin</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">Add Admin</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function EditAdminDialog({ isOpen, onClose, onSubmit, admin }) {
+  const [formData, setFormData] = useState({
+    fullname: "",
+    email: "",
+    role: "",
+  });
+
+  useEffect(() => {
+    if (admin) {
+      setFormData({
+        fullname: admin.fullname,
+        email: admin.email,
+        role: admin.role,
+      });
+    }
+  }, [admin]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Admin</DialogTitle>
+          <DialogDescription>
+            Make changes to the admin user here.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="fullname" className="text-right">
+                Full Name
+              </Label>
+              <Input
+                id="fullname"
+                name="fullname"
+                value={formData.fullname}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="email" className="text-right">
+                Email
+              </Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="role" className="text-right">
+                Role
+              </Label>
+              <Select
+                name="role"
+                value={formData.role}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, role: value }))
+                }
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="editor">Editor</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="superadmin">Superadmin</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">Save Changes</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function DeleteAdminDialog({ isOpen, onClose, onConfirm, admin }) {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete Admin</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete this admin? This action cannot be
+            undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="destructive" onClick={onConfirm}>
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

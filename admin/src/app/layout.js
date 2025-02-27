@@ -19,6 +19,7 @@ export default function RootLayout({ children }) {
             <AdminProvider>{children}</AdminProvider>
           </Provider>
         </FileManagerProvider>
+      <script src="./node_modules/preline/dist/preline.js"></script>
       </body>
     </html>
   );

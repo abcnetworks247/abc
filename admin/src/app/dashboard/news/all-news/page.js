@@ -1,34 +1,46 @@
-'use client';
-import Api from '@/utils/Api';
-import Cookies from 'js-cookie';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import Swal from 'sweetalert2';
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import Api from "@/utils/Api";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
-  Button,
-  CardFooter,
-  Checkbox,
-  Option,
-  Select,
   Dialog,
-  DialogHeader,
-  DialogBody,
+  DialogContent,
+  DialogDescription,
   DialogFooter,
-  Typography,
-} from '@material-tailwind/react';
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { AlertCircle, Edit, Trash2 } from "lucide-react";
+
 const Page = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const pathUrl = '/dashboard/news/all-news';
-  const editUrl = '/dashboard/news/edit';
-  const router = useRouter();
-  const AuthToken = Cookies.get('adminToken');
+  const [error, setError] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-
+  const pathUrl = "/dashboard/news/all-news";
+  const editUrl = "/dashboard/news/edit";
+  const router = useRouter();
+  const AuthToken = Cookies.get("adminToken");
 
   const fetchBlogs = async (page, perPage) => {
     Api.get(`admin/blog?page=${page}&perPage=${perPage}`)
@@ -50,220 +62,215 @@ const Page = () => {
   };
 
   useEffect(() => {
-     fetchBlogs(currentPage, 10);
-  }, []);
-
-  useEffect(() => {
-     fetchBlogs(currentPage, 10);
+    fetchBlogs(currentPage, 10);
   }, [currentPage]);
-
-  
 
   const handlePageIncrement = () => {
     if (currentPage < totalPages) {
-        setCurrentPage((prev) => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
-  
-  }
+  };
 
   const handlePageDecrement = () => {
     if (currentPage > 1) {
-       setCurrentPage((prev) => prev - 1);
+      setCurrentPage((prev) => prev - 1);
     }
-   }
-
-  const deleteBlog = (id) => {
-    Api.delete(`admin/blog/delete`, {
-      data: {
-        _id: id,
-      },
-
-      headers: {
-        Authorization: `Bearer ${String(AuthToken)}`,
-      },
-    })
-      .then((res) => {
-        console.log(res, data);
-        router.reload();
-      })
-      .catch((err) => {
-        console.log('cant delete', err);
-      });
   };
 
-  async function Delete(id) {
-    Swal.fire({
-      title: `Are you sure you want to delete this `,
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Delete!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // make a delete request to the server and if it is successful then show the alert and reload the page else show the error alert
-        Api.delete(`admin/blog/delete`, {
-          data: { id },
-          headers: {
-            Authorization: `Bearer ${String(AuthToken)}`,
-            'Content-Type': 'application/json',
-          },
-        })
-          .then((res) => {
-            if (res.status >= 200 && res.status <= 300) {
-              Swal.fire({
-                title: 'Post Deleted!',
-                text: `${res.data.message}`,
-                icon: 'success',
-                timer: 2000,
-              });
-              console.log(res.statusText, res.status, res.data);
-              // reload the page
-              window.location.reload();
-            }
-          })
-          .catch((err) => {
-            console.log('cant delete', err);
-            console.log(id);
+  const handleDeleteClick = (id) => {
+    setItemToDelete(id);
+    setDeleteDialogOpen(true);
+  };
 
-            Swal.fire({
-              title: 'Post Not Deleted!',
-              text: 'Post Not Deleted. Error occurred during the request.',
-              icon: 'error',
-            });
-          });
+  const confirmDelete = async () => {
+    if (!itemToDelete) return;
+
+    setIsDeleting(true);
+
+    try {
+      const res = await Api.delete(`admin/blog/delete`, {
+        data: { id: itemToDelete },
+        headers: {
+          Authorization: `Bearer ${String(AuthToken)}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.status >= 200 && res.status < 300) {
+        // Refresh the data
+        fetchBlogs(currentPage, 10);
+        setDeleteDialogOpen(false);
+        setItemToDelete(null);
       }
-    });
-  }
+    } catch (err) {
+      console.error("Error deleting blog:", err);
+      setError("Failed to delete the post. Please try again.");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   if (error) {
     return (
-      // create a professinal error page
-      <div className=' flex flex-col items-center justify-center gap-3 h-[80svh]'>
-        <h1 className='text-3xl font-bold'>{error}</h1>
+      <div className="flex flex-col items-center justify-center gap-4 h-[80vh]">
+        <AlertCircle className="h-16 w-16 text-destructive" />
+        <h1 className="text-3xl font-bold text-destructive">{error}</h1>
+        <Button onClick={() => fetchBlogs(currentPage, 10)}>Try Again</Button>
       </div>
     );
   }
 
   return (
-    <main className="px-5 mt-10">
-      <h1 className="ml-10 text-3xl font-bold">All News</h1>
-      <br />
+    <main className="container mx-auto px-4 py-4">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-xl font-bold">All News</h1>
+        <Button onClick={() => router.push("/dashboard/news/create-news")}>
+          Add New Post
+        </Button>
+      </div>
+
+      <Separator className="mb-8" />
+
       {loading ? (
-        <div className="flex items-center justify-center h-[70svh] lg:h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
+        <div className="space-y-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="overflow-hidden">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                <Skeleton className="h-[250px] w-full rounded-lg" />
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <div className="space-x-2">
+                      <Skeleton className="h-9 w-16 inline-block" />
+                      <Skeleton className="h-9 w-16 inline-block" />
+                    </div>
+                    <Skeleton className="h-5 w-32" />
+                  </div>
+                  <Skeleton className="h-8 w-3/4" />
+                  <Skeleton className="h-20 w-full" />
+                </div>
+              </div>
+            </Card>
+          ))}
         </div>
       ) : (
-        <div className="">
+        <div className="space-y-6">
           {news.map((item) => (
-            <article
-              key={item._id}
-              className="p-4 m-3 bg-white border border-gray-100 shadow-lg rounded-xl md:p-7 sm:p-6 lg:p-2"
-            >
-              <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 md:grid-cols-2">
-                <div className="lg:col-span-1 md:col-span-1">
-                  <div className="rounded-lg overflow-hidden">
+            <Card key={item._id} className="overflow-hidden">
+              <CardContent className="p-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+                  <div className="overflow-hidden rounded-lg">
                     <Link href={`${pathUrl}/${item._id}`}>
                       <img
-                        src={item.blogimage}
-                        alt="random image from unsplash"
-                        className="object-cover object-center w-full h-60 md:h-48 lg:h-[250px] "
+                        src={item.blogimage || "/placeholder.svg"}
+                        alt={item.title}
+                        className="object-cover object-center w-full h-[250px] transition-transform hover:scale-105"
                       />
                     </Link>
                   </div>
-                </div>
-
-                <div className="lg:col-span-1 md:col-span-1 flex flex-col gap-5 lg:items-start lg:justify-center">
-                  <div className="flex justify-between items-center w-full lg:pr-8">
-                    <div>
-                      <button
-                        onClick={() => {
-                          router.push(`${editUrl}/${item._id}`);
-                        }}
-                        className="rounded border border-indigo-500 bg-indigo-500 px-3 py-1.5 text-xs md:text-sm font-medium mr-1 text-white"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => {
-                          let id = item._id;
-                          Delete(id);
-                        }}
-                        className="rounded border border-red-500 bg-red-500 px-3 py-1.5 text-xs md:text-sm font-medium ml-1 text-white"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                    <p className="text-xs md:text-sm text-gray-500">
-                      {item.createdAt.split("T")[0]}{" "}
-                      {item.createdAt.split("T")[1].split(".")[0].slice(0, 5)}
-                    </p>
-                  </div>
 
                   <div className="flex flex-col justify-between">
-                    <h3 className="mt-4 text-lg md:text-xl font-medium">
-                      <Link
-                        href={`${pathUrl}/${item._id}`}
-                        className="hover:underline line-clamp-2 text-xl capitalize"
-                      >
-                        {item.title}
-                      </Link>
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-700">
-                      {item.shortdescription}
-                    </p>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <div className="space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              router.push(`${editUrl}/${item.slug}`)
+                            }
+                          >
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDeleteClick(item.slug)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete
+                          </Button>
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {new Date(item.createdAt).toLocaleDateString()} at{" "}
+                          {new Date(item.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h3 className="text-xl font-medium line-clamp-2 capitalize">
+                          <Link
+                            href={`${pathUrl}/${item._id}`}
+                            className="hover:underline"
+                          >
+                            {item.title}
+                          </Link>
+                        </h3>
+                        <p className="mt-2 text-muted-foreground line-clamp-3">
+                          {item.shortdescription}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
+              </CardContent>
+            </Card>
           ))}
-          <CardFooter className="flex items-center justify-between p-4 border-t border-blue-gray-50">
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
-              {`Page ${currentPage} of ${totalPages}`}
-            </Typography>
-            <div className="flex gap-2">
-              <Button
-                variant="outlined"
-                size="sm"
-                onClick={()=>handlePageDecrement()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outlined"
-                size="sm"
-                onClick={() =>handlePageIncrement()}
-              >
-                Next
-              </Button>
-            </div>
-          </CardFooter>
+
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={handlePageDecrement}
+                  disabled={currentPage <= 1}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <span className="text-sm">
+                  Page {currentPage} of {totalPages}
+                </span>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  onClick={handlePageIncrement}
+                  disabled={currentPage >= totalPages}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       )}
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this post? This action cannot be
+              undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={confirmDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 };
