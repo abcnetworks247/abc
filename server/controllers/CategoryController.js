@@ -150,6 +150,101 @@ const DeleteNewsType = async (req, res) => {
   }
 };
 
+// const UpdateNewsTypePositions = async (req, res) => {
+//   try {
+//     const { ids } = req.body;
+//     const { user } = req;
+
+//     console.log("Received IDs in order:", ids);
+
+//     if (!user) throw new NotFoundError("User not found");
+//     if (!["superadmin", "admin", "editor"].includes(user.role)) {
+//       throw new UnAuthorizedError("You are not authorized to update positions");
+//     }
+//     if (!Array.isArray(ids) || ids.length === 0) {
+//       throw new ValidationError("Array of valid IDs is required");
+//     }
+
+//     // Assign temporary unique values instead of null
+//     for (let i = 0; i < ids.length; i++) {
+//       await NewsType.findByIdAndUpdate(ids[i], { position: i + 1000 });
+//     }
+
+//     // Now assign final positions
+//     for (let i = 0; i < ids.length; i++) {
+//       await NewsType.findByIdAndUpdate(ids[i], { position: i + 1 });
+//     }
+
+//     const updatedNewsTypes = await NewsType.find().sort("position");
+
+//     return res.status(StatusCodes.OK).json({
+//       message: "News Type positions updated successfully",
+//       data: updatedNewsTypes,
+//     });
+//   } catch (error) {
+//     console.error("Error updating news type positions:", error);
+//     return res
+//       .status(StatusCodes.INTERNAL_SERVER_ERROR)
+//       .json({ error: error.message });
+//   }
+// };
+
+const UpdateNewsTypePositions = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    const { user } = req;
+
+    console.log("Received IDs in order:", ids);
+
+    if (!user) throw new NotFoundError("User not found");
+    if (!["superadmin", "admin", "editor"].includes(user.role)) {
+      throw new UnAuthorizedError("You are not authorized to update positions");
+    }
+    if (!Array.isArray(ids) || ids.length === 0) {
+      throw new ValidationError("Array of valid IDs is required");
+    }
+
+    const bulkOperations = [];
+
+    // Step 1: Assign temporary unique values (e.g., 1000+)
+    ids.forEach((id, index) => {
+      bulkOperations.push({
+        updateOne: {
+          filter: { _id: id },
+          update: { $set: { position: index + 1000 } },
+        },
+      });
+    });
+
+    // Execute bulk update for temporary values
+    await NewsType.bulkWrite(bulkOperations);
+
+    // Step 2: Assign final positions based on received order
+    const finalOperations = ids.map((id, index) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $set: { position: index + 1 } },
+      },
+    }));
+
+    // Execute bulk update for final positions
+    await NewsType.bulkWrite(finalOperations);
+
+    const updatedNewsTypes = await NewsType.find().sort("position");
+
+    return res.status(StatusCodes.OK).json({
+      message: "News Type positions updated successfully",
+      data: updatedNewsTypes,
+    });
+  } catch (error) {
+    console.error("Error updating news type positions:", error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
+  }
+};
+
+
 const CreateNewsCat = async (req, res) => {
   const { name } = req.body;
   const { user } = req;
@@ -460,4 +555,5 @@ module.exports = {
   ReadAllProductCat,
   UpdateProductCat,
   DeleteProductCat,
+  UpdateNewsTypePositions,
 };

@@ -5,6 +5,7 @@ const {
   ReadAllNewsType,
   UpdateNewsType,
   DeleteNewsType,
+  UpdateNewsTypePositions,
   CreateNewsCat,
   ReadAllNewsCat,
   UpdateNewsCat,
@@ -17,6 +18,7 @@ const {
 
 // News Type Routes
 router.route("/news/type").post(authChecker, CreateNewsType);
+router.route("/news/type/reorder").put(authChecker, UpdateNewsTypePositions);
 router.route("/news/type").get(ReadAllNewsType);
 router.route("/news/type").patch(authChecker, UpdateNewsType);
 router.route("/news/type").delete(authChecker, DeleteNewsType);
