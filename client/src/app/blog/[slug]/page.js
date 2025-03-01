@@ -17,7 +17,8 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import Nav1 from "@/components/navbar/Nav1";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
+import ShareModal from "@/components/ShareModal";
 
 export default function BlogPost() {
   const [blog, setBlog] = useState(null);
@@ -228,132 +229,7 @@ function BlogContent({ blog, shareModalOpen, setShareModalOpen, slug }) {
   );
 }
 
-function ShareModal({ isOpen, onClose, url, title, image }) {
-  if (!isOpen) return null;
 
-  const shareData = {
-    title: title,
-    url: url,
-  };
-
-  const shareLinks = [
-    {
-      name: "Facebook",
-      url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        url
-      )}`,
-      icon: "📘",
-    },
-    {
-      name: "Twitter",
-      url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
-        url
-      )}&text=${encodeURIComponent(title)}`,
-      icon: "🐦",
-    },
-    {
-      name: "LinkedIn",
-      url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-        url
-      )}`,
-      icon: "💼",
-    },
-    {
-      name: "WhatsApp",
-      url: `https://wa.me/?text=${encodeURIComponent(title + " " + url)}`,
-      icon: "📱",
-    },
-  ];
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(url).then(() => {
-      alert("Link copied to clipboard!");
-    });
-  };
-
-  const nativeShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (err) {
-        console.error("Error sharing:", err);
-      }
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg max-w-md w-full p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Share this article</h3>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div className="mb-4">
-          <div className="flex items-center space-x-2 mb-2">
-            <div className="w-16 h-16 bg-gray-200 rounded overflow-hidden">
-              {image && (
-                <Image
-                  src={image || "/placeholder.svg"}
-                  alt={title}
-                  width={64}
-                  height={64}
-                  className="object-cover w-full h-full"
-                />
-              )}
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium line-clamp-2">{title}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-4 gap-3 mb-4">
-          {shareLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-col items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
-            >
-              <span className="text-2xl mb-1">{link.icon}</span>
-              <span className="text-xs">{link.name}</span>
-            </a>
-          ))}
-        </div>
-
-        <div className="flex flex-col space-y-3">
-          <div className="flex rounded-md overflow-hidden border">
-            <input
-              type="text"
-              value={url}
-              readOnly
-              className="flex-1 px-3 py-2 text-sm focus:outline-none"
-            />
-            <button
-              onClick={copyToClipboard}
-              className="bg-gray-100 px-3 text-sm font-medium hover:bg-gray-200"
-            >
-              Copy
-            </button>
-          </div>
-
-          {navigator.share && (
-            <Button onClick={nativeShare} className="w-full">
-              Share via device
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function NotFound() {
   return (
