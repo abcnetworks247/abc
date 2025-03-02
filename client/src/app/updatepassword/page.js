@@ -1,407 +1,279 @@
 "use client";
+
 import { useState } from "react";
 import Link from "next/link";
-import Api from "@/utils/Api";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "sonner";
+import { Eye, EyeOff, Lock } from "lucide-react";
+import Logo from "@/resources/assets/image/AbcstudioNo.png";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import Api from "@/utils/Api";
 import { PASSWORD_REGEX } from "@/utils/regex";
 import HocUpdatePassword from "@/utils/HocUpdatePassword";
-import Logo from "@/resources/assets/image/AbcstudioNo.png";
-import Image from "next/image";
 
-function Page() {
-  // router for navigating to login page after password update
+function UpdatePasswordPage() {
   const router = useRouter();
-  // using usesearcparams to get the search params
   const params = useSearchParams();
-
-  // using paams.get to get the reset query on the search params
   const reset = params.get("reset");
-  //  initial state for update password
-  const [password, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmpassword] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  /**
-   *
-   * @param {object} e - the event object
-   * @param {string} e.name - the name of the input
-   * @param {string} e.value - the value of the input
-   */
-
-  //Define state for universal error
-
-  const [universalError, setUniversalError] = useState("");
-
-  // Define initial validation state
-  const [isValidData, setIsValidData] = useState(true);
-
-  // Define initial form error state
-
-  const [errorMessages, setErrorMessages] = useState({
-    confirmPassword: "",
+  const [passwordData, setPasswordData] = useState({
     password: "",
+    confirmPassword: "",
+  });
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessages, setErrorMessages] = useState({
+    password: "",
+    confirmPassword: "",
   });
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible((prevVisible) => !prevVisible);
+  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+
+  const validateField = (name, value) => {
+    if (name === "password") {
+      if (!PASSWORD_REGEX.test(value)) {
+        setErrorMessages((prev) => ({
+          ...prev,
+          password:
+            "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)",
+        }));
+        return false;
+      }
+    } else if (name === "confirmPassword") {
+      if (value !== passwordData.password) {
+        setErrorMessages((prev) => ({
+          ...prev,
+          confirmPassword: "Passwords do not match",
+        }));
+        return false;
+      }
+    }
+    setErrorMessages((prev) => ({ ...prev, [name]: "" }));
+    return true;
   };
 
-  /**
-   *
-   * @param {Object} fieldName  - for checkking if the field name meet up the chaeteria required
-   * @param {Object} regex - for checkking if the regex meet up the chaeteria required
-   * @param {Object} value - the value for regex test
-   * @param {Error} errorMessage -to indeciate the error
-   */
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
+    validateField(name, value);
+  };
 
-  function signUpValidate(fieldName, regex, value, errorMessage) {
-    if (!regex.test(value)) {
-      setUniversalError("");
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        [fieldName]: errorMessage,
-      }));
-      setIsValidData(false);
-    } else {
-      setErrorMessages((prevErrors) => ({
-        ...prevErrors,
-        [fieldName]: "",
-      }));
-      setIsValidData(true);
-
-      setUniversalError("");
-    }
-  }
-
-  // Define Variable for allfield valid
-
-  const allFieldsValid = Object.keys(errorMessages).every(
-    (field) => !errorMessages[field]
-  );
-
-  const HandleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isValidData) {
-      toast.error("please fill in all the fields correctly", {
-        position: toast.POSITION.TOP_LEFT,
-      });
+
+    const isPasswordValid = validateField("password", passwordData.password);
+    const isConfirmPasswordValid = validateField(
+      "confirmPassword",
+      passwordData.confirmPassword
+    );
+
+    if (!isPasswordValid || !isConfirmPasswordValid) {
+      toast.error("Please correct the errors in the form");
       return;
     }
 
-    if (password !== confirmPassword) {
-      toast.error("passwords do not match", {
-        position: toast.POSITION.TOP_LEFT,
-      });
-      return;
-    }
-    const id = toast.loading("changingpassword..", {
-      position: toast.POSITION.TOP_LEFT,
-    });
-    console.log({ reset, password, confirmPassword });
+    setIsLoading(true);
+    const toastId = toast.loading("Updating password...");
+
     try {
-      const data = await Api.post("client/auth/account/updatepassword", {
-        reset,
-        password,
-        confirmPassword,
-      });
-      console.log("data status", data.status);
-      if (data.status !== 200) {
-        toast.update(id, {
-          render: `error on password update`,
-          type: "error",
-          isLoading: false,
-        });
+      const { data, status } = await Api.post(
+        "client/auth/account/updatepassword",
+        {
+          reset,
+          password: passwordData.password,
+          confirmPassword: passwordData.confirmPassword,
+        }
+      );
+
+      if (status === 200) {
+        toast.success(data.message, { id: toastId });
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      } else {
+        throw new Error(data.error || "Failed to update password");
       }
-      console.log("post successful", data.data.message);
-      setTimeout(() => {
-        toast.dismiss(id);
-      }, 2000);
-      toast.update(id, {
-        render: `${data.data.message}`,
-        type: "success",
-        isLoading: false,
-      });
-
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
     } catch (error) {
-      const suberrormsg = toast.update(id, {
-        render: `${error.response.data.error}`,
-        type: "error",
-        isLoading: false,
+      toast.error(error.response?.data?.error || "Failed to update password", {
+        id: toastId,
       });
-      setTimeout(() => {
-        toast.dismiss(suberrormsg);
-      }, 2000);
-
-      console.log(error);
+      console.error("Password update error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      
-      <div className="flex justify-center flex-1 h-screen max-w-full sm:rounded-lg">
-        <div className="flex flex-col items-center justify-center w-full h-screen p-6 lg:w-1/2 xl:w-5/12 lg:flex-none sm:p-12">
-          <div className="w-[100%] flex flex-col items-center">
-            <div className="text-center">
-              <Image
-                src={Logo}
-                height={50}
-                width={50}
-                draggable={false}
-                className="object-contain h-[80px] w-full"
-              />
-              <h1 className="mb-2 text-2xl font-extrabold text-blue-900 xl:text-4xl">
-                Update Password
-              </h1>
-              <p className="text-[12px] text-gray-500">
-                Enter your New Password
-              </p>
-            </div>
-            <div className="flex-1 w-full mt-8">
-              <form
-                className="flex flex-col max-w-xs gap-4 mx-auto"
-                onSubmit={HandleSubmit}
-              >
-                <div
-                  className={`flex items-center justify-between py-3 px-5 h-10 bg-gray-100 border border-gray-200 rounded-lg  ${
-                    errorMessages.password && password && "border-red-500"
-                  }`}
-                >
-                  <input
-                    className={`w-full  placeholder-gray-500 text-sm focus:outline-none bg-transparent`}
-                    type={passwordVisible ? "text" : "password"}
-                    name="password"
-                    placeholder="Enter password"
-                    onChange={(e) => {
-                      setNewPassword(e.target.value);
-                      signUpValidate(
-                        "password",
-                        PASSWORD_REGEX,
-                        e.target.value,
-                        "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
-                      );
-                    }}
-                    required
-                    value={password}
-                  />
-                  <div onClick={togglePasswordVisibility}>
-                    {passwordVisible ? (
-                      <svg
-                        className="w-5 h-5 cursor-pointer"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        stroke="#737373"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M12 5C5.63636 5 2 12 2 12C2 12 5.63636 19 12 19C18.3636 19 22 12 22 12C22 12 18.3636 5 12 5Z"
-                            stroke="#737373"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />{" "}
-                          <path
-                            d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
-                            stroke="#737373"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />{" "}
-                        </g>
-                      </svg>
-                    ) : (
-                      <svg
-                        className="w-5 h-5 cursor-pointer"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        stroke="#737373"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M20 14.8335C21.3082 13.3317 22 12 22 12C22 12 18.3636 5 12 5C11.6588 5 11.3254 5.02013 11 5.05822C10.6578 5.09828 10.3244 5.15822 10 5.23552M12 9C12.3506 9 12.6872 9.06015 13 9.17071C13.8524 9.47199 14.528 10.1476 14.8293 11C14.9398 11.3128 15 11.6494 15 12M3 3L21 21M12 15C11.6494 15 11.3128 14.9398 11 14.8293C10.1476 14.528 9.47198 13.8524 9.1707 13C9.11386 12.8392 9.07034 12.6721 9.04147 12.5M4.14701 9C3.83877 9.34451 3.56234 9.68241 3.31864 10C2.45286 11.1282 2 12 2 12C2 12 5.63636 19 12 19C12.3412 19 12.6746 18.9799 13 18.9418"
-                            stroke="#737373"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />{" "}
-                        </g>
-                      </svg>
-                    )}
-                  </div>
-                </div>
-
-                {errorMessages.password && password && (
-                  <span className="text-red-500 text-[13px]">
-                    {errorMessages.password}
-                  </span>
-                )}
-
-                <div
-                  className={`flex items-center justify-between py-3 px-5 h-10 bg-gray-100 border border-gray-200 rounded-lg  ${
-                    errorMessages.confirmPassword &&
-                    confirmPassword &&
-                    "border-red-500"
-                  }`}
-                >
-                  <input
-                    className={`w-full h-full placeholder-gray-500 bg-transparent text-sm focus:outline-none `}
-                    type={passwordVisible ? "text" : "password"}
-                    name="password"
-                    placeholder="Enter password"
-                    onChange={(e) => {
-                      setConfirmpassword(e.target.value);
-                      signUpValidate(
-                        "password",
-                        PASSWORD_REGEX,
-                        e.target.value,
-                        "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)"
-                      );
-                    }}
-                    required
-                    value={confirmPassword}
-                  />
-                  <div onClick={togglePasswordVisibility}>
-                    {passwordVisible ? (
-                      <svg
-                        className="w-5 h-5 cursor-pointer"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        stroke="#737373"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M12 5C5.63636 5 2 12 2 12C2 12 5.63636 19 12 19C18.3636 19 22 12 22 12C22 12 18.3636 5 12 5Z"
-                            stroke="#737373"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />{" "}
-                          <path
-                            d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
-                            stroke="#737373"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />{" "}
-                        </g>
-                      </svg>
-                    ) : (
-                      <svg
-                        className="w-5 h-5 cursor-pointer"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        stroke="#737373"
-                      >
-                        <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                        <g
-                          id="SVGRepo_tracerCarrier"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <g id="SVGRepo_iconCarrier">
-                          {" "}
-                          <path
-                            d="M20 14.8335C21.3082 13.3317 22 12 22 12C22 12 18.3636 5 12 5C11.6588 5 11.3254 5.02013 11 5.05822C10.6578 5.09828 10.3244 5.15822 10 5.23552M12 9C12.3506 9 12.6872 9.06015 13 9.17071C13.8524 9.47199 14.528 10.1476 14.8293 11C14.9398 11.3128 15 11.6494 15 12M3 3L21 21M12 15C11.6494 15 11.3128 14.9398 11 14.8293C10.1476 14.528 9.47198 13.8524 9.1707 13C9.11386 12.8392 9.07034 12.6721 9.04147 12.5M4.14701 9C3.83877 9.34451 3.56234 9.68241 3.31864 10C2.45286 11.1282 2 12 2 12C2 12 5.63636 19 12 19C12.3412 19 12.6746 18.9799 13 18.9418"
-                            stroke="#737373"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />{" "}
-                        </g>
-                      </svg>
-                    )}
-                  </div>
-                </div>
-
-                {errorMessages.confirmPassword && confirmPassword && (
-                  <span className="text-red-500 text-[13px]">
-                    {errorMessages.confirmPassword}
-                  </span>
-                )}
-
-                <button
-                  className="flex items-center justify-center w-full py-3 mt-3 font-semibold tracking-wide text-gray-100 transition-all duration-300 ease-in-out bg-blue-700 rounded-lg hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
-                  onClick={HandleSubmit}
-                >
-                  <svg
-                    className="w-6 h-6 -ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="8.5" cy="7" r="4" />
-                    <path d="M20 8v6M23 11h-6" />
-                  </svg>
-                  <span className="ml-3">Update Password</span>
-                </button>
-                <p className="mt-6 text-xs text-center text-gray-600">
-                  remeber your password?{" "}
-                  <Link href="/login">
-                    <span className="font-semibold text-blue-900">login</span>
-                  </Link>
-                </p>
-              </form>
-            </div>
+    <div className="flex min-h-screen bg-gray-50">
+      <div className="flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        <div className="mx-auto w-full max-w-sm lg:w-96">
+          <div className="flex flex-col items-center">
+            <Image
+              src={Logo || "/placeholder.svg"}
+              height={40}
+              width={40}
+              alt="Your Company"
+              className="h-14 w-auto"
+            />
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+              Update Password
+            </h2>
           </div>
+
+          <Card className="mt-8">
+            <CardHeader>
+              <p className="text-sm text-gray-600">
+                Enter your new password to update your account
+              </p>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <Label
+                    htmlFor="password"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    New Password
+                  </Label>
+                  <div className="relative mt-1">
+                    <Input
+                      id="password"
+                      name="password"
+                      type={passwordVisible ? "text" : "password"}
+                      autoComplete="new-password"
+                      required
+                      className={`pr-10 ${
+                        errorMessages.password ? "border-red-500" : ""
+                      }`}
+                      value={passwordData.password}
+                      onChange={handleInputChange}
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {passwordVisible ? (
+                        <EyeOff className="h-5 w-5 text-gray-400" />
+                      ) : (
+                        <Eye className="h-5 w-5 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
+                  {errorMessages.password && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {errorMessages.password}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="confirmPassword"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Confirm New Password
+                  </Label>
+                  <div className="relative mt-1">
+                    <Input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={passwordVisible ? "text" : "password"}
+                      autoComplete="new-password"
+                      required
+                      className={`pr-10 ${
+                        errorMessages.confirmPassword ? "border-red-500" : ""
+                      }`}
+                      value={passwordData.confirmPassword}
+                      onChange={handleInputChange}
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {passwordVisible ? (
+                        <EyeOff className="h-5 w-5 text-gray-400" />
+                      ) : (
+                        <Eye className="h-5 w-5 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
+                  {errorMessages.confirmPassword && (
+                    <p className="mt-2 text-sm text-red-600">
+                      {errorMessages.confirmPassword}
+                    </p>
+                  )}
+                </div>
+
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <span className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Updating...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center">
+                      <Lock className="mr-2 h-5 w-5" />
+                      Update Password
+                    </span>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
+            <CardFooter>
+              <p className="text-center text-sm text-gray-600">
+                Remember your password?{" "}
+                <Link
+                  href="/login"
+                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </CardFooter>
+          </Card>
         </div>
-        <div className="flex-1 bg-gradient-to-t from-[#00045E] via-[#9D3615] to-[#00045E] w-fit h-screen text-center hidden md:flex">
-          <div
-            className="w-full h-screen bg-center bg-no-repeat bg-contain "
-            style={{
-              backgroundImage: `url("/Login.svg")`,
-            }}
-          ></div>
-        </div>
+      </div>
+      <div className="relative hidden w-0 flex-1 lg:block bg-blue-900">
+        <div
+          className="w-full h-screen bg-center bg-no-repeat bg-contain"
+          style={{
+            backgroundImage: `url("/Login.svg")`,
+          }}
+        ></div>
       </div>
     </div>
   );
 }
 
-const updatePassword = HocUpdatePassword(Page);
-
-export default updatePassword;
+export default HocUpdatePassword(UpdatePasswordPage);
