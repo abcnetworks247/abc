@@ -106,13 +106,14 @@ AuthSchema.methods.checkPassword = async function (userPassword) {
 };
 
 
-
-AuthSchema.methods.newHashPassword = async function (password) {
+AuthSchema.methods.newHashPassword = async (password) => {
   try {
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, salt);
     return hashedPassword;
-  } catch (error) {}
+  } catch (error) {
+    throw error; // Re-throw the error to be handled by the caller
+  }
 };
 
 module.exports = mongoose.model("Client", AuthSchema);

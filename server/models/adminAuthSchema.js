@@ -63,10 +63,12 @@ AdminSchema.methods.checkPassword = async function (password) {
 
 AdminSchema.methods.newHashPassword = async function (password) {
   try {
-    // const salt = await bcrypt.genSalt(10);
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     return hashedPassword;
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    throw new Error("Failed to hash password");
+  }
 };
 
 module.exports = mongoose.model('Admin', AdminSchema);

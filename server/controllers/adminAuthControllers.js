@@ -24,6 +24,8 @@ const {
 } = require("../errors/index");
 
 const Client = require("../models/clientAuthSchema");
+const Subscription = require("../models/subscriptionSchema");
+const Donation = require("../models/donationSchema");
 
 const maxAgeInMilliseconds = 7 * 24 * 60 * 60 * 1000;
 
@@ -51,7 +53,7 @@ const signUp = async (req, res) => {
 
     console.log("this is a valid user ", value);
 
-    const newUser = await Admin.save(value);
+    const newUser = await Admin.create(value);
 
     console.log(newUser);
 
@@ -144,6 +146,8 @@ const singleAdmin = async (req, res) => {
 
 const userRecovery = async (req, res) => {
   const { email } = req.body;
+
+  console.log("email", email);
 
   try {
     const userexist = await Admin.findOne({ email });
@@ -675,6 +679,37 @@ const adminRoleUpdateAdmin = async (req, res) => {
   }
 };
 
+const dashboardData = async (req, res) => {
+  try {
+    // Check if user is authenticated
+    const user = req.user;
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    console.log("API hit: Fetching dashboard data");
+
+    // Count documents
+    const allBlogs = await Blog.countDocuments();
+    const allClients = await Client.countDocuments();
+    const allDonations = await Donation.countDocuments();
+    const allSubscriptions = await Subscription.countDocuments();
+
+    // Return response
+    res.status(200).json({
+      blogs: allBlogs,
+      clients: allClients,
+      donations: allDonations,
+      subscriptions: allSubscriptions,
+    });
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
 module.exports = {
   signUp,
   signIn,
@@ -692,4 +727,5 @@ module.exports = {
   adminDeleteClient,
   adminDeleteAdmin,
   adminRoleUpdateAdmin,
+  dashboardData,
 };
