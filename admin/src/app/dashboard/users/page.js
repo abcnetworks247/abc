@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import {
   Search,
   UserPlus,
@@ -13,6 +13,7 @@ import {
   Loader2,
   Filter,
   RefreshCw,
+  Edit,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -54,10 +55,27 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { AddMember } from "@/components/User/AddUser";
 import UseUserlist from "@/hooks/UseUserlist";
 import Api from "@/utils/Api";
+import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX } from "@/utils/regex";
 
 const TABS = [
   {
@@ -88,11 +106,17 @@ const TABS = [
     label: "Titanium",
     value: "titanium",
   },
+  {
+    label: "Admins",
+    value: "admin",
+  },
 ];
 
 const TABLE_HEAD = ["Member", "Package", "Creation Date", "Actions"];
+const ROLES = ["editor", "admin", "superadmin"];
 
 export default function MembersPage() {
+  // Member management state
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -100,9 +124,41 @@ export default function MembersPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
+  // Admin management state
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [updateAdminOpen, setUpdateAdminOpen] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // Add Admin form state
+  const [addAdminFormData, setAddAdminFormData] = useState({
+    role: "",
+    fullname: "",
+    email: "",
+    password: "",
+  });
+  const [addAdminErrorMessages, setAddAdminErrorMessages] = useState({
+    email: "",
+    fullname: "",
+    password: "",
+    role: "",
+  });
+  const [addAdminIsValidData, setAddAdminIsValidData] = useState(true);
+
+  // Update Admin form state
+  const [updateAdminFormData, setUpdateAdminFormData] = useState({
+    role: "",
+  });
+  const [updateAdminErrorMessages, setUpdateAdminErrorMessages] = useState({
+    role: "",
+  });
+  const [updateAdminIsValidData, setUpdateAdminIsValidData] = useState(true);
+
   const { users, isLoading, isError, isSuccess, refetch } = UseUserlist();
 
   const handleOpen = () => setOpen(!open);
+  const handleAdminOpen = () => setAdminOpen(!adminOpen);
+  const handleUpdateAdminOpen = () => setUpdateAdminOpen(!updateAdminOpen);
 
   const ITEMS_PER_PAGE = 10;
 
@@ -114,7 +170,9 @@ export default function MembersPage() {
           user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
         const matchesTab =
-          activeTab === "all" || user.userpackage === activeTab;
+          activeTab === "all" ||
+          user.userpackage === activeTab ||
+          (activeTab === "admin" && user.role);
 
         return matchesSearch && matchesTab;
       })
@@ -129,11 +187,207 @@ export default function MembersPage() {
 
   const token = Cookies.get("adminToken");
 
+  // Fetch current user on component mount
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const token = Cookies.get("adminToken");
+        if (token) {
+          const response = await Api.get("admin/auth/me", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (response.status === 200) {
+            setCurrentUser(response.data);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // Validation function for form fields
+  function validateField(fieldName, regex, value, errorMessage, formType) {
+    if (!regex.test(value)) {
+      if (formType === "addAdmin") {
+        setAddAdminErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: errorMessage,
+        }));
+        setAddAdminIsValidData(false);
+      } else {
+        setUpdateAdminErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: errorMessage,
+        }));
+        setUpdateAdminIsValidData(false);
+      }
+      return false;
+    } else {
+      if (formType === "addAdmin") {
+        setAddAdminErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: "",
+        }));
+        setAddAdminIsValidData(true);
+      } else {
+        setUpdateAdminErrorMessages((prevErrors) => ({
+          ...prevErrors,
+          [fieldName]: "",
+        }));
+        setUpdateAdminIsValidData(true);
+      }
+      return true;
+    }
+  }
+
+  // Handle input change for Add Admin form
+  const handleAddAdminInputChange = (e) => {
+    const { name, value } = e.target;
+    setAddAdminFormData({
+      ...addAdminFormData,
+      [name]: value,
+    });
+
+    if (name === "fullname") {
+      validateField(
+        "fullname",
+        USERNAME_REGEX,
+        value,
+        "Username must start with a letter and may include numbers or underscore(_)",
+        "addAdmin"
+      );
+    } else if (name === "email") {
+      validateField(
+        "email",
+        EMAIL_REGEX,
+        value,
+        "Please enter a valid email address.",
+        "addAdmin"
+      );
+    } else if (name === "password") {
+      validateField(
+        "password",
+        PASSWORD_REGEX,
+        value,
+        "Password must be 8 characters or more with at least one uppercase letter, one lowercase letter, one digit, and one special character (@#$%^&*!)",
+        "addAdmin"
+      );
+    }
+  };
+
+  // Handle role selection for Add Admin form
+  const handleAddAdminRoleChange = (value) => {
+    setAddAdminFormData({
+      ...addAdminFormData,
+      role: value,
+    });
+  };
+
+  // Handle role selection for Update Admin form
+  const handleUpdateAdminRoleChange = (value) => {
+    setUpdateAdminFormData({
+      ...updateAdminFormData,
+      role: value,
+    });
+  };
+
+  // Submit Add Admin form
+  const handleAddAdminSubmit = async (e) => {
+    e.preventDefault();
+
+    const allFieldsValid = Object.keys(addAdminErrorMessages).every(
+      (field) => !addAdminErrorMessages[field]
+    );
+
+    if (!allFieldsValid) {
+      toast.error("Please fill in all the fields correctly");
+      return;
+    }
+
+    if (!addAdminFormData.role) {
+      setAddAdminErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        role: "Please select a role.",
+      }));
+      return;
+    }
+
+    setAdminOpen(false);
+
+    toast.promise(
+      async () => {
+        const response = await Api.post("admin/auth/signup", addAdminFormData);
+
+        if (response.status === 201) {
+          await refetch();
+          return response.data.message;
+        } else {
+          throw new Error(response.data.message || "Error creating admin");
+        }
+      },
+      {
+        loading: "Creating admin...",
+        success: (message) => message || "Admin created successfully",
+        error: (error) => error.message || "Failed to create admin",
+      }
+    );
+  };
+
+  // Submit Update Admin form
+  const handleUpdateAdminSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!updateAdminFormData.role) {
+      setUpdateAdminErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        role: "Please select a role.",
+      }));
+      return;
+    }
+
+    setUpdateAdminOpen(false);
+
+    toast.promise(
+      async () => {
+        const item = {
+          role: updateAdminFormData.role,
+          id: String(selectedAdmin._id),
+        };
+
+        const response = await Api.patch("admin/auth/account/admin", item, {
+          headers: {
+            Authorization: `Bearer ${String(token)}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200) {
+          await refetch();
+          return response.data.message;
+        } else {
+          throw new Error(response.data.message || "Error updating admin");
+        }
+      },
+      {
+        loading: "Updating admin...",
+        success: (message) => message || "Admin updated successfully",
+        error: (error) => error.message || "Failed to update admin",
+      }
+    );
+  };
+
+  // Handle delete user
   function handleDeleteUser(user) {
     setSelectedUser(user);
     setDeleteDialogOpen(true);
   }
 
+  // Confirm delete user
   async function confirmDeleteUser() {
     try {
       const response = await Api.delete("admin/auth/account/client", {
@@ -145,25 +399,35 @@ export default function MembersPage() {
       });
 
       if (response && response.status === 200) {
+        setDeleteDialogOpen(false);
         toast.success("User deleted successfully", {
           description:
             response?.data?.message ||
             "The user has been removed from the system",
         });
-        refetch();
+        await refetch();
       } else {
+        setDeleteDialogOpen(false);
         toast.error("Failed to delete user", {
           description: "An error occurred while deleting the user",
         });
       }
     } catch (error) {
+      setDeleteDialogOpen(false);
       toast.error("Failed to delete user", {
         description:
           error.message || "An error occurred while deleting the user",
       });
-    } finally {
-      setDeleteDialogOpen(false);
     }
+  }
+
+  // Handle update admin
+  function handleUpdateAdmin(admin) {
+    setSelectedAdmin(admin);
+    setUpdateAdminFormData({
+      role: admin.role || "",
+    });
+    setUpdateAdminOpen(true);
   }
 
   // Get badge color based on package type
@@ -188,6 +452,7 @@ export default function MembersPage() {
 
   return (
     <>
+      <Toaster position="top-bottom" />
       <div className="container mx-auto py-6">
         <Card className="border-none shadow-sm">
           <CardHeader className="pb-4">
@@ -198,14 +463,25 @@ export default function MembersPage() {
                   Manage your members and their subscription packages
                 </CardDescription>
               </div>
-              <Button
-                onClick={handleOpen}
-                className="md:w-auto w-full"
-                size="sm"
-              >
-                <UserPlus className="mr-2 h-4 w-4" />
-                Add Member
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={handleOpen} className="md:w-auto" size="sm">
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Add Member
+                </Button>
+                {currentUser &&
+                  (currentUser.data.olduser.role === "admin" ||
+                    currentUser.data.olduser.role === "superadmin") && (
+                    <Button
+                      onClick={handleAdminOpen}
+                      className="md:w-auto"
+                      variant="outline"
+                      size="sm"
+                    >
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Add Admin
+                    </Button>
+                  )}
+              </div>
             </div>
           </CardHeader>
 
@@ -334,16 +610,32 @@ export default function MembersPage() {
                                 <span className="text-sm text-muted-foreground">
                                   {user.email}
                                 </span>
+                                {user.role && (
+                                  <Badge
+                                    variant="outline"
+                                    className="mt-1 w-fit"
+                                  >
+                                    {user.role}
+                                  </Badge>
+                                )}
                               </div>
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge
-                              variant={getPackageBadgeVariant(user.userpackage)}
-                              className="capitalize"
-                            >
-                              {user.userpackage || "basic"}
-                            </Badge>
+                            {user.userpackage ? (
+                              <Badge
+                                variant={getPackageBadgeVariant(
+                                  user.userpackage
+                                )}
+                                className="capitalize"
+                              >
+                                {user.userpackage}
+                              </Badge>
+                            ) : user.role ? (
+                              <Badge variant="secondary">Admin</Badge>
+                            ) : (
+                              <Badge variant="outline">None</Badge>
+                            )}
                           </TableCell>
                           <TableCell>
                             {new Date(user.createdAt).toLocaleDateString(
@@ -369,6 +661,18 @@ export default function MembersPage() {
                               <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
+                                {user.role &&
+                                  currentUser &&
+                                  (currentUser.data.olduser.role === "admin" ||
+                                    currentUser.data.olduser.role ===
+                                      "superadmin") && (
+                                    <DropdownMenuItem
+                                      onClick={() => handleUpdateAdmin(user)}
+                                    >
+                                      <Edit className="h-4 w-4 mr-2" />
+                                      Update Role
+                                    </DropdownMenuItem>
+                                  )}
                                 <DropdownMenuItem
                                   onClick={() => handleDeleteUser(user)}
                                 >
@@ -423,8 +727,201 @@ export default function MembersPage() {
         </Card>
       </div>
 
+      {/* Add Member Dialog (kept as a component) */}
       <AddMember open={open} handleOpen={handleOpen} />
 
+      {/* Add Admin Dialog */}
+      <Dialog open={adminOpen} onOpenChange={setAdminOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Add An Admin</DialogTitle>
+            <DialogDescription>
+              Create a new admin user with specific permissions
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleAddAdminSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullname">Full Name</Label>
+                <Input
+                  id="fullname"
+                  name="fullname"
+                  placeholder="e.g. John Doe"
+                  value={addAdminFormData.fullname}
+                  onChange={handleAddAdminInputChange}
+                  required
+                />
+                {addAdminErrorMessages.fullname &&
+                  addAdminFormData.fullname && (
+                    <p className="text-sm text-destructive">
+                      {addAdminErrorMessages.fullname}
+                    </p>
+                  )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="e.g. john@example.com"
+                  value={addAdminFormData.email}
+                  onChange={handleAddAdminInputChange}
+                  required
+                />
+                {addAdminErrorMessages.email && addAdminFormData.email && (
+                  <p className="text-sm text-destructive">
+                    {addAdminErrorMessages.email}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="role">Role</Label>
+                <Select
+                  value={addAdminFormData.role}
+                  onValueChange={handleAddAdminRoleChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currentUser &&
+                    currentUser.data.olduser.role === "superadmin" ? (
+                      ROLES.map((role) => (
+                        <SelectItem key={role} value={role}>
+                          {role.charAt(0).toUpperCase() + role.slice(1)}
+                        </SelectItem>
+                      ))
+                    ) : currentUser &&
+                      currentUser.data.olduser.role === "admin" ? (
+                      <SelectItem value="editor">Editor</SelectItem>
+                    ) : null}
+                  </SelectContent>
+                </Select>
+                {addAdminErrorMessages.role && (
+                  <p className="text-sm text-destructive">
+                    {addAdminErrorMessages.role}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={addAdminFormData.password}
+                  onChange={handleAddAdminInputChange}
+                  required
+                />
+                {addAdminErrorMessages.password &&
+                  addAdminFormData.password && (
+                    <p className="text-sm text-destructive">
+                      {addAdminErrorMessages.password}
+                    </p>
+                  )}
+              </div>
+            </div>
+            <DialogFooter className="sm:justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setAdminOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={Object.values(addAdminFormData).some(
+                  (value) => value === ""
+                )}
+              >
+                Create Admin
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Update Admin Dialog */}
+      <Dialog open={updateAdminOpen} onOpenChange={setUpdateAdminOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Update Admin Role</DialogTitle>
+            <DialogDescription>
+              Change the role and permissions for this admin user
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleUpdateAdminSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="update-fullname">Full Name</Label>
+                <Input
+                  id="update-fullname"
+                  value={selectedAdmin?.fullname || ""}
+                  disabled
+                  className="bg-muted"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="update-email">Email Address</Label>
+                <Input
+                  id="update-email"
+                  value={selectedAdmin?.email || ""}
+                  disabled
+                  className="bg-muted"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="update-role">Role</Label>
+              <Select
+                value={updateAdminFormData.role || selectedAdmin?.role || ""}
+                onValueChange={handleUpdateAdminRoleChange}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {currentUser &&
+                  currentUser.data.olduser.role === "superadmin" ? (
+                    ROLES.map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {role.charAt(0).toUpperCase() + role.slice(1)}
+                      </SelectItem>
+                    ))
+                  ) : currentUser &&
+                    currentUser.data.olduser.role === "admin" ? (
+                    <SelectItem value="editor">Editor</SelectItem>
+                  ) : null}
+                </SelectContent>
+              </Select>
+              {updateAdminErrorMessages.role && (
+                <p className="text-sm text-destructive">
+                  {updateAdminErrorMessages.role}
+                </p>
+              )}
+            </div>
+            <DialogFooter className="sm:justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setUpdateAdminOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={!updateAdminFormData.role}>
+                Update Role
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete User Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>

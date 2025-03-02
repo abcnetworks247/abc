@@ -1,13 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Loader2, MoreHorizontal, Plus } from "lucide-react";
-import { format } from "date-fns";
+import { useState } from "react";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+import {
+  Search,
+  ChevronsUpDownIcon,
+  Pencil,
+  UserPlus,
+  Trash2,
+  Loader2,
+} from "lucide-react";
+import Api from "@/utils/Api";
 
-import { Button } from "@/components/ui/button";
+import { toast, Toaster } from "sonner";
+import { EMAIL_REGEX, PASSWORD_REGEX, USERNAME_REGEX } from "@/utils/regex";
+
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -16,13 +32,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   Dialog,
   DialogContent,
@@ -31,8 +49,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Select,
   SelectContent,
@@ -42,464 +58,800 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import useCurrentAdmin from "@/hooks/useCurrentAdmin";
-import useAllAdmin from "@/hooks/useallAdmin"; // Fixed casing for consistency
-// import { deleteAdmin, updateAdmin, createAdmin } from "@/lib/api"; // Uncommented this line
+import useallAdmin from "@/hooks/useallAdmin";
 
-export default function AdminDashboard() {
+const TABS = [
+  {
+    label: "All",
+    value: "all",
+  },
+  {
+    label: "SuperAdmin",
+    value: "superadmin",
+  },
+  {
+    label: "Admin",
+    value: "admin",
+  },
+  {
+    label: "Editor",
+    value: "editor",
+  },
+];
+
+const TABLE_HEAD = ["Member", "Roles", "Date", "Employed", ""];
+
+export default function Page() {
+  const [addAdminOpen, setAddAdminOpen] = useState(false);
+  const [updateAdminOpen, setUpdateAdminOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedAdmin, setSelectedAdmin] = useState(null);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  const router = useRouter();
-  const { user, isError, isLoading, isSuccess, mutate } = useAllAdmin(); // Added mutate
-  const { currentAdmin } = useCurrentAdmin();
+  const [activeTab, setActiveTab] = useState("all");
+  const { user, isError, isLoading, isSuccess } = useallAdmin();
+  const { CurrentUser } = useCurrentAdmin();
   const Admins = user?.data;
-  const ITEMS_PER_PAGE = 10;
 
-  // const filteredAdmins =
-  //   Admins?.filter(
-  //     (admin) =>
-  //       admin.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //       admin.email.toLowerCase().includes(searchQuery.toLowerCase())
-  //   ) || [];
-  // const totalPages = Math.ceil(filteredAdmins.length / ITEMS_PER_PAGE);
-  // const paginatedAdmins = filteredAdmins.slice(
-  //   (currentPage - 1) * ITEMS_PER_PAGE,
-  //   currentPage * ITEMS_PER_PAGE
-  // );
-
-
-    const filteredAdmins = user
-      ? Admins.data.filter(
-          (user) =>
-            user.fullname
-              .toLowerCase()
-              .includes(searchQuery.trim().toLowerCase()) ||
-            user.email.toLowerCase().includes(searchQuery.trim().toLowerCase())
-        )
-      : [];
-  
-  console.log("filteredAdmins", filteredAdmins);
-  
-    // const currentItems = filteredAdmins.slice(startIndex, endIndex);
-
-  
-  const handleAddAdmin = async (data) => {
-    try {
-      // await createAdmin(data);
-      mutate();
-      setIsAddDialogOpen(false);
-      toast.success("Admin added successfully");
-    } catch (error) {
-      toast.error("Failed to add admin");
-    }
-  };
-
-  const handleEditAdmin = async (data) => {
-    try {
-      // await updateAdmin(selectedAdmin._id, data);
-      mutate();
-      setIsEditDialogOpen(false);
-      toast.success("Admin updated successfully");
-    } catch (error) {
-      toast.error("Failed to update admin");
-    }
-  };
-
-  const handleDeleteAdmin = async () => {
-    try {
-      // await deleteAdmin(selectedAdmin._id);
-      mutate();
-      setIsDeleteDialogOpen(false);
-      toast.success("Admin deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete admin");
-    }
-  };
-
-  const canEdit = (admin) => {
-    if (currentAdmin?.role === "superadmin") return true;
-    if (
-      currentAdmin?.role === "admin" &&
-      admin.role !== "superadmin" &&
-      admin.role !== "admin"
-    )
-      return true;
-    return false;
-  };
-
-  const canDelete = canEdit;
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="mx-2 md:mx-4 lg:mx-8 py-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Add Admin
-        </Button>
-      </div>
-
-      <div className="flex justify-between items-center mb-4">
-        <Input
-          placeholder="Search admins..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="max-w-sm"
-        />
-        <Select onValueChange={(value) => setSearchQuery(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by role" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All roles</SelectItem>
-            <SelectItem value="superadmin">Superadmin</SelectItem>
-            <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="editor">Editor</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Created At</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredAdmins.map((admin) => (
-              <TableRow key={admin._id}>
-                <TableCell className="font-medium">
-                  <div className="flex items-center">
-                    <Avatar className="h-8 w-8 mr-2">
-                      <AvatarImage src={admin.userdp} alt={admin.fullname} />
-                      <AvatarFallback>{admin.fullname[0]}</AvatarFallback>
-                    </Avatar>
-                    {admin.fullname}
-                  </div>
-                </TableCell>
-                <TableCell>{admin.email}</TableCell>
-                <TableCell>
-                  <Badge
-                    variant={
-                      admin.role === "superadmin"
-                        ? "destructive"
-                        : admin.role === "admin"
-                        ? "default"
-                        : "secondary"
-                    }
-                  >
-                    {admin.role}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {format(new Date(admin.createdAt), "PPP")}
-                </TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSelectedAdmin(admin);
-                          setIsEditDialogOpen(true);
-                        }}
-                        disabled={!canEdit(admin)}
-                      >
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setSelectedAdmin(admin);
-                          setIsDeleteDialogOpen(true);
-                        }}
-                        disabled={!canDelete(admin)}
-                      >
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </Button>
-      </div> */}
-
-      <AddAdminDialog
-        isOpen={isAddDialogOpen}
-        onClose={() => setIsAddDialogOpen(false)}
-        onSubmit={handleAddAdmin}
-      />
-
-      <EditAdminDialog
-        isOpen={isEditDialogOpen}
-        onClose={() => setIsEditDialogOpen(false)}
-        onSubmit={handleEditAdmin}
-        admin={selectedAdmin}
-      />
-
-      <DeleteAdminDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onConfirm={handleDeleteAdmin}
-        admin={selectedAdmin}
-      />
-    </div>
-  );
-}
-
-function AddAdminDialog({ isOpen, onClose, onSubmit }) {
-  const [formData, setFormData] = useState({
+  const [newAdmin, setNewAdmin] = useState(null);
+  const [addFormData, setAddFormData] = useState({
+    role: "",
     fullname: "",
     email: "",
+    password: "",
+  });
+
+  const [updateFormData, setUpdateFormData] = useState({
+    role: "",
+  });
+
+  const [addErrorMessages, setAddErrorMessages] = useState({
+    email: "",
+    fullname: "",
     password: "",
     role: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Add New Admin</DialogTitle>
-          <DialogDescription>Create a new admin user here.</DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullname" className="text-right">
-                Full Name
-              </Label>
-              <Input
-                id="fullname"
-                name="fullname"
-                value={formData.fullname}
-                onChange={handleChange}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="text-right">
-                Password
-              </Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="role" className="text-right">
-                Role
-              </Label>
-              <Select
-                name="role"
-                value={formData.role}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, role: value }))
-                }
-              >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="editor">Editor</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="superadmin">Superadmin</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Add Admin</Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function EditAdminDialog({ isOpen, onClose, onSubmit, admin }) {
-  const [formData, setFormData] = useState({
-    fullname: "",
-    email: "",
+  const [updateErrorMessages, setUpdateErrorMessages] = useState({
     role: "",
   });
 
-  useEffect(() => {
-    if (admin) {
-      setFormData({
-        fullname: admin.fullname,
-        email: admin.email,
-        role: admin.role,
-      });
-    }
-  }, [admin]);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const handleChange = (e) => {
+  const ITEMS_PER_PAGE = 10;
+  const totalItems = Admins ? Admins.data.length : 0;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  // Filter users based on search query and active tab
+  const filteredUsers = user
+    ? Admins.data.filter((user) => {
+        const matchesSearch =
+          user.fullname
+            .toLowerCase()
+            .includes(searchQuery.trim().toLowerCase()) ||
+          user.email.toLowerCase().includes(searchQuery.trim().toLowerCase());
+
+        const matchesTab = activeTab === "all" || user.role === activeTab;
+
+        return matchesSearch && matchesTab;
+      })
+    : [];
+
+  const currentItems = filteredUsers.slice(startIndex, endIndex);
+
+  const token = Cookies.get("adminToken");
+
+  // Validation function for add admin form
+  function validateAddField(fieldName, regex, value, errorMessage) {
+    if (!regex.test(value)) {
+      setAddErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: errorMessage,
+      }));
+      return false;
+    } else {
+      setAddErrorMessages((prevErrors) => ({
+        ...prevErrors,
+        [fieldName]: "",
+      }));
+      return true;
+    }
+  }
+
+  // Handle input change for add admin form
+  const handleAddInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setAddFormData({
+      ...addFormData,
+      [name]: value,
+    });
+
+    if (name === "fullname") {
+      validateAddField(
+        "fullname",
+        USERNAME_REGEX,
+        value,
+        "Username must start with a letter and may include numbers or underscore(_)"
+      );
+    } else if (name === "email") {
+      validateAddField(
+        "email",
+        EMAIL_REGEX,
+        value,
+        "Please enter a valid email address"
+      );
+    } else if (name === "password") {
+      validateAddField(
+        "password",
+        PASSWORD_REGEX,
+        value,
+        "Password must be 8+ characters with at least one uppercase, lowercase, digit, and special character"
+      );
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
+  // Handle role selection for add admin form
+  const handleAddRoleChange = (value) => {
+    setAddFormData({
+      ...addFormData,
+      role: value,
+    });
+  };
+
+  // Handle role selection for update admin form
+  const handleUpdateRoleChange = (value) => {
+    setUpdateFormData({
+      ...updateFormData,
+      role: value,
+    });
+  };
+
+  // Check if all fields in add form are valid
+  const allAddFieldsValid = Object.values(addErrorMessages).every(
+    (error) => !error
+  );
+
+  // Add admin submit handler
+  const handleAddSubmit = async () => {
+    if (!allAddFieldsValid) {
+      toast.error("Please fill in all fields correctly");
+      return;
+    }
+
+    if (!addFormData.role) {
+      setAddErrorMessages((prev) => ({
+        ...prev,
+        role: "Please select a role",
+      }));
+      return;
+    }
+
+    setAddAdminOpen(false);
+
+    toast.promise(Api.post("admin/auth/signup", addFormData), {
+      loading: "Creating admin account...",
+      success: (data) => {
+        if (typeof window !== "undefined") {
+          window.location.reload();
+        }
+        return data.data.message || "Admin created successfully";
+      },
+      error: (error) => {
+        return error.response?.data?.error || "Failed to create admin account";
+      },
+    });
+  };
+
+  // Update admin submit handler
+  const handleUpdateSubmit = async () => {
+    if (!updateFormData.role) {
+      setUpdateErrorMessages((prev) => ({
+        ...prev,
+        role: "Please select a role",
+      }));
+      return;
+    }
+
+    setUpdateAdminOpen(false);
+
+    const item = {
+      role: updateFormData.role,
+      id: String(newAdmin._id),
+    };
+
+    toast.promise(
+      Api.patch("admin/auth/account/admin", item, {
+        headers: {
+          Authorization: `Bearer ${String(token)}`,
+          "Content-Type": "application/json",
+        },
+      }),
+      {
+        loading: "Updating admin account...",
+        success: (response) => {
+          if (typeof window !== "undefined") {
+            window.location.reload();
+          }
+          return response.data.message || "Admin updated successfully";
+        },
+        error: (error) => {
+          return (
+            error.response?.data?.error || "Failed to update admin account"
+          );
+        },
+      }
+    );
+  };
+
+  // Delete admin handler
+  function deleteUser(role, _id) {
+    const data = {
+      id: _id,
+    };
+
+    Swal.fire({
+      title: `Are you sure you want to delete this ${role}?`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Delete!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        toast.promise(
+          Api.delete("admin/auth/account/admin", {
+            data,
+            headers: {
+              Authorization: `Bearer ${String(token)}`,
+            },
+            withCredentials: true,
+          }),
+          {
+            loading: "Deleting admin account...",
+            success: (res) => {
+              if (typeof window !== "undefined") {
+                window.location.reload();
+              }
+              return res.data.message || "Admin deleted successfully";
+            },
+            error: (error) => {
+              return (
+                error.response?.data?.error || "Failed to delete admin account"
+              );
+            },
+          }
+        );
+      }
+    });
+  }
+
+  // Set update form data when opening update dialog
+  const openUpdateDialog = (admin) => {
+    setNewAdmin(admin);
+    setUpdateFormData({
+      role: admin.role,
+    });
+    setUpdateAdminOpen(true);
+  };
+
+  // Get badge color based on role
+  const getBadgeColor = (role) => {
+    switch (role) {
+      case "editor":
+        return "success";
+      case "admin":
+        return "secondary";
+      case "superadmin":
+        return "warning";
+      default:
+        return "default";
+    }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit Admin</DialogTitle>
-          <DialogDescription>
-            Make changes to the admin user here.
-          </DialogDescription>
-        </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullname" className="text-right">
-                Full Name
-              </Label>
-              <Input
-                id="fullname"
-                name="fullname"
-                value={formData.fullname}
-                onChange={handleChange}
-                className="col-span-3"
-              />
+    <>
+      <Toaster position="top-right" richColors />
+
+      {isLoading ? (
+        <div className="flex items-center justify-center py-24">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : (
+        <Card className="h-full w-full">
+          <CardHeader className="pb-0">
+            <div className="mb-8 flex items-center justify-between gap-8">
+              <div>
+                <h3 className="text-2xl font-bold tracking-tight">
+                  Admin list
+                </h3>
+                <p className="text-muted-foreground mt-1">
+                  See information about all members
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                <Button
+                  className="flex items-center gap-2"
+                  size="sm"
+                  onClick={() => setAddAdminOpen(true)}
+                >
+                  <UserPlus className="h-4 w-4" /> Add Admin
+                </Button>
+              </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="role" className="text-right">
-                Role
-              </Label>
-              <Select
-                name="role"
-                value={formData.role}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, role: value }))
-                }
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+              <Tabs
+                defaultValue="all"
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="w-full md:w-fit"
               >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="editor">Editor</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="superadmin">Superadmin</SelectItem>
-                </SelectContent>
-              </Select>
+                <TabsList className="w-full">
+                  {TABS.map(({ label, value }) => (
+                    <TabsTrigger key={value} value={value}>
+                      {label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+              <div className="w-full md:w-72 relative">
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search"
+                  className="pl-8"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="px-0 py-4">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {TABLE_HEAD.map((head, index) => (
+                      <TableHead key={head} className="cursor-pointer">
+                        <div className="flex items-center justify-between gap-2 font-medium text-muted-foreground">
+                          {head}{" "}
+                          {index !== TABLE_HEAD.length - 1 && (
+                            <ChevronsUpDownIcon className="h-4 w-4" />
+                          )}
+                        </div>
+                      </TableHead>
+                    ))}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredUsers.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={TABLE_HEAD.length}
+                        className="text-center"
+                      >
+                        No results found.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    <>
+                      {Admins &&
+                        currentItems.map(
+                          (
+                            { userdp, fullname, email, role, createdAt, _id },
+                            index
+                          ) => {
+                            return (
+                              <TableRow key={_id}>
+                                <TableCell>
+                                  <div className="flex items-center gap-3">
+                                    <Avatar>
+                                      <AvatarImage
+                                        src={userdp}
+                                        alt={fullname}
+                                      />
+                                      <AvatarFallback>
+                                        {fullname
+                                          .split(" ")
+                                          .map((n) => n[0])
+                                          .join("")}
+                                      </AvatarFallback>
+                                    </Avatar>
+                                    <div className="flex flex-col">
+                                      <span className="font-medium">
+                                        {fullname}
+                                      </span>
+                                      <span className="text-sm text-muted-foreground">
+                                        {email}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </TableCell>
+
+                                <TableCell>
+                                  <Badge variant={getBadgeColor(role)}>
+                                    {role}
+                                  </Badge>
+                                </TableCell>
+                                <TableCell>{createdAt.split("T")[0]}</TableCell>
+
+                                <TableCell>
+                                  {CurrentUser &&
+                                  CurrentUser.data.olduser.role ===
+                                    "superadmin" &&
+                                  role !== "superadmin" ? (
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() =>
+                                              openUpdateDialog({
+                                                userdp,
+                                                fullname,
+                                                email,
+                                                role,
+                                                createdAt,
+                                                _id,
+                                              })
+                                            }
+                                          >
+                                            <Pencil className="h-4 w-4" />
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          Edit User {role}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  ) : CurrentUser &&
+                                    CurrentUser.data.olduser.role === "admin" &&
+                                    role !== "superadmin" &&
+                                    role !== "admin" ? (
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() =>
+                                              openUpdateDialog({
+                                                userdp,
+                                                fullname,
+                                                email,
+                                                role,
+                                                createdAt,
+                                                _id,
+                                              })
+                                            }
+                                          >
+                                            <Pencil className="h-4 w-4" />
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          Edit User {role}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  ) : null}
+                                </TableCell>
+                                <TableCell>
+                                  {CurrentUser &&
+                                  CurrentUser.data.olduser.role ===
+                                    "superadmin" &&
+                                  role !== "superadmin" ? (
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="text-destructive hover:text-destructive/90 hover:bg-destructive/10"
+                                            onClick={() =>
+                                              deleteUser(role, _id)
+                                            }
+                                          >
+                                            <Trash2 className="h-4 w-4" />
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          Delete {role}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  ) : CurrentUser &&
+                                    CurrentUser.data.olduser.role === "admin" &&
+                                    role !== "superadmin" &&
+                                    role !== "admin" ? (
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="text-destructive hover:text-destructive/90 hover:bg-destructive/10"
+                                            onClick={() =>
+                                              deleteUser(role, _id)
+                                            }
+                                          >
+                                            <Trash2 className="h-4 w-4" />
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          Delete {role}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  ) : null}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          }
+                        )}
+                    </>
+                  )}
+
+                  {CurrentUser && CurrentUser.data.olduser.length === 0 ? (
+                    <TableRow>
+                      <TableCell
+                        colSpan={TABLE_HEAD.length}
+                        className="text-center"
+                      >
+                        No Admin Found.
+                      </TableCell>
+                    </TableRow>
+                  ) : null}
+                </TableBody>
+              </Table>
+            </div>
+          </CardContent>
+          <CardFooter className="flex items-center justify-between border-t p-4">
+            <span className="text-sm text-muted-foreground">
+              Page {currentPage} of {totalPages || 1}
+            </span>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages || 1))
+                }
+                disabled={currentPage === totalPages || totalPages === 0}
+              >
+                Next
+              </Button>
+            </div>
+          </CardFooter>
+        </Card>
+      )}
+
+      {/* Add Admin Dialog */}
+      <Dialog open={addAdminOpen} onOpenChange={setAddAdminOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add An Admin</DialogTitle>
+            <DialogDescription>
+              Add a new admin user to the system
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullname">Full Name</Label>
+                <Input
+                  id="fullname"
+                  name="fullname"
+                  placeholder="e.g. John Doe"
+                  value={addFormData.fullname}
+                  onChange={handleAddInputChange}
+                />
+                {addErrorMessages.fullname && addFormData.fullname && (
+                  <p className="text-sm text-destructive">
+                    {addErrorMessages.fullname}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="e.g. john@example.com"
+                  value={addFormData.email}
+                  onChange={handleAddInputChange}
+                />
+                {addErrorMessages.email && addFormData.email && (
+                  <p className="text-sm text-destructive">
+                    {addErrorMessages.email}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="role">Role</Label>
+                {CurrentUser &&
+                CurrentUser.data.olduser.role === "superadmin" ? (
+                  <Select onValueChange={handleAddRoleChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="editor">Editor</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="superadmin">Super Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : CurrentUser && CurrentUser.data.olduser.role === "admin" ? (
+                  <Select onValueChange={handleAddRoleChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="editor">Editor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Select disabled>
+                    <SelectTrigger>
+                      <SelectValue placeholder="No permission" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+                {addErrorMessages.role && (
+                  <p className="text-sm text-destructive">
+                    {addErrorMessages.role}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="•••••••"
+                  value={addFormData.password}
+                  onChange={handleAddInputChange}
+                />
+                {addErrorMessages.password && addFormData.password && (
+                  <p className="text-sm text-destructive">
+                    {addErrorMessages.password}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save Changes</Button>
+            <Button variant="outline" onClick={() => setAddAdminOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleAddSubmit}
+              disabled={
+                !addFormData.fullname ||
+                !addFormData.email ||
+                !addFormData.password ||
+                !addFormData.role ||
+                !allAddFieldsValid
+              }
+            >
+              Add Admin
+            </Button>
           </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
-}
+        </DialogContent>
+      </Dialog>
 
-function DeleteAdminDialog({ isOpen, onClose, onConfirm, admin }) {
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete Admin</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete this admin? This action cannot be
-            undone.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button variant="destructive" onClick={onConfirm}>
-            Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      {/* Update Admin Dialog */}
+      <Dialog open={updateAdminOpen} onOpenChange={setUpdateAdminOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Update Admin</DialogTitle>
+            <DialogDescription>
+              Update the role of an existing admin user
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="update-fullname">Full Name</Label>
+                <Input
+                  id="update-fullname"
+                  value={newAdmin?.fullname || ""}
+                  disabled
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="update-email">Email Address</Label>
+                <Input
+                  id="update-email"
+                  value={newAdmin?.email || ""}
+                  disabled
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="update-role">Role</Label>
+                {CurrentUser &&
+                CurrentUser.data.olduser.role === "superadmin" ? (
+                  <Select
+                    defaultValue={newAdmin?.role}
+                    onValueChange={handleUpdateRoleChange}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="editor">Editor</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="superadmin">Super Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : CurrentUser && CurrentUser.data.olduser.role === "admin" ? (
+                  <Select
+                    defaultValue={newAdmin?.role}
+                    onValueChange={handleUpdateRoleChange}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="editor">Editor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Select disabled>
+                    <SelectTrigger>
+                      <SelectValue placeholder="No permission" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">None</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+                {updateErrorMessages.role && (
+                  <p className="text-sm text-destructive">
+                    {updateErrorMessages.role}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="update-password">Password</Label>
+                <Input
+                  id="update-password"
+                  type="password"
+                  value="••••••••"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUpdateAdminOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUpdateSubmit}
+              disabled={!updateFormData.role}
+            >
+              Update Admin
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

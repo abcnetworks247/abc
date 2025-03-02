@@ -1,99 +1,152 @@
-"use client"
-import BarChart from "@/components/ApexChart/barChart";
-import FlowChart from "@/components/ApexChart/flowChart";
-// Fix the casing here
+"use client";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { MembersTable } from "@/components/Dashboard/MembersTable";
-import dynamic from "next/dynamic";
-import { useMemo } from "react";
-import toast, { Toaster } from 'react-hot-toast';
+import { FileText, Users, CreditCard, Bell } from "lucide-react";
+import { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import Api from "@/utils/Api";
+import Cookies from "js-cookie";
 
 export default function Page() {
+  const [dashboardData, setDashboardData] = useState({
+    blogs: 0,
+    clients: 0,
+    donations: 0,
+    subscriptions: 0,
+  });
 
+  const token = Cookies.get("adminToken");
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await Api.get("/admin/auth/account/dashboarddata", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        console.log("API Response:", response.data);
+        setDashboardData(response.data);
+      } catch (error) {
+        console.error(
+          "Error fetching dashboard data:",
+          error.response?.data || error.message
+        );
+      }
+    };
+
+    if (token) {
+      fetchDashboardData();
+    }
+  }, [token]); // Include `token` in dependencies if it's dynamic
   
   return (
     <>
       <main className="flex flex-col gap-5 px-5 mt-10">
-        <div className="">
-          <div className="grid grid-cols-12 gap-3 ">
-            <div className="col-span-12 sm:col-span-4">
-              <div className="p-4 relative h-32   bg-[#121E31] border border-gray-800 shadow-lg  rounded-2xl">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute text-green-400 h-14 w-14 bottom-4 right-3"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                  <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-                </svg>
-                <div className="mt-5 text-2xl font-medium leading-8 text-gray-100">
-                  20
-                </div>
-                <div className="text-sm text-gray-500">Components</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Total Blogs Card */}
+          <Card className="bg-blue-100 border-blue-200 shadow-md">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-medium text-blue-800">
+                Total Blogs
+              </CardTitle>
+              <CardDescription className="text-blue-600">
+                All published articles
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-between items-center">
+              <p className="text-3xl font-bold text-blue-800">
+                {dashboardData.blogs}
+              </p>
+              <div className="p-2 bg-blue-200 rounded-full">
+                <FileText className="h-8 w-8 text-blue-500" />
               </div>
-            </div>
-            <div className="col-span-12 sm:col-span-4">
-              <div className="p-4 relative h-32  bg-[#121E31] border border-gray-800 shadow-lg  rounded-2xl">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute text-blue-500 h-14 w-14 bottom-4 right-3"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                </svg>
-                <div className="flex items-center justify-between ">
-                  <i className="text-xl text-gray-400 fab fa-behance"></i>
-                </div>
-                <div className="mt-5 text-2xl font-medium leading-8 text-gray-100">
-                  99
-                </div>
-                <div className="text-sm text-gray-500">Projects</div>
+            </CardContent>
+          </Card>
+
+          {/* Total Users Card */}
+          <Card className="bg-purple-100 border-purple-200 shadow-md">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-medium text-purple-800">
+                Total Users
+              </CardTitle>
+              <CardDescription className="text-purple-600">
+                Registered accounts
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-between items-center">
+              <p className="text-3xl font-bold text-purple-800">
+                {dashboardData.clients}
+              </p>
+              <div className="p-2 bg-purple-200 rounded-full">
+                <Users className="h-8 w-8 text-purple-500" />
               </div>
-            </div>
-            <div className="col-span-12 sm:col-span-4">
-              <div className="p-4 relative h-32  bg-[#121E31] border border-gray-800 shadow-lg  rounded-2xl">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute text-yellow-300 h-14 w-14 bottom-4 right-3"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div className="flex items-center justify-between ">
-                  <i className="text-xl text-gray-400 fab fa-codepen"></i>
-                </div>
-                <div className="mt-5 text-2xl font-medium leading-8 text-gray-100">
-                  50
-                </div>
-                <div className="text-sm text-gray-500">Pen Items</div>
+            </CardContent>
+          </Card>
+
+          {/* Total Donations Card */}
+          <Card className="bg-green-100 border-green-200 shadow-md">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-medium text-green-800">
+                Total Donations
+              </CardTitle>
+              <CardDescription className="text-green-600">
+                All contributions
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-between items-center">
+              <p className="text-3xl font-bold text-green-800">
+                {dashboardData.donations}
+              </p>
+              <div className="p-2 bg-green-200 rounded-full">
+                <CreditCard className="h-8 w-8 text-green-500" />
               </div>
-            </div>
+            </CardContent>
+          </Card>
+
+          {/* Total Subscriptions Card */}
+          <Card className="bg-orange-100 border-orange-200 shadow-md">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-medium text-orange-800">
+                Total Subscriptions
+              </CardTitle>
+              <CardDescription className="text-orange-600">
+                Active subscribers
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-between items-center">
+              <p className="text-3xl font-bold text-orange-800">
+                {dashboardData.subscriptions}
+              </p>
+              <div className="p-2 bg-orange-200 rounded-full">
+                <Bell className="h-8 w-8 text-orange-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {typeof window !== "undefined" ? (
+          <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
+            {/* Chart components would go here */}
           </div>
-        </div>
-       { typeof window !== "undefined" ? 
-        <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
-        {/* <div className="">
-         <BarChart />
-        </div>
-        <div className="">
-          <FlowChart />
-        </div> */}
-      </div>
-      : 
-      []
-        
-       }
+        ) : (
+          []
+        )}
+
         <div className="">
           <MembersTable />
         </div>
       </main>
-      <Toaster position='top-right' reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
     </>
   );
 }

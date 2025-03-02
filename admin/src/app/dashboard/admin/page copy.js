@@ -88,7 +88,7 @@ export default function Page() {
 
   const currentItems = filteredUsers.slice(startIndex, endIndex);
 
-  console.log(currentItems, "current items");
+
   const token = Cookies.get("adminToken");
 
   function DeleteUser(role, _id) {
@@ -99,7 +99,6 @@ export default function Page() {
     let data = {
       id: id._id,
     };
-
 
     Swal.fire({
       title: `Are you sure you want to delete this ${role}?`,
@@ -356,7 +355,7 @@ export default function Page() {
                                 role !== "superadmin" &&
                                 role !== "admin" ? (
                                 <td className={classes}>
-                                   <Tooltip content={`Edit User ${role}`}>
+                                  <Tooltip content={`Edit User ${role}`}>
                                     <IconButton
                                       variant="text"
                                       onClick={() => {

@@ -23,6 +23,7 @@ import {
 } from "@material-tailwind/react";
 import { AddMember } from "@/components/User/AddUser";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const TABS = [
   {
@@ -48,27 +49,8 @@ export function MembersTable() {
   return (
     <>
       {isLoading ? (
-        <div className="flex items-center justify-center h-full">
-          <svg
-            className="w-20 h-20 mr-3 -ml-1 text-blue-500 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-            />
-          </svg>
+        <div className="flex items-center justify-center py-24">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       ) : (
         <Card className="h-full w-full px-3">

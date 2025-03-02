@@ -136,48 +136,6 @@ export function ComplexNavbar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Mobile Navigation */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden text-gray-700 hover:bg-gray-100"
-              >
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle navigation menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72 bg-white p-0">
-              <div className="flex flex-col gap-4 p-6">
-                <form>
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                    <Input
-                      type="search"
-                      placeholder="Search..."
-                      className="w-full bg-gray-100 pl-8 text-gray-900 placeholder:text-gray-500"
-                    />
-                  </div>
-                </form>
-                <nav className="flex flex-col gap-2">
-                  {navigationItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={cn(
-                        "rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100",
-                        pathname === item.href && "bg-gray-100"
-                      )}
-                    >
-                      {item.title}
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-            </SheetContent>
-          </Sheet>
         </div>
       </div>
     </nav>
