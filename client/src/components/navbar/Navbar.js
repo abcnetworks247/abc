@@ -12,11 +12,11 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Logo from "@/resources/assets/image/AbcstudioNo.png";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Api from "@/utils/Api";
 import Cookies from "js-cookie";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Menu,
   ShoppingCart,
@@ -175,7 +175,7 @@ export default function Navbar() {
           </Link>
           <Link
             //if access === basic redirect to home. else go to contact
-            href={"/live"}
+            href={UserData && UserData.userpackage ? "/live" : "/signup"}
             className={`navbar-item mx-1 w-fit text-sm  rounded-none hover:border-b-[2px] border-[#0e1b2b] transition-all ${
               pathname === "/contact" ? "border-b-[2px] border-[#0e1b2b]" : ""
             }`}
@@ -258,16 +258,16 @@ export default function Navbar() {
           {/* condition to display user profile picture on first render with token */}
           <div>
             {Authtoken && UserData ? (
-              <div className="hidden avatar avatar-ring avatar-md md:block">
+              <div className="hidden avatar avatar-ring avatar-md md:block  h-fit">
                 {loading === false ? (
-                  <div className="dropdown-container ">
+                  <div className="dropdown-container">
                     <div className="flex flex-row gap-4 ">
                       <div className="hidden dropdown md:block">
                         <label
-                          className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end"
+                          className="hidden px-0 cursor-pointer btn btn-ghost sm:block md:block lg:block justify-items-end h-fit"
                           tabIndex="0"
                         >
-                          <div className="avatar-square avatar avatar-md">
+                          <div className="avatar-square avatar avatar-sm">
                             <Image
                               src={UserData && UserData.userdp}
                               height={20}
@@ -284,7 +284,7 @@ export default function Navbar() {
                           </div>
                         </label>
 
-                        <div className="dropdown-menu dropdown-menu-bottom-left mt-sm bg-white z-50 text-gray-900 rounded-sm">
+                        <div className="dropdown-menu dropdown-menu-bottom-left mt-[15px] bg-white z-50 text-gray-900 rounded-sm">
                           <Link
                             href="/userdashboard"
                             className="text-sm rounded-sm dropdown-item -z-50 hover:bg-gray-100"
@@ -363,28 +363,20 @@ export default function Navbar() {
             {Authtoken ? (
               <div className="block avatar avatar-ring avatar-md md:hidden">
                 {loading === false ? (
-                  <div className="dropdown-container ">
-                    <div className="flex flex-row gap-4 ">
-                      <div className="dropdown ">
-                        <div className="avatar-square avatar avatar-md">
-                          <Link href="/userdashboard">
-                            <Image
-                              src={UserData && UserData.userdp}
-                              height={20}
-                              width={33}
-                              quality={100}
-                              loading="lazy"
-                              className="object-cover rounded-full cursor-pointer"
-                              alt="avatar"
-                              // style={{
-                              //   width: '100%',
-                              //   height: 'auto',
-                              // }}
-                            />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="avatar-square avatar avatar-sm">
+                    <Image
+                      src={UserData && UserData.userdp}
+                      height={20}
+                      width={33}
+                      quality={100}
+                      loading="lazy"
+                      className="object-cover rounded-full cursor-pointer"
+                      alt="avatar"
+                      // style={{
+                      //   width: '100%',
+                      //   height: 'auto',
+                      // }}
+                    />
                   </div>
                 ) : (
                   <>

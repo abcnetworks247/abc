@@ -109,7 +109,9 @@ function LoginPage() {
           expires: rememberMe ? 30 : 1,
         });
         toast.success("Signed in successfully", { id: toastId });
-        router.push("/dashboard");
+        if(typeof window != "undefined"){
+          window.location.reload()
+        }
       }
     } catch (error) {
       toast.error(error.response?.data?.error || "Login failed", {

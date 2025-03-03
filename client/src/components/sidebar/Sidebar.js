@@ -342,7 +342,7 @@ export default function Sidebar() {
           <div className="p-4">
             {Authtoken && UserData && Authtoken.length !== 0 ? (
               <div className="flex items-center space-x-4">
-                {userLoading ? (
+                {loading ? (
                   <div className="flex items-center space-x-4">
                     <div className="h-10 w-10 rounded-full bg-muted animate-pulse" />
                     <div className="space-y-2">
