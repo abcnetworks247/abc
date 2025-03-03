@@ -361,9 +361,9 @@ export default function Navbar() {
           )}
           <div>
             {Authtoken ? (
-              <div className="block avatar avatar-ring avatar-md md:hidden">
+              <div className="block avatar avatar-ring avatar-md md:hidden h-fit">
                 {loading === false ? (
-                  <div className="avatar-square avatar avatar-sm">
+                  <div className="avatar-square avatar avatar-sm h-fit">
                     <Image
                       src={UserData && UserData.userdp}
                       height={20}
