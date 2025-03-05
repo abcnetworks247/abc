@@ -8,9 +8,9 @@ const page = () => {
   const { screen, handleUser } = UseProductProvider();
   console.log(screen);
   return (
-    <>
+    <div className="w-full h-full flex flex-col gap-4">
       <Stats/>
-    </>
+    </div>
   );
 };
 
