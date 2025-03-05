@@ -364,6 +364,11 @@ export default function Navbar() {
               <div className="block avatar avatar-ring avatar-md md:hidden h-fit">
                 {loading === false ? (
                   <div className="avatar-square avatar avatar-sm h-fit">
+                    <Link
+                      href="/userdashboard"
+                      className="text-sm"
+                    >
+                     
                     <Image
                       src={UserData && UserData.userdp}
                       height={20}
@@ -377,6 +382,7 @@ export default function Navbar() {
                       //   height: 'auto',
                       // }}
                     />
+                    </Link>
                   </div>
                 ) : (
                   <>
