@@ -116,7 +116,7 @@ export default function Navbar() {
 
   return (
     <div id="mainnav">
-      <div className="navbar rounded-b-lg top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-[#111827]">
+      <div className="navbar top-0 px-4 right-0 w-full z-[100] shadow-md h-16 bg-[#111827]">
         <div className="w-fit lg:hidden">
           <label htmlFor="sidebar-mobile-fixed" className=" lg:hidden">
             <RiMenu2Fill className="text-white hover:text-gray-300 transition  text-[26px] cursor-pointer" />
