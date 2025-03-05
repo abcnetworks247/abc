@@ -14,6 +14,7 @@ import Link from "next/link";
 import ProductNav from "@/components/Products/ProductNav";
 import axios from "axios";
 import Nav1 from "@/components/navbar/Nav1";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 const page = () => {
   const { fetchData, setAllProducts } = UseProductProvider();
@@ -55,6 +56,7 @@ const page = () => {
       <div className="bg-[#111827] sticky top-0 z-[20] ">
         <Navbar />
       </div>
+      <Sidebar />
       {/* <ProductNav /> */}
       <div className="p-4 mx-6 mb-2 bg-white">
         <nav className="flex" aria-label="Breadcrumb">

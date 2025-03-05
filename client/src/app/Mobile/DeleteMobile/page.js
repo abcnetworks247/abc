@@ -1,18 +1,21 @@
-"use client"
-import React from 'react'
-import DeleteAccount from '../../userdashboard/components/DeleteAccount'
-import { useRouter } from 'next/navigation'
-import FooterComp from '@/components/Footer/FooterComp'
-import Navbar from '@/components/navbar/Navbar'
-import Nav1 from '@/components/navbar/Nav1'
-
+"use client";
+import React from "react";
+import DeleteAccount from "../../userdashboard/components/DeleteAccount";
+import { useRouter } from "next/navigation";
+import FooterComp from "@/components/Footer/FooterComp";
+import Navbar from "@/components/navbar/Navbar";
+import Nav1 from "@/components/navbar/Nav1";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 const page = () => {
-    const router = useRouter()
+  const router = useRouter();
   return (
     <div>
       <Nav1 />
-      <Navbar />
+      <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
+        <Navbar />
+      </div>
+      <Sidebar />
       <div className="flex flex-row-reverse py-4 mx-2">
         <svg
           onClick={() => router.back()}
@@ -60,6 +63,6 @@ const page = () => {
       <FooterComp />
     </div>
   );
-}
+};
 
-export default page
+export default page;

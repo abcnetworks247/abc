@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Nav1 from "@/components/navbar/Nav1";
 import { Toaster, toast } from "sonner";
 import ShareModal from "@/components/ShareModal";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 export default function BlogPost() {
   const [blog, setBlog] = useState(null);
@@ -121,9 +122,10 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Nav1 />
-      <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
-        <Navbar />
-      </div>
+       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
+              <Navbar />
+            </div>
+            <Sidebar />
       <main className="container mx-auto px-4 py-8 flex-grow">
         {blog ? (
           <BlogContent

@@ -35,6 +35,7 @@ const page = () => {
       <div className="bg-[#111827] sticky top-0 z-[20] ">
         <Navbar />
       </div>
+      <Sidebar />
       <ProductNav />
       <Banner products={products} />
       <Sidebar />

@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/Navbar";
 import FooterComp from "@/components/Footer/FooterComp";
 import { useRouter } from "next/navigation";
 import Nav1 from "@/components/navbar/Nav1";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 const page = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const page = () => {
       <div className="bg-[#111827] sticky top-0 z-[10] mb-10">
         <Navbar />
       </div>
+      <Sidebar />
       <div className="flex flex-row-reverse py-4 mx-2 cursor-pointer ">
         <svg
           onClick={() => router.back()}

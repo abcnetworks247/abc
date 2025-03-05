@@ -15,6 +15,7 @@ import { UseUserContext } from "../../../contexts/UserContext";
 import Loadinganimate from "@/components/Loadinganimate";
 import Api from "@/utils/Api";
 import Nav1 from "@/components/navbar/Nav1";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 const page = () => {
 
@@ -80,6 +81,7 @@ const handleWishClick = () => {
       <div className="sticky top-0 z-50 bg-[#111827]">
         <Navbar />
       </div>
+      <Sidebar />
       <div className="px-2 py-4 mb-2 mt-2 bg-white lg:w-[80%] lg:mx-auto">
         <nav className="flex" aria-label="Breadcrumb">
           <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">

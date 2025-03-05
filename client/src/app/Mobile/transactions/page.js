@@ -7,6 +7,7 @@ import Navbar from '@/components/navbar/Navbar';
 import PurchaseComp from '@/app/userdashboard/components/purchase/PurchaseComp';
 import DonateComp from '@/app/userdashboard/components/donate/DonateComp';
 import SubscribeComp from '@/app/userdashboard/components/subscribe/SubscribeComp';
+import Sidebar from '@/components/sidebar/Sidebar';
 
 const page = () => {
 
@@ -26,6 +27,7 @@ const page = () => {
       <div className="sticky top-0 z-50 bg-white">
         <Navbar />
       </div>
+      <Sidebar />
       <div className='flex flex-row-reverse py-4 mx-2'>
         <svg
           onClick={() => router.back()}

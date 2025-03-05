@@ -7,10 +7,10 @@ import Sidebar from "@/components/sidebar/Sidebar";
 function About() {
   return (
     <div>
-      <Sidebar />
       <div className="bg-[#111827] sticky top-0 z-[10]" id="navbar">
         <Navbar />
       </div>
+      <Sidebar />
 
       <AboutComponent />
       <div id='footer'>
