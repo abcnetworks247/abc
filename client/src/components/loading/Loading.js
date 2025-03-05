@@ -1,5 +1,4 @@
 import { Loader2 } from "lucide-react";
-import { RotatingLines } from "react-loader-spinner";
 
 export default function Loading() {
   return (

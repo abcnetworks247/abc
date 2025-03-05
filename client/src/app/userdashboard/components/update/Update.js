@@ -8,7 +8,7 @@ import Api from "@/utils/Api";
 import StaticForm from "../edit/StaticForm";
 import Editform from "../edit/Editform";
 import Swal from "sweetalert2";
-import { RotatingLines } from "react-loader-spinner";
+import { Loader2 } from "lucide-react";
 
 const Update = () => {
   const { UserData, HandleGetUser, Authtoken } = UseUserContext();
@@ -126,15 +126,7 @@ const Update = () => {
       )}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-80 z-50">
-          <RotatingLines
-            visible={true}
-            height="96"
-            width="96"
-            color="gray"
-            strokeWidth="5"
-            animationDuration="0.75"
-            ariaLabel="rotating-lines-loading"
-          />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       )}
     </div>
