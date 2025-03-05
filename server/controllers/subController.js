@@ -1,21 +1,21 @@
-const Auth = require('../models/clientAuthSchema'); // Assuming your user model is named 'Auth'
-const { StatusCodes } = require('http-status-codes');
-const SubscriptionModel = require('../models/subscriptionSchema');
-const SubscriptionJoi = require('../Utils/SubscriptionJoi');
-const path = require('path');
-const Client = require('../models/clientAuthSchema');
-const sendMail = require('../Utils/sendMail');
-const dotenv = require('dotenv').config();
-const fs = require('fs');
-const ejs = require('ejs');
+const Auth = require("../models/clientAuthSchema"); // Assuming your user model is named 'Auth'
+const { StatusCodes } = require("http-status-codes");
+const SubscriptionModel = require("../models/subscriptionSchema");
+const SubscriptionJoi = require("../Utils/SubscriptionJoi");
+const path = require("path");
+const Client = require("../models/clientAuthSchema");
+const sendMail = require("../Utils/sendMail");
+const dotenv = require("dotenv").config();
+const fs = require("fs");
+const ejs = require("ejs");
 
 const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-} = require('../errors/index');
+} = require("../errors/index");
 
-const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookSecret = process.env.STRIPE_SUBSCRIPTION_WEBHOOK_SECRETE;
 const localurl = process.env.CLIENT_URL;
 
@@ -24,17 +24,17 @@ const serverUrl = process.env.SERVER_URL;
 const clientUrl = process.env.CLIENT_URL;
 
 const createSubscription = async (req, res) => {
-  console.log('Create subscription');
+  console.log("Create subscription");
 
   const user = req.user;
   const item = req.body;
   let customer;
 
-  console.log('item level', item.level);
+  console.log("item level", item.level);
 
   try {
     if (!user) {
-      throw new UnAuthorizedError('User must be logged in to subscribe');
+      throw new UnAuthorizedError("User must be logged in to subscribe");
     }
 
     const existingCustomer = await stripe.customers.list({
@@ -49,21 +49,21 @@ const createSubscription = async (req, res) => {
       // Check if the customer already has an active subscription
       const subscriptions = await stripe.subscriptions.list({
         customer: customer.id,
-        status: 'active',
+        status: "active",
         limit: 1,
       });
 
       if (subscriptions.data.length > 0) {
         // Customer already has an active subscription, send them to biiling portal to manage subscription
 
-        console.log('old subscription');
+        console.log("old subscription");
 
         const stripeSession = await stripe.billingPortal.sessions.create({
           customer: customer.id,
           return_url: `${localurl}`,
         });
 
-        console.log('yes', stripeSession.url);
+        console.log("yes", stripeSession.url);
 
         return res
           .status(StatusCodes.CONFLICT)
@@ -85,14 +85,14 @@ const createSubscription = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       success_url: `${localurl}/paymentsuccess?success=true`,
       cancel_url: `${localurl}/paymenterror?canceled=true`,
-      payment_method_types: ['card'],
-      mode: 'subscription',
-      billing_address_collection: 'auto',
+      payment_method_types: ["card"],
+      mode: "subscription",
+      billing_address_collection: "auto",
       customer_email: user.email,
       line_items: [
         {
           price_data: {
-            currency: 'usd',
+            currency: "usd",
             product_data: {
               name: item.name,
               description: `As a ${item.level} subscriber, ${item.description}. you will be eligible for ${item.features}`,
@@ -107,14 +107,14 @@ const createSubscription = async (req, res) => {
       ],
       metadata: {
         userId: user._id,
-        description: 'testing level',
+        description: "testing level",
       },
       customer: user._id,
     });
 
     res.status(StatusCodes.OK).json({ url: session.url });
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -122,204 +122,175 @@ const createSubscription = async (req, res) => {
 };
 
 const SubWebhook = async (req, res) => {
-  console.log('subscriptions webhook currently active');
+  console.log("Subscriptions webhook currently active");
 
   const payload = req.body;
-  const templatePath = path.join(__dirname, '../views/subscriptionView.ejs');
-  const sig = req.headers['stripe-signature'];
+  const templatePath = path.join(__dirname, "../views/subscriptionView.ejs");
+  const sig = req.headers["stripe-signature"];
 
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(payload, sig, stripeWebhookSecret);
   } catch (err) {
+    console.error("Webhook Error:", err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  console.log('new web2');
+  console.log("New webhook event received:", event.type);
 
   switch (event.type) {
-    case 'invoice.payment_succeeded':
+    case "invoice.payment_succeeded": {
       const invoicePaymentSucceeded = event.data.object;
+      const email = invoicePaymentSucceeded.customer_email;
 
-      let email = invoicePaymentSucceeded.customer_email;
-
-      // Define level ranges and corresponding levels for monthly subscriptions
+      // Define level ranges
       const monthlyLevelRanges = [
-        { minAmount: 10, maxAmount: 50, level: 'copper' },
-        { minAmount: 55, maxAmount: 100, level: 'silver' },
-        { minAmount: 105, maxAmount: 200, level: 'gold' },
-        { minAmount: 500, maxAmount: Infinity, level: 'diamond' }, // No upper bound for diamond level in monthly subscription
+        { minAmount: 10, maxAmount: 50, level: "copper" },
+        { minAmount: 55, maxAmount: 100, level: "silver" },
+        { minAmount: 105, maxAmount: 200, level: "gold" },
+        { minAmount: 500, maxAmount: Infinity, level: "diamond" },
       ];
-
-      // Define level ranges and corresponding levels for yearly subscriptions
       const yearlyLevelRanges = [
-        { minAmount: 120, maxAmount: 600, level: 'copper' },
-        { minAmount: 660, maxAmount: 1200, level: 'silver' },
-        { minAmount: 1260, maxAmount: 2400, level: 'gold' },
-        { minAmount: 6000, maxAmount: 12000, level: 'diamond' },
-        { minAmount: 12000, maxAmount: Infinity, level: 'titanium' }, // No upper bound for titanium level in yearly subscription
+        { minAmount: 120, maxAmount: 600, level: "copper" },
+        { minAmount: 660, maxAmount: 1200, level: "silver" },
+        { minAmount: 1260, maxAmount: 2400, level: "gold" },
+        { minAmount: 6000, maxAmount: 12000, level: "diamond" },
+        { minAmount: 12000, maxAmount: Infinity, level: "titanium" },
       ];
 
-      // Function to determine level based on amount for monthly subscription
-      function determineMonthlyLevel(amount) {
-        // Find the level range that includes the given amount
-
-        const range = monthlyLevelRanges.find(
+      function determineLevel(amount, planType) {
+        const ranges =
+          planType === "month" ? monthlyLevelRanges : yearlyLevelRanges;
+        const range = ranges.find(
           (range) => amount >= range.minAmount && amount <= range.maxAmount
         );
-
-        // Return the level corresponding to the range
-
-        return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
+        return range ? range.level : "Unknown";
       }
 
-      // Function to determine level based on amount for yearly subscription
-
-      function determineYearlyLevel(amount) {
-        // Find the level range that includes the given amount
-        const range = yearlyLevelRanges.find(
-          (range) => amount >= range.minAmount && amount <= range.maxAmount
+      try {
+        const subscription = await stripe.subscriptions.retrieve(
+          invoicePaymentSucceeded.subscription
         );
+        const planType = subscription.plan.interval;
+        const amount = subscription.plan.amount / 100;
 
-        // Return the level corresponding to the range
-        return range ? range.level : 'Unknown'; // Return 'Unknown' if amount doesn't fall into any range
-      }
+        const level = determineLevel(amount, planType);
+        if (level === "Unknown") {
+          console.error(
+            "Could not determine subscription level for amount:",
+            amount
+          );
+          return res.status(400).send("Invalid subscription amount");
+        }
 
-      const subscription = await stripe.subscriptions.retrieve(
-        event.data.object.subscription
-      );
+        console.log("Subscription Level:", level, "for email:", email);
 
-      let plantype = subscription.plan.interval;
+        const user = await Client.findOne({ email });
+        if (!user) {
+          console.error("User not found:", email);
+          return res.status(404).send("User not found");
+        }
 
-      // Example usage:
-      const amount = subscription.plan.amount / 100; // Example amount
-      const level =
-        plantype === 'month'
-          ? determineMonthlyLevel(amount)
-          : plantype === 'year'
-          ? determineYearlyLevel(amount)
-          : '';
+        const periodStartDate = new Date(
+          subscription.current_period_start * 1000
+        );
+        const periodEndDate = new Date(subscription.current_period_end * 1000);
+        const country =
+          invoicePaymentSucceeded.customer_address?.country || "Unknown";
+        const paymentUrl = invoicePaymentSucceeded.hosted_invoice_url;
 
-      console.log('item level 2', level);
-
-      if (level) {
-        console.log('email of user: ' + email);
-
-        const usersub = await Client.findOne({ email });
-
-        console.log('subscription of user: ' + subscription);
-
-        const periodEndTimestamp = subscription.current_period_end;
-        const periodStartTimestamp = subscription.current_period_start;
-
-        // Convert to milliseconds (JavaScript Date object works with milliseconds)
-        const periodEndMilliseconds = periodEndTimestamp * 1000;
-        const periodStartMilliseconds = periodStartTimestamp * 1000;
-
-        // Create Date objects
-        const periodEndDate = new Date(periodEndMilliseconds);
-        const periodStartDate = new Date(periodStartMilliseconds);
-
-        let amount_check = subscription.plan.amount / 100;
-        let paymenturl = invoicePaymentSucceeded.hosted_invoice_url;
-
-        const subdata1 = {
-          email: usersub.email,
-          name: usersub.fullname,
-          amount: amount_check,
+        const subData = {
+          email: user.email,
+          name: user.fullname,
+          amount,
           currency: subscription.currency,
-          country: invoicePaymentSucceeded.customer_address.country,
+          country,
           subscription_period_start: periodStartDate,
           subscription_period_end: periodEndDate,
           subscription_id: subscription.id,
           plan_id: subscription.plan.id,
-          plan_type: subscription.plan.interval,
+          plan_type: planType,
           quantity: subscription.quantity,
-          // subscription_status: subscription.status,
-          subscription_status: 'Paid',
-          hosted_invoice_url: paymenturl,
-          subscription_name: invoicePaymentSucceeded.lines.data[0].description,
+          subscription_status: "Paid",
+          hosted_invoice_url: paymentUrl,
+          subscription_name:
+            invoicePaymentSucceeded.lines.data[0]?.description || "Unknown",
         };
 
-        const { error, value } = SubscriptionJoi.validate(subdata1);
+        const { error, value } = SubscriptionJoi.validate(subData);
+        if (error) throw new ValidationError("Invalid subscription data");
 
-        if (error) {
-          throw new ValidationError('Data recieved is invalid');
-        }
+        const newSubscription = await SubscriptionModel.create(value);
+        user.subscriptionhistory.unshift(newSubscription._id);
+        await user.save();
 
-        const newData = await SubscriptionModel.create(value);
+        console.log("Subscription updated successfully for:", user.email);
 
-        console.log('data now', newData);
-
-        usersub.subscriptionhistory.unshift(newData._id);
-        await usersub.save();
-
-        const renderHtml = await ejs.renderFile(
-          templatePath,
-          {
-            userFullname: usersub.fullname,
-            userEmail: usersub.email,
-            amount: amount_check,
-            paymenturl: paymenturl,
-            renewalDate: periodEndDate,
-            // donation_data: data,
-          },
-          { async: true }
-        );
+        const renderHtml = await ejs.renderFile(templatePath, {
+          userFullname: user.fullname,
+          userEmail: user.email,
+          amount,
+          paymenturl: paymentUrl,
+          renewalDate: periodEndDate,
+        });
 
         await sendMail({
-          email: usersub.email,
-          subject: 'Our Heartfelt Thanks for Your Generous Support!',
+          email: user.email,
+          subject: "Our Heartfelt Thanks for Your Generous Support!",
           html: renderHtml,
         });
 
-        console.log('item level 3', level);
+        await Client.findByIdAndUpdate(user._id, { userpackage: level });
 
-        await Client.findByIdAndUpdate(
-          usersub._id,
-          { userpackage: level },
-          {
-            new: true,
-          }
-        );
-
-        console.log('sent successfully');
+        console.log("Subscription email sent successfully.");
+      } catch (err) {
+        console.error("Error processing subscription:", err);
+        return res.status(500).send("Internal Server Error");
       }
-
       break;
+    }
 
-    // ... handle other event types
+    case "customer.subscription.updated": {
+      const updatedSubscription = event.data.object;
 
-    case 'customer.subscription.updated':
-      const customerSubscriptionUpdated = event.data.object;
-
-      // console.log(event);
-      if (customerSubscriptionUpdated.cancel_at_period_end) {
+      if (updatedSubscription.cancel_at_period_end) {
         console.log(
-          `Subscription ${customerSubscriptionUpdated.id} was canceled.`
+          `Subscription ${updatedSubscription.id} was set to cancel.`
         );
-
-        // DB code to update the customer's subscription status in your database
       } else {
-        console.log(
-          `Subscription ${customerSubscriptionUpdated.id} was restarted.`
-        );
-        // get subscription details and update the DB
+        console.log(`Subscription ${updatedSubscription.id} was restarted.`);
       }
-
       break;
-    case 'invoice.payment_failed':
+    }
+
+    case "invoice.payment_failed": {
       const invoicePaymentFailed = event.data.object;
+      const email = invoicePaymentFailed.customer_email;
 
+      try {
+        const user = await Client.findOne({ email });
+        if (!user) {
+          console.error("User not found for failed payment:", email);
+          return res.status(404).send("User not found");
+        }
+
+        await Client.findByIdAndUpdate(user._id, { userpackage: "basic" });
+        console.log(`Payment failed for ${email}, reverted to Basic plan.`);
+      } catch (err) {
+        console.error("Error handling failed payment:", err);
+        return res.status(500).send("Internal Server Error");
+      }
       break;
+    }
 
     default:
-      console.log(`Unhandled event type ${event.type}`);
+      console.log(`Unhandled event type: ${event.type}`);
   }
 
   res.status(200).end();
 };
+
 
 // Fetch all subscription plans from the database
 const getAllSubscriptionPlans = async (req, res) => {
@@ -329,7 +300,7 @@ const getAllSubscriptionPlans = async (req, res) => {
     const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
     // Check if the user has the required role to access subscription plans
-    if (userRole === 'superadmin' || userRole === 'admin') {
+    if (userRole === "superadmin" || userRole === "admin") {
       // Calculate the number of documents to skip
       const skip = (page - 1) * perPage;
 
@@ -340,7 +311,7 @@ const getAllSubscriptionPlans = async (req, res) => {
 
       res.status(StatusCodes.OK).json(subscriptionPlans);
     } else {
-      throw new UnAuthorizedError('Unauthorized to access subscription plans');
+      throw new UnAuthorizedError("Unauthorized to access subscription plans");
     }
   } catch (error) {
     console.error(error);

@@ -1,21 +1,21 @@
-const { StatusCodes } = require('http-status-codes');
-const Product = require('../models/productsSchema');
-const coinbase = require('coinbase-commerce-node');
-const PurchaseHistoryModel = require('../models/purchaseSchema');
-const OrderHistoryModel = require('../models/orderHistorySchema');
-const DonateModel = require('../models/donationSchema');
-const DonationJoi = require('../Utils/DonationJoiSchema');
-const PurchaseHistoryJoi = require('../Utils/PurchaseHistoryJoi');
-const OrderHistoryJoi = require('../Utils/OrderHistoryJoi');
-const sendMail = require('../Utils/sendMail');
-const path = require('path');
-const fs = require('fs');
-const ejs = require('ejs');
+const { StatusCodes } = require("http-status-codes");
+const Product = require("../models/productsSchema");
+const coinbase = require("coinbase-commerce-node");
+const PurchaseHistoryModel = require("../models/purchaseSchema");
+const OrderHistoryModel = require("../models/orderHistorySchema");
+const DonateModel = require("../models/donationSchema");
+const DonationJoi = require("../Utils/DonationJoiSchema");
+const PurchaseHistoryJoi = require("../Utils/PurchaseHistoryJoi");
+const OrderHistoryJoi = require("../Utils/OrderHistoryJoi");
+const sendMail = require("../Utils/sendMail");
+const path = require("path");
+const fs = require("fs");
+const ejs = require("ejs");
 
 var Webhook = coinbase.Webhook;
-const dotenv = require('dotenv').config();
+const dotenv = require("dotenv").config();
 
-const Client = require('../models/clientAuthSchema');
+const Client = require("../models/clientAuthSchema");
 const coinbaseClient = coinbase.Client;
 const resources = coinbase.resources;
 
@@ -23,7 +23,7 @@ const adminUrl = process.env.ADMIN_URL;
 const serverUrl = process.env.SERVER_URL;
 const clientUrl = process.env.CLIENT_URL;
 
-const stripe = require('stripe')(process.env.STRIPE_SECRETE_KEY);
+const stripe = require("stripe")(process.env.STRIPE_SECRETE_KEY);
 const stripeWebhookPurchaseSecret = process.env.STRIPE_PRODUCT_WEBHOOK_SECRETE;
 // const clientObj = Client.init(process.env.COINBASE_API_KEY);
 // clientObj.setRequestTimeout(3000);
@@ -38,11 +38,11 @@ const StripeCheckout = async (req, res) => {
   try {
     if (!user) {
       throw new UnAuthorizedError(
-        'User must be logged in to purchase a product'
+        "User must be logged in to purchase a product"
       );
     }
 
-    if (!data.name && data.name !== 'Donation') {
+    if (!data.name && data.name !== "Donation") {
       await Client.findByIdAndUpdate(
         String(user._id),
         {
@@ -84,7 +84,7 @@ const StripeCheckout = async (req, res) => {
 
       const lineItems = data.product.map((product) => ({
         price_data: {
-          currency: 'usd',
+          currency: "usd",
           product_data: {
             name: product.product.title,
             images: [product.product.thumbnail],
@@ -97,7 +97,7 @@ const StripeCheckout = async (req, res) => {
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         customer: customer.id,
-        mode: 'payment',
+        mode: "payment",
         // cart: JSON.stringify(lineItems),
         success_url: `${localurl}/paymentsuccess?success=true`,
         cancel_url: `${localurl}/paymenterror?canceled=true`,
@@ -136,7 +136,7 @@ const StripeCheckout = async (req, res) => {
         line_items: [
           {
             price_data: {
-              currency: 'usd',
+              currency: "usd",
               product_data: {
                 name: data.name,
               },
@@ -149,10 +149,10 @@ const StripeCheckout = async (req, res) => {
         metadata: {
           userId: user._id,
           description: data.note,
-          description2: 'donate',
+          description2: "donate",
         },
         customer: customer.id,
-        mode: 'payment',
+        mode: "payment",
         success_url: `${localurl}/paymentsuccess?success=true`,
         cancel_url: `${localurl}/paymenterror?canceled=true`,
       });
@@ -160,19 +160,17 @@ const StripeCheckout = async (req, res) => {
       res.status(StatusCodes.OK).send({ url: session.url });
     }
   } catch (error) {
-    console.error('Error in StripeCheckout:', error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .send({ error: 'Internal server error' });
+      .send({ error: "Internal server error" });
   }
 };
 
 const stripeProductWebhook = async (req, res) => {
-  console.log('stripe webhook for product');
 
-  const templatePath1 = path.join(__dirname, '../views/purchaseView.ejs');
-  const templatePath2 = path.join(__dirname, '../views/donationView.ejs');
-  const sig = req.headers['stripe-signature'];
+  const templatePath1 = path.join(__dirname, "../views/purchaseView.ejs");
+  const templatePath2 = path.join(__dirname, "../views/donationView.ejs");
+  const sig = req.headers["stripe-signature"];
 
   let event;
 
@@ -183,212 +181,152 @@ const stripeProductWebhook = async (req, res) => {
       stripeWebhookPurchaseSecret
     );
   } catch (err) {
-    res.status(400).send(`Webhook Error: ${err.message}`);
-    return;
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // Handle the event
-  switch (event.type) {
-    case 'checkout.session.async_payment_failed':
-      const checkoutSessionAsyncPaymentFailed = event.data.object;
-      // Then define and call a function to handle the event checkout.session.async_payment_failed
-      console.log('payment failed', checkoutSessionAsyncPaymentFailed);
-      break;
-    case 'checkout.session.async_payment_succeeded':
-      const checkoutSessionAsyncPaymentSucceeded = event.data.object;
-      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
-      console.log('Checkout successful', checkoutSessionAsyncPaymentSucceeded);
-      break;
+  try {
+    switch (event.type) {
+      case "checkout.session.async_payment_failed":
+        break;
 
-    case 'checkout.session.completed':
-      const checkoutSessionCompleted = event.data.object;
-      // Then define and call a function to handle the event checkout.session.async_payment_succeeded
+      case "checkout.session.async_payment_succeeded":
+        break;
 
-      let email = checkoutSessionCompleted.customer_details.email;
+      case "checkout.session.completed":
+        const checkoutSessionCompleted = event.data.object;
+        const {
+          customer_details,
+          metadata,
+          payment_status,
+          payment_method_types,
+          id,
+          amount_total,
+          currency,
+        } = checkoutSessionCompleted;
 
-      const olduser = await Client.findOne({ email });
-
-      let cartdesc = checkoutSessionCompleted.metadata.description;
-      let cartdesc2 = checkoutSessionCompleted.metadata.description2;
-
-      const donationTime = new Date(); // Instantiate a new Date object for current time
-      const hours = donationTime.getHours();
-      const minutes = donationTime.getMinutes();
-      const seconds = donationTime.getSeconds();
-
-      // Format the time
-      const formattedTime = `${hours}:${minutes}:${seconds}`;
-
-      const currentDate = new Date(); // Instantiate a new Date object for current date
-      const year = currentDate.getFullYear();
-      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-      const day = String(currentDate.getDate()).padStart(2, '0');
-
-      // Format the date
-      const formattedDate = `${year}-${month}-${day}`;
-
-      console.log('2 stripe webhook for product');
-      console.log("cartdesc2", cartdesc2);
-
-      if (cartdesc2 === 'Buy') {
-        // Assuming your cart contains product IDs
-
-        const productIds = olduser.cart.map((item) => item.product);
-
-        // Retrieve the full product details from MongoDB using product IDs
-        const products = await Product.find({ _id: { $in: productIds } });
-
-        // Map each item in the cart to its corresponding product information
-        const combinedCart = olduser.cart.map((item) => {
-          // Find the product object in the products array that matches the current item's product ID
-          const productInfo = products.find(
-            (product) => product._id.toString() === item.product.toString()
-          );
-
-          // Return an object containing product information, quantity, and other properties from the original cart item
-          return {
-            product: productInfo,
-            quantity: item.quantity,
-            _id: item._id,
-          };
-        });
-
-        console.log(combinedCart);
-
-        let amount_check = checkoutSessionCompleted.amount_total / 100;
-
-        const data = {
-          email: olduser.email,
-          name: olduser.fullname,
-          amount: amount_check,
-          currency: checkoutSessionCompleted.currency,
-          payment_Date: formattedDate, // Current date
-          payment_Time: formattedTime, // Current time
-          cart: combinedCart,
-          note: cartdesc,
-          payment_status: checkoutSessionCompleted.payment_status,
-          payment_method_types:
-            checkoutSessionCompleted.payment_method_types[0],
-          transaction_Id: checkoutSessionCompleted.id,
-          phone: olduser.phone,
-          address: checkoutSessionCompleted.customer_details.address.line1,
-          city: checkoutSessionCompleted.customer_details.address.city,
-          postal_code:
-            checkoutSessionCompleted.customer_details.address.postal_code,
-          state: checkoutSessionCompleted.customer_details.address.state,
-          country: checkoutSessionCompleted.customer_details.address.country,
-        };
-
-        const data2 = {
-          email: olduser.email,
-          name: olduser.fullname,
-          amount: amount_check,
-          currency: checkoutSessionCompleted.currency,
-          payment_Date: formattedDate, // Current date
-          payment_Time: formattedTime, // Current time
-          cart: combinedCart,
-          note: cartdesc,
-          delivery_Status: 'pending',
-          payment_status: checkoutSessionCompleted.payment_status,
-          payment_method_types:
-            checkoutSessionCompleted.payment_method_types[0],
-          transaction_Id: checkoutSessionCompleted.id,
-          phone: olduser.phone,
-          address: checkoutSessionCompleted.customer_details.address.line1,
-          city: checkoutSessionCompleted.customer_details.address.city,
-          postal_code:
-            checkoutSessionCompleted.customer_details.address.postal_code,
-          state: checkoutSessionCompleted.customer_details.address.state,
-          country: checkoutSessionCompleted.customer_details.address.country,
-        };
-
-        const newData = await PurchaseHistoryModel.create(data);
-        const newData1 = await OrderHistoryModel.create(data2);
-
-        await Client.findByIdAndUpdate(olduser._id, {
-          $push: {
-            productpurchasehistory: newData._id,
-            orderhistory: newData1._id,
-          },
-          $set: {
-            cart: [],
-          },
-        });
-
-        const renderHtml = await ejs.renderFile(
-          templatePath1,
-          {
-            userFullname: olduser.fullname,
-            amount: amount_check,
-            // donation_data: data,
-          },
-          { async: true }
-        );
-
-        await sendMail({
-          email: olduser.email,
-          subject: 'Thank you for your order',
-          html: renderHtml,
-        });
-
-        console.log('sent email product successfully');
-      } else if (cartdesc === 'ABCDonatiom') {
-
-        let amount_check = checkoutSessionCompleted.amount_total / 100;
-
-        const data = {
-          email: olduser.email,
-          name: olduser.fullname,
-          amount: amount_check,
-          currency: checkoutSessionCompleted.currency,
-          donation_Date: formattedDate, // Current date
-          donation_Time: formattedTime, // Current time
-          payment_status: checkoutSessionCompleted.payment_status,
-          payment_method_types:
-            checkoutSessionCompleted.payment_method_types[0],
-          transaction_Id: checkoutSessionCompleted.id,
-        };
-
-        console.log('---------check1----------');
-
-        const { error, value } = DonationJoi.validate(data);
-
-        if (error) {
-          throw new ValidationError('Data recieved is invalid');
+        if (!customer_details || !customer_details.email) {
+          return res.status(400).send("Customer email is required.");
         }
 
-        const newData = await DonateModel.create(value);
+        const email = customer_details.email;
+        const olduser = await Client.findOne({ email });
 
-        olduser.donationhistory.unshift(newData._id);
+        if (!olduser) {
+          return res.status(400).send("User not found.");
+        }
 
-        await olduser.save();
+        const cartdesc = metadata?.description || "";
+        const cartdesc2 = metadata?.description2 || "";
 
-        const renderHtml = await ejs.renderFile(
-          templatePath2,
-          {
+        const formattedDate = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+        const formattedTime = new Date().toLocaleTimeString();
+
+
+        const amount_check = amount_total / 100; // Convert cents to actual amount
+
+        if (cartdesc2 === "Buy") {
+          // Fetch products
+          const productIds = olduser.cart.map((item) => item.product);
+          const products = await Product.find({ _id: { $in: productIds } });
+
+          const combinedCart = olduser.cart.map((item) => {
+            const productInfo = products.find(
+              (product) => product._id.toString() === item.product.toString()
+            );
+            return {
+              product: productInfo,
+              quantity: item.quantity,
+              _id: item._id,
+            };
+          });
+
+          const purchaseData = {
+            email,
+            name: olduser.fullname,
+            amount: amount_check,
+            currency,
+            payment_Date: formattedDate,
+            payment_Time: formattedTime,
+            cart: combinedCart,
+            note: cartdesc,
+            payment_status,
+            payment_method_types: payment_method_types[0],
+            transaction_Id: id,
+            phone: olduser.phone,
+            address: customer_details.address?.line1 || "",
+            city: customer_details.address?.city || "",
+            postal_code: customer_details.address?.postal_code || "",
+            state: customer_details.address?.state || "",
+            country: customer_details.address?.country || "",
+          };
+
+          const orderData = { ...purchaseData, delivery_Status: "pending" };
+
+          const newPurchase = await PurchaseHistoryModel.create(purchaseData);
+          const newOrder = await OrderHistoryModel.create(orderData);
+
+          await Client.findByIdAndUpdate(olduser._id, {
+            $push: {
+              productpurchasehistory: newPurchase._id,
+              orderhistory: newOrder._id,
+            },
+            $set: { cart: [] },
+          });
+
+          const renderHtml = await ejs.renderFile(templatePath1, {
             userFullname: olduser.fullname,
             amount: amount_check,
-            // donation_data: data,
-          },
-          { async: true }
-        );
+          });
 
-        await sendMail({
-          email: olduser.email,
-          subject: 'Thank You for Your Generous Support to Ambazonia Broadcasting Corporation!',
-          html: renderHtml,
-        });
+          await sendMail({
+            email,
+            subject: "Thank you for your order",
+            html: renderHtml,
+          });
 
-        console.log('sent email donate successfully');
-      }
-      break;
+        } else if (cartdesc === "ABCDonatiom") {
+          const donationData = {
+            email,
+            name: olduser.fullname,
+            amount: amount_check,
+            currency,
+            donation_Date: formattedDate,
+            donation_Time: formattedTime,
+            payment_status,
+            payment_method_types: payment_method_types[0],
+            transaction_Id: id,
+          };
 
-    default:
-      console.log(`Unhandled event type ${event.type}`);
+          const { error, value } = DonationJoi.validate(donationData);
+          if (error) {
+            throw new ValidationError("Invalid donation data received.");
+          }
+
+          const newDonation = await DonateModel.create(value);
+          olduser.donationhistory.unshift(newDonation._id);
+          await olduser.save();
+
+          const renderHtml = await ejs.renderFile(templatePath2, {
+            userFullname: olduser.fullname,
+            amount: amount_check,
+          });
+
+          await sendMail({
+            email,
+            subject: "Thank You for Your Generous Support!",
+            html: renderHtml,
+          });
+
+        }
+        break;
+
+      default:
+    }
+
+    res.status(200).end();
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
   }
-
-  // Return a 200 response to acknowledge receipt of the event
-  res.status(200).end();
 };
 
 // const Crypto = async (req, res) => {
@@ -445,7 +383,6 @@ const stripeProductWebhook = async (req, res) => {
 //       process.env.COINBASE_API_KEY
 //     );
 
-//     console.log("Successfully verified", event);
 
 //     if (event.type === "charge:confirmed") {
 //       let amount = event.data.pricing.local.amount;
@@ -453,8 +390,6 @@ const stripeProductWebhook = async (req, res) => {
 //       let userId = event.data.metadata.user_id;
 //     }
 //   } catch (error) {
-//     console.log("Failed");
-//     console.log(error);
 //   }
 // };
 

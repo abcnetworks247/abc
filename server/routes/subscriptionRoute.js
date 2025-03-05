@@ -14,7 +14,7 @@ router.route('/usersubscription').post(authChecker, createSubscription);
 
 router
   .route("/stripe/plan/webhook")
-  .post(express.raw({ type: "application/json" }), SubWebhook);
+  .post(express.raw({ type: 'application/json' }), SubWebhook);
   
 
 module.exports = router;

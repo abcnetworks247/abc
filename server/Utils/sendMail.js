@@ -2,30 +2,35 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const sendMail = async (options) => {
+  if (!options || !options.email || !options.subject || !options.html) {
+    throw new Error("Missing required email options");
+  }
+
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: false, // true for 465, false for 587
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: process.env.SMTP_PORT == "465", // Secure for port 465
     auth: {
       user: process.env.SMTP_MAIL,
       pass: process.env.SMTP_PASS,
     },
-    logger: true, // log to console
-    debug: true, // debug info
+    requireTLS: true,
+    logger: true,
+    debug: true,
   });
 
   const mailOptions = {
-    from: process.env.SMTP_MAIL, // Verified sender email
-    to: options.email, // Destination email
-    subject: options.subject, // Subject line
-    html: options.html, // HTML content
+    from: `"Your Name" <${process.env.SMTP_MAIL}>`, // More standard format
+    to: options.email,
+    subject: options.subject,
+    html: options.html,
   };
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log("Message sent: %s", info.messageId);
+    return info;
   } catch (error) {
-    console.error("Error occurred:", error);
+    throw new Error("Email sending failed");
   }
 };
 
