@@ -83,6 +83,10 @@ export default function Sidebar() {
       title: "News Type",
       href: "/dashboard/news/type",
     },
+    {
+      title: "News Update",
+      href: "/dashboard/news/update",
+    },
   ];
 
   const bottomNavItems = [
