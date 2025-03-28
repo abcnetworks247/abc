@@ -1,29 +1,35 @@
 "use client";
 
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-  Spinner,
-} from "@material-tailwind/react";
-import Image from "next/image";
 import { useState } from "react";
-import Api from "@/utils/Api";
-import axios from "axios";
+import Image from "next/image";
 import cookies from "js-cookie";
 import Confetti from "react-confetti";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Loader2, Upload, X } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
+import Api from "@/utils/Api";
+import Cookies from "js-cookie";
 
-function UploadComp({ handleOpen, size }) {
+function UploadComp({ handleOpen, size, onUploadSuccess }) {
   const [uploadfile, setUploadFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
   const [successful, setSuccessfull] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadstate, setUploadState] = useState(null);
+  const [progress, setProgress] = useState(0);
+    const AuthToken = Cookies.get("adminToken");
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
 
     const imageUrl = URL.createObjectURL(selectedFile);
     setFileUrl(imageUrl);
@@ -31,163 +37,202 @@ function UploadComp({ handleOpen, size }) {
   };
 
   const HandleUpload = async () => {
+    if (!uploadfile) {
+      toast.error("Please select a file to upload");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("image", uploadfile);
-
-    const token = cookies.get("adminToken");
 
     try {
       setLoading(true);
       setUploadState("Uploading, please wait...");
-      console.log("token", token);
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/file/upload`,
-        formData, // Pass the FormData directly as the second parameter
+      setProgress(10);
+
+      const response = await Api.post(
+        "admin/filemanager/file/upload",
+        formData,
         {
           headers: {
-            Authorization: `Bearer ${String(token)}`,
+            Authorization: `Bearer ${String(AuthToken)}`,
             "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percentCompleted);
           },
         }
       );
 
       if (response.status === 201) {
-        console.log("successful");
-        setUploadState("File Uploaded Successfully 🎉🎉");
+        setProgress(100);
+        setUploadState("File Uploaded Successfully 🎉");
         setSuccessfull(true);
-        setLoading(null)
+
+        toast.success("File uploaded successfully");
+
+        // Notify parent component about successful upload
+        if (onUploadSuccess) {
+          onUploadSuccess(response.data.data);
+        }
+
         setTimeout(() => {
           setLoading(false);
           setSuccessfull(null);
+          setFileUrl(null);
+          setUploadFile(null);
+          setUploadState(null);
+          setProgress(0);
           handleOpen(null);
-          // if(typeof window !== "undefined"){
-          //   window.location.reload();
-          // }
-        }, [5000]);
+        }, 2000);
       } else {
-        setTimeout(() => {
-          setLoading(false);
-          setUploadState("Error: Try again later");
-          setSuccessfull(null);
-          handleOpen(null);
-        }, [2000]);
-        console.log("error");
+        handleUploadError("Upload failed. Please try again.");
       }
     } catch (error) {
+      handleUploadError(
+        error.response?.data?.message || "Upload failed. Please try again."
+      );
       console.error("Error:", error);
     }
   };
 
+  const handleUploadError = (message) => {
+    setProgress(0);
+    setLoading(false);
+    setUploadState(`Error: ${message}`);
+
+    toast.error(message);
+  };
+
+  const isOpen =
+    size === "xs" ||
+    size === "sm" ||
+    size === "md" ||
+    size === "lg" ||
+    size === "xl" ||
+    size === "xxl";
+
   return (
-    <div> 
-      <Dialog
-        open={
-          size === "xs" ||
-          size === "sm" ||
-          size === "md" ||
-          size === "lg" ||
-          size === "xl" ||
-          size === "xxl"
-        }
-        size={size || "sm"}
-        handler={handleOpen}
-      >
-        <DialogHeader>Choose Image.</DialogHeader>
-        <DialogBody className="px-6">
-          <div
-            className="relative w-full p-6 border-2 border-gray-300 border-dashed rounded-lg h-[50vh] flex flex-col items-center justify-center"
-            id="dropzone"
-          >
-            <form encType="multipart/form-data">
-              <input
-                type="file"
-                className="absolute inset-0 z-50 w-full h-full opacity-0"
-                onChange={(e) => handleImageChange(e)}
-                name="image"
-                accept="image/*"
-              />
-            </form>
-            <div className="text-center">
-              {!fileUrl ? (
-                <Image
-                  className="w-12 h-12 mx-auto"
-                  src="https://www.svgrepo.com/show/357902/image-upload.svg"
-                  alt=""
-                  height={200}
-                  width={200}
-                />
-              ) : (
+    <Dialog open={isOpen} onOpenChange={() => !loading && handleOpen(null)}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Upload Image</DialogTitle>
+        </DialogHeader>
+
+        <div className="relative w-full p-6 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-lg min-h-[300px] flex flex-col items-center justify-center">
+          <form encType="multipart/form-data">
+            <input
+              type="file"
+              className="absolute inset-0 z-50 w-full h-full opacity-0 cursor-pointer"
+              onChange={handleImageChange}
+              name="image"
+              accept="image/*"
+              disabled={loading}
+            />
+          </form>
+
+          <div className="text-center">
+            {!fileUrl ? (
+              <div className="mx-auto w-32 h-32 flex items-center justify-center rounded-full bg-muted/30">
+                <Upload className="h-10 w-10 text-muted-foreground" />
+              </div>
+            ) : (
+              <div className="relative">
                 <Image
                   className="w-[200px] h-[200px] object-cover mx-auto rounded-lg shadow-sm"
-                  src={fileUrl}
-                  alt=""
+                  src={fileUrl || "/placeholder.svg"}
+                  alt="Preview"
                   height={200}
                   width={200}
                 />
-              )}
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
-                <label
-                  htmlFor="file-upload"
-                  className="relative cursor-pointer"
-                >
-                  <span>Drag and drop</span>
-                  <span className="text-indigo-600"> or browse </span>
-                  <span> to upload</span>
-                  <input
-                    id="file-upload"
-                    name="file-upload"
-                    type="file"
-                    accept="image/*"
-                    className="sr-only"
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </label>
-              </h3>
-              <p className="mt-1 text-xs text-gray-500">
-                PNG, JPG, GIF up to 10MB
-              </p>
-            </div>
-            <img src="" className="hidden mx-auto mt-4 max-h-40" id="preview" />
-            {successful && (
-              <div className="absolute w-[50%] top-0 h-fit flex items-center justify-between bg-red-500">
-                <Confetti className="w-[30vw]" />
+                {!loading && (
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setFileUrl(null);
+                      setUploadFile(null);
+                    }}
+                    className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             )}
-          </div>
-        </DialogBody>
-        <DialogFooter className="">
-          {!loading && <div className=""></div>}
 
-          <div className="flex flex-row items-center gap-4 ml-5">
-            {loading && <Spinner />
-            
-            }
-            <span className="text-sm"> {uploadstate}</span>
+            <h3 className="mt-4 text-sm font-medium">
+              <span>Drag and drop</span>
+              <span className="text-primary"> or browse </span>
+              <span>to upload</span>
+            </h3>
+            <p className="mt-1 text-xs text-muted-foreground">
+              PNG, JPG, GIF up to 10MB
+            </p>
           </div>
 
-          <div className="">
-            <Button
-              variant="text"
-              color="red"
-              onClick={() => handleOpen(null)}
-              className="mr-1"
-            >
-              <span>Cancel</span>
-            </Button>
-            <Button
-              variant="gradient"
-              onClick={() => HandleUpload()}
-              disabled={!fileUrl}
-              className={`${
-                !fileUrl ? "cursor-not-allowed" : "cursor-pointer"
-              }`}
-            >
-              <span>Upload</span>
-            </Button>
+          {successful && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Confetti
+                width={500}
+                height={300}
+                recycle={false}
+                numberOfPieces={200}
+              />
+            </div>
+          )}
+        </div>
+
+        {loading && (
+          <div className="w-full space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">
+                {uploadstate}
+              </span>
+              <span className="text-sm font-medium">{progress}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
           </div>
+        )}
+
+        {!loading && uploadstate && (
+          <div className="flex items-center gap-2 text-sm">
+            {successful ? (
+              <div className="text-green-500 font-medium">{uploadstate}</div>
+            ) : (
+              <div className="text-destructive font-medium">{uploadstate}</div>
+            )}
+          </div>
+        )}
+
+        <DialogFooter className="flex justify-between items-center">
+          <Button
+            variant="outline"
+            onClick={() => handleOpen(null)}
+            disabled={loading}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={HandleUpload}
+            disabled={!fileUrl || loading}
+            className={`${!fileUrl ? "cursor-not-allowed" : "cursor-pointer"}`}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading
+              </>
+            ) : (
+              "Upload"
+            )}
+          </Button>
         </DialogFooter>
-      </Dialog>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

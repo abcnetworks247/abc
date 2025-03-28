@@ -1,26 +1,45 @@
-import { Button, Spinner } from "@material-tailwind/react";
-import Cookies from "js-cookie";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Confetti from "react-confetti";
-import Image from "next/image";
+"use client";
 
-const UploadPop = () => {
+import { useState } from "react";
+import Cookies from "js-cookie";
+import Confetti from "react-confetti";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Loader2, Upload, X } from "lucide-react";
+import { toast } from "sonner";
+import Api from "@/utils/Api";
+
+const UploadPop = ({ handleOpen, onUploadSuccess }) => {
   const [uploadFile, setUploadFile] = useState(null);
   const [fileUrl, setFileUrl] = useState(null);
   const [successful, setSuccessful] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadState, setUploadState] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [imageLoading, setImageLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
 
+    setImageLoading(true);
     const imageUrl = URL.createObjectURL(selectedFile);
+
     setFileUrl(imageUrl);
     setUploadFile(selectedFile);
+
+    // Use a short timeout to simulate loading and ensure UI updates properly
+    setTimeout(() => {
+      setImageLoading(false);
+    }, 300);
   };
 
   const handleUpload = async () => {
+    if (!uploadFile) {
+      toast.error("Please select a file to upload");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("image", uploadFile);
 
@@ -29,83 +48,181 @@ const UploadPop = () => {
     try {
       setLoading(true);
       setUploadState("Uploading, please wait...");
+      setProgress(10);
 
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}admin/file/upload`,
+      console.log(
+        "Starting upload with token:",
+        token ? "Token exists" : "No token"
+      );
+
+      const response = await Api.post(
+        "admin/filemanager/file/upload",
         formData,
         {
           headers: {
             Authorization: `Bearer ${String(token)}`,
             "Content-Type": "multipart/form-data",
           },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percentCompleted);
+          },
         }
       );
 
+      console.log("Upload response:", response.status, response.data);
+
       if (response.status === 201) {
-        setUploadState("File Uploaded Successfully 🎉🎉");
+        setProgress(100);
+        setUploadState("File Uploaded Successfully 🎉");
         setSuccessful(true);
         setLoading(false);
 
-        setTimeout(() => {
-          setSuccessful(null);
-        }, 5000);
-      } else {
-        setLoading(false);
-        setUploadState("Error: Try again later");
+        toast.success("File uploaded successfully");
+
+        // Notify parent component about successful upload
+        if (onUploadSuccess) {
+          onUploadSuccess(response.data.data);
+        }
 
         setTimeout(() => {
           setSuccessful(null);
+          setFileUrl(null);
+          setUploadFile(null);
+          setUploadState(null);
+          setProgress(0);
+          // if (handleOpen) handleOpen(null);
         }, 2000);
+      } else {
+        setLoading(false);
+        setUploadState("Error: Try again later");
+        setProgress(0);
+        toast.error("Failed to upload file");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Upload error:", error);
+      setLoading(false);
+      setUploadState(
+        "Error: " + (error.response?.data?.message || "Try again later")
+      );
+      setProgress(0);
+      toast.error(error.response?.data?.message || "Failed to upload file");
     }
+  };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setFileUrl(null);
+    setUploadFile(null);
   };
 
   return (
     <div className="flex flex-col justify-start">
-      <div className="relative w-full p-6 border-2 border-gray-300 border-dashed rounded-lg h-[50vh] flex flex-col items-center justify-center" id="dropzone">
+      <div className="relative w-full p-6 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-lg min-h-[300px] flex flex-col items-center justify-center">
         <form encType="multipart/form-data">
-          <input type="file" className="absolute inset-0 z-50 w-full h-full opacity-0" onChange={handleImageChange} name="image" accept="image/*" />
+          <input
+            type="file"
+            className="absolute inset-0 z-50 w-full h-full opacity-0 cursor-pointer"
+            onChange={handleImageChange}
+            name="image"
+            accept="image/*"
+            disabled={loading}
+          />
         </form>
+
         <div className="text-center">
           {!fileUrl ? (
-            <Image className="w-12 h-12 mx-auto" src="https://www.svgrepo.com/show/357902/image-upload.svg" alt="" height={200} width={200} />
+            <div className="mx-auto w-24 h-24 flex items-center justify-center rounded-full bg-muted/30">
+              {imageLoading ? (
+                <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+              ) : (
+                <Upload className="h-8 w-8 text-muted-foreground" />
+              )}
+            </div>
           ) : (
-            <Image className="w-[200px] h-[200px] object-cover mx-auto rounded-lg shadow-sm" src={fileUrl} alt="" height={200} width={200} />
+            <div className="relative">
+              <div className="w-[200px] h-[200px] overflow-hidden rounded-lg shadow-sm">
+                <img
+                  className="w-full h-full object-cover"
+                  src={fileUrl || "/placeholder.svg"}
+                  alt="Preview"
+                />
+              </div>
+              {!loading && (
+                <button
+                  onClick={handleCancel}
+                  className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
           )}
-          <h3 className="mt-2 text-sm font-medium text-gray-900">
-            <label htmlFor="file-upload" className="relative cursor-pointer">
-              <span>Drag and drop</span>
-              <span className="text-indigo-600"> or browse </span>
-              <span> to upload</span>
-              <input id="file-upload" name="file-upload" type="file" accept="image/*" className="sr-only" />
-            </label>
+
+          <h3 className="mt-4 text-sm font-medium">
+            <span>Drag and drop</span>
+            <span className="text-primary"> or browse </span>
+            <span>to upload</span>
           </h3>
-          <p className="mt-1 text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            PNG, JPG, GIF up to 10MB
+          </p>
         </div>
-        <img src="" className="hidden mx-auto mt-4 max-h-40" id="preview" />
+
         {successful && (
-          <div className="absolute w-[50%] top-0 h-fit flex items-center justify-between bg-red-500">
-            <Confetti className="w-[30vw]" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Confetti
+              width={500}
+              height={300}
+              recycle={false}
+              numberOfPieces={200}
+            />
           </div>
         )}
       </div>
 
-      <div className="flex flex-row items-center justify-between mt-10">
-        {!loading && <div className=""></div>}
-
-        <div className="flex flex-row items-center gap-4 ml-5">
-          {loading && <Spinner />}
-          <span className="text-sm"> {uploadState}</span>
+      {loading && (
+        <div className="w-full space-y-2 mt-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">{uploadState}</span>
+            <span className="text-sm font-medium">{progress}%</span>
+          </div>
+          <Progress value={progress} className="h-2" />
         </div>
+      )}
 
-        <div className="">
-          <Button variant="text" color="red" onClick={() => handleOpen(null)} className="mr-1">
-            <span>Cancel</span>
+      {!loading && uploadState && (
+        <div className="flex items-center gap-2 text-sm mt-4">
+          {successful ? (
+            <div className="text-green-500 font-medium">{uploadState}</div>
+          ) : (
+            <div className="text-destructive font-medium">{uploadState}</div>
+          )}
+        </div>
+      )}
+
+      <div className="flex flex-row items-center justify-between mt-6">
+        <div></div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => handleOpen && handleOpen(null)}
+            disabled={loading}
+          >
+            Cancel
           </Button>
-          <Button variant="gradient" onClick={handleUpload} disabled={!fileUrl} className={`${!fileUrl ? "cursor-not-allowed" : "cursor-pointer"}`}>
-            <span>Upload</span>
+          <Button onClick={handleUpload} disabled={!fileUrl || loading}>
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Uploading
+              </>
+            ) : (
+              "Upload"
+            )}
           </Button>
         </div>
       </div>

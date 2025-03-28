@@ -43,6 +43,7 @@ export default function EditNewsPage() {
   const [newType, setNewType] = useState("");
   const [category, setCategory] = useState([]);
   const [imageSrc, setImageSrc] = useState(null);
+  const [blogId, setBlogId] = useState("");
 
   const JoditEditor = useMemo(
     () => dynamic(() => import("jodit-react"), { ssr: false }),
@@ -78,6 +79,7 @@ export default function EditNewsPage() {
         setNewType(data.type);
         setNewCategory(data.category);
         setImageSrc(data.blogimage);
+        setBlogId(data._id); // Store the blog ID
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -105,6 +107,11 @@ export default function EditNewsPage() {
       return;
     }
 
+    if (!blogId) {
+      toast.error("Blog ID not found. Please try again.");
+      return;
+    }
+
     const toastId = toast.loading("Updating post...");
     setSubmitting(true);
 
@@ -112,7 +119,7 @@ export default function EditNewsPage() {
       const response = await Api.patch(
         "admin/blog/update",
         {
-          blogid: id,
+          blogid: blogId, // Use the stored blogId instead of undefined 'id'
           title,
           shortdescription: shortDescription,
           longdescription: html,
@@ -129,9 +136,13 @@ export default function EditNewsPage() {
 
       if (response.status === 200) {
         toast.success("Post updated successfully", { id: toastId });
-        router.push("/dashboard/news/all-news");
+        // Add a small delay before redirecting
+        setTimeout(() => {
+          router.push("/dashboard/news/all-news");
+        }, 1500);
       }
     } catch (error) {
+      console.error("Update error:", error);
       const errorMessage =
         error.response?.data?.message || "Failed to update post";
       toast.error(errorMessage, { id: toastId });
@@ -270,22 +281,24 @@ export default function EditNewsPage() {
             <div className="space-y-2">
               <Label>Featured Image</Label>
               {!imageSrc ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full h-32"
-                  onClick={() => handleOpen("lg")}
-                >
-                  <div className="flex flex-col items-center justify-center">
-                    <ImagePlus className="h-8 w-8 mb-2 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      Click to upload image
-                    </span>
-                    <span className="text-xs text-muted-foreground mt-1">
-                      PNG, JPG, GIF up to 10MB
-                    </span>
-                  </div>
-                </Button>
+                <a href="#value=newsimage">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full h-32"
+                    onClick={() => handleOpen("lg")}
+                  >
+                    <div className="flex flex-col items-center justify-center">
+                      <ImagePlus className="h-8 w-8 mb-2 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        Click to upload image
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-1">
+                        PNG, JPG, GIF up to 10MB
+                      </span>
+                    </div>
+                  </Button>
+                </a>
               ) : (
                 <div className="relative rounded-lg overflow-hidden border">
                   <Image

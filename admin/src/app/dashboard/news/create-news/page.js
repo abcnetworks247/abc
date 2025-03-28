@@ -57,7 +57,7 @@ function Page() {
     setHtml(newContent);
   }
 
-  const handleUpload = async (e) => {
+  async function handleUpload(e) {
     e.preventDefault();
 
     if (!title || !newType || !newCategory || !shortDescription || !html) {
@@ -89,16 +89,20 @@ function Page() {
 
       if (response.status === 201) {
         toast.success("News post created successfully", { id: toastId });
-        router.push("/dashboard/news/all-news");
+        // Add a small delay before redirecting to ensure the toast is visible
+        setTimeout(() => {
+          router.push("/dashboard/news/all-news");
+        }, 1500);
       }
     } catch (error) {
+      console.error("Error creating post:", error);
       const errorMessage =
         error.response?.data?.message || "Something went wrong";
       toast.error(`Error: ${errorMessage}`, { id: toastId });
     } finally {
       setSubmitting(false);
     }
-  };
+  }
 
   const fetchData = useCallback(async () => {
     try {
@@ -256,22 +260,24 @@ function Page() {
             <div className="space-y-4">
               <Label>Featured Image</Label>
               {!imageSrc ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full h-32"
-                  onClick={() => handleOpen("lg")}
-                >
-                  <div className="flex flex-col items-center justify-center">
-                    <ImagePlus className="h-8 w-8 mb-2 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">
-                      Click to upload image
-                    </span>
-                    <span className="text-xs text-muted-foreground mt-1">
-                      PNG, JPG, GIF up to 10MB
-                    </span>
-                  </div>
-                </Button>
+                <a href="#value=newsimage">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full h-32"
+                    onClick={() => handleOpen("lg")}
+                  >
+                    <div className="flex flex-col items-center justify-center">
+                      <ImagePlus className="h-8 w-8 mb-2 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        Click to upload image
+                      </span>
+                      <span className="text-xs text-muted-foreground mt-1">
+                        PNG, JPG, GIF up to 10MB
+                      </span>
+                    </div>
+                  </Button>
+                </a>
               ) : (
                 <div className="relative rounded-lg overflow-hidden">
                   <Image
