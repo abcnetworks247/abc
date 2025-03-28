@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-require('dotenv').config();
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 const AdminSchema = new mongoose.Schema(
   {
@@ -11,11 +11,11 @@ const AdminSchema = new mongoose.Schema(
     userdp: {
       type: String,
       default:
-        'https://i.pinimg.com/originals/a6/f3/c5/a6f3c55ace829310723adcb7a468869b.png',
+        "https://i.pinimg.com/originals/a6/f3/c5/a6f3c55ace829310723adcb7a468869b.png",
     },
     userbio: {
       type: String,
-      default: 'Tell us about yourself',
+      default: "Tell us about yourself",
     },
     email: {
       type: String,
@@ -28,20 +28,20 @@ const AdminSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['superadmin', 'admin', 'editor'],
-      default: 'editor',
+      enum: ["superadmin", "admin", "editor"],
+      default: "editor",
     },
     mypost: [
       {
         type: mongoose.Types.ObjectId,
-        ref: 'Blog',
+        ref: "Blog",
       },
     ],
   },
   { timestamps: true }
 );
 
-AdminSchema.pre('save', async function (next) {
+AdminSchema.pre("save", async function (next) {
   const gensalt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, gensalt);
   next();
@@ -51,24 +51,24 @@ AdminSchema.methods.checkPassword = async function (password) {
   try {
     const checkPassword = await bcrypt.compare(password, this.password);
 
-    console.log('Password comparison result:', checkPassword);
+    console.log("Password comparison result:", checkPassword);
 
     return checkPassword;
-    
   } catch (error) {
-    console.error('Error comparing passwords:', error);
-    throw new Error('Error comparing passwords');
+    console.error("Error comparing passwords:", error);
+    throw new Error("Error comparing passwords");
   }
 };
 
-AdminSchema.methods.newHashPassword = async function (password) {
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return hashedPassword;
-  } catch (error) {
-    console.error("Error hashing password:", error);
-    throw new Error("Failed to hash password");
-  }
-};
+// AdminSchema.methods.newHashPassword = async function (password) {
+//   try {
+//     const gensalt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(password, gensalt);
+//     return hashedPassword;
+//   } catch (error) {
+//     console.error("Error hashing password:", error);
+//     throw new Error("Failed to hash password");
+//   }
+// };
 
-module.exports = mongoose.model('Admin', AdminSchema);
+module.exports = mongoose.model("Admin", AdminSchema);

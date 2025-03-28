@@ -204,11 +204,11 @@ const userUpdatePassword = async (req, res) => {
       throw new UnAuthorizedError("User not found");
     }
 
-    const hashedPassword = await checkuser.newHashPassword(password);
+    // const hashedPassword = await checkuser.newHashPassword(password);
 
     await Client.findByIdAndUpdate(
       checkuser._id,
-      { password: hashedPassword },
+      { password },
       { new: true }
     );
 
@@ -249,11 +249,11 @@ const activeUserUpdatePassword = async (req, res) => {
       throw new UnAuthorizedError("old password is invalid");
     }
 
-    const hashedPassword = await checkuser.newHashPassword(newPassword);
+    // const hashedPassword = await checkuser.newHashPassword(newPassword);
 
     await Client.findByIdAndUpdate(
       checkuser._id,
-      { password: hashedPassword },
+      { password },
       { new: true }
     );
 

@@ -8,6 +8,7 @@ const blog = require('../models/blogSchema');
 const Admin = require('../models/adminAuthSchema');
 const NewsType = require('../models/newsTypeSchema');
 require('dotenv').config();
+const mongoose = require('mongoose');
 const sendMail = require('../Utils/sendMail');
 const slugify = require("slugify");
 const path = require('path');
@@ -228,7 +229,6 @@ const createBlog = async (req, res) => {
       throw new UnAuthorizedError("User not found");
     }
 
-    console.log("User authorized to create a new blog");
 
     if (!["superadmin", "admin", "editor"].includes(currentUser.role)) {
       throw new UnAuthorizedError(
@@ -257,57 +257,61 @@ const createBlog = async (req, res) => {
       throw new ValidationError("Invalid blog information", error.details);
     }
 
-    console.log("Blog data validated successfully");
 
     const blogData = await blog.create(value);
 
-    console.log("Blog created successfully:", blogData);
 
     currentUser.mypost.push(blogData._id);
-    console.log("Blog ID pushed to user's mypost array");
 
     await currentUser.save();
 
     const templatePath = path.join(__dirname, "../views/postView.ejs");
     const postlink = `${clientUrl}/blog/${blogData.slug}`;
 
-    const allUsers = await Client.find();
-    const userEmails = allUsers.map((user) => user.email).filter(Boolean);
+    // Sending emails in the background using setImmediate
+    setImmediate(async () => {
+      try {
+        const allUsers = await Client.find();
+        const userEmails = allUsers.map((user) => user.email).filter(Boolean);
 
-    for (const email of userEmails) {
-      const renderHtml = await ejs.renderFile(
-        templatePath,
-        {
-          title: title,
-          shortdescription: shortdescription,
-          blogimage: blogimage,
-          postlink: postlink,
-        },
-        { async: true }
-      );
+        for (const email of userEmails) {
+          const renderHtml = await ejs.renderFile(
+            templatePath,
+            {
+              title: title,
+              shortdescription: shortdescription,
+              blogimage: blogimage,
+              postlink: postlink,
+            },
+            { async: true }
+          );
 
-      await sendMail({
-        email: email,
-        subject: "New post update on ABC Networks 24",
-        html: renderHtml,
-      });
+          await sendMail({
+            email: email,
+            subject: "New post update on ABC Networks 24",
+            html: renderHtml,
+          });
 
-      console.log(`Sent email to ${email} successfully`);
-    }
+        }
 
-    console.log("sent email product successfully");
+        
+      } catch (error) {
+      
+      }
+    });
 
     return res.status(StatusCodes.CREATED).json({
       blogData,
       message: "Blog created successfully",
     });
   } catch (error) {
-    console.error("Error creating blog:", error);
+
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: error.message, details: error.details });
   }
 };
+
 
 const updateBlog = async (req, res) => {
   try {
@@ -371,40 +375,53 @@ const updateBlog = async (req, res) => {
 
 const deleteBlog = async (req, res) => {
   const { id } = req.body;
-  console.log(id);
+
+  console.log("Request received to delete blog with id:", id);
+
+  // Validate that the id is a valid ObjectId
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    console.log("Invalid blog ID");
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid blog ID",
+    });
+  }
+
+  const blogId = String(id);
 
   try {
     const currentUser = req.user;
 
     // Find the blog by ID
-    const blogData = await blog.findById(id);
+    const blogData = await blog.findById(blogId);
+    console.log("Blog data found:", blogData);
 
     // Ensure the blog exists
     if (!blogData) {
-      throw new NotFoundError('Blog not found');
+      console.log("Blog not found");
+      throw new NotFoundError("Blog not found");
     }
 
     // Check if the user is authorized to delete the blog
     if (
-      !['superadmin', 'admin', 'editor', 'owner'].includes(currentUser.role)
+      !["superadmin", "admin", "editor", "owner"].includes(currentUser.role)
     ) {
-      throw new UnAuthorizedError('You are not authorized to delete this blog');
+      console.log("User not authorized to delete blog");
+      throw new UnAuthorizedError("You are not authorized to delete this blog");
     }
 
     // Log user information for debugging
-
     try {
       // Get user information
       const authorinfo = await Admin.findById(blogData.author);
+      console.log("Author info:", authorinfo);
 
       // Get user's mypost array
       const authorPosts = authorinfo.mypost;
-      console.log('author post', authorPosts);
+      console.log("Author's mypost array:", authorPosts);
 
       // Find the index of the blog in the mypost array
-      const index = authorPosts.indexOf(id);
-
-      console.log('index of', index);
+      const index = authorPosts.indexOf(blogId);
+      console.log("Index of blog in author's mypost array:", index);
 
       if (index !== -1) {
         // Remove the blog ID from the mypost array
@@ -412,34 +429,38 @@ const deleteBlog = async (req, res) => {
 
         // Save the updated mypost array
         await authorinfo.save();
+        console.log("Updated author's mypost array:", authorPosts);
 
         // Delete the blog
-        await blog.findByIdAndDelete(id);
+        await blog.findByIdAndDelete(blogId);
+        console.log("Blog deleted successfully");
 
         // Respond with success message
-        res
+        return res
           .status(StatusCodes.OK)
-          .json({ message: 'Blog deleted successfully' });
-        console.log('true');
+          .json({ message: "Blog deleted successfully" });
       } else {
         // Blog ID not found in the user's mypost array
-        res
+        console.log("Blog ID not found in user's mypost array");
+        return res
           .status(StatusCodes.NOT_FOUND)
           .json({ message: "Blog ID not found in user's mypost array" });
       }
     } catch (error) {
-      console.error(error);
-      res
+      console.error("Error while updating user's mypost array:", error);
+      return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ message: 'An error occurred while updating user data' });
+        .json({ message: "An error occurred while updating user data" });
     }
   } catch (error) {
-    console.error(error);
-    res
+    console.error("Error deleting blog:", error);
+    return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });
   }
 };
+
+
 
 const getUserBlog = async (req, res) => {
   const { id } = req.params;

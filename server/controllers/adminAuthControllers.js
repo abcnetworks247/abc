@@ -236,11 +236,11 @@ const userUpdatePassword = async (req, res) => {
       throw new UnAuthorizedError("User not found");
     }
 
-    const hashedPassword = await checkuser.newHashPassword(password);
+    // const hashedPassword = await checkuser.newHashPassword(password);
 
     await Admin.findByIdAndUpdate(
       checkuser._id,
-      { password: hashedPassword },
+      { password },
       { new: true }
     );
 
