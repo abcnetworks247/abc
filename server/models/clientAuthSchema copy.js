@@ -2,8 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-const SALT_ROUNDS = 10; // Define salt rounds consistently
-
 const AuthSchema = new mongoose.Schema(
   {
     fullname: {
@@ -41,7 +39,7 @@ const AuthSchema = new mongoose.Schema(
       enum: ["basic", "coper", "silver", "gold", "diamond", "titanium"],
       default: "basic",
     },
-
+    
     cart: [
       {
         product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
@@ -53,31 +51,31 @@ const AuthSchema = new mongoose.Schema(
     ],
     orderhistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "OrderHistory",
       },
     ],
     subscriptionhistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "SubscriptionHistory",
       },
     ],
     donationhistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "donation",
       },
     ],
     wishlist: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Product",
       },
     ],
     productpurchasehistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "PurchaseHistory",
       },
     ],
@@ -92,7 +90,7 @@ AuthSchema.pre("save", async function (next) {
   }
 
   try {
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(this.password, salt);
     this.password = hashedPassword;
     next();
@@ -102,29 +100,20 @@ AuthSchema.pre("save", async function (next) {
 });
 
 AuthSchema.methods.checkPassword = async function (userPassword) {
-  try {
-    console.log("Comparing passwords in client schema method");
-    console.log("Input password:", userPassword);
-    console.log("Stored hash:", this.password);
-
-    const isMatch = await bcrypt.compare(userPassword, this.password);
-    console.log("Password comparison result:", isMatch);
-    return isMatch;
-  } catch (error) {
-    console.error("Error comparing passwords:", error);
-    throw new Error("Error comparing passwords");
-  }
+  const isMatch = await bcrypt.compare(userPassword, this.password);
+  console.log(isMatch)
+  return isMatch;
 };
 
-// Static method to hash a password (for use in controllers)
-AuthSchema.statics.hashPassword = async function (password) {
-  try {
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
-    return await bcrypt.hash(password, salt);
-  } catch (error) {
-    console.error("Error hashing password:", error);
-    throw new Error("Failed to hash password");
-  }
-};
+
+// AuthSchema.methods.newHashPassword = async (password) => {
+//   try {
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(password, salt);
+//     return hashedPassword;
+//   } catch (error) {
+//     throw error; // Re-throw the error to be handled by the caller
+//   }
+// };
 
 module.exports = mongoose.model("Client", AuthSchema);

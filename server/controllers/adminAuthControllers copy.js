@@ -10,7 +10,6 @@ const ejs = require("ejs");
 const { CreateToken, VerifyToken } = require("../Helper/authToken");
 const multer = require("multer");
 const cloudinary = require("../Utils/CloudinaryFileUpload");
-const bcrypt = require("bcrypt");
 
 const upload = multer({ dest: "public/tmp" });
 const adminUrl = process.env.ADMIN_URL;
@@ -22,7 +21,6 @@ const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-  InternalServerError,
 } = require("../errors/index");
 
 const Client = require("../models/clientAuthSchema");
@@ -50,7 +48,7 @@ const signUp = async (req, res) => {
 
     if (error) {
       console.log("error");
-      throw new ValidationError(error.message);
+      throw new ValidationError("error");
     }
 
     console.log("this is a valid user ", value);
@@ -74,25 +72,18 @@ const signIn = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    console.log("Login attempt for email:", email);
-
     // Find the user by email
     const olduser = await Admin.findOne({ email });
 
     // If user not found, throw a NotFoundError
     if (!olduser) {
-      console.log("User not found with email:", email);
       throw new NotFoundError("User not found");
     }
 
-    console.log("User found:", olduser.email);
-    console.log("Stored password hash:", olduser.password);
-
     // Authenticate user by checking password
-    console.log("Attempting to verify password");
-    const authenticatedUser = await bcrypt.compare(password, olduser.password);
+    const authenticatedUser = await olduser.checkPassword(password);
 
-    console.log("Password verification result:", authenticatedUser);
+    console.log("auth user:" + authenticatedUser);
 
     // If password doesn't match, throw an UnAuthorizedError
     if (!authenticatedUser) {
@@ -119,7 +110,6 @@ const signIn = async (req, res) => {
     });
   } catch (error) {
     // Handle errors
-    console.error("Login error:", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -128,10 +118,10 @@ const signIn = async (req, res) => {
 
 const singleAdmin = async (req, res) => {
   const id = req.params.id;
+  const userblog = await Blog.find({ author: id });
 
   try {
     const olduser = await Admin.findById(id);
-    const userblog = await Blog.find({ author: id });
 
     if (!olduser) {
       throw new NotFoundError("User not found");
@@ -181,6 +171,7 @@ const userRecovery = async (req, res) => {
         userEmail: userexist.email,
         userRecoveryUrl: passwordUpdateUrl,
       },
+
       { async: true }
     );
 
@@ -228,65 +219,38 @@ const userVerifyPasswordReset = async (req, res) => {
 const userUpdatePassword = async (req, res) => {
   const { reset, password, confirmPassword } = req.body;
 
-  console.log("Password reset request received");
+  console.log(reset, password, confirmPassword);
+
+  console.log(password, confirmPassword);
 
   try {
     if (password !== confirmPassword) {
       throw new ValidationError("Passwords do not match");
     }
 
-    // Verify token and get user ID
     const decodedId = VerifyToken(reset);
-    console.log("Decoded token:", decodedId);
 
-    if (!decodedId || !decodedId.id) {
-      throw new UnAuthorizedError("Invalid or expired token");
+    const checkuser = await Admin.findById(decodedId["id"]);
+
+    if (!checkuser) {
+      throw new UnAuthorizedError("User not found");
     }
 
-    // Find the user by ID
-    const userId = decodedId.id;
-    console.log("Looking for user with ID:", userId);
+    // const hashedPassword = await checkuser.newHashPassword(password);
 
-    const user = await Admin.findById(userId);
-
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
-    console.log("User found:", user.email);
-
-    // Hash the password directly
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    console.log("Password hashed successfully");
-
-    // Update the user document directly with the hashed password
-    const updatedUser = await Admin.findByIdAndUpdate(
-      userId,
-      { password: hashedPassword },
+    await Admin.findByIdAndUpdate(
+      checkuser._id,
+      { password },
       { new: true }
     );
 
-    if (!updatedUser) {
-      throw new Error("Failed to update user");
-    }
-
-    console.log("Password updated successfully for user:", updatedUser.email);
-
-    // For debugging: verify the new password would work
-    const passwordCheck = await bcrypt.compare(password, updatedUser.password);
-    console.log("Password verification check:", passwordCheck);
-
-    return res.status(StatusCodes.OK).json({
-      message: "Password updated successfully",
-      success: true,
-    });
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "password updated successfully" });
   } catch (error) {
-    console.error("Password update error:", error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: error.message,
-      success: false,
-    });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
   }
 };
 
@@ -391,7 +355,6 @@ const userSignOut = async (req, res) => {
     }
 
     res.setHeader("Authorization", "Bearer " + "");
-    res.clearCookie("authtoken");
 
     res.status(StatusCodes.OK).json({ message: "Signout successfully" });
   } catch (error) {
@@ -407,12 +370,13 @@ const userDelete = async (req, res) => {
   try {
     const { user } = req;
 
+    const olduser = await Admin.find(id);
+
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
-    // If user is deleting their own account
-    if (user._id.toString() === id) {
+    if (user._id === id) {
       const deleteUser = await Admin.findByIdAndDelete(user._id);
 
       if (deleteUser) {
@@ -422,26 +386,37 @@ const userDelete = async (req, res) => {
       }
     }
 
-    const olduser = await Admin.findById(id);
+    const deleteUser = async (id) => {};
 
-    if (!olduser) {
-      throw new NotFoundError("User to delete not found");
+    if (
+      (user.role === "owner" && olduser.role === "superadmin") ||
+      olduser.role === "admin" ||
+      olduser.role === "editor"
+    ) {
     }
 
-    // Check permissions based on roles
-    if (
-      (user.role === "owner" &&
-        ["superadmin", "admin", "editor"].includes(olduser.role)) ||
-      (user.role === "superadmin" &&
-        ["admin", "editor"].includes(olduser.role)) ||
-      (user.role === "admin" && olduser.role === "editor")
-    ) {
-      const deleteUser = await Admin.findByIdAndDelete(id);
+    // Allow super admin to delete both admins and editors
+    if (user.role === "owner" && user.role === "superadmin") {
+      const deleteUser = await Admin.findByIdAndDelete(user._id);
 
       if (deleteUser) {
-        return res
+        res
           .status(StatusCodes.OK)
           .json({ message: "User deleted successfully" });
+        console.log("User deleted successfully");
+      }
+    } else if (
+      (userRole === "admin" && user.role === "editor") ||
+      (userRole === "superadmin" && user.role === "admin")
+    ) {
+      // Allow admin to delete editors and super admin to delete admins
+      const deleteUser = await Admin.findByIdAndDelete(user._id);
+
+      if (deleteUser) {
+        res
+          .status(StatusCodes.OK)
+          .json({ message: "User deleted successfully" });
+        console.log("User deleted successfully");
       }
     } else {
       throw new UnAuthorizedError("Unauthorized to delete user");
@@ -455,8 +430,8 @@ const userDelete = async (req, res) => {
 
 const allAdmin = async (req, res) => {
   try {
-    const page = req.query.page ? Number.parseInt(req.query.page) : 1;
-    const perPage = req.query.perPage ? Number.parseInt(req.query.perPage) : 10;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
     // Calculate the number of documents to skip
     const skip = (page - 1) * perPage;
@@ -488,8 +463,8 @@ const allAdmin = async (req, res) => {
 
 const allClient = async (req, res) => {
   try {
-    const page = req.query.page ? Number.parseInt(req.query.page) : 1;
-    const perPage = req.query.perPage ? Number.parseInt(req.query.perPage) : 10;
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const perPage = req.query.perPage ? parseInt(req.query.perPage) : 10;
 
     // Calculate the number of documents to skip
     const skip = (page - 1) * perPage;
@@ -530,12 +505,6 @@ const singleClient = async (req, res) => {
     }
 
     // Check user role for authorization
-    const user = req.user;
-
-    if (!user) {
-      throw new NotFoundError("Admin user not found");
-    }
-
     if (user.role !== "superadmin" && user.role !== "admin") {
       throw new UnAuthorizedError("Access denied");
     }
@@ -575,8 +544,6 @@ const adminDeleteClient = async (req, res) => {
         .status(StatusCodes.OK)
         .json({ message: "Client deleted successfully" });
       console.log("User deleted successfully");
-    } else {
-      throw new NotFoundError("Client not found");
     }
   } catch (error) {
     res
@@ -598,6 +565,7 @@ const adminDeleteAdmin = async (req, res) => {
     }
 
     // Check user role for authorization
+
     const oldAdmin = await Admin.findById(id);
 
     if (!oldAdmin) {
@@ -613,7 +581,7 @@ const adminDeleteAdmin = async (req, res) => {
       if (deleteUser) {
         return res
           .status(StatusCodes.OK)
-          .json({ message: "Admin deleted successfully" });
+          .json({ message: "Client deleted successfully" });
       }
     } else if (
       user.role === "superadmin" &&
@@ -625,15 +593,15 @@ const adminDeleteAdmin = async (req, res) => {
         console.log("delete user is successful");
         return res
           .status(StatusCodes.OK)
-          .json({ message: "Admin deleted successfully" });
+          .json({ message: "Client deleted successfully" });
       }
-    } else if (user.role === "admin" && oldAdmin.role === "editor") {
+    } else if (user.role === "admin" && ["editor"].includes(oldAdmin.role)) {
       const deleteUser = await Admin.findByIdAndDelete(id);
 
       if (deleteUser) {
         return res
           .status(StatusCodes.OK)
-          .json({ message: "Admin deleted successfully" });
+          .json({ message: "Client deleted successfully" });
       }
     } else {
       throw new UnAuthorizedError("Access denied");
@@ -658,11 +626,8 @@ const adminRoleUpdateAdmin = async (req, res) => {
     }
 
     // Check user role for authorization
-    const oldAdmin = await Admin.findById(id);
 
-    if (!oldAdmin) {
-      throw new NotFoundError("Admin not found");
-    }
+    const oldAdmin = await Admin.findById(id);
 
     if (
       user.role === "owner" &&
@@ -693,7 +658,7 @@ const adminRoleUpdateAdmin = async (req, res) => {
         data: updateUser,
         message: "Account updated successfully",
       });
-    } else if (user.role === "admin" && oldAdmin.role === "editor") {
+    } else if (user.role === "admin" && ["editor"].includes(oldAdmin.role)) {
       const updateUser = await Admin.findByIdAndUpdate(
         id,
         { role: role },
@@ -742,6 +707,8 @@ const dashboardData = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 module.exports = {
   signUp,

@@ -12,7 +12,6 @@ const ejs = require("ejs");
 const { CreateToken, VerifyToken } = require("../Helper/authToken");
 const multer = require("multer");
 const cloudinary = require("../Utils/CloudinaryFileUpload");
-const bcrypt = require("bcrypt");
 
 const upload = multer({ dest: "public/tmp" });
 const adminUrl = process.env.ADMIN_URL;
@@ -24,7 +23,6 @@ const {
   NotFoundError,
   UnAuthorizedError,
   ValidationError,
-  InternalServerError,
 } = require("../errors/index");
 
 const maxAgeInMilliseconds = 7 * 24 * 60 * 60 * 1000;
@@ -46,7 +44,7 @@ const signUp = async (req, res) => {
     });
 
     if (error) {
-      throw new ValidationError(error.message);
+      throw new ValidationError("error");
     }
 
     const newUser = await Client.create(value);
@@ -65,24 +63,18 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("Login attempt for email:", email);
+  console.log(email, password);
 
   try {
     const oldUser = await Client.findOne({ email });
 
     if (!oldUser) {
-      console.log("User not found with email:", email);
       return res
         .status(StatusCodes.NOT_FOUND)
         .json({ error: "User not found" });
     }
 
-    console.log("User found:", oldUser.email);
-    console.log("Stored password hash:", oldUser.password);
-
-    // Use await with the async method
-    const authenticatedUser = await oldUser.checkPassword(password);
-    console.log("Authentication result:", authenticatedUser);
+    const authenticatedUser = oldUser.checkPassword(password);
 
     if (!authenticatedUser) {
       return res
@@ -91,7 +83,7 @@ const signIn = async (req, res) => {
     }
 
     const maxAgeInMilliseconds = 90 * 24 * 60 * 60 * 1000; // 90 days
-    const token = CreateToken(oldUser._id, maxAgeInMilliseconds / 1000); // Convert to seconds for token creation
+    const token = CreateToken(oldUser._id, maxAgeInMilliseconds);
 
     res.setHeader("Authorization", "Bearer " + token);
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -124,10 +116,11 @@ const singleUser = async (req, res) => {
       throw new NotFoundError("User not found");
     }
 
-    res.status(StatusCodes.OK).json({
-      olduser,
-      userblog: userblog || [],
-    });
+    if (!userblog) {
+      throw new NotFoundError("No Blog found");
+    }
+
+    res.status(StatusCodes.OK).json({ olduser, userblog });
   } catch (error) {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -198,82 +191,50 @@ const userVerifyPasswordReset = async (req, res) => {
 const userUpdatePassword = async (req, res) => {
   const { reset, password, confirmPassword } = req.body;
 
-  console.log("Password reset request received");
-
   try {
     if (password !== confirmPassword) {
       throw new ValidationError("Passwords do not match");
     }
 
-    // Verify token and get user ID
     const decodedId = VerifyToken(reset);
-    console.log("Decoded token:", decodedId);
 
-    if (!decodedId || !decodedId.id) {
-      throw new UnAuthorizedError("Invalid or expired token");
+    const checkuser = await Client.findById(decodedId["id"]);
+
+    if (!checkuser) {
+      throw new UnAuthorizedError("User not found");
     }
 
-    // Find the user by ID
-    const userId = decodedId.id;
-    console.log("Looking for user with ID:", userId);
+    // const hashedPassword = await checkuser.newHashPassword(password);
 
-    const user = await Client.findById(userId);
-
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
-    console.log("User found:", user.email);
-
-    // Hash the password directly
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    console.log("Password hashed successfully");
-
-    // Update the user document directly with the hashed password
-    const updatedUser = await Client.findByIdAndUpdate(
-      userId,
-      { password: hashedPassword },
+    await Client.findByIdAndUpdate(
+      checkuser._id,
+      { password },
       { new: true }
     );
 
-    if (!updatedUser) {
-      throw new Error("Failed to update user");
-    }
-
-    console.log("Password updated successfully for user:", updatedUser.email);
-
-    // For debugging: verify the new password would work
-    const passwordCheck = await bcrypt.compare(password, updatedUser.password);
-    console.log("Password verification check:", passwordCheck);
-
-    return res.status(StatusCodes.OK).json({
-      message: "Password updated successfully",
-      success: true,
-    });
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "password updated successfully" });
   } catch (error) {
-    console.error("Password update error:", error);
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      error: error.message,
-      success: false,
-    });
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: error.message });
   }
 };
 
 const activeUserUpdatePassword = async (req, res) => {
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
 
-  console.log("Active user password update request received");
+  console.log(oldPassword, newPassword, confirmNewPassword);
 
   const { user } = req;
 
   try {
     if (newPassword !== confirmNewPassword) {
-      throw new ValidationError("New passwords do not match");
+      throw new ValidationError("Passwords do not match");
     }
 
-    const userid = String(user._id);
-    console.log("User ID:", userid);
+    let userid = String(user._id);
 
     const checkuser = await Client.findById(userid);
 
@@ -281,40 +242,25 @@ const activeUserUpdatePassword = async (req, res) => {
       throw new UnAuthorizedError("User not found");
     }
 
-    console.log("User found:", checkuser.email);
-
-    // Verify old password
     const checkPassword = await checkuser.checkPassword(oldPassword);
-    console.log("Old password verification:", checkPassword);
 
     if (!checkPassword) {
       console.log("Password check failed");
-      throw new UnAuthorizedError("Old password is invalid");
+      throw new UnAuthorizedError("old password is invalid");
     }
 
-    // Hash the new password directly
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
-    console.log("New password hashed successfully");
+    // const hashedPassword = await checkuser.newHashPassword(newPassword);
 
-    // Update the user document directly with the hashed password
-    const updatedUser = await Client.findByIdAndUpdate(
+    await Client.findByIdAndUpdate(
       checkuser._id,
-      { password: hashedPassword },
+      { password },
       { new: true }
     );
 
-    if (!updatedUser) {
-      throw new Error("Failed to update user");
-    }
-
-    console.log("Password updated successfully for user:", updatedUser.email);
-
     return res
       .status(StatusCodes.OK)
-      .json({ message: "Password updated successfully" });
+      .json({ message: "password updated successfully" });
   } catch (error) {
-    console.error("Password update error:", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -384,14 +330,12 @@ const userUpdate = async (req, res) => {
           user: updatedUser,
         });
       } catch (uploadError) {
-        console.error("Error uploading file to Cloudinary:", uploadError);
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ error: "Error uploading file to Cloudinary" });
       }
     }
   } catch (error) {
-    console.error("Error updating user:", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -402,10 +346,6 @@ const currentUser = async (req, res) => {
   try {
     if (req.user) {
       const user = await Client.findById(req.user._id);
-
-      if (!user) {
-        throw new NotFoundError("User not found in database");
-      }
 
       const olduser = await Client.populate(user, [
         { path: "cart.product" },
@@ -419,12 +359,11 @@ const currentUser = async (req, res) => {
 
       return res
         .status(200)
-        .json({ olduser, message: "data received successfully" });
+        .json({ olduser, message: "data recieved successfully" });
     }
 
-    throw new NotFoundError("User not found in request");
+    throw new NotFoundError("User not found");
   } catch (error) {
-    console.error("Error fetching current user:", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -438,11 +377,9 @@ const userSignOut = async (req, res) => {
     }
 
     res.setHeader("Authorization", "Bearer " + "");
-    res.clearCookie("authToken");
 
     res.status(StatusCodes.OK).json({ message: "Signout successfully" });
   } catch (error) {
-    console.error("Error signing out:", error);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ error: error.message });
@@ -478,7 +415,6 @@ const userDelete = async (req, res) => {
       throw new UnAuthorizedError("Incorrect password");
     }
   } catch (error) {
-    console.error("Error deleting user:", error);
     if (error instanceof NotFoundError) {
       return res.status(StatusCodes.NOT_FOUND).json({ error: error.message });
     }
@@ -492,6 +428,7 @@ const userDelete = async (req, res) => {
       .json({ error: error.message });
   }
 };
+
 
 const Wishlist = (io) => {
   io.on("connection", (socket) => {
@@ -511,7 +448,9 @@ const Wishlist = (io) => {
           const index = user.wishlist.indexOf(wish.productId);
           user.wishlist.splice(index, 1);
 
-          await user.save();
+          user.save();
+
+          // const currentuser = Client.findById(wish.userId).populate("wishlist", )
 
           const userwish = await user.populate("wishlist");
 
@@ -519,15 +458,13 @@ const Wishlist = (io) => {
         } else {
           user.wishlist.unshift(wish.productId);
 
-          await user.save();
+          user.save();
 
           const userwish = await user.populate("wishlist");
 
           socket.emit("wishlist", userwish.wishlist);
         }
-      } catch (error) {
-        console.error("Wishlist error:", error);
-      }
+      } catch (error) {}
     });
   });
 };
@@ -566,7 +503,7 @@ const Cart = (io) => {
 
         socket.emit("cart", populatedCart.cart);
       } catch (error) {
-        console.error("Cart add error:", error);
+        console.error(error);
       }
     });
 
@@ -594,7 +531,7 @@ const Cart = (io) => {
 
         socket.emit("cart", populatedCart.cart);
       } catch (error) {
-        console.error("Cart minus error:", error);
+        console.error(error);
       }
     });
 
@@ -606,15 +543,7 @@ const Cart = (io) => {
           throw new NotFoundError("User not found");
         }
 
-        // Find the index of the product to remove
-        const productIndex = user.cart.findIndex(
-          (item) => String(item.product) === cart.productId
-        );
-
-        if (productIndex !== -1) {
-          // Remove the product at the found index
-          user.cart.splice(productIndex, 1);
-        }
+        user.cart.pop({ product: cart.productId });
 
         await user.save();
 
@@ -624,7 +553,7 @@ const Cart = (io) => {
 
         socket.emit("cart", populatedCart.cart);
       } catch (error) {
-        console.error("Cart remove error:", error);
+        console.error(error);
       }
     });
   });

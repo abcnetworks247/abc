@@ -2,8 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-const SALT_ROUNDS = 10; // Define salt rounds consistently
-
 const AdminSchema = new mongoose.Schema(
   {
     fullname: {
@@ -35,7 +33,7 @@ const AdminSchema = new mongoose.Schema(
     },
     mypost: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Blog",
       },
     ],
@@ -43,42 +41,30 @@ const AdminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving
 AdminSchema.pre("save", async function (next) {
-  // Only hash the password if it's modified (or new)
-  if (!this.isModified("password")) return next();
-
-  try {
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  const gensalt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, gensalt);
+  next();
 });
 
-// Method to check password
 AdminSchema.methods.checkPassword = async function (password) {
   try {
-    console.log("Comparing passwords in schema method");
-    console.log("Input password:", password);
-    console.log("Stored hash:", this.password);
+    const checkPassword = await bcrypt.compare(password, this.password);
 
-    // Use bcrypt.compare directly
-    const isMatch = await bcrypt.compare(password, this.password);
-    console.log("Password comparison result:", isMatch);
-    return isMatch;
+    console.log("Password comparison result:", checkPassword);
+
+    return checkPassword;
   } catch (error) {
     console.error("Error comparing passwords:", error);
     throw new Error("Error comparing passwords");
   }
 };
 
-// Static method to hash a password (for use in controllers)
-AdminSchema.statics.hashPassword = async (password) => {
+AdminSchema.methods.newHashPassword = async function (password) {
   try {
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
-    return await bcrypt.hash(password, salt);
+    const gensalt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, gensalt);
+    return hashedPassword;
   } catch (error) {
     console.error("Error hashing password:", error);
     throw new Error("Failed to hash password");
